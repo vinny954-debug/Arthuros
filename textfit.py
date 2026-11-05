@@ -26,10 +26,33 @@ FONTSETS = {}
 for fs in ET.parse(os.path.join(XML, "Font.xml")).getroot().findall("fontset"):
     FONTSETS[fs.get("id")] = {f.findtext("name"): (f.findtext("filename"), int(f.findtext("size")),
                                                   (f.findtext("style") or "")) for f in fs.findall("font")}
+# Extra fontsets in fonts/*.xml (mkfonts.py: "Unicode" on Kodi's own arial.ttf,
+# which the skin does not ship). Kodi's width is the sum of per-glyph advances,
+# each rounded to whole pixels at the loaded size (GUIFontTTF CacheCharacter,
+# GetTextWidthInternal); style bold widens each by size/24 (SetGlyphStrength).
+# vendor/kodi/arial-advances.json holds arial.ttf's advance widths.
+import json, math
+for p in sorted(glob.glob(os.path.join(SKIN, "fonts", "*.xml"))):
+    for fs in ET.parse(p).getroot().findall("fontset"):
+        FONTSETS[fs.get("id")] = {f.findtext("name"): (f.findtext("filename"), int(f.findtext("size")),
+                                                      (f.findtext("style") or "")) for f in fs.findall("font")}
+_ADV = json.load(open(os.path.join(os.path.dirname(KODI_PO), "arial-advances.json")))
+def measure_kodi(text, size, bold):
+    adv, upem = _ADV["adv"], _ADV["upem"]
+    worst = 0
+    for s in (1, 1.2, 1.8, 2, 3.6):     # the GUI scales mkfonts.py plans for
+        ppem = round(size * s)
+        extra = (ppem * 64 // 24) / 64 if bold else 0
+        w = sum(math.floor(math.floor(adv.get(str(ord(ch)), _ADV["max"]) * ppem / upem + 0.5)
+                           + extra + 0.5) for ch in text)
+        worst = max(worst, w / s)
+    return worst
 _cache = {}
 def measure(fontset, name, text):
     fn, size, style = FONTSETS[fontset].get(name) or FONTSETS[fontset]["font13"]
     if "uppercase" in style: text = text.upper()
+    if not os.path.exists(os.path.join(SKIN, "fonts", fn)):
+        return measure_kodi(text, size, "bold" in style)
     key = (fn, size)
     if key not in _cache: _cache[key] = ImageFont.truetype(os.path.join(SKIN, "fonts", fn), size)
     return _cache[key].getlength(text)
