@@ -2,19 +2,28 @@
 <!-- Icon wall: square thumbs, the closest thing to an Arthur filer window. -->
 <includes>
   <include name="View_52_IconWall">
+    <!-- height: the views area; inner = height-6, panel = height-12;
+         up: the toolbar row above -->
+    <param name="height" default="462" />
+    <param name="inner" default="456" />
+    <param name="panel" default="450" />
+    <param name="up" default="9490" />
+    <definition>
     <control type="group">
       <visible>Control.IsVisible(52)</visible>
       <include content="Arthur_ListWell">
         <param name="width" value="634" />
-        <param name="height" value="462" />
+        <param name="height" value="$PARAM[height]" />
       </include>
     </control>
 
     <control type="panel" id="52">
-      <left>6</left><top>6</top><width>604</width><height>450</height>
+      <left>6</left><top>6</top><width>604</width><height>$PARAM[panel]</height>
+      <!-- the name Kodi shows on the View button -->
+      <viewtype label="536">bigicon</viewtype>
       <onleft>9490</onleft>
       <onright>62</onright>
-      <onup>9490</onup>
+      <onup>$PARAM[up]</onup>
       <ondown>9100</ondown>
       <pagecontrol>62</pagecontrol>
       <scrolltime tween="linear">0</scrolltime>
@@ -25,15 +34,21 @@
         </control>
         <control type="image">
           <left>22</left><top>8</top><width>106</width><height>98</height>
-          <texture fallback="DefaultFolder.png">$INFO[ListItem.Art(thumb)]</texture>
+          <texture fallback="DefaultFile.png">$INFO[ListItem.Icon]</texture>
           <aspectratio>keep</aspectratio>
         </control>
-        <control type="label">
+        <include content="Arthur_TileStatus">
+          <param name="left" value="110" /><param name="top" value="10" />
+          <param name="barleft" value="22" /><param name="bartop" value="100" />
+          <param name="barwidth" value="106" />
+        </include>
+        <!-- a textbox, not a label: labels in list layouts never wrap -->
+        <control type="textbox">
           <left>4</left><top>114</top><width>142</width><height>32</height>
           <font>tiny</font><textcolor>text</textcolor>
-          <align>center</align><aligny>top</aligny>
+          <align>center</align>
+          <autoscroll>false</autoscroll>
           <label>$INFO[ListItem.Label]</label>
-          <wrapmultiline>true</wrapmultiline>
         </control>
       </itemlayout>
       <focusedlayout height="146" width="150">
@@ -43,28 +58,35 @@
         </control>
         <control type="image">
           <left>22</left><top>8</top><width>106</width><height>98</height>
-          <texture fallback="DefaultFolder.png">$INFO[ListItem.Art(thumb)]</texture>
+          <texture fallback="DefaultFile.png">$INFO[ListItem.Icon]</texture>
           <aspectratio>keep</aspectratio>
         </control>
+        <include content="Arthur_TileStatus">
+          <param name="left" value="110" /><param name="top" value="10" />
+          <param name="barleft" value="22" /><param name="bartop" value="100" />
+          <param name="barwidth" value="106" />
+        </include>
         <control type="image">
           <left>4</left><top>114</top><width>142</width><height>32</height>
           <texture colordiffuse="select">fill.png</texture>
         </control>
-        <control type="label">
+        <!-- a textbox, not a label: labels in list layouts never wrap -->
+        <control type="textbox">
           <left>4</left><top>114</top><width>142</width><height>32</height>
           <font>tiny</font><textcolor>textinv</textcolor>
-          <align>center</align><aligny>top</aligny>
+          <align>center</align>
+          <autoscroll>false</autoscroll>
           <label>$INFO[ListItem.Label]</label>
-          <wrapmultiline>true</wrapmultiline>
         </control>
       </focusedlayout>
     </control>
 
     <control type="scrollbar" id="62">
-      <left>611</left><top>3</top><width>18</width><height>456</height>
+      <left>611</left><top>3</top><width>18</width><height>$PARAM[inner]</height>
       <onleft>52</onleft>
       <onright>9490</onright>
       <visible>Control.IsVisible(52)</visible>
     </control>
+    </definition>
   </include>
 </includes>

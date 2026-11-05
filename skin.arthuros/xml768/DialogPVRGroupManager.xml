@@ -199,6 +199,29 @@
         <font>small</font><textcolor>textdim</textcolor>
         <align>right</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label2]</label>
+        <visible>!ListItem.IsPlaying + !ListItem.IsResumable + !Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <control type="label">
+        <right>24</right><top>0</top><height>40</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <align>right</align><aligny>center</aligny>
+        <label>$INFO[ListItem.Label2]</label>
+        <visible>ListItem.IsPlaying | ListItem.IsResumable | Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>12</top><width>16</width><height>16</height>
+        <texture>icons24/status_playing.png</texture>
+        <visible>ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>12</top><width>16</width><height>16</height>
+        <texture>icons24/status_resume.png</texture>
+        <visible>ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>12</top><width>16</width><height>16</height>
+        <texture>icons24/status_watched.png</texture>
+        <visible>Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsResumable + !ListItem.IsPlaying</visible>
       </control>
         </itemlayout>
         <focusedlayout height="44" width="550" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
@@ -224,6 +247,29 @@
         <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
         <align>right</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label2]</label>
+        <visible>!ListItem.IsPlaying + !ListItem.IsResumable + !Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <control type="label">
+        <right>24</right><top>0</top><height>40</height>
+        <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
+        <align>right</align><aligny>center</aligny>
+        <label>$INFO[ListItem.Label2]</label>
+        <visible>ListItem.IsPlaying | ListItem.IsResumable | Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>12</top><width>16</width><height>16</height>
+        <texture>icons24/status_playing.png</texture>
+        <visible>ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>12</top><width>16</width><height>16</height>
+        <texture>icons24/status_resume.png</texture>
+        <visible>ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>12</top><width>16</width><height>16</height>
+        <texture>icons24/status_watched.png</texture>
+        <visible>Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsResumable + !ListItem.IsPlaying</visible>
       </control>
         </focusedlayout>
       <itemlayout height="28" width="550">
@@ -244,6 +290,29 @@
         <font>small</font><textcolor>textdim</textcolor>
         <align>right</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label2]</label>
+        <visible>!ListItem.IsPlaying + !ListItem.IsResumable + !Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <control type="label">
+        <right>24</right><top>0</top><height>24</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <align>right</align><aligny>center</aligny>
+        <label>$INFO[ListItem.Label2]</label>
+        <visible>ListItem.IsPlaying | ListItem.IsResumable | Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>4</top><width>16</width><height>16</height>
+        <texture>icons24/status_playing.png</texture>
+        <visible>ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>4</top><width>16</width><height>16</height>
+        <texture>icons24/status_resume.png</texture>
+        <visible>ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>4</top><width>16</width><height>16</height>
+        <texture>icons24/status_watched.png</texture>
+        <visible>Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsResumable + !ListItem.IsPlaying</visible>
       </control>
         </itemlayout>
         <focusedlayout height="28" width="550">
@@ -269,6 +338,29 @@
         <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
         <align>right</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label2]</label>
+        <visible>!ListItem.IsPlaying + !ListItem.IsResumable + !Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <control type="label">
+        <right>24</right><top>0</top><height>24</height>
+        <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
+        <align>right</align><aligny>center</aligny>
+        <label>$INFO[ListItem.Label2]</label>
+        <visible>ListItem.IsPlaying | ListItem.IsResumable | Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>4</top><width>16</width><height>16</height>
+        <texture>icons24/status_playing.png</texture>
+        <visible>ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>4</top><width>16</width><height>16</height>
+        <texture>icons24/status_resume.png</texture>
+        <visible>ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>4</top><width>16</width><height>16</height>
+        <texture>icons24/status_watched.png</texture>
+        <visible>Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsResumable + !ListItem.IsPlaying</visible>
       </control>
         </focusedlayout>
       </control>

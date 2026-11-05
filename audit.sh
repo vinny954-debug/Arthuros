@@ -89,6 +89,36 @@ chk "xml768 version stamp matches"      'grep -q "(v$VER)" $S/xml768/Home.xml'
 :
 :
 # ===== P7 browsers & info =====
+chk "T-1 Options focuses the view before ContextMenu" '(for f in $S/xml768/My*.xml $S/xml768/AddonBrowser.xml; do grep -q "id=\"9501\"" $f || continue; grep -A6 "id=\"9501\"" $f | tr -d "\n " | grep -q "SetFocus(50)</onclick><onclick>Action(ContextMenu)" || exit 1; done)'
+chk "S-7 sort order button shows Container.SortOrder" 'grep -A2 "type=\"button\" id=\"4\"" $S/xml/Includes_Media.xml | grep -q "VAR.MediaSortOrderVar" && grep -A1 "name=\"MediaSortOrderVar\"" $S/xml/Includes_Media.xml | grep -q "INFO.Container.SortOrder"'
+chk "S-7 every view names itself (viewtype)" 'grep -q "<viewtype label=\"535\">list" $S/xml/View_50_List.xml && grep -q "<viewtype label=\"20021\">icon" $S/xml/View_51_Poster.xml && grep -q "<viewtype label=\"536\">bigicon" $S/xml/View_52_IconWall.xml'
+chk "S-7 file browser Mirror image (416) is labelled" 'grep -A1 "id=\"416\"" $S/xml/FileBrowser.xml | grep -q "LOCALIZE\[749\]" && grep -A1 "id=\"416\"" $S/xml768/FileBrowser.xml | grep -q "LOCALIZE\[749\]"'
+chk "B-6 item count label has no id 12 (Kodi overwrites it)" '! grep -q "type=\"label\" id=\"12\"" $S/xml/Includes_Media.xml && grep -q "VAR\[MediaCountVar\]" $S/xml/Includes_Media.xml'
+chk "B-6 empty list says so" 'grep -B3 "Integer.IsEqual(Container.NumItems,0) + !Container.IsUpdating" $S/xml/Includes_Media.xml | grep -q "LOCALIZE\[2080\]"'
+chk "B-1 list rows show watched/resume/playing" '(for k in ListItem.PlayCount ListItem.IsResumable ListItem.IsPlaying status_watched.png status_resume.png status_playing.png; do grep -q "$k" $S/xml/Includes_Lists.xml || exit 1; done; test -f $S/media/icons24/status_watched.png -a -f $S/media/icons24/status_resume.png -a -f $S/media/icons24/status_playing.png)'
+chk "B-1 poster and icon tiles show the status badge" 'grep -q "Arthur_TileStatus" $S/xml/View_51_Poster.xml && grep -q "Arthur_TileStatus" $S/xml/View_52_IconWall.xml && grep -q "ListItem.PercentPlayed" $S/xml/Includes_Lists.xml'
+chk "B-2 tiles use Kodi icon chain, no DefaultFolder/DefaultVideo fallback" '! grep -qE "fallback=.Default(Folder|Video).png.>.INFO.ListItem.Art.(poster|thumb)" $S/xml/View_51_Poster.xml $S/xml/View_52_IconWall.xml $S/xml/Includes_Media.xml && grep -q "VAR.PosterArtVar" $S/xml/View_51_Poster.xml'
+chk "B-3 info dialogs pick art by type" 'grep -q "VAR\[VideoInfoArtVar\]" $S/xml/DialogVideoInfo.xml && grep -q "VAR\[MusicInfoArtVar\]" $S/xml/DialogMusicInfo.xml && grep -q "VAR\[MusicInfoArtVar\]" $S/xml768/DialogMusicInfo.xml && grep -q "type=\"list\" id=\"50\"" $S/xml/DialogMusicInfo.xml'
+chk "B-4 video info hides Trailer/Director/Versions/Extras when n/a" '(for d in xml xml768; do for i in 11 13 14 15; do grep "type=\"button\" id=\"$i\"" $S/$d/DialogVideoInfo.xml | grep -q "<visible>" || exit 1; done; grep "type=\"button\" id=\"8\"" $S/$d/DialogVideoInfo.xml | grep -q InfoPlayLabelVar || exit 1; done)'
+chk "C-3 recording info hides the guide-only buttons" '(for d in xml xml768; do for i in 10 5 6 9 11; do grep "type=\"button\" id=\"$i\"" $S/$d/DialogPVRInfo.xml | grep -q "Window.IsActive(PVRGuideInfo)" || exit 1; done; ! grep "type=\"button\" id=\"[0-9]*\"><width>212" $S/$d/DialogPVRInfo.xml | grep -qv "<label>" || exit 1; done)'
+chk "T-5 info plot and add-on text scroll by touch (pagecontrol 61)" '(for f in DialogVideoInfo DialogMusicInfo DialogPVRInfo DialogAddonInfo; do grep -q "<pagecontrol>61</pagecontrol>" $S/xml/$f.xml && grep -q "type=\"scrollbar\" id=\"61\"" $S/xml/$f.xml || exit 1; done)'
+chk "B-7 tile titles are textboxes (labels in layouts never wrap)" '(for f in View_51_Poster View_52_IconWall Includes_Lists Includes_Media; do python3 -c "import lxml.etree as E,sys; r=E.parse(\"$S/xml/$f.xml\"); sys.exit(1 if r.xpath(\"//itemlayout//wrapmultiline|//focusedlayout//wrapmultiline\") else 0)" || exit 1; done; grep -q "type=\"textbox\"" $S/xml/View_51_Poster.xml)'
+chk "B-8 play queue title icon follows video/music" 'grep -q "name=\"icon\" value=\"\$VAR\[ArthurWindowIcon\]\"" $S/xml/MyPlaylist.xml && grep -q "ArthurWindowIcon" $S/xml768/MyPlaylist.xml'
+chk "K-3 window-specific buttons exist (Kodi ids)" 'python3 -c "
+import lxml.etree as E,sys
+need={\"MyPlaylist\":\"20 21 22 26\",\"MyVideoNav\":\"8 10 16 20\",\"MyMusicNav\":\"8 16 20\",\"MyPics\":\"6 7 9\",\"MyPVRChannels\":\"28 6\",\"MyPVRRecordings\":\"5 7 10\",\"MyPVRTimers\":\"8\",\"MyPVRSearch\":\"29 30\"}
+radio={\"MyPVRChannels\":\"6\",\"MyPVRRecordings\":\"7 5\",\"MyPlaylist\":\"20\"}
+for w,ids in need.items():
+  r=E.parse(\"$S/xml768/%s.xml\"%w)
+  for i in ids.split():
+    c=r.xpath(\"//control[@id=\x27%s\x27]\"%i)
+    if not c or c[0].getparent().get(\"id\")!=\"9491\": sys.exit(1)
+    if c[0].get(\"type\")!=\"label\" and not c[0].findtext(\"label\"): sys.exit(1)
+  for i in radio.get(w,\"\").split():
+    if r.xpath(\"//control[@id=\x27%s\x27]\"%i)[0].get(\"type\")!=\"radiobutton\": sys.exit(1)
+"'
+chk "T-13 file browser picture view (451) has touch-height rows" 'grep -q "focusedlayout height=\"42\" width=\"848\" condition=\"\[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)\]\"" $S/xml/FileBrowser.xml'
+chk "C-1 focused rows keep textinv when marked (file browser, music info)" 'test $(grep -c "textinv</textcolor><selectedcolor>textinv" $S/xml/FileBrowser.xml) -ge 4 && grep -q "<selectedcolor>textinv</selectedcolor>" $S/xml/DialogMusicInfo.xml'
 :
 :
 # ===== P8 4:3 layout =====

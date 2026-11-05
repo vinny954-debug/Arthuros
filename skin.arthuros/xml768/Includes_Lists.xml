@@ -26,6 +26,31 @@
         <font>small</font><textcolor>textdim</textcolor>
         <align>right</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label2]</label>
+        <visible>!ListItem.IsPlaying + !ListItem.IsResumable + !Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <!-- the same, moved in to clear the status mark -->
+      <control type="label">
+        <right>24</right><top>0</top><height>24</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <align>right</align><aligny>center</aligny>
+        <label>$INFO[ListItem.Label2]</label>
+        <visible>ListItem.IsPlaying | ListItem.IsResumable | Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <!-- now playing / part watched / watched, at the right-hand end -->
+      <control type="image">
+        <right>4</right><top>4</top><width>16</width><height>16</height>
+        <texture>icons24/status_playing.png</texture>
+        <visible>ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>4</top><width>16</width><height>16</height>
+        <texture>icons24/status_resume.png</texture>
+        <visible>ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>4</top><width>16</width><height>16</height>
+        <texture>icons24/status_watched.png</texture>
+        <visible>Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsResumable + !ListItem.IsPlaying</visible>
       </control>
     </definition>
   </include>
@@ -50,6 +75,31 @@
         <font>small</font><textcolor>textdim</textcolor>
         <align>right</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label2]</label>
+        <visible>!ListItem.IsPlaying + !ListItem.IsResumable + !Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <!-- the same, moved in to clear the status mark -->
+      <control type="label">
+        <right>24</right><top>0</top><height>40</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <align>right</align><aligny>center</aligny>
+        <label>$INFO[ListItem.Label2]</label>
+        <visible>ListItem.IsPlaying | ListItem.IsResumable | Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <!-- now playing / part watched / watched, at the right-hand end -->
+      <control type="image">
+        <right>4</right><top>12</top><width>16</width><height>16</height>
+        <texture>icons24/status_playing.png</texture>
+        <visible>ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>12</top><width>16</width><height>16</height>
+        <texture>icons24/status_resume.png</texture>
+        <visible>ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>12</top><width>16</width><height>16</height>
+        <texture>icons24/status_watched.png</texture>
+        <visible>Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsResumable + !ListItem.IsPlaying</visible>
       </control>
     </definition>
   </include>
@@ -79,6 +129,31 @@
         <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
         <align>right</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label2]</label>
+        <visible>!ListItem.IsPlaying + !ListItem.IsResumable + !Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <!-- the same, moved in to clear the status mark -->
+      <control type="label">
+        <right>24</right><top>0</top><height>24</height>
+        <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
+        <align>right</align><aligny>center</aligny>
+        <label>$INFO[ListItem.Label2]</label>
+        <visible>ListItem.IsPlaying | ListItem.IsResumable | Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <!-- now playing / part watched / watched, at the right-hand end -->
+      <control type="image">
+        <right>4</right><top>4</top><width>16</width><height>16</height>
+        <texture>icons24/status_playing.png</texture>
+        <visible>ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>4</top><width>16</width><height>16</height>
+        <texture>icons24/status_resume.png</texture>
+        <visible>ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>4</top><width>16</width><height>16</height>
+        <texture>icons24/status_watched.png</texture>
+        <visible>Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsResumable + !ListItem.IsPlaying</visible>
       </control>
     </definition>
   </include>
@@ -108,6 +183,64 @@
         <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
         <align>right</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label2]</label>
+        <visible>!ListItem.IsPlaying + !ListItem.IsResumable + !Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <!-- the same, moved in to clear the status mark -->
+      <control type="label">
+        <right>24</right><top>0</top><height>40</height>
+        <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
+        <align>right</align><aligny>center</aligny>
+        <label>$INFO[ListItem.Label2]</label>
+        <visible>ListItem.IsPlaying | ListItem.IsResumable | Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <!-- now playing / part watched / watched, at the right-hand end -->
+      <control type="image">
+        <right>4</right><top>12</top><width>16</width><height>16</height>
+        <texture>icons24/status_playing.png</texture>
+        <visible>ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>12</top><width>16</width><height>16</height>
+        <texture>icons24/status_resume.png</texture>
+        <visible>ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>12</top><width>16</width><height>16</height>
+        <texture>icons24/status_watched.png</texture>
+        <visible>Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+    </definition>
+  </include>
+
+  <!-- ========== status badge for poster / icon tiles ================== -->
+  <!-- left/top: the top-right corner of the art; bar*: a progress strip
+       along the bottom of the art for part-watched items -->
+  <include name="Arthur_TileStatus">
+    <param name="left" default="0" />
+    <param name="top" default="0" />
+    <param name="barleft" default="0" />
+    <param name="bartop" default="0" />
+    <param name="barwidth" default="100" />
+    <definition>
+      <control type="image">
+        <left>$PARAM[left]</left><top>$PARAM[top]</top><width>16</width><height>16</height>
+        <texture>icons24/status_playing.png</texture>
+        <visible>ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <left>$PARAM[left]</left><top>$PARAM[top]</top><width>16</width><height>16</height>
+        <texture>icons24/status_resume.png</texture>
+        <visible>ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <left>$PARAM[left]</left><top>$PARAM[top]</top><width>16</width><height>16</height>
+        <texture>icons24/status_watched.png</texture>
+        <visible>Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="progress">
+        <left>$PARAM[barleft]</left><top>$PARAM[bartop]</top><width>$PARAM[barwidth]</width><height>6</height>
+        <info>ListItem.PercentPlayed</info>
+        <visible>ListItem.IsResumable</visible>
       </control>
     </definition>
   </include>
