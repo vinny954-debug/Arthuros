@@ -16,6 +16,7 @@
         <left>0</left><top>0</top><width>116</width><height>32</height>
         <hitrect x="-2" y="0" w="122" h="32"/>
         <label/>
+        <onup>9903</onup><onleft>9903</onleft>
         <onclick>Action(Back)</onclick>
       </control>
       <control type="image">

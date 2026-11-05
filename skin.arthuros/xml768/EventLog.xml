@@ -360,7 +360,7 @@
           <hitrect x="-4" y="-4" w="110" h="32"/>
           <label/>
           <onup>50</onup>
-          <onright>9101</onright>
+          <onright>9106</onright>
           <!-- with the task bar hidden, Down carries on to the floating Back -->
           <ondown>9107</ondown>
           <onclick>ActivateWindow(Home)</onclick>
@@ -382,12 +382,42 @@
           <visible>Control.HasFocus(9100)</visible>
         </control>
       </control>
+      <!-- Power: the shutdown / reboot / exit menu, always there, so the box
+           can be switched off by touch alone. Next to Start, so with nothing
+           playing the bar still packs from the left. -->
+      <control type="group">
+        <left>112</left><top>4</top><width>100</width><height>24</height>
+        <control type="button" id="9106">
+          <left>0</left><top>0</top><width>100</width><height>24</height>
+          <hitrect x="-2" y="-4" w="104" h="32"/>
+          <label/>
+          <onup>50</onup>
+          <onleft>9100</onleft><onright>9101</onright>
+          <onclick>ActivateWindow(ShutdownMenu)</onclick>
+        </control>
+        <control type="image">
+          <left>6</left><top>4</top><width>16</width><height>16</height>
+          <texture>icons24/power.png</texture>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>68</width><height>24</height>
+          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+          <label>$LOCALIZE[33060]</label>
+          <visible>!Control.HasFocus(9106)</visible>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>68</width><height>24</height>
+          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <label>$LOCALIZE[33060]</label>
+          <visible>Control.HasFocus(9106)</visible>
+        </control>
+      </control>
       <!-- Back to the picture of whatever plays. The conditions are all
            evaluated before any action runs (CGUIAction), so exactly one of
            the three fires: a game (RetroPlayer also reports HasVideo), a
            video, or music. -->
       <control type="group">
-        <left>112</left><top>4</top><width>200</width><height>24</height>
+        <left>216</left><top>4</top><width>200</width><height>24</height>
         <visible>Player.HasMedia</visible>
         <control type="button" id="9101">
           <left>0</left><top>0</top><width>200</width><height>24</height>
@@ -397,7 +427,7 @@
           <hitrect x="-2" y="-4" w="204" h="32"/>
           <label/>
           <onup>50</onup>
-          <onleft>9100</onleft><onright>9102</onright>
+          <onleft>9106</onleft><onright>9102</onright>
         </control>
         <control type="image">
           <left>6</left><top>4</top><width>16</width><height>16</height>
@@ -418,14 +448,14 @@
       </control>
       <!-- The desktop mini player (PlayerControls, titled "Now playing"). -->
       <control type="group">
-        <left>316</left><top>4</top><width>150</width><height>24</height>
+        <left>420</left><top>4</top><width>150</width><height>24</height>
         <visible>Player.HasMedia</visible>
         <control type="button" id="9102">
           <left>0</left><top>0</top><width>150</width><height>24</height>
           <hitrect x="-2" y="-4" w="154" h="32"/>
           <label/>
           <onup>50</onup>
-          <onleft>9101</onleft><onright>9106</onright>
+          <onleft>9101</onleft><onright>9104</onright>
           <onclick>ActivateWindow(PlayerControls)</onclick>
         </control>
         <control type="image">
@@ -445,35 +475,6 @@
           <visible>Control.HasFocus(9102)</visible>
         </control>
       </control>
-      <!-- Power: the shutdown / reboot / exit menu, always there, so the box
-           can be switched off by touch alone. -->
-      <control type="group">
-        <left>470</left><top>4</top><width>100</width><height>24</height>
-        <control type="button" id="9106">
-          <left>0</left><top>0</top><width>100</width><height>24</height>
-          <hitrect x="-2" y="-4" w="104" h="32"/>
-          <label/>
-          <onup>50</onup>
-          <onleft>9102</onleft><onright>9104</onright>
-          <onclick>ActivateWindow(ShutdownMenu)</onclick>
-        </control>
-        <control type="image">
-          <left>6</left><top>4</top><width>16</width><height>16</height>
-          <texture>icons24/power.png</texture>
-        </control>
-        <control type="label">
-          <left>26</left><top>0</top><width>68</width><height>24</height>
-          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
-          <label>$LOCALIZE[33060]</label>
-          <visible>!Control.HasFocus(9106)</visible>
-        </control>
-        <control type="label">
-          <left>26</left><top>0</top><width>68</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
-          <label>$LOCALIZE[33060]</label>
-          <visible>Control.HasFocus(9106)</visible>
-        </control>
-      </control>
       <!-- A window parked by its title-bar "_" box. Click to bring it back
            to the folder it was showing; the button then goes away. -->
       <control type="group">
@@ -484,7 +485,7 @@
           <hitrect x="-2" y="-4" w="186" h="32"/>
           <label/>
           <onup>50</onup>
-          <onleft>9106</onleft><onright>9103</onright>
+          <onleft>9102</onleft><onright>9103</onright>
           <onclick condition="String.IsEmpty(Skin.String(arthur.minpath))">ActivateWindow($INFO[Skin.String(arthur.minwin)])</onclick>
           <onclick condition="!String.IsEmpty(Skin.String(arthur.minpath))">ActivateWindow($INFO[Skin.String(arthur.minwin)],$ESCINFO[Skin.String(arthur.minpath)])</onclick>
           <onclick>Skin.Reset(arthur.minwin)</onclick>
@@ -593,7 +594,7 @@
       <control type="button" id="9107">
         <left>0</left><top>0</top><width>116</width><height>32</height>
         <label/>
-        <onup>50</onup>
+        <onup>50</onup><onleft>50</onleft>
         <onclick>Action(Back)</onclick>
       </control>
       <control type="image">

@@ -46,7 +46,12 @@
       <control type="scrollbar" id="61">
         <include content="Size_Left" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="530" /></include><include content="Size_Left" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="542" /></include><top>48</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="18" /></include><height>132</height>
         <showonepage>false</showonepage>
-        <onleft>11</onleft><onright>11</onright><ondown>11</ondown>
+        <!-- Progress shows only 10 (Cancel), OK only 11, and a hidden
+             button with no way on would strand the focus here
+             (CGUIDialogProgress::UpdateChoices, CGUIWindow::OnMove) -->
+        <onleft condition="Control.IsVisible(11)">11</onleft><onleft condition="!Control.IsVisible(11)">10</onleft>
+        <onright condition="Control.IsVisible(11)">11</onright><onright condition="!Control.IsVisible(11)">10</onright>
+        <ondown condition="Control.IsVisible(11)">11</ondown><ondown condition="!Control.IsVisible(11)">10</ondown>
       </control>
       <control type="progress" id="20">
         <left>20</left><top>190</top><width>540</width><height>20</height>
@@ -56,7 +61,7 @@
         <left>13</left>
         <include content="ConfirmRow_Top_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
         <include content="ConfirmRow_Top" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-        <include content="Dialog_ButtonRow"><param name="width" value="554" /></include>
+        <include content="Dialog_ButtonRow"><param name="width" value="554" /><param name="up" value="61" /></include>
       </control>
     </control>
   </controls>

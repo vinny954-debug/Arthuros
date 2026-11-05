@@ -862,7 +862,12 @@ def small_dialogs():
     def xl_pair(inc, normal, xl, ind):
         return (f"{ind}<include content=\"{inc}\" condition=\"{XLC}\"><param name=\"v\" value=\"{xl}\" /></include>\n"
                 f"{ind}<include content=\"{inc}\" condition=\"!{XLC}\"><param name=\"v\" value=\"{normal}\" /></include>\n")
-    BW, SBL = W - 42, W - 28          # buttons 10..348, scrollbar 352..370
+    # Normal mode keeps the full 360 px rows: the 18 px bar only exists
+    # while the menu overflows (GUIScrollBarControl::IsVisible) and then
+    # lies over the rows' right end - it is drawn after 996 and gets taps
+    # first (CGUIControlGroup::SendMouseEvent runs last-rendered first).
+    # Taller rows (XLC) give the 30 px bar a column of its own.
+    BW, BWX, SBL = W - 20, W - 54, W - 28   # rows 10..370 / 10..336, bar 352..370 / 340..370
     out["DialogContextMenu"] = (H + "<window>\n  <defaultcontrol>996</defaultcontrol>\n"
       "  <coordinates><left>0</left><top>0</top></coordinates>\n  <controls>\n"
       f"    <control type=\"image\" id=\"999\">\n"
@@ -880,13 +885,13 @@ def small_dialogs():
       "    </control>\n"
       "    <control type=\"grouplist\" id=\"996\">\n"
       f"      <left>10</left><top>38</top><height>{GL}</height>\n"
-      + xl_pair("Size_Width", BW, BW - 12, "      ") +
+      + xl_pair("Size_Width", BW, BWX, "      ") +
       "      <orientation>vertical</orientation><itemgap>2</itemgap>\n"
       "      <pagecontrol>997</pagecontrol>\n"
       "      <onright>997</onright>\n"
       "      <control type=\"button\" id=\"1000\">\n"
       f"        <height>30</height>\n"
-      + xl_pair("Size_Width", BW, BW - 12, "        ") +
+      + xl_pair("Size_Width", BW, BWX, "        ") +
       "        <align>left</align><textoffsetx>12</textoffsetx>\n"
       "      </control>\n"
       "    </control>\n"

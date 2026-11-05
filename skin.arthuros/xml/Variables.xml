@@ -149,4 +149,12 @@
        goes to the desktop and leaves an already parked window alone.
        Keep it in step with ArthurWindowName (audit.sh checks). -->
   <expression name="ArthurParkable">Window.IsActive(videos) | Window.IsActive(music) | Window.IsActive(pictures) | Window.IsActive(programs) | Window.IsActive(games) | Window.IsActive(addonbrowser) | Window.IsActive(favouritesbrowser) | Window.IsActive(videoplaylist) | Window.IsActive(musicplaylist) | Window.IsActive(tvchannels) | Window.IsActive(radiochannels) | Window.IsActive(tvguide) | Window.IsActive(radioguide) | Window.IsActive(tvrecordings) | Window.IsActive(radiorecordings) | Window.IsActive(tvtimers) | Window.IsActive(radiotimers) | Window.IsActive(tvtimerrules) | Window.IsActive(radiotimerrules) | Window.IsActive(tvsearch) | Window.IsActive(radiosearch) | Window.IsActive(weather) | Window.IsActive(filemanager) | Window.IsActive(systeminfo) | Window.IsActive(settings) | Window.IsActive(systemsettings) | Window.IsActive(playersettings) | Window.IsActive(mediasettings) | Window.IsActive(interfacesettings) | Window.IsActive(servicesettings) | Window.IsActive(pvrsettings) | Window.IsActive(gamesettings) | Window.IsActive(skinsettings) | Window.IsActive(profiles) | Window.IsActive(eventlog) | Window.IsActive(musicplaylisteditor) | Window.IsActive(screencalibration)</expression>
+
+  <!-- The title bar's ▫ box (WinBox_Max in Includes_Chrome) can only switch
+       to the player's window when no modal dialog or player window is in
+       the way: ActivateWindow is refused while a modal dialog is open
+       (CGUIWindowManager::ActivateWindow_Internal), and over a player
+       window FullScreen would leave it instead. -->
+  <expression name="ArthurCanShowPlayer">Player.HasMedia + !Window.IsActive(fullscreenvideo) + !Window.IsActive(visualisation) + !Window.IsActive(fullscreengame) + !Window.IsActive(slideshow)</expression>
+
 </includes>
