@@ -74,6 +74,26 @@ chk "xml768 desktop panel is 702 high"  'grep -q "<height>702</height>" $S/xml76
 chk "xml768 skin settings say 1024x768" 'grep -q "v$VER  -  1024x768" $S/xml768/SkinSettings.xml'
 chk "xml768 version stamp matches"      'grep -q "(v$VER)" $S/xml768/Home.xml'
 # ===== P1 video/music/game OSD =====
+chk "OSD/mini-player horizontal grouplists: every set of children that can show at once fits the width (else the last is clipped and gets no touch)" 'python3 -c "
+import sys,re,itertools,xml.etree.ElementTree as E
+A=re.compile(r\"[A-Za-z][\w.]*(\((?:[^()]|\([^()]*\))*\))?\")
+bad=[]
+for f in sys.argv[1:]:
+  for g in E.parse(f).getroot().iter(\"control\"):
+    if g.get(\"type\")!=\"grouplist\" or g.findtext(\"orientation\")!=\"horizontal\": continue
+    cs=g.findall(\"control\"); gap=int(g.findtext(\"itemgap\") or 0); W=int(g.findtext(\"width\"))
+    vs=[c.findtext(\"visible\") or \"true\" for c in cs]
+    at=sorted(set(m.group(0) for v in vs for m in A.finditer(v))-{\"true\"})
+    py=[A.sub(lambda m:\"1\" if m.group(0)==\"true\" else \"v%d\"%at.index(m.group(0)),v).replace(\"!\",\" not \").replace(\"+\",\" and \").replace(\"|\",\" or \").replace(\"[\",\"(\").replace(\"]\",\")\") for v in vs]
+    for V in itertools.product((0,1),repeat=len(at)):
+      d=dict((\"v%d\"%i,x) for i,x in enumerate(V))
+      ws=[int(c.findtext(\"width\")) for c,p in zip(cs,py) if eval(p,{},d)]
+      if ws and sum(ws)+gap*(len(ws)-1)>W: bad.append((f,g.get(\"id\"),W,sum(ws)+gap*(len(ws)-1))); break
+print(bad); sys.exit(1 if bad or len(sys.argv)<9 else 0)" $S/xml/VideoOSD.xml $S/xml/MusicOSD.xml $S/xml/GameOSD.xml $S/xml/PlayerControls.xml $S/xml768/VideoOSD.xml $S/xml768/MusicOSD.xml $S/xml768/GameOSD.xml $S/xml768/PlayerControls.xml'
+chk "every slider is horizontal (Kodi defaults to vertical: left/right do nothing)" 'python3 -c "
+import sys,glob,xml.etree.ElementTree as E
+b=[(f,c.get(\"id\")) for f in glob.glob(sys.argv[1]+\"/*.xml\")+glob.glob(sys.argv[2]+\"/*.xml\") for c in E.parse(f).getroot().iter(\"control\") if c.get(\"type\")==\"slider\" and c.findtext(\"orientation\")!=\"horizontal\"]
+print(b); sys.exit(1 if b else 0)" $S/xml $S/xml768 && grep -A3 "type=\"slider\" id=\"11\"" $S/xml768/DialogSlider.xml | grep -q "<orientation>horizontal</orientation>"'
 OSDS="VideoOSD MusicOSD GameOSD"
 chk "T-14 Startup starts mousewatch unless Home (which does) is the start window" 'for r in xml xml768; do grep "<onload condition=" $S/$r/Startup.xml | grep "Skin.HasSetting(touchmode)" | grep "!String.IsEqual(System.StartupWindow,10000)" | grep -q "RunScript(special://skin/scripts/mousewatch.py)" && grep -q "<onload>ReplaceWindow(\$INFO\[System.StartupWindow\])</onload>" $S/$r/Startup.xml && grep -q "mousewatch.py" $S/$r/Home.xml || exit 1; done'
 chk "K-6 music OSD: visualisation chooser 500, preset list, lock 501" 'for r in xml xml768; do f=$S/$r/MusicOSD.xml; grep -A3 "type=\"button\" id=\"500\"" $f | grep -q "LOCALIZE\[250\]" && grep -q "ActivateWindow(VisualisationPresetList)" $f && grep -A4 "type=\"radiobutton\" id=\"501\"" $f | grep -q "<selected>Visualisation.Locked</selected>" && grep -q "<onright condition=\"Control.IsVisible(203)\">203</onright>" $f && ! grep -q "id=\"50[01]\"" $S/$r/VideoOSD.xml $S/$r/GameOSD.xml || exit 1; done'

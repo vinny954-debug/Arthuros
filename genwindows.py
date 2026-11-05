@@ -610,7 +610,9 @@ def seek_targets(kind):
 
 # K-6: the music OSD's visualisation preset buttons sit in the transport
 # row, right of the longest possible transport (6 x 60 + 5 x 6 = 390 px from
-# x 8). Only while the visualisation has presets to pick from.
+# x 8, so grouplist 201 is VIS_L - 8 - 6 = 390 wide: CGUIControlGroupList
+# only hands mouse/touch to children that fit whole inside its width, and
+# clips the rest). Only while the visualisation has presets to pick from.
 VIS_L, VIS_W = 404, 196
 VIS_ON = "Visualisation.HasPresets"
 VIS_IF = "Control.IsVisible(203)"
@@ -621,7 +623,7 @@ def osd_transport(kind="video", top=TR_T):
     up = seek_targets(kind) + [(None, "202")]
     right = [(VIS_IF, "203"), (None, "9982")] if kind == "music" else "9982"
     s = (f'      <control type="grouplist" id="201">\n'
-         f"        <left>8</left><top>{top}</top><width>{(VIS_L if kind == 'music' else MUTE_L) - 16}</width><height>{TR_H}</height>\n"
+         f"        <left>8</left><top>{top}</top><width>{VIS_L - 14 if kind == 'music' else MUTE_L - 16}</width><height>{TR_H}</height>\n"
          f"        <orientation>horizontal</orientation><itemgap>6</itemgap>\n"
          + navs("        ", up=up, down="202", left="9951", right=right))
     for cid, glyph, acts, vis in OSD_BUTTONS:
@@ -1788,6 +1790,7 @@ def small_dialogs():
             "        <onup>11</onup><onright>14</onright><onleft>14</onleft>\n      </control>\n"
             "      <control type=\"slider\" id=\"11\">\n"
             "        <left>88</left><top>78</top><width>356</width><height>28</height>\n"
+            "        <orientation>horizontal</orientation>\n"
             "        <ondown>13</ondown><onup>13</onup>\n      </control>\n"
             "      <control type=\"button\" id=\"14\">\n"
             "        <left>452</left><top>70</top><width>64</width><height>44</height>\n"

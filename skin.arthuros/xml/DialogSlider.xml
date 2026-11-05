@@ -31,6 +31,7 @@
       </control>
       <control type="slider" id="11">
         <left>88</left><top>78</top><width>356</width><height>28</height>
+        <orientation>horizontal</orientation>
         <ondown>13</ondown><onup>13</onup>
       </control>
       <control type="button" id="14">

@@ -115,7 +115,7 @@
         <visible>!Player.SeekEnabled</visible>
       </control>
       <control type="grouplist" id="201">
-        <left>8</left><top>74</top><width>388</width><height>48</height>
+        <left>8</left><top>74</top><width>390</width><height>48</height>
         <orientation>horizontal</orientation><itemgap>6</itemgap>
         <onup condition="Player.SeekEnabled + !MusicPlayer.Content(LiveTV)">9980</onup>
         <onup condition="Player.SeekEnabled + MusicPlayer.Content(LiveTV)">9981</onup>
