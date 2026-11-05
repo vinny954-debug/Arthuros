@@ -902,6 +902,31 @@ def sb_hit(l, t, h):
     the same coordinates as <left>/<top> (CGUIControlFactory::GetHitRect)."""
     return f'<hitrect x="{l - 4}" y="{t}" w="28" h="{h}" />'
 
+def touch_back(up="9903"):
+    """Touch mode's live Back for a pop-up opened on top of another one
+    (1122, 1123 over 1121): the same group Dialog_Dim draws, without the dim
+    (1121 has dimmed the screen already). While a modal dialog is on top,
+    CGUIWindowManager::HandleAction hands it every tap and stops there, so
+    the Back that 1121 draws underneath shows but is dead. Placed first, at
+    the screen level, like Dialog_Dim's, so tallpass moves it down with the
+    task bar at 768."""
+    return ("    <control type=\"group\">\n"
+            "      <right>4</right><top>568</top><width>116</width><height>32</height>\n"
+            "      <visible>Skin.HasSetting(touchmode)</visible>\n"
+            "      <control type=\"image\">\n"
+            "        <left>0</left><top>0</top><width>116</width><height>32</height>\n"
+            "        <texture border=\"2\" colordiffuse=\"facetint\">panel_chrome.png</texture>\n"
+            "      </control>\n"
+            "      <control type=\"button\" id=\"9108\">\n"
+            "        <left>0</left><top>0</top><width>116</width><height>32</height>\n"
+            "        <hitrect x=\"-2\" y=\"0\" w=\"122\" h=\"32\" />\n"
+            "        <label></label>\n"
+            f"        <onup>{up}</onup><onleft>{up}</onleft>\n"
+            "        <onclick>Action(Back)</onclick>\n"
+            "      </control>\n"
+            "      <include content=\"Chrome_BackFace\"><param name=\"id\" value=\"9108\" /></include>\n"
+            "    </control>\n")
+
 def catalogue_dialog():
     """1122: everything a tile can open."""
     W, Hh = 780, 500
@@ -978,7 +1003,7 @@ def catalogue_dialog():
     b += ctl("scrollbar", 211, RX + 3 + rw + 3, 47, 18, Hh - 66,
              ["<onleft>210</onleft>", "<onright>200</onright>", sb_hit(RX + 3 + rw + 3, 47, Hh - 66)])
     x = gw.dialog("Custom_1122_DesktopChoose", W, Hh, b, default="200", icon=EDIT_ICON,
-                  title="$LOCALIZE[31970]", dim=False)
+                  title="$LOCALIZE[31970]", dim=False, pre=touch_back())
     return custom(x, 1122, "dialog")
 
 # marks drawn on rows and in dialogs, not pictures of anything: never offered
@@ -995,9 +1020,10 @@ def tile_icon_names():
     return [n for n in names if n not in skip and not n.startswith(NOT_TILE_PREFIX)]
 
 def icon_dialog():
-    """1123: pick any icon the skin draws. At 768 the box and the panel are
-    168 px taller (8 icon rows instead of 6); it stays centred."""
-    W, Hh = 800, 520 + DY
+    """1123: pick any icon the skin draws. At 768 the box grows by whole
+    68 px icon rows (2 more, 656 px), so the strip under the last row stays
+    12 px as at 600; it stays centred."""
+    W, Hh = 800, 520 + DY // 68 * 68
     names = tile_icon_names()
     k = SLOTKEY
     b = sunken(16, 44, W - 32, Hh - 100)
@@ -1032,7 +1058,7 @@ def icon_dialog():
              ["<font>normal</font>", "<textcolor>text</textcolor>", "<align>center</align>",
               "<label>$INFO[Container(400).ListItem.Label]</label>"])
     x = gw.dialog("Custom_1123_DesktopIcon", W, Hh, b, default="400", icon=EDIT_ICON,
-                  title="$LOCALIZE[31975]", dim=False)
+                  title="$LOCALIZE[31975]", dim=False, pre=touch_back())
     return custom(x, 1123, "dialog"), len(names)
 
 MIGRATED = "home.v092"

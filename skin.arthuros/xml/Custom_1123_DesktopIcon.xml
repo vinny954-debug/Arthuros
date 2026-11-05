@@ -3,6 +3,22 @@
   <defaultcontrol>400</defaultcontrol>
   <controls>
     <control type="group">
+      <right>4</right><top>568</top><width>116</width><height>32</height>
+      <visible>Skin.HasSetting(touchmode)</visible>
+      <control type="image">
+        <left>0</left><top>0</top><width>116</width><height>32</height>
+        <texture border="2" colordiffuse="facetint">panel_chrome.png</texture>
+      </control>
+      <control type="button" id="9108">
+        <left>0</left><top>0</top><width>116</width><height>32</height>
+        <hitrect x="-2" y="0" w="122" h="32" />
+        <label></label>
+        <onup>9903</onup><onleft>9903</onleft>
+        <onclick>Action(Back)</onclick>
+      </control>
+      <include content="Chrome_BackFace"><param name="id" value="9108" /></include>
+    </control>
+    <control type="group">
       <centerleft>50%</centerleft><centertop>50%</centertop>
       <width>800</width><height>520</height>
       <include content="Dialog_Box">

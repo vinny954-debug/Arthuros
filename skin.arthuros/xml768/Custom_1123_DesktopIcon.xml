@@ -3,11 +3,42 @@
   <defaultcontrol>400</defaultcontrol>
   <controls>
     <control type="group">
+      <right>4</right><top>736</top><width>116</width><height>32</height>
+      <visible>Skin.HasSetting(touchmode)</visible>
+      <control type="image">
+        <left>0</left><top>0</top><width>116</width><height>32</height>
+        <texture border="2" colordiffuse="facetint">panel_chrome.png</texture>
+      </control>
+      <control type="button" id="9108">
+        <left>0</left><top>0</top><width>116</width><height>32</height>
+        <hitrect x="-2" y="0" w="122" h="32"/>
+        <label/>
+        <onup>9903</onup><onleft>9903</onleft>
+        <onclick>Action(Back)</onclick>
+      </control>
+      <control type="image">
+        <left>8</left><top>8</top><width>16</width><height>16</height>
+        <texture>icons24/parent.png</texture>
+      </control>
+      <control type="label">
+        <left>30</left><top>0</top><width>80</width><height>32</height>
+        <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[31994]</label>
+        <visible>!Control.HasFocus(9108)</visible>
+      </control>
+      <control type="label">
+        <left>30</left><top>0</top><width>80</width><height>32</height>
+        <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[31994]</label>
+        <visible>Control.HasFocus(9108)</visible>
+      </control>
+    </control>
+    <control type="group">
       <centerleft>50%</centerleft><centertop>50%</centertop>
-      <width>800</width><height>688</height>
+      <width>800</width><height>656</height>
       <control type="image">
         <left>0</left><top>0</top>
-        <width>800</width><height>688</height>
+        <width>800</width><height>656</height>
         <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
       </control>
       <control type="group">
@@ -132,7 +163,7 @@
     </control>
       </control>
       </control>
-      <control type="image"><left>16</left><top>44</top><width>768</width><height>588</height><texture border="2" colordiffuse="facetint">panel_sunken.png</texture></control>
+      <control type="image"><left>16</left><top>44</top><width>768</width><height>556</height><texture border="2" colordiffuse="facetint">panel_sunken.png</texture></control>
       <control type="panel" id="400">
         <left>19</left><top>47</top><width>740</width><height>544</height>
         <onright>401</onright><onleft>400</onleft><ondown>400</ondown>
@@ -342,7 +373,7 @@
         <onright>400</onright>
       </control>
       <control type="label">
-        <left>16</left><top>640</top><width>768</width><height>30</height>
+        <left>16</left><top>608</top><width>768</width><height>30</height>
         <font>normal</font>
         <textcolor>text</textcolor>
         <align>center</align>
