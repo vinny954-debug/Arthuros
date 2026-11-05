@@ -285,7 +285,9 @@ def context_menu(root):
 
 # panels whose cells grow instead of leaving a band under the last row: the
 # Settings hub's 5 x 3 tiles (15 items at most) left 168 px empty at 768
-TALLER_CELLS = {"Settings": "9200"}
+# Settings hub (9200): its tile layouts now come from home.py per resolution
+# (Settings_HubLayouts in Includes_Home.xml / build768), so nothing to grow.
+TALLER_CELLS = {}
 ICON = 64       # the hub icon at 768: icons64 drawn at its own size
 
 def taller_cells(root, pid):

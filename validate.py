@@ -607,21 +607,6 @@ for wname, root in sorted(windows.items()):
 # fix it, or add it here with a reason. Fixed ones are only reported, so a
 # package that fixes one doesn't break the build until this list is trimmed.
 KNOWN_WARNINGS = {
-    # Dialog_Dim's tap catcher defaults up/left to the title bar (9903); the
-    # busy spinner has no title bar and nothing to focus - Kodi ignores it.
-    "DialogBusy: <onup> points at id 9903 which is not in this window",
-    "DialogBusy: <onleft> points at id 9903 which is not in this window",
-    # MyPVRRecordings keeps no channel-group button (decided 0.9.7): only
-    # GUIWindowPVRBase handles 28 (OpenChannelGroupSelectionDialog, label
-    # set in UpdateButtons), and the recordings list ignores the group
-    # (CGUIWindowPVRRecordingsBase::GetDirectoryPath builds the path from
-    # deleted/radio only), so the button would change nothing on screen.
-    # Estuary ships a 28 in Recordings only as a hidden object (PVRSideBar
-    # in Includes_MediaMenu.xml, <include>HiddenObject</include>).
-    "MyPVRRecordings: missing Kodi control id(s) ['28'] (GUIWindowPVRBase.h: channel groups, show deleted)",
-    # MyPVRTimers keeps no channel-group button: timers are not grouped by
-    # channel group in the UI (Estuary has none either)
-    "MyPVRTimers: missing Kodi control id(s) ['28'] (GUIWindowPVRBase.h: channel groups)",
 }
 for x in warns:
     if x not in KNOWN_WARNINGS:

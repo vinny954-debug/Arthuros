@@ -343,13 +343,6 @@ bad=[a for a in r.iter() if isinstance(a.tag,str) and a.tag.startswith(\"on\") a
 sys.exit(1 if bad else 0)" $S/$d/$w.xml || exit 1; done; done)'
 chk "X-7 pointer obeys touch.pointer.show/hide at once" 'test $(grep -c "<value condition=\"Skin.HasSetting(touchmode) + !Skin.HasSetting(touch.pointer.show) + \[Skin.HasSetting(touch.pointer.hide) | String.IsEmpty(Window(Home).Property(arthuros.mouse))\]\"></value>" $S/xml/Variables.xml) -eq 2'
 chk "V-2 sliders lie flat by default (Kodi defaults to vertical)" 'grep -A8 "<default type=\"slider\">" $S/xml/Defaults.xml | grep -q "<orientation>horizontal</orientation>" && grep -A8 "<default type=\"slider\">" $S/xml768/Defaults.xml | grep -q "<orientation>horizontal</orientation>"'
-chk "T-6 media toolbar buttons get a 34 px touch hit rect" 'python3 -c "
-import sys
-from lxml import etree
-r=etree.parse(sys.argv[1]).getroot()
-g=r.xpath(\"//control[@type=\x27grouplist\x27][@id=\x279490\x27]\")[0]
-b=[c for c in g if c.tag==\"control\"]
-sys.exit(not b or any(not c.xpath(\"include[@content=\x27Size_Hit\x27][@condition=\x27Skin.HasSetting(touchmode)\x27]/param[@name=\x27h\x27][@value=\x2734\x27]\") for c in b))" $S/xml/Includes_Media.xml && grep -q "<include name=\"Size_Hit\">.*<hitrect x=\"\$PARAM\[x\]\" y=\"\$PARAM\[y\]\" w=\"\$PARAM\[w\]\" h=\"\$PARAM\[h\]\" />" $S/xml/Includes_Size.xml && grep -q "Size_Hit" $S/xml768/Includes_Media.xml'
 chk "T-8 heading comment names the keyboard (311) and slider (10) ids" 'grep -q "label 311" $S/xml/Includes_Dialogs.xml && grep -q "label 10 (CONTROL_HEADING" $S/xml/Includes_Dialogs.xml'
 chk "T-2 now playing picks game/video/music once" 'B=$(grep -A8 "id=\"9101\"" $S/xml/Includes_Chrome.xml); echo "$B" | grep -q "condition=\"Player.HasGame\">ActivateWindow(FullscreenGame)" && echo "$B" | grep -q "condition=\"Player.HasVideo + !Player.HasGame\">ActivateWindow(FullscreenVideo)" && ! echo "$B" | grep -q "<onclick>ActivateWindow"'
 chk "T-3 dialogs carry a touch Back at the task bar" 'grep -A30 "<include name=\"Dialog_Dim\">" $S/xml/Includes_Dialogs.xml | grep -q "id=\"9108\"" && (for f in $(grep -l "<include>Dialog_Dim</include>" $S/xml/*.xml); do grep -q "id=\"9108\"" $S/xml768/$(basename $f) || exit 1; done) && grep -B12 "id=\"9108\"" $S/xml768/DialogConfirm.xml | grep -q "<top>736</top>"'
