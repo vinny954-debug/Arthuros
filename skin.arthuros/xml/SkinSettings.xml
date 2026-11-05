@@ -38,7 +38,7 @@
       <control type="label">
         <left>20</left><top>72</top><width>960</width><height>22</height>
         <font>small</font><textcolor>textdim</textcolor>
-        <label>v0.9.7  -  1024x600  -  $VAR[SkinFontVar]  -  $LOCALIZE[31948]</label>
+        <label>v0.9.8  -  1024x600  -  $VAR[SkinFontVar]  -  $LOCALIZE[31948]</label>
       </control>
       <control type="image">
         <left>20</left><top>102</top><width>960</width><height>1</height>

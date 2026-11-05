@@ -79,7 +79,9 @@ def osd_nav():
         for o in OSDS + ("PlayerControls",):
             r = tree(d, o)
             s = ctl(r, 9983)
-            need(txt(s, "onleft") == "9982" and txt(s, "onright") in ("9951", "201"), f"{d}/{o} 9983 left/right")
+            need(txt(s, "onleft") == "9993" and txt(s, "onright") == "9994", f"{d}/{o} 9983 left/right")
+            need(txt(ctl(r, 9993), "onleft") == "9982" and txt(ctl(r, 9994), "onright") in ("9951", "201"),
+                 f"{d}/{o} volume -/+ chain")
         for o in OSDS:
             g = ctl(tree(d, o), 202)
             need(g.find("onright") is None and g.find("onleft") is None, f"{d}/{o} 202 has onleft/onright")

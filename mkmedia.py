@@ -72,6 +72,9 @@ def flat(c, name, n=8, a=255):
 
 # solid fills (use with colordiffuse for anything else)
 flat(W,  "fill.png")
+# fully transparent, 24 px like the bevels: a slider bar that draws nothing
+# but keeps the nib scale (CGUISliderControl: nib scale = height / bar texture height)
+flat(W,  "blank.png", n=24, a=0)
 flat(K,  "fill_black.png")
 for nm, c in [("red",R),("blue",B),("grey",g2),("dgrey",g4),("face",w2),
               ("chrome",g1),("white",W),("yellow",Y),("green",G),("purple",P),

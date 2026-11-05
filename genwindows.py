@@ -431,10 +431,14 @@ TR_T, TR_H = 74, 48           # transport | mute + volume | Hide
 TX_T, TX_H = 128, 44          # text buttons
 OSD_H = TX_T + TX_H + 8
 TR_W = 60                     # a transport button: 60x48 with a 24 px glyph
-VOL_W, HIDE_W = 220, 110
+# volume: [mute][-][level bar][+][NN%] - the percent and the fill show the level
+VSTEP_W, VPCT_W, VBAR_H = 40, 46, 28
+HIDE_W = 96
 HIDE_L = OSD_W - 8 - HIDE_W
-VOL_L = HIDE_L - 8 - VOL_W
-MUTE_L = VOL_L - 6 - TR_W
+MUTE_L = 606                  # music: preset group 203 ends at 600 (VIS_L + VIS_W)
+VOL_L = MUTE_L + TR_W + 4     # the "-" button
+VOL_W = HIDE_L - 8 - VOL_L    # - bar + NN%
+VBAR_W = VOL_W - 2 * VSTEP_W - VPCT_W - 3 * 4
 
 LIVE_V = "VideoPlayer.Content(LiveTV)"
 LIVE_M = "MusicPlayer.Content(LiveTV)"
@@ -582,15 +586,28 @@ def icon_button(cid, glyph, w, h, clicks, indent=8, size=16):
     return s + f'{sp}</control>\n'
 
 def slider(cid, l, t, wd, ht, action, info, visible=None, enable=None, nav=None, indent=6):
-    """A touch slider: a tap jumps, a drag follows the finger
-    (CGUISliderControl::OnMouseEvent). <action> seek / pvr.seek / volume are
-    Kodi's own (GUISliderControl.cpp). The nib is the bevel texture scaled to
-    the control height, so it is a ht x ht square. Kodi's default slider
-    orientation is vertical, hence the explicit horizontal."""
+    """A touch slider that SHOWS its level: a progress bar on the same info
+    draws the fill, and the slider on top of it draws only its nib (bar
+    texture blank.png, 24 px so the nib stays an ht x ht square -
+    CGUISliderControl scales the nib by height / bar-texture height).
+    A tap jumps, a drag follows the finger (CGUISliderControl::OnMouseEvent).
+    <action> seek / pvr.seek / volume are Kodi's own (GUISliderControl.cpp)
+    and their info code drives the value. Kodi's default slider orientation
+    is vertical, hence the explicit horizontal."""
     sp = " " * indent
-    s = (f'{sp}<control type="slider" id="{cid}">\n'
+    s = (f'{sp}<control type="progress">\n'
          f"{sp}  <left>{l}</left><top>{t}</top><width>{wd}</width><height>{ht}</height>\n"
-         f"{sp}  <orientation>horizontal</orientation>\n")
+         f"{sp}  <info>{info}</info>\n")
+    if visible:
+        s += f"{sp}  <visible>{visible}</visible>\n"
+    s += f"{sp}</control>\n"
+    s += (f'{sp}<control type="slider" id="{cid}">\n'
+          f"{sp}  <left>{l}</left><top>{t}</top><width>{wd}</width><height>{ht}</height>\n"
+          f"{sp}  <orientation>horizontal</orientation>\n"
+          f"{sp}  <texturesliderbar>blank.png</texturesliderbar>\n"
+          f"{sp}  <texturesliderbardisabled>blank.png</texturesliderbardisabled>\n"
+          f'{sp}  <textureslidernib border="2" colordiffuse="facetint">button_up.png</textureslidernib>\n'
+          f'{sp}  <textureslidernibfocus border="2" colordiffuse="accent1">button_up.png</textureslidernibfocus>\n')
     if info:
         s += f"{sp}  <info>{info}</info>\n"
     if action:
@@ -602,6 +619,61 @@ def slider(cid, l, t, wd, ht, action, info, visible=None, enable=None, nav=None,
     if visible:
         s += f"{sp}  <visible>{visible}</visible>\n"
     return s + f"{sp}</control>\n"
+
+def vol_steps(step=5):
+    """+/- for the volume, step % at a time, landing on multiples of step.
+    SetVolume takes an absolute percent only (ApplicationBuiltins.cpp), and
+    Action(VolumeUp) moves ~1 % (100/volumesteps), so each button carries one
+    onclick per band; the bands exclude each other and CGUIAction checks
+    every condition before running any, so exactly one fires.
+    Integer.Is* read Player.Volume's integer value, the percent
+    (PlayerGUIInfo::GetInt), not its "-6.0 dB" label."""
+    up, down = [], []
+    for v in range(0, 100, step):
+        up.append((f"Integer.IsGreaterOrEqual(Player.Volume,{v}) + Integer.IsLess(Player.Volume,{v + step})",
+                   f"SetVolume({v + step})"))
+        down.append((f"Integer.IsGreater(Player.Volume,{v}) + Integer.IsLessOrEqual(Player.Volume,{v + step})",
+                     f"SetVolume({v})"))
+    return down, up
+
+def volume_cluster(sp, l, t, h, bar_w, nav_up, nav_down, left, right, font="chromebold"):
+    """[- 9993][level bar + slider 9983][+ 9994][NN%], starting at l. Returns
+    (xml, total width). The percent is the slider's own description
+    (Control.GetLabel of a percentage slider = "NN%", GUISliderControl::
+    GetDescription), so it follows the slider exactly."""
+    down, up = vol_steps()
+    bt, bh = t, h
+    x = l
+    out = ""
+    def step_button(cid, x, label, acts, lft, rgt):
+        b = (f'{sp}<control type="button" id="{cid}">\n'
+             f"{sp}  <left>{x}</left><top>{bt}</top><width>{VSTEP_W}</width><height>{bh}</height>\n"
+             + hitrect(sp + "  ", x, bt, VSTEP_W, bh, 2, OSD_HIT)
+             + f"{sp}  <font>{font}</font><align>center</align><label>{label}</label>\n")
+        for c, a in acts:
+            b += f'{sp}  <onclick condition="{c}">{a}</onclick>\n'
+        b += (f"{sp}  <enable>!Player.Passthrough</enable>\n"
+              + navs(sp + "  ", up=nav_up, down=nav_down, left=lft, right=rgt)
+              + f"{sp}</control>\n")
+        return b
+    out += step_button(9993, x, "-", down, left, "9983")
+    x += VSTEP_W + 4
+    st = t + (h - VBAR_H) // 2
+    out += slider(9983, x, st, bar_w, VBAR_H, "volume", "Player.Volume",
+                  enable="!Player.Passthrough",
+                  nav={"up": nav_up, "down": nav_down, "left": "9993", "right": "9994"},
+                  indent=len(sp))
+    x += bar_w + 4
+    out += step_button(9994, x, "+", up, "9983", right)
+    x += VSTEP_W + 4
+    out += (f'{sp}<control type="label">\n'
+            f"{sp}  <left>{x}</left><top>{t}</top><width>{VPCT_W}</width><height>{h}</height>\n"
+            f"{sp}  <font>{font}</font><align>center</align><aligny>center</aligny>\n"
+            f"{sp}  <label>$INFO[Control.GetLabel(9983)]</label>\n"
+            f"{sp}  <visible>!Player.Passthrough</visible>\n"
+            f"{sp}</control>\n")
+    x += VPCT_W
+    return out, x - l
 
 # (id, glyph, onclick actions, {kind: visible condition}) - a kind that is not
 # listed does not get the button. Rewind/forward resume first when paused:
@@ -970,15 +1042,14 @@ def osd_window(name, kind="video"):
     left = [(VIS_IF, "203"), (None, "201")] if kind == "music" else "201"
     body += icon_radio(9982, "volume", TR_W, TR_H, ["Mute"], indent=6, size=24,
                        selected="Player.Muted", glyph_on="mute", pos=(MUTE_L, TR_T),
-                       nav={"up": up, "down": "202", "left": left, "right": "9983"},
+                       nav={"up": up, "down": "202", "left": left, "right": "9993"},
                        hit=OSD_HIT)
-    # left/right only act while the slider is disabled (passthrough): a
-    # focused horizontal slider uses them for its value
-    # (CGUISliderControl::OnAction), a disabled one is skipped by
-    # CGUIWindow::OnMove through its own actions, so the row ring holds
-    body += slider(9983, VOL_L, TR_T + 6, VOL_W, TR_H - 12, "volume", "Player.Volume",
-                   enable="!Player.Passthrough",
-                   nav={"up": up, "down": "202", "left": "9982", "right": "9951"})
+    # [-][level][+][NN%]: the fill and the percent show where the volume is;
+    # a focused horizontal slider uses left/right for its value
+    # (CGUISliderControl::OnAction), the buttons step 5 %
+    vc, vw = volume_cluster("      ", VOL_L, TR_T, TR_H, VBAR_W, up, "202", "9982", "9951")
+    assert VOL_L + vw <= HIDE_L - 8, f"{name}: volume cluster overlaps Hide"
+    body += vc
     # V-3: Hide closes the bar only; playback carries on underneath
     body += (f'      <control type="button" id="9951">\n'
              f"        <left>{HIDE_L}</left><top>{TR_T}</top><width>{HIDE_W}</width><height>{TR_H}</height>\n"
@@ -986,7 +1057,7 @@ def osd_window(name, kind="video"):
              + hitrect("        ", HIDE_L, TR_T, HIDE_W, TR_H, 4, OSD_HIT)
              + f"        <font>chromebold</font><label>$LOCALIZE[31800]</label>\n"
              f"        <onclick>Dialog.Close({name})</onclick>\n"
-             + navs("        ", up=up, down="202", left="9983", right="201")
+             + navs("        ", up=up, down="202", left="9994", right="201")
              + "      </control>\n")
     worst = osd_row_worst(kind)
     assert max(worst.values()) <= OSD_W - 16, f"{name}: OSD text row can overflow: {worst}"
@@ -3068,7 +3139,7 @@ def player_controls():
     body += ("      <control type=\"grouplist\" id=\"201\">\n"
              "        <left>13</left><top>146</top><width>270</width><height>48</height>\n"
              "        <orientation>horizontal</orientation><itemgap>6</itemgap>\n"
-             + navs("        ", up=seek, down="202", left="9983", right="9982"))
+             + navs("        ", up=seek, down="202", left="9994", right="9982"))
     body += icon_radio(600, "prev", 60, 48, ["PlayerControl(Previous)"], size=24, hit=OSD_HIT)
     body += icon_radio(602, "play", 60, 48, ["PlayerControl(Play)"], size=24,
                        selected=PLAYING, glyph_on="pause", hit=OSD_HIT)
@@ -3077,11 +3148,12 @@ def player_controls():
     body += "      </control>\n"
     body += icon_radio(9982, "volume", 60, 48, ["Mute"], indent=6, size=24,
                        selected="Player.Muted", glyph_on="mute", pos=(290, 146),
-                       nav={"up": seek, "down": "202", "left": "201", "right": "9983"},
+                       nav={"up": seek, "down": "202", "left": "201", "right": "9993"},
                        hit=OSD_HIT)
-    body += slider(9983, 356, 152, 290, 36, "volume", "Player.Volume",
-                   enable="!Player.Passthrough",
-                   nav={"up": seek, "down": "202", "left": "9982", "right": "201"})
+    vc, vw = volume_cluster("      ", 354, 146, 48, 646 - 354 - 2 * VSTEP_W - VPCT_W - 12,
+                            seek, "202", "9982", "201")
+    assert 354 + vw <= 646, "PlayerControls: volume cluster too wide"
+    body += vc
     body += osd_buttons(202, 202, [
         (607, 140, "$LOCALIZE[191]", ["PlayerControl(Random)"], None, "Playlist.IsRandom"),
         (704, 150, "$VAR[OSDRepeatLabelVar]", ["PlayerControl(Repeat)"], None),

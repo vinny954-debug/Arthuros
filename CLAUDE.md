@@ -8,7 +8,7 @@ Context for Claude Code. Read this first, then `README.md` (user-facing), then
 A from-scratch Kodi 21 (Omega) skin styled after Acorn **Arthur 1.2**: 16-colour
 pixel desktop, 1px outlines, chunky bevels, no gradients, no animations, bitmap
 font (Tamzen) used only at native or exactly-doubled sizes. Owner: Vince.
-Current version: **0.9.7** (see `skin.arthuros/changelog.txt`).
+Current version: **0.9.8** (see `skin.arthuros/changelog.txt`).
 
 Two layouts ship:
 - `xml/` — 1024x600, 16:9, default (7" panels).
@@ -179,7 +179,7 @@ regress.
 - **Desktop tiles** are skin strings `tile.N.{id,lid,pre,name,icon,image,action,addon}`,
   N=1..36, `home.layout` ∈ 3x3, 4x3 (default), 4x4, 5x4, 5x5, 6x5, 6x6.
 - **Version stamps** (bump all on release): `addon.xml`, `xml/SkinSettings.xml`
-  (`v0.9.7  -  1024x600`), `xml/Includes_Chrome.xml` (`ArthurOS 1.2 (v0.9.7)`),
+  (`v0.9.8  -  1024x600`), `xml/Includes_Chrome.xml` (`ArthurOS 1.2 (v0.9.8)`),
   `changelog.txt` (newest first), `README.md` (current version + zip names).
   `audit.sh` checks the stamps match.
 
@@ -267,10 +267,16 @@ excerpts in `vendor/kodi/estuary-ref/`. For anything else, read the Kodi
 
 All via `RunScript(special://skin/scripts/<name>.py[,args])`.
 
-## State at handover (0.9.7)
+## State at handover (0.9.8)
 
-Installed on the Pi 4 at 0.9.5 (confirmed working install). 0.9.6 and 0.9.7 are
-built but **not yet tested on the box**. 0.9.7 implements the whole 0.9.6 audit
+0.9.7 is on the box; Vince: "looks pretty good", but the volume slider showed no
+level (bar and nib were the same facetint bevel). 0.9.8 fixes that: every OSD /
+mini-player slider is a progress fill (same info) under a slider with a blank
+bar texture (`media/blank.png`, 24 px so the nib stays ht x ht), and volume is
+`genwindows.volume_cluster()`: mute 9982, - 9993, slider 9983, + 9994 (5 % bands
+via `vol_steps()`; SetVolume is absolute only), `$INFO[Control.GetLabel(9983)]`
+= "NN%". 0.9.8 is untested on the box. Earlier, 0.9.6/0.9.7 were checked in
+source and preview only. 0.9.7 implemented the whole 0.9.6 audit
 (`docs/audit-0.9.6.md`, 92 findings; final verification: 87 fixed, 6 partly by
 design) - checked in Kodi source and preview only. Test first on hardware:
 - Video OSD: tap opens the bottom bar; tap the picture / Hide closes it; volume

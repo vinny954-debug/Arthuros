@@ -1,3 +1,18 @@
+v0.9.8
+- Volume now shows where it is. The volume control on the video, music and
+  game bars and in the mini player is now:
+  [mute] [ - ] [level bar] [ + ] 60%
+  - The bar fills up to the current volume, with a knob at the end. Tap
+    anywhere on it to jump, or drag it as before.
+  - "-" and "+" step the volume down and up by 5 % (to the next multiple
+    of 5).
+  - The percentage next to it is the current volume, 0-100 %.
+- The seek bars fill up to the current position the same way, so you can
+  see how far into the film you are.
+- The Hide button is slightly narrower to make room.
+Checked against Kodi's source and in preview only. The fill itself can only
+be seen on the box.
+
 v0.9.7
 A big touch-and-remote release that fixes everything found in the 0.9.6
 review (docs/audit-0.9.6.md). It was checked against Kodi's source and in

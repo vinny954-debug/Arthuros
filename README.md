@@ -7,7 +7,7 @@ An Acorn *Arthur 1.2* desktop for Kodi 21 (Omega), built natively for a
 Hard 1px outlines, chunky bevels, no gradients, no animations — everything
 snaps. Text is Tamzen, a bitmap font used only at its native pixel sizes.
 
-**Current version: 0.9.7** — the menu bar shows the running version, so one
+**Current version: 0.9.8** — the menu bar shows the running version, so one
 glance tells you which build is installed.
 
 ---
@@ -36,7 +36,7 @@ For **updates**, dropping the folder in is more reliable than Kodi's zip
 installer and does not need "Unknown sources" turned on.
 
 ```sh
-unzip skin.arthuros-0.9.7.zip
+unzip skin.arthuros-0.9.8.zip
 scp -r skin.arthuros root@<pi-address>:/storage/.kodi/addons/
 ssh root@<pi-address> systemctl restart kodi
 ```
@@ -52,7 +52,7 @@ pick it as above. (Kodi's zip installer enables it by itself;
 ### On Raspberry Pi OS (Kodi from apt), by hand
 
 ```sh
-unzip skin.arthuros-0.9.7.zip
+unzip skin.arthuros-0.9.8.zip
 rm -rf ~/.kodi/addons/skin.arthuros && mv skin.arthuros ~/.kodi/addons/
 ```
 

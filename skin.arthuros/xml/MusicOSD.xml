@@ -49,18 +49,36 @@
         <font>chrome</font><aligny>center</aligny>
         <label>$INFO[Player.Duration]</label>
       </control>
+      <control type="progress">
+        <left>112</left><top>32</top><width>800</width><height>36</height>
+        <info>Player.Progress</info>
+        <visible>Player.SeekEnabled + !MusicPlayer.Content(LiveTV)</visible>
+      </control>
       <control type="slider" id="9980">
         <left>112</left><top>32</top><width>800</width><height>36</height>
         <orientation>horizontal</orientation>
+        <texturesliderbar>blank.png</texturesliderbar>
+        <texturesliderbardisabled>blank.png</texturesliderbardisabled>
+        <textureslidernib border="2" colordiffuse="facetint">button_up.png</textureslidernib>
+        <textureslidernibfocus border="2" colordiffuse="accent1">button_up.png</textureslidernibfocus>
         <info>Player.Progress</info>
         <action>seek</action>
         <onup>202</onup>
         <ondown>201</ondown>
         <visible>Player.SeekEnabled + !MusicPlayer.Content(LiveTV)</visible>
       </control>
+      <control type="progress">
+        <left>112</left><top>32</top><width>800</width><height>36</height>
+        <info>PVR.TimeshiftProgressPlayPos</info>
+        <visible>Player.SeekEnabled + MusicPlayer.Content(LiveTV)</visible>
+      </control>
       <control type="slider" id="9981">
         <left>112</left><top>32</top><width>800</width><height>36</height>
         <orientation>horizontal</orientation>
+        <texturesliderbar>blank.png</texturesliderbar>
+        <texturesliderbardisabled>blank.png</texturesliderbardisabled>
+        <textureslidernib border="2" colordiffuse="facetint">button_up.png</textureslidernib>
+        <textureslidernibfocus border="2" colordiffuse="accent1">button_up.png</textureslidernibfocus>
         <info>PVR.TimeshiftProgressPlayPos</info>
         <action>pvr.seek</action>
         <onup>202</onup>
@@ -198,8 +216,8 @@
         </control>
       </control>
       <control type="radiobutton" id="9982">
-        <left>612</left><top>74</top><width>60</width><height>48</height>
-        <hitrect x="609" y="71" w="66" h="54" />
+        <left>606</left><top>74</top><width>60</width><height>48</height>
+        <hitrect x="603" y="71" w="66" h="54" />
         <label></label>
         <textureradioonfocus colordiffuse="textinv">icons24/w_mute.png</textureradioonfocus>
         <textureradioonnofocus colordiffuse="text">icons24/w_mute.png</textureradioonnofocus>
@@ -217,11 +235,51 @@
         <ondown>202</ondown>
         <onleft condition="Control.IsVisible(203)">203</onleft>
         <onleft>201</onleft>
+        <onright>9993</onright>
+      </control>
+      <control type="button" id="9993">
+        <left>670</left><top>74</top><width>40</width><height>48</height>
+        <hitrect x="668" y="71" w="44" h="54" />
+        <font>chromebold</font><align>center</align><label>-</label>
+        <onclick condition="Integer.IsGreater(Player.Volume,0) + Integer.IsLessOrEqual(Player.Volume,5)">SetVolume(0)</onclick>
+        <onclick condition="Integer.IsGreater(Player.Volume,5) + Integer.IsLessOrEqual(Player.Volume,10)">SetVolume(5)</onclick>
+        <onclick condition="Integer.IsGreater(Player.Volume,10) + Integer.IsLessOrEqual(Player.Volume,15)">SetVolume(10)</onclick>
+        <onclick condition="Integer.IsGreater(Player.Volume,15) + Integer.IsLessOrEqual(Player.Volume,20)">SetVolume(15)</onclick>
+        <onclick condition="Integer.IsGreater(Player.Volume,20) + Integer.IsLessOrEqual(Player.Volume,25)">SetVolume(20)</onclick>
+        <onclick condition="Integer.IsGreater(Player.Volume,25) + Integer.IsLessOrEqual(Player.Volume,30)">SetVolume(25)</onclick>
+        <onclick condition="Integer.IsGreater(Player.Volume,30) + Integer.IsLessOrEqual(Player.Volume,35)">SetVolume(30)</onclick>
+        <onclick condition="Integer.IsGreater(Player.Volume,35) + Integer.IsLessOrEqual(Player.Volume,40)">SetVolume(35)</onclick>
+        <onclick condition="Integer.IsGreater(Player.Volume,40) + Integer.IsLessOrEqual(Player.Volume,45)">SetVolume(40)</onclick>
+        <onclick condition="Integer.IsGreater(Player.Volume,45) + Integer.IsLessOrEqual(Player.Volume,50)">SetVolume(45)</onclick>
+        <onclick condition="Integer.IsGreater(Player.Volume,50) + Integer.IsLessOrEqual(Player.Volume,55)">SetVolume(50)</onclick>
+        <onclick condition="Integer.IsGreater(Player.Volume,55) + Integer.IsLessOrEqual(Player.Volume,60)">SetVolume(55)</onclick>
+        <onclick condition="Integer.IsGreater(Player.Volume,60) + Integer.IsLessOrEqual(Player.Volume,65)">SetVolume(60)</onclick>
+        <onclick condition="Integer.IsGreater(Player.Volume,65) + Integer.IsLessOrEqual(Player.Volume,70)">SetVolume(65)</onclick>
+        <onclick condition="Integer.IsGreater(Player.Volume,70) + Integer.IsLessOrEqual(Player.Volume,75)">SetVolume(70)</onclick>
+        <onclick condition="Integer.IsGreater(Player.Volume,75) + Integer.IsLessOrEqual(Player.Volume,80)">SetVolume(75)</onclick>
+        <onclick condition="Integer.IsGreater(Player.Volume,80) + Integer.IsLessOrEqual(Player.Volume,85)">SetVolume(80)</onclick>
+        <onclick condition="Integer.IsGreater(Player.Volume,85) + Integer.IsLessOrEqual(Player.Volume,90)">SetVolume(85)</onclick>
+        <onclick condition="Integer.IsGreater(Player.Volume,90) + Integer.IsLessOrEqual(Player.Volume,95)">SetVolume(90)</onclick>
+        <onclick condition="Integer.IsGreater(Player.Volume,95) + Integer.IsLessOrEqual(Player.Volume,100)">SetVolume(95)</onclick>
+        <enable>!Player.Passthrough</enable>
+        <onup condition="Player.SeekEnabled + !MusicPlayer.Content(LiveTV)">9980</onup>
+        <onup condition="Player.SeekEnabled + MusicPlayer.Content(LiveTV)">9981</onup>
+        <onup>202</onup>
+        <ondown>202</ondown>
+        <onleft>9982</onleft>
         <onright>9983</onright>
       </control>
+      <control type="progress">
+        <left>714</left><top>84</top><width>104</width><height>28</height>
+        <info>Player.Volume</info>
+      </control>
       <control type="slider" id="9983">
-        <left>678</left><top>80</top><width>220</width><height>36</height>
+        <left>714</left><top>84</top><width>104</width><height>28</height>
         <orientation>horizontal</orientation>
+        <texturesliderbar>blank.png</texturesliderbar>
+        <texturesliderbardisabled>blank.png</texturesliderbardisabled>
+        <textureslidernib border="2" colordiffuse="facetint">button_up.png</textureslidernib>
+        <textureslidernibfocus border="2" colordiffuse="accent1">button_up.png</textureslidernibfocus>
         <info>Player.Volume</info>
         <action>volume</action>
         <enable>!Player.Passthrough</enable>
@@ -229,19 +287,57 @@
         <onup condition="Player.SeekEnabled + MusicPlayer.Content(LiveTV)">9981</onup>
         <onup>202</onup>
         <ondown>202</ondown>
-        <onleft>9982</onleft>
+        <onleft>9993</onleft>
+        <onright>9994</onright>
+      </control>
+      <control type="button" id="9994">
+        <left>822</left><top>74</top><width>40</width><height>48</height>
+        <hitrect x="820" y="71" w="44" h="54" />
+        <font>chromebold</font><align>center</align><label>+</label>
+        <onclick condition="Integer.IsGreaterOrEqual(Player.Volume,0) + Integer.IsLess(Player.Volume,5)">SetVolume(5)</onclick>
+        <onclick condition="Integer.IsGreaterOrEqual(Player.Volume,5) + Integer.IsLess(Player.Volume,10)">SetVolume(10)</onclick>
+        <onclick condition="Integer.IsGreaterOrEqual(Player.Volume,10) + Integer.IsLess(Player.Volume,15)">SetVolume(15)</onclick>
+        <onclick condition="Integer.IsGreaterOrEqual(Player.Volume,15) + Integer.IsLess(Player.Volume,20)">SetVolume(20)</onclick>
+        <onclick condition="Integer.IsGreaterOrEqual(Player.Volume,20) + Integer.IsLess(Player.Volume,25)">SetVolume(25)</onclick>
+        <onclick condition="Integer.IsGreaterOrEqual(Player.Volume,25) + Integer.IsLess(Player.Volume,30)">SetVolume(30)</onclick>
+        <onclick condition="Integer.IsGreaterOrEqual(Player.Volume,30) + Integer.IsLess(Player.Volume,35)">SetVolume(35)</onclick>
+        <onclick condition="Integer.IsGreaterOrEqual(Player.Volume,35) + Integer.IsLess(Player.Volume,40)">SetVolume(40)</onclick>
+        <onclick condition="Integer.IsGreaterOrEqual(Player.Volume,40) + Integer.IsLess(Player.Volume,45)">SetVolume(45)</onclick>
+        <onclick condition="Integer.IsGreaterOrEqual(Player.Volume,45) + Integer.IsLess(Player.Volume,50)">SetVolume(50)</onclick>
+        <onclick condition="Integer.IsGreaterOrEqual(Player.Volume,50) + Integer.IsLess(Player.Volume,55)">SetVolume(55)</onclick>
+        <onclick condition="Integer.IsGreaterOrEqual(Player.Volume,55) + Integer.IsLess(Player.Volume,60)">SetVolume(60)</onclick>
+        <onclick condition="Integer.IsGreaterOrEqual(Player.Volume,60) + Integer.IsLess(Player.Volume,65)">SetVolume(65)</onclick>
+        <onclick condition="Integer.IsGreaterOrEqual(Player.Volume,65) + Integer.IsLess(Player.Volume,70)">SetVolume(70)</onclick>
+        <onclick condition="Integer.IsGreaterOrEqual(Player.Volume,70) + Integer.IsLess(Player.Volume,75)">SetVolume(75)</onclick>
+        <onclick condition="Integer.IsGreaterOrEqual(Player.Volume,75) + Integer.IsLess(Player.Volume,80)">SetVolume(80)</onclick>
+        <onclick condition="Integer.IsGreaterOrEqual(Player.Volume,80) + Integer.IsLess(Player.Volume,85)">SetVolume(85)</onclick>
+        <onclick condition="Integer.IsGreaterOrEqual(Player.Volume,85) + Integer.IsLess(Player.Volume,90)">SetVolume(90)</onclick>
+        <onclick condition="Integer.IsGreaterOrEqual(Player.Volume,90) + Integer.IsLess(Player.Volume,95)">SetVolume(95)</onclick>
+        <onclick condition="Integer.IsGreaterOrEqual(Player.Volume,95) + Integer.IsLess(Player.Volume,100)">SetVolume(100)</onclick>
+        <enable>!Player.Passthrough</enable>
+        <onup condition="Player.SeekEnabled + !MusicPlayer.Content(LiveTV)">9980</onup>
+        <onup condition="Player.SeekEnabled + MusicPlayer.Content(LiveTV)">9981</onup>
+        <onup>202</onup>
+        <ondown>202</ondown>
+        <onleft>9983</onleft>
         <onright>9951</onright>
       </control>
+      <control type="label">
+        <left>866</left><top>74</top><width>46</width><height>48</height>
+        <font>chromebold</font><align>center</align><aligny>center</aligny>
+        <label>$INFO[Control.GetLabel(9983)]</label>
+        <visible>!Player.Passthrough</visible>
+      </control>
       <control type="button" id="9951">
-        <left>906</left><top>74</top><width>110</width><height>48</height>
-        <hitrect x="902" y="71" w="118" h="54" />
+        <left>920</left><top>74</top><width>96</width><height>48</height>
+        <hitrect x="916" y="71" w="104" h="54" />
         <font>chromebold</font><label>$LOCALIZE[31800]</label>
         <onclick>Dialog.Close(MusicOSD)</onclick>
         <onup condition="Player.SeekEnabled + !MusicPlayer.Content(LiveTV)">9980</onup>
         <onup condition="Player.SeekEnabled + MusicPlayer.Content(LiveTV)">9981</onup>
         <onup>202</onup>
         <ondown>202</ondown>
-        <onleft>9983</onleft>
+        <onleft>9994</onleft>
         <onright>201</onright>
       </control>
       <control type="grouplist" id="202">

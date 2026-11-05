@@ -600,5 +600,17 @@ chk "P12 textfit fails on a character the font lacks (C-5)" 'grep -q "MISSING.se
 chk "P12 sizepass widens list scrollbars / hit-rects the rest (T-7)" 'grep -q "T-7: every other visible 18 px scrollbar" "$D/sizepass.py"'
 :
 :
+# ===== P13 volume level (0.9.7 box feedback) =====
+chk "OSD sliders show their level: a progress fill under every slider, blank bar texture" 'python3 -c "
+import sys,lxml.etree as E
+for d in (\"xml\",\"xml768\"):
+  for f in (\"VideoOSD\",\"MusicOSD\",\"GameOSD\",\"PlayerControls\"):
+    r=E.parse(\"$S/%s/%s.xml\"%(d,f))
+    for s in r.xpath(\"//control[@type=\x27slider\x27]\"):
+      p=s.getprevious()
+      if p is None or p.get(\"type\")!=\"progress\" or p.findtext(\"info\")!=s.findtext(\"info\") or s.findtext(\"texturesliderbar\")!=\"blank.png\": sys.exit(1)
+" && python3 -c "from PIL import Image;import sys;sys.exit(0 if Image.open(\"'"$S"'/media/blank.png\").size==(24,24) else 1)"'
+chk "volume has -/+ (5 % steps) and a NN% readout in every OSD and the mini player" '(for d in xml xml768; do for f in VideoOSD MusicOSD GameOSD PlayerControls; do grep -q "id=\"9993\"" $S/$d/$f.xml && grep -q "id=\"9994\"" $S/$d/$f.xml && grep -q "SetVolume(100)" $S/$d/$f.xml && grep -q "SetVolume(0)" $S/$d/$f.xml && grep -q "Control.GetLabel(9983)" $S/$d/$f.xml || exit 1; done; done)'
+:
 [ $fail -eq 0 ] && echo "all good" || echo "AUDIT FAILED"
 exit $fail
