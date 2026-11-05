@@ -158,6 +158,63 @@ chk "no unused skin strings"                     'for i in $(sed -n "s/^msgctxt 
 :
 :
 # ===== P4 TV guide =====
+chk "guide has a real epggrid 50 in <views>" 'for d in xml xml768; do python3 -c "
+import sys; from lxml import etree
+r = etree.parse(sys.argv[1]).getroot()
+assert (r.findtext(\"views\") or \"\").strip() == \"50\"
+g = r.xpath(\"//control[@type=\\\"epggrid\\\"][@id=\\\"50\\\"]\")[0]
+assert int(g.findtext(\"left\")) >= 0 and int(g.findtext(\"top\")) >= 0
+for t in (\"channellayout\", \"focusedchannellayout\", \"rulerlayout\", \"itemlayout\", \"focusedlayout\"):
+    assert len(g.findall(t)) == 2 and \"touchmode\" in (g.find(t).get(\"condition\") or \"\"), t
+assert g.findtext(\"pagecontrol\") == \"60\" and r.xpath(\"//control[@type=\\\"scrollbar\\\"][@id=\\\"60\\\"]\")
+assert not r.xpath(\"//control[@type=\\\"epggrid\\\"][@id!=\\\"50\\\"]\")
+" $S/$d/MyPVRGuide.xml || exit 1; done'
+chk "guide title is Guide, not Channel"  'for d in xml xml768; do grep -q "\$LOCALIZE\[19069\]" $S/$d/MyPVRGuide.xml && ! grep -q "LOCALIZE\[19029\]" $S/$d/MyPVRGuide.xml || exit 1; done'
+chk "guide strip: group, now, navigate, options" 'for d in xml xml768; do for a in "id=\"28\"" "EpgGridControl(CurrentProgramme)" "ActivateWindow(PVRGuideControls)" "Action(ContextMenu)" "Action(PageDown)"; do grep -q "$a" $S/$d/MyPVRGuide.xml || exit 1; done; done'
+chk "guide shows the channel group name (label 30) in the title bar" 'for d in xml xml768; do grep -q "Control.GetLabel(30)" $S/$d/MyPVRGuide.xml || exit 1; done'
+chk "guide programme title is id 1 in every programme layout (hidden in tiny cells)" 'for d in xml xml768; do python3 -c "
+import sys; from lxml import etree
+g = etree.parse(sys.argv[1]).getroot().xpath(\"//control[@type=\\\"epggrid\\\"]\")[0]
+ls = g.findall(\"itemlayout\") + g.findall(\"focusedlayout\")
+assert len(ls) == 4
+for l in ls:
+    assert l.xpath(\"control[@type=\\\"label\\\"][@id=\\\"1\\\"]\"), l.get(\"condition\")
+" $S/$d/MyPVRGuide.xml || exit 1; done'
+chk "guide controls: on the bottom edge, compact in normal mode, tap catchers reach every screen edge" 'for d in xml xml768; do python3 -c "
+import sys; from lxml import etree
+r = etree.parse(sys.argv[1]).getroot()
+H = 768 if sys.argv[1].endswith(\"xml768/DialogPVRGuideControls.xml\") else 600
+box = r.find(\"controls\").find(\"control\")
+assert box.findtext(\"bottom\") == \"0\" and box.findtext(\"top\") is None
+bh, bw = int(box.findtext(\"height\")), int(box.findtext(\"width\"))
+bx, by = (1024 - bw) // 2, H - bh
+cs = {c.get(\"id\"): c for c in box.xpath(\"control[@type=\\\"button\\\"]\") if c.get(\"id\", \"\").startswith(\"997\") and c.get(\"id\") != \"9970\"}
+assert sorted(cs) == [\"9971\", \"9972\", \"9973\", \"9974\"], sorted(cs)
+def rect(c):
+    l, t, w, h = (int(c.findtext(k)) for k in (\"left\", \"top\", \"width\", \"height\"))
+    return bx + l, by + t, bx + l + w, by + t + h
+L, R, T, B = (rect(cs[i]) for i in (\"9971\", \"9972\", \"9973\", \"9974\"))
+assert L[0] <= 0 and L[1] <= 0 and L[3] >= H and L[2] == bx
+assert R[2] >= 1024 and R[1] <= 0 and R[3] >= H and R[0] == bx + bw
+assert T[1] <= 0 and T[3] == by
+assert all(c.findtext(\"onclick\") == \"Action(close)\" for c in cs.values())
+boxes = box.xpath(\"include[@content=\\\"Dialog_Box\\\"]\")
+hs = sorted(int(i.xpath(\"param[@name=\\\"height\\\"]/@value\")[0]) for i in boxes)
+assert len(boxes) == 2 and hs[1] == bh and hs[0] < bh - 30, hs
+assert B[1] == by + hs[0] and B[3] >= H and \"!\" in cs[\"9974\"].findtext(\"visible\")
+" $S/$d/DialogPVRGuideControls.xml || exit 1; done'
+chk "guide controls: 12 jumps, every button labelled" 'for d in xml xml768; do python3 -c "
+import sys; from lxml import etree
+r = etree.parse(sys.argv[1]).getroot()
+bs = r.xpath(\"//control[@type=\\\"button\\\" or @type=\\\"radiobutton\\\"][not(starts-with(@id,\\\"99\\\"))]\")
+assert len(bs) == 12
+for b in bs:
+    assert (b.findtext(\"label\") or \"\").strip() and b.findtext(\"onclick\"), b.get(\"id\")
+args = {b.findtext(\"onclick\") for b in bs}
+want = \"FirstProgramme -12 CurrentProgramme +12 LastProgramme SelectDate FirstChannel PlayingChannel LastChannel PreviousGroup NextGroup SelectGroup\"
+assert args == {\"PVR.EpgGridControl(%s)\" % a for a in want.split()}, args
+assert r.xpath(\"//onclick[text()=\\\"Action(close)\\\"]\")
+" $S/$d/DialogPVRGuideControls.xml || exit 1; done'
 :
 :
 # ===== P5 touch chrome & controls =====
