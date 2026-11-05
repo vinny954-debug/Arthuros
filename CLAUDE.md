@@ -8,7 +8,7 @@ Context for Claude Code. Read this first, then `README.md` (user-facing), then
 A from-scratch Kodi 21 (Omega) skin styled after Acorn **Arthur 1.2**: 16-colour
 pixel desktop, 1px outlines, chunky bevels, no gradients, no animations, bitmap
 font (Tamzen) used only at native or exactly-doubled sizes. Owner: Vince.
-Current version: **0.9.6** (see `skin.arthuros/changelog.txt`).
+Current version: **0.9.7** (see `skin.arthuros/changelog.txt`).
 
 Two layouts ship:
 - `xml/` — 1024x600, 16:9, default (7" panels).
@@ -49,10 +49,14 @@ RES=xml768 python3 preview.py skin.arthuros/xml768/Home.xml out.png
 XL=1 SET="home.layout=3x3;touchmode=true" python3 preview.py ...   # fontset + state
 SET="Container.PluginName=plugin.video.youtube" ...            # any infolabel/bool by exact name
 RES=xml768 python3 validate.py                                  # validate the 4:3 folder
+python3 preview.py --selftest                                   # preview geometry self-check
+python3 tallpass.py --check keyboard                            # one 4:3 special case (audit runs all)
+python3 vendor/kodi/mktables.py                                 # regenerate vendor/kodi/*.txt from Omega
 ```
 
-`preview.py` is *approximate* (no clipping of grouplists, shows both XL and normal
-layouts in some dialogs, unknown conditions count as true). Use it to catch
+`preview.py` is *approximate*: it clips grouplists and anchors `<bottom>`/`<right>`
+like Kodi, but unknown conditions count as true (set states with `SET=`), it draws
+no focus state, and it can't draw the Unicode fontset (arial.ttf is not vendored). Use it to catch
 layout mistakes, then confirm on the box. **Screenshots from the real device are
 the only proof** — a clean kodi.log proves nothing about appearance.
 
@@ -61,7 +65,7 @@ the only proof** — a clean kodi.log proves nothing about appearance.
 | Step | Script | Writes |
 |---|---|---|
 | textures | `mkmedia.py` (+ `iconset.py` registry) | `media/*.png` — every PNG, from pixel grids |
-| fonts | `mkfonts.py` | `xml/Font.xml` (7 fontsets) |
+| fonts | `mkfonts.py` | `xml/Font.xml` (7 fontsets) + `fonts/Unicode.xml`; patches extra glyphs (’ “ ” – … • € ™) into `fonts/Tamzen*.ttf` in place, idempotent |
 | language | `mklang.py` | `language/resource.language.en_us` from en_gb |
 | windows | `genwindows.py` (uses `inventory.json`) | ~55 generic windows in `xml/` |
 | desktop | `home.py`, then `ARTHUR_H=768 home.py` | Home.xml, Includes_Home.xml, Custom_1120–1126; 768 desktop into `build768/` |
@@ -72,7 +76,7 @@ the only proof** — a clean kodi.log proves nothing about appearance.
 | contrast | `palettecheck.py` | WCAG check of every palette |
 | icons | `iconcheck.py` | every icon unique, registry complete |
 | text fit | `textfit.py` | every fixed label fits in every fontset |
-| audit | `audit.sh` | regression checks for every past fix |
+| audit | `audit.sh` (+ `labelcheck.py`, `logincheck.py`, `p12check.py`) | regression checks for every past fix |
 
 ### The one rule: never hand-edit a generated file
 
@@ -91,9 +95,12 @@ Fix the generator instead.
   MusicVisualisation, MyMusicPlaylistEditor, MyPVRGuide, MyWeather,
   PlayerControls, Pointer, SettingsCategory, SettingsProfile,
   SettingsScreenCalibration, SettingsSystemInfo, SlideShow, SmartPlaylistEditor,
-  SmartPlaylistRule, Startup, VideoFullScreen, VideoOSD, VideoOSDBookmarks
-- by `home.py`: Home, Includes_Home, Custom_1120…1126
-- by `mkfonts.py`: Font.xml · by `sizepass.py`: Includes_Size.xml
+  SmartPlaylistRule, Startup, Timers (root `<timers>`), VideoFullScreen, VideoOSD,
+  VideoOSDBookmarks
+- by `home.py`: Home, Includes_Home (also `Settings_HubLayouts`, `SkinFontVar`),
+  Custom_1120…1126; `ARTHUR_H=768` writes the 768 desktop, hub layouts and
+  icon picker into `build768/`
+- by `mkfonts.py`: Font.xml, `fonts/Unicode.xml` · by `sizepass.py`: Includes_Size.xml
 - everything in `media/`, `language/resource.language.en_us/`, `xml768/`, `build768/`
 
 **Hand-maintained XML (edit directly; themepass/sizepass still touch them idempotently):**
@@ -130,9 +137,40 @@ regress.
   in `media/icons24`, `icons` (48), `icons64`, `icons80`, `icons96`.
   `iconcheck.py` rejects duplicates and repeats within a menu. **No brand
   logos** — add-ons get original ArthurOS pictures (addon_stream, addon_server…).
-- **Strings:** skin strings live in en_gb `strings.po`. Used: 31900–31998;
-  **31999 is the last free id in that block** — open a new block (e.g. 31800–31899)
-  next. Prefer an existing Kodi string id when one says the same thing.
+- **Strings:** skin strings live in en_gb `strings.po`. Blocks: 31900–31999
+  (free: 31900, 31905, 31908, 31909, 31911, 31913–31916, 31974, 31999), 31800–31899
+  (marked per area with `# ===== Pn strings` comments; many free), and 31700–31769
+  (unused, reserved). `audit.sh` fails on an unused skin string. Prefer an existing
+  Kodi string id when one says the same thing.
+- **Labels:** a bare number in `<label>`/`<label2>`/`<altlabel>`/`<hinttext>` is a
+  string id (digits 0–9 are `$LOCALIZE[12310..12319]` or `$NUMBER[n]`);
+  `validate.py` rejects it.
+- **Transport glyphs** exist only white: `icons16|icons24/w_<name>.png` (play,
+  pause, stop, prev, next, rew, ffwd, shuffle, repeat, volume, mute; icons24 are
+  32x32). Use them through `genwindows` `glyph_tex`/`icon_radio`/`tinted_glyph`,
+  which tint `text` / `textinv` (focused) / `textdisabled`. audit fails on an
+  untinted `w_*`. Palette colour `epgnow` is the guide's now line (palettecheck).
+- **Touch hit areas:** `<hitrect>` is in the parent's coordinates (a grouplist
+  child's slot); pad at most half the item gap. sizepass generates `Size_Hit`,
+  `Size_Height`, `Size_Top`, `Size_Left`, `Size_Width` pairs; Touch mode widens
+  list scrollbars to 30 px (the list shrinks 12).
+- **Chrome ids:** 9100 Start, 9101 Now playing, 9102 mini player, 9103 Settings,
+  9104 parked window, 9105 touch Back, 9106 Power, 9107 floating touch Back
+  (task bar hidden), 9108 dialog touch Back (`Dialog_TouchBack`), 9109 menu-bar
+  volume (opens PlayerControls). `Dialog_Dim` = dim + touch Back;
+  `Dialog_DimClose` = a tap on the dim runs Back (only where nothing is lost).
+- **genwindows.dialog()** takes `anchor="bottom"` (OSDs, seek bar, bookmarks,
+  info), `visible=` window conditions (modeless dialogs such as DialogSeekBar
+  open only through these), `pre=` (tap catchers), `default_always`, and falls
+  back to `TITLES[name]` when Kodi writes no heading (`KODI_HEADED` excepted).
+  `osd_row_worst()` asserts every OSD text row fits 1008 px in every state.
+- **Sliders** need `<orientation>horizontal</orientation>` (Kodi's default is
+  vertical; Defaults.xml sets it). Kodi-driven sliders/progress have no `<info>`.
+- **validate.py** fails on any warning not in `KNOWN_WARNINGS` (now empty) and
+  checks builtins, actions, window names, info labels, `$VAR`/`$EXP`, SetFocus /
+  Container ids and the Kodi-required ids in `KODI_IDS` (tables in
+  `vendor/kodi/*.txt`). Ids inside container layouts and non-focusable controls
+  may repeat.
 - **Grouplists:** every child needs an `id` (id 0 breaks navigation) — put
   captions/labels outside the grouplist.
 - **Static item properties:** never name them `icon`, `thumb`, `label`, `label2`
@@ -141,7 +179,7 @@ regress.
 - **Desktop tiles** are skin strings `tile.N.{id,lid,pre,name,icon,image,action,addon}`,
   N=1..36, `home.layout` ∈ 3x3, 4x3 (default), 4x4, 5x4, 5x5, 6x5, 6x6.
 - **Version stamps** (bump all on release): `addon.xml`, `xml/SkinSettings.xml`
-  (`v0.9.6  -  1024x600`), `xml/Includes_Chrome.xml` (`ArthurOS 1.2 (v0.9.6)`),
+  (`v0.9.7  -  1024x600`), `xml/Includes_Chrome.xml` (`ArthurOS 1.2 (v0.9.7)`),
   `changelog.txt` (newest first), `README.md` (current version + zip names).
   `audit.sh` checks the stamps match.
 
@@ -177,6 +215,38 @@ regress.
   500 ms after a change; `UnloadSkin` writes in-memory settings over the file.
 - Kodi reuses `addons/packages/*.zip` when the version matches (how 32-bit
   binaries came back after a box migration).
+- Fullscreen video: a tap (LeftClick) opens VideoOSD; the OSD is **modal**, so a
+  tap on the picture goes to the OSD - a transparent full-screen button behind
+  the bar closes it. `Action(FullScreen)` = ACTION_SHOW_GUI leaves playback to
+  the menus; `Action(X,<window>)` goes straight to that window's OnAction.
+- Built-in slider actions (GUISliderControl.cpp): `seek`, `pvr.seek`, `volume`
+  (fireOnDrag). Volume keys step 1/volumesteps (~1 %), so +/- buttons are no
+  substitute for a slider.
+- Modeless dialogs (DialogSeekBar, DialogExtendedProgressBar, DialogVolumeBar)
+  never get input. SlideShow draws skin controls ON TOP of the picture and
+  eats the arrow keys. DialogBusy renders only when topmost.
+- `Player.FilenameAndPath` keeps `plugin://<id>/` during plugin playback
+  (only DynPath is resolved) - `scripts/addonsettings.py` reads it.
+- epggrid: programme cells are `itemlayout`/`focusedlayout`; only controls with
+  ids 1-14 stretch to a programme's width. `PVR.EpgGridControl(...)` acts on the
+  active guide. Kodi opens DialogPVRGuideControls for Navigate... only because
+  the file exists.
+- The keyboard heading goes to label 311, the slider heading to label 10;
+  settings level button 20 needs `<onclick>SettingsLevelChange</onclick>`.
+- PVR ids 6 (channels) and 7 (recordings) must be radiobuttons (static_cast).
+  Kodi writes "N Objects" into any id 12. id 0 never enters the control lookup.
+- Grouplists copy their onup/ondown (with conditions) to each child; Kodi has no
+  spatial navigation, so stacked horizontal rows need explicit row navigation
+  (`row_nav()`).
+- `<usealttexture>` is the togglebutton's *selected* condition (never `true`).
+- Font lookup: skin `fonts/` -> special://home/media/Fonts -> special://xbmc/
+  media/Fonts, so `arial.ttf` needs no shipping. Omega ignores
+  `<fontset unicode=...>`: the user picks Unicode by hand. No per-glyph fallback.
+- A folder-copied add-on is inserted disabled (CAddonDatabase::SyncInstalled);
+  install-arthuros.sh enables it in Addons33.db while Kodi is stopped.
+- Under `set -e`, a failure in `a && b` is ignored unless it is the last command
+  (build.sh has one command per line); audit.sh's `chk` runs each check in a
+  subshell.
 
 Reference sources in `vendor/kodi/src/` (Skin.cpp, game dialogs) and Estuary
 excerpts in `vendor/kodi/estuary-ref/`. For anything else, read the Kodi
@@ -186,30 +256,42 @@ excerpts in `vendor/kodi/estuary-ref/`. For anything else, read the Kodi
 
 ## Scripts that run inside Kodi (`skin.arthuros/scripts/`)
 
-- `backup.py` — skin settings backup/restore (JSON-RPC + Skin.* builtins).
-- `mousewatch.py` — Touch mode mouse detection via `/proc/bus/input/devices`.
+- `backup.py` — skin settings backup/restore/reset (JSON-RPC + Skin.* builtins);
+  reset keeps touchmode and the pointer choice.
+- `mousewatch.py` — Touch mode mouse detection via `/proc/bus/input/devices`;
+  honours `Skin.HasSetting(touch.pointer.show|hide)` (neither = Auto). Started
+  from Startup (when the start window isn't Home), Home and Skin settings.
+- `addonsettings.py` — opens the settings of the add-on that is playing.
 - `netbt.py` — Wi-Fi/Bluetooth/audio output for Raspberry Pi OS (nmcli,
   bluetoothctl). Vince's own script, shipped verbatim — ask before changing it.
 
 All via `RunScript(special://skin/scripts/<name>.py[,args])`.
 
-## State at handover (0.9.6)
+## State at handover (0.9.7)
 
-Installed on the Pi 4 at 0.9.5 (confirmed working install). 0.9.6 built and
-delivered, **not yet tested on the box**. Untested-on-hardware items:
-- 0.9.6 OSD Settings row, Add-on button (does `arthuros.plugin` get set when
-  YouTube is started from its own menus / a favourite / a tile?), the
-  toolbar Add-on settings button, the game picture dialogs.
-- 0.9.5 4:3 layout on the real 2048x1536 panel.
-- netbt.py on real hardware (polkit may refuse NetworkManager for a service user).
-- Editor dialogs 1124/1126 closing themselves from onload; Tile dialog load time.
+Installed on the Pi 4 at 0.9.5 (confirmed working install). 0.9.6 and 0.9.7 are
+built but **not yet tested on the box**. 0.9.7 implements the whole 0.9.6 audit
+(`docs/audit-0.9.6.md`, 92 findings; final verification: 87 fixed, 6 partly by
+design) - checked in Kodi source and preview only. Test first on hardware:
+- Video OSD: tap opens the bottom bar; tap the picture / Hide closes it; volume
+  slider + mute; seek slider; Menus returns to the browser while playing;
+  Rewind/Forward; the seek strip on pause/skip; Bookmarks, Info.
+- Touch mode: dialog Back buttons, title-bar boxes, task-bar Power, context menu
+  tap-outside, keyboard keys on the 7" panel, scrollbars, Pointer in Touch mode.
+- TV guide grid, Navigate..., channel OSD, live-TV preview/switch.
+- Slideshow strip; game OSD; music visualisation buttons.
+- install-arthuros.sh on Raspberry Pi OS and LibreELEC (enable-in-DB, polkit rule).
+- netbt.py polkit message on real hardware; the Unicode fontset.
+- Still untested from 0.9.6: the Add-on settings button paths, game picture dialogs,
+  the 4:3 layout on the real 2048x1536 panel, editor dialogs 1124/1126 onload.
 
 Known gaps / candidates:
-- Settings hub tile panel doesn't use the extra height at 768.
-- Dialogs keep 600-era sizes in 768.
-- Toolbar buttons are 26 px high — small for touch.
-- PVR guide (`epggrid`) and channel windows deserve a design pass.
+- Info dialogs keep 30 px faces (34 px hit rects); three 46 px rows don't fit at 600.
+- Scrollbars beside panels/grouplists/epggrid keep an 18 px look (30 px hit area).
+- Weather tiles at 768 keep the 600 icon/day design.
+- Calibration art is rescaled by Kodi from 1920x1080 (never pixel-exact).
 - On 5x5/6x6 desktops very long tile names lose their last line.
+- PVR channel/recording windows could still use a design pass beyond the guide.
 
 ## Working with Vince
 

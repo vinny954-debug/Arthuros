@@ -1,86 +1,195 @@
 v0.9.7
-A big touch and remote pass, from the 0.9.6 review. Everything below was
-checked in Kodi's source and in preview renders only - none of it has been
-tried on the Pi yet. Please test on the box, by finger and by remote.
+A big touch-and-remote release that fixes everything found in the 0.9.6
+review (docs/audit-0.9.6.md). It was checked against Kodi's source and in
+preview renders only, not yet on the Pi. Please test it on the box, both
+by finger and by remote.
 
 Playing video, music and games
-- The on-screen controls are now one bar along the bottom edge, with big
-  buttons: seek slider (drag or tap; on live TV it seeks the timeshift),
-  previous / rewind / play-pause / stop / forward / next, mute and a volume
-  slider. Tap the picture above the bar to hide it.
-- "Close" is now "Hide": it only hides the bar. NEW "Menus" goes back to
-  the browser or desktop while the film, song or game keeps playing; the
-  task bar's Now playing brings you back.
-- Live TV: swiping up/down only previews another channel. The channel name
-  and programme now show at the top, and the bar has "Switch to channel"
-  while the preview is up (tap the picture, then Switch). Previous / Next
-  on live TV now always show as a pair.
-- Info shows a progress bar; the seek strip that pops up when you skip is
-  a plain bar now (it looked draggable and wasn't).
-- Music: visualisation and preset buttons; radio shows Radio text.
-- Picture viewer: tap the picture for a strip with previous, play/pause,
-  next, info and close.
-- The zoom / view-mode readout is full width and scrolls, so the long
-  "Sizing" line is no longer cut off with Extra large fonts.
+- The on-screen controls are now one bar along the bottom edge instead of
+  a box in the middle of the picture. Tap the picture above the bar to hide
+  it. "Hide" only hides the bar. NEW "Menus" takes you back to the browser
+  or desktop while the film, song or game keeps playing; Now playing on the
+  task bar brings you back.
+- Volume by touch: a mute button (a speaker, crossed out while muted) and a
+  volume slider on the bar and in the mini player. You can also tap the
+  speaker/volume gauge at the top right of the menu bar to open the mini
+  player.
+- Seek by touch: drag the position bar or tap anywhere on it. On live TV it
+  seeks within the timeshift buffer.
+- Rewind and Fast-forward now really rewind and fast-forward (they used to
+  pause). Play turns into Pause while something plays.
+- The buttons are bigger and drawn in the palette's text colour, so they
+  are readable on dark palettes too. A tap in the small gap between two
+  buttons hits the nearer one.
+- New buttons: Info (with a progress bar, plot and Process info), Playlist
+  (what is queued), Subtitles, Audio, Video, Bookmarks and Add-on settings.
+  Add-on settings now works however playback started (from the add-on, a
+  favourite or a desktop tile).
+- When you pause, skip or fast-forward, a thin strip at the bottom shows
+  the position and the speed or "Paused". Buffering shows a box with the
+  percentage. Zoom/view-mode changes show full width.
+- Bookmarks opens as a panel at the bottom, so the video stays visible. Its
+  buttons have labels, and Clear asks first (it also deletes the resume
+  point).
+- Music: shuffle and repeat show whether they are on. NEW Visualisation
+  button, plus Preset and Locked when the visualisation has presets.
+  Without a visualisation add-on, full-screen music shows the fanart or a
+  big cover instead of black. Radio streams no longer show a stray " - ".
+- Games: Controls, Ports and Players in the game menu, and a note that only
+  controllers can play.
+- Remote: opening the bar starts on Play/Pause, so OK can't repeat Stop by
+  accident. Left/Right go round both rows.
+
+Live TV and radio
+- NEW real TV/Radio guide grid: channels down the left, a time ruler along
+  the top, a "now" line, and red dots for recordings. The strip on the left
+  has Group, Now, -12 h, +12 h, Date, Page up/down, Information, Options
+  and Navigate... Tap a programme to select it, long-press it for the menu,
+  drag to scroll. The guide is titled "Guide" (it said "Channel").
+- The guide's Navigate... box was six blank buttons. It now has labelled
+  jumps and sits on the bottom edge with the grid in view.
+- On the bar while watching: Channels, Guide, Teletext, Record (which reads
+  Stop recording while recording), and Radio text for radio. A swipe up or
+  down previews another channel: its name and programme show at the top and
+  the bar offers "Switch to channel". Previous/Next always come as a pair.
+- The channel list while watching shows number, logo, what is on now with
+  times and progress, now/next for the highlighted channel, and arrows to
+  change group. Tap outside it to close.
+- Programme and recording info show channel, date, start-end time, episode
+  and genre. The five guide-only buttons on recordings, which did nothing,
+  are gone.
+- Channels: Group and Show hidden channels buttons. Recordings: Group
+  items, Deleted recordings and the watched filter. Timers: Hide disabled.
+  The channel manager, group manager and guide search have a caption on
+  every button.
+
+Pictures
+- Pictures and slideshows really show the picture (a grey sheet covered
+  it).
+- Tap the picture for a strip with Previous, Play/Pause, Next, Info and
+  Close. The strip hides itself after 5 seconds.
+- Pictures gets View slideshow, Recursive slideshow and Randomise buttons.
+  Picture info shows the picture beside its details.
 
 Touch
-- Most buttons are finger-sized in Touch mode: task bar, title-bar boxes,
-  toolbars, OSD rows, dialog button rows, info-dialog buttons, the file
-  browser (tile picture picker) and the select lists' OK/Cancel row.
-- The on-screen keyboard on the 7" panel gets 56 px keys in Touch mode
-  (and with Extra large fonts), like the 4:3 layout.
-- List and settings scrollbars are a finger wide in Touch mode.
-- Tapping the dimmed picture closes the OSD Subtitle/Audio/Video settings,
-  the Power menu and Now playing (it never closes the keyboard, number pad,
-  a confirmation or add-on settings, where you'd lose what you typed).
-- The context menu: a tap outside closes it; a tap that just misses an
-  entry no longer does. With a real mouse, clicking outside does nothing
-  (right-click or Back closes it).
-- Screen calibration says what really works by touch: tap to pick the next
-  marker, swipe to nudge it, tap and hold (or Back) to finish.
-- Long dialog titles (keyboard prompts, add-on settings) no longer run
-  under the title-bar boxes in Touch mode.
+- NEW Power button on the task bar (shut down, reboot, exit). Power is also
+  in the Settings hub and the desktop's Settings tile, for when the task
+  bar is hidden.
+- In Touch mode every pop-up has its own Back button at the bottom right
+  (the task bar doesn't react while a pop-up is open). With "Hide the task
+  bar" on, a Back button still floats at the bottom right.
+- Finger-sized in Touch mode: the title-bar boxes (wider and
+  spaced apart, with × alone at the far right), task-bar buttons (the whole
+  bar height reacts), the browser toolbars, dialog button rows, info-dialog
+  buttons, the select lists' OK/Cancel row, spin arrows, slider knobs,
+  scrollbars and the picture picker rows.
+- The on-screen keyboard gets 56 px keys in Touch mode on the 7" panel, and
+  on the 4:3 screen.
+- Things that couldn't be scrolled by finger now can: the text viewer
+  (changelogs, logs), long confirmations, plots and add-on descriptions,
+  the privacy policy, the skin settings list and its help, and the tile
+  catalogue.
+- The context menu can be twice as tall, with a scrollbar when needed. A
+  tap outside closes it; a tap that just misses an entry no longer does.
+- Tapping the dimmed background closes the OSD settings, the Power menu
+  and the mini player. It never closes the keyboard, number pad,
+  confirmations or add-on settings, so nothing you typed is lost.
+- Toolbar "Options" opens the menu for the selected item (it did nothing).
+- Skin settings > NEW "Pointer in Touch mode": Auto / Always / Never. In
+  Auto, a touchscreen's own built-in "mouse" no longer keeps the pointer
+  on. Mouse detection also starts when Kodi starts in a window other than
+  the desktop.
+- Screen calibration: the markers are visible, and the hint says what
+  works by touch (tap to pick the next marker, swipe to nudge it, tap and
+  hold or Back to finish).
 
-Remote
-- The on-screen keyboard and the number pad work with a remote: Up/Down
-  move between the rows (before, only the bottom row could be reached).
-- Select lists: Up from OK/Cancel goes back to the list.
-- OSD: Left/Right go round both rows the same way, also during audio
-  passthrough when the volume slider is off.
+Remote and keyboard
+- The on-screen keyboard and the number pad work with a remote: Up and Down
+  move between the rows (before, only one row could be reached).
+- Select lists: Up from OK/Cancel goes back to the list. Info screens
+  always open with a button selected. Nothing gets stuck on the touch Back
+  buttons or the scrollbars.
 
-TV guide and PVR
-- Real TV/Radio guide grid with a button strip (Group, Now, -12 h, +12 h,
-  Date, Page up/down, Information, Options, Navigate...). The strip is
-  wider so "Group: All channels" fits.
-- Programme and recording info show channel, date, start-end time,
-  episode and genre; the empty cast box is gone.
-- The channel list title names the group being shown (TV and radio), and
-  the channel's guide is titled "Guide - <channel>".
-- The playing channel (and any marked row) is readable when focused - it
-  was dark red on blue.
+Missing text and dead buttons
+- The number pad shows 0-9 again, not "Programs", "Pictures"...
+- The on-screen keyboard's title says what it is asking for (Wi-Fi
+  password, search, name...).
+- Add/Edit media source: Browse, Add, Remove and Name have captions, and a
+  scrollbar shows when there are many paths.
+- Audio/subtitle delay and similar sliders: the title names the setting,
+  and - and + step the value.
+- Every slider now shows its bar and knob (they were invisible).
+- Settings: the Basic/Standard/Advanced/Expert button works, and add-on
+  settings have one too.
+- Pop-ups that had an empty title bar (player, power menu, bookmarks, PVR
+  dialogs, info) now have a title.
+- Smart playlist editor and rule, music playlist editor (you can see the
+  playlist you are building), video versions manager, event log, profiles
+  and colour picker (now with swatches): every button is labelled and the
+  dead blank ones are gone.
+- Power menu: "Enter/Leave master mode" instead of "Lock settings". The task
+  bar's Start follows Kodi's language.
+- Background jobs (library scan, guide import) show a small box in the
+  bottom-right corner instead of dimming the whole screen. The Busy box has
+  a Cancel you can tap.
 
-Desktop and settings
-- Power button on the task bar and in the Settings hub; Reset skin settings
-  asks first and keeps Touch mode, colours and fonts.
-- Rename on a library tile starts empty: cancel or confirm an empty name
-  and the tile keeps following its own (UK/US) label.
-- "Scroll long descriptions" now really decides whether plots and
-  descriptions scroll by themselves (info dialogs, browser info panel,
-  add-on info, System information). Confirmations and the skin settings
-  help always scroll.
+Browsers and info
+- Library, playlist and add-on windows have a second row of buttons for
+  that window: play queue Shuffle/Repeat/Save/Clear; Videos and Music
+  Search, Watched filter, Party mode and Update library; inside add-ons,
+  Refresh and Add-on start page.
+- Lists, posters and icons show a tick when watched, a half circle when
+  part-watched, and a play mark on what is playing.
+- Posters and icons show the real picture (episode thumbs, add-on art, file
+  and folder icons), and their titles wrap onto a second line.
+- Album and artist info show the cover. Film/TV info hides Trailer,
+  Director, Versions and Extras when there is nothing behind them, and Play
+  reads Browse on a TV show or season.
+- Sort Order says Ascending or Descending, and View says List, Poster or
+  Icons. Empty folders say "Empty list". The item count also shows inside
+  add-ons.
+- The current value in every settings choice list is readable when
+  highlighted (it was dark red on blue). Chosen rows get a tick.
+
+Desktop and skin settings
+- "Defaults" is now "Reset skin settings..." and asks first, offering
+  Reset, Back up and Cancel. Touch mode and the pointer choice survive a
+  reset.
+- Back up / Restore: Cancel really cancels. Restore no longer brings back
+  an old parked-window button.
+- Tiles: Rename is greyed out on an empty slot, so "(empty)" tiles no
+  longer appear. Renaming a library tile starts empty, so the tile keeps
+  following its own label.
+- "Scroll list labels" is now "Scroll long descriptions", and it really
+  decides whether plots and descriptions scroll by themselves.
+- "Hide the date and clock" also hides the task-bar clock. Minimise (_) no
+  longer throws away the window you had parked before.
+- Customise desktop: Done is no longer cut off in Touch mode / Extra large.
+  The tile catalogue lists can be scrolled. The icon picker uses its whole
+  box and no longer offers the small status marks.
+
+4:3 screen (1024x768)
+- The keyboard, the context menu and the Settings hub use the extra height,
+  with sharper icons. System information and the weather no longer leave
+  big gaps. The icon picker shows two more rows.
 
 Fonts
-- The bitmap font now has curly quotes, dashes, the ellipsis, bullet, and
-  NEW euro and trademark signs (€ ™), so YouTube and Plex titles no longer
-  lose them. For other alphabets choose the "Unicode (all alphabets)" font
-  in Settings > Interface > Skin > Fonts.
+- The bitmap font now has curly quotes, dashes, the ellipsis, bullet, euro
+  and trademark signs, so YouTube and Plex titles no longer lose them.
+- NEW font choice for other alphabets (Polish, Greek, Russian, Japanese...):
+  Settings > Interface > Skin > Fonts > "Unicode (all alphabets)". It uses
+  Kodi's own smooth font at the same sizes. Kodi doesn't switch to it by
+  itself, so choose it when you need it.
 
-Network & Bluetooth (your netbt.py - two small changes, please approve)
-- A saved open (no-password) Wi-Fi network that fails to connect now says
-  why, instead of nothing.
-- "Not allowed to manage networks" names the user Kodi really runs as and
-  points at the polkit rule install-arthuros.sh offers to add (a systemd
-  Kodi has no login session, so NetworkManager refuses it otherwise).
+Install and Network & Bluetooth
+- install-arthuros.sh switches the skin on in Kodi by itself, so it shows up
+  in the skin list on a fresh box. It works on LibreELEC (root, no sudo),
+  and never leaves Kodi stopped or without a skin if a step fails. It can
+  add the polkit rule that lets Network & Bluetooth change Wi-Fi when Kodi
+  runs as a service; it asks once.
+- Wi-Fi (netbt.py): if a saved open network fails to connect, you now get a
+  message saying why. "Not allowed to manage networks" names the user Kodi
+  really runs as.
 
 v0.9.6
 - Player settings are back in the on-screen controls. Tap the screen (or
