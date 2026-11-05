@@ -35,7 +35,7 @@ for p in sorted(glob.glob(os.path.join(XML,"*.xml"))):
                 includes[i.get("name")] = i
     elif root.tag == "window":
         windows[os.path.basename(p)[:-4]] = root
-    elif root.tag == "fonts":
+    elif root.tag in ("fonts", "timers"):
         pass
     else:
         warns.append(f"{os.path.basename(p)}: unexpected root <{root.tag}>")
@@ -75,7 +75,9 @@ def resolve(el, params=None, depth=0, chain=()):
             yield from resolve(body if body is not None else inc, p, depth+1, chain+(tag,))
             continue
         yield (ch, params, chain)
-        yield from resolve(ch, params, depth+1, chain)
+        # a container layout scopes its control ids per item: mark the chain
+        nxt = chain + ("@layout",) if ch.tag.endswith("layout") else chain
+        yield from resolve(ch, params, depth+1, nxt)
 
 def sub(t, params):
     if not t: return t
@@ -83,6 +85,8 @@ def sub(t, params):
         for k, v in params.items(): t = t.replace(f"$PARAM[{k}]", v)
     return t
 
+NONFOCUS = {"image", "label", "fadelabel", "progress", "textbox", "rss", "multiimage",
+            "visualisation", "videowindow", "gamewindow", "ranges"}
 for wname, root in sorted(windows.items()):
     seen_ids = collections.Counter()
     nav_refs, ctrl_ids = [], set()
@@ -94,7 +98,16 @@ for wname, root in sorted(windows.items()):
                     errors.append(f"{wname}: non-numeric control id '{cid}'")
                 else:
                     branch = next((c for c in chain if "?" in c), None)
-                    seen_ids[(cid, branch)] += 1; ctrl_ids.add(cid)
+                    # Duplicate ids only matter for controls that take focus or
+                    # are addressed as one (groups, containers, buttons...). Kodi
+                    # keeps ids inside container layouts per item, and
+                    # non-focusable controls may share an id on purpose (e.g.
+                    # VideoFullScreen's buffering box: every child id 1, so the
+                    # BLUE_BAR id-0 broadcast never hides it - as in Estuary).
+                    in_layout = "@layout" in chain
+                    if not in_layout and el.get("type") not in NONFOCUS:
+                        seen_ids[(cid, branch)] += 1
+                    ctrl_ids.add(cid)
             ct = el.get("type")
             if not ct:
                 errors.append(f"{wname}: <control> with no type")
@@ -529,18 +542,15 @@ for wname, root in sorted(windows.items()):
 # fix it, or add it here with a reason. Fixed ones are only reported, so a
 # package that fixes one doesn't break the build until this list is trimmed.
 KNOWN_WARNINGS = {
-    # 0.9.6 dialogs: onup/ondown to the removed 9100 list (genwindows.py)
-    *(f"{w}: <{t}> points at id 9100 which is not in this window"
-      for w in ("DialogColorPicker", "DialogFullScreenInfo", "DialogPVRChannelManager",
-                "DialogPVRGroupManager", "DialogPVRGuideControls", "DialogPVRGuideSearch",
-                "DialogPVRRadioRDSInfo", "DialogPictureInfo", "DialogVideoManager")
-      for t in ("onup", "ondown")),
-    # 0.9.6 codec overlay (genwindows.py video_fullscreen)
-    "VideoFullScreen: Player.ShowCodec is not an info label/bool Kodi 21 knows - always empty/false",
-    # hand-made media windows that leave out Kodi buttons (design gaps, not crashes)
-    *(f"{w}: missing Kodi control id(s) {sorted(REQUIRED[w][0], key=int)} ({REQUIRED[w][1]})"
-      for w in ("MyMusicNav", "MyPVRChannels", "MyPVRRecordings", "MyPVRTimers",
-                "MyPlaylist", "MyVideoNav")),
+    # Dialog_Dim's tap catcher defaults up/left to the title bar (9903); the
+    # busy spinner has no title bar and nothing to focus - Kodi ignores it.
+    "DialogBusy: <onup> points at id 9903 which is not in this window",
+    "DialogBusy: <onleft> points at id 9903 which is not in this window",
+    # recordings: group button 28 pending a decision (wave 2 triage)
+    "MyPVRRecordings: missing Kodi control id(s) ['28'] (GUIWindowPVRBase.h: channel groups, show deleted)",
+    # MyPVRTimers keeps no channel-group button: timers are not grouped by
+    # channel group in the UI (Estuary has none either)
+    "MyPVRTimers: missing Kodi control id(s) ['28'] (GUIWindowPVRBase.h: channel groups)",
 }
 for x in warns:
     if x not in KNOWN_WARNINGS:

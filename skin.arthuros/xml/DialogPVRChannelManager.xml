@@ -94,6 +94,7 @@
         </control>
         <control type="spincontrolex" id="13">
           <width>420</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="SpinSize_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
           <label>$LOCALIZE[19200]</label>

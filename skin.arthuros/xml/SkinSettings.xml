@@ -190,14 +190,14 @@
       <!-- the help runs past the box with Extra large fonts: drag 97, or it
            scrolls by itself while its scrollbar is not focused -->
       <control type="textbox">
-        <left>612</left><top>126</top><width>326</width><height>376</height>
+        <left>612</left><top>126</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="314" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="326" /></include><height>376</height>
         <font>small</font>
         <pagecontrol>97</pagecontrol>
         <autoscroll delay="6000" time="4000" repeat="8000">!Control.HasFocus(97)</autoscroll>
-        <label>$LOCALIZE[31922]</label>
+        <label>$LOCALIZE[31922][CR][CR]$LOCALIZE[31896]</label>
       </control>
       <control type="scrollbar" id="97">
-        <left>946</left><top>126</top><width>18</width><height>376</height>
+        <include content="Size_Left" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="934" /></include><include content="Size_Left" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="946" /></include><top>126</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="18" /></include><height>376</height>
         <onleft>98</onleft><onup>9100</onup><ondown>9100</ondown>
       </control>
     </control>

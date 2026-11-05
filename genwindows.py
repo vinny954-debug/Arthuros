@@ -122,7 +122,12 @@ def login_safe_boxes(wd, down):
         elif c.get("type") == "image" and "9901" in (c.findtext("visible") or ""):
             v = c.find("visible"); v.text = f"{v.text} + {NOT_AT_LOGIN}"
     b9901 = [c for c in group.iter("control") if c.get("id") == "9901"][0]
-    pos = "".join(etree.tostring(b9901.find(t)).decode().strip() for t in ("right", "top", "width", "height"))
+    # geometry: plain right/top/width/height, or the WinBox include that
+    # gives the boxes their Touch-mode size (Includes_Chrome.xml)
+    pos = "".join(etree.tostring(e, with_tail=False).decode().strip() for e in b9901
+                  if e.tag in ("left", "right", "top", "width", "height")
+                  or (e.tag == "include" and (e.get("content") or "").startswith("WinBox")))
+    assert pos, "login_safe_boxes: no geometry found on 9901"
     grey = (f'<control type="image">{pos}<texture colordiffuse="facetint">wc_face.png</texture>'
             f'<visible>Window.IsVisible(loginscreen)</visible></control>'
             f'<control type="image">{pos}<texture colordiffuse="textdim">wc_min_dg.png</texture>'

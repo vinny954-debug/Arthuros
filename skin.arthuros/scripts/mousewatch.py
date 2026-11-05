@@ -13,9 +13,9 @@
 # vendor and product as a touchscreen is ignored. A wireless receiver with no
 # mouse paired still looks like a mouse, which is what the override is for.
 #
-# Skin settings can override it with one skin string, Skin.String(touch.pointer):
-# "hide" keeps the pointer hidden, "show" keeps it shown, empty (or anything
-# else) is Auto. The decision, and the device that made it, goes to kodi.log
+# Skin settings can override it (Skin settings > Pointer in Touch mode):
+# Skin.HasSetting(touch.pointer.hide) keeps the pointer hidden,
+# Skin.HasSetting(touch.pointer.show) keeps it shown, neither is Auto. The decision, and the device that made it, goes to kodi.log
 # when it changes.
 #
 # Started from Home and from Skin settings when Touch mode is turned on (a
@@ -86,14 +86,14 @@ def mouse_present():
     return False, "no mouse among the input devices"
 
 
-POINTER = "Skin.String(touch.pointer)"     # "", "hide" or "show"
+SHOW = "Skin.HasSetting(touch.pointer.show)"
+HIDE = "Skin.HasSetting(touch.pointer.hide)"
 
 
 def override():
-    v = xbmc.getInfoLabel(POINTER).strip().lower()
-    if v == "show":
+    if xbmc.getCondVisibility(SHOW):
         return True, "Skin settings: always show the pointer"
-    if v == "hide":
+    if xbmc.getCondVisibility(HIDE):
         return False, "Skin settings: always hide the pointer"
     return None
 

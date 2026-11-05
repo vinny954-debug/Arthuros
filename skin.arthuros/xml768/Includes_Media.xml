@@ -258,15 +258,15 @@
        9 randomise (selected when on) -->
   <include name="Media_Extras_Pictures">
     <control type="button" id="6">
-      <width>208</width><height>34</height><font>chrome</font>
+      <width>216</width><height>34</height><font>chrome</font>
       <label>$LOCALIZE[13317]</label>
     </control>
     <control type="button" id="7">
-      <width>208</width><height>34</height><font>chrome</font>
+      <width>216</width><height>34</height><font>chrome</font>
       <label>$LOCALIZE[13318]</label>
     </control>
     <control type="radiobutton" id="9">
-      <width>208</width><height>34</height><font>chrome</font>
+      <width>216</width><height>34</height><font>chrome</font>
       <label>$LOCALIZE[13319]</label>
     </control>
   </include>

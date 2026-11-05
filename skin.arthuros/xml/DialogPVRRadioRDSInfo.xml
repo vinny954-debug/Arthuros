@@ -180,6 +180,7 @@
         <left>8</left><top>342</top><width>884</width><height>56</height>
         <control type="spincontrol" id="21">
           <left>0</left><top>8</top><width>220</width><height>40</height>
+          <include content="SpinSize_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <font>chrome</font>
           <onright>10</onright><onleft>10</onleft><onup>10</onup><ondown>10</ondown>
         </control>

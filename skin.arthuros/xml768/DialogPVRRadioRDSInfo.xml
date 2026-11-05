@@ -35,14 +35,16 @@
         <!-- left + right with no width: Kodi derives the width, so the title
              stops before the window boxes instead of running underneath them -->
         <control type="label">
-          <left>26</left><right>100</right><top>0</top><height>26</height>
+          <left>26</left><include content="WinTitle_Right_Mouse" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinTitle_Right_Touch" condition="Skin.HasSetting(touchmode)"/><top>0</top><height>26</height>
           <align>left</align><aligny>center</aligny>
           <font>chromebold</font><textcolor>titletext</textcolor>
           <label>$LOCALIZE[29900]</label>
         </control>
 
         <control type="label">
-          <right>100</right><top>0</top><width>460</width><height>26</height>
+          <include content="WinTitle_Right_Mouse" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinTitle_Right_Touch" condition="Skin.HasSetting(touchmode)"/><top>0</top><width>460</width><height>26</height>
           <align>right</align><aligny>center</aligny>
           <font>chromesmall</font><textcolor>titletext</textcolor>
           <label></label>
@@ -220,6 +222,7 @@
         <left>8</left><top>342</top><width>884</width><height>56</height>
         <control type="spincontrol" id="21">
           <left>0</left><top>8</top><width>220</width><height>40</height>
+          <include content="SpinSize_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <font>chrome</font>
           <onright>10</onright><onleft>10</onleft><onup>10</onup><ondown>10</ondown>
         </control>

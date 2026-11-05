@@ -155,27 +155,24 @@
         <left>3</left><top>3</top><width>454</width><height>26</height>
         <control type="group">
           <control type="image">
-            <right>70</right>
-            <top>2</top>
-            <width>22</width>
-            <height>22</height>
+            <include content="WinBox">
+              <param name="n" value="1" />
+            </include>
             <texture colordiffuse="facetint">wc_face.png</texture>
             <visible>Window.IsVisible(loginscreen)</visible>
           </control>
           <control type="image">
-            <right>70</right>
-            <top>2</top>
-            <width>22</width>
-            <height>22</height>
+            <include content="WinBox">
+              <param name="n" value="1" />
+            </include>
             <texture colordiffuse="textdim">wc_min_dg.png</texture>
             <visible>Window.IsVisible(loginscreen)</visible>
           </control>
           <control type="button" id="9901">
-            <right>70</right>
-            <top>2</top>
-            <width>22</width>
-            <height>22</height>
-            <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+            <include content="WinBox">
+              <param name="n" value="1" />
+            </include>
+            <texturenofocus border="4" colordiffuse="facetint">wc_face.png</texturenofocus>
             <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
             <label />
             <onclick>Dialog.Close(all,true)</onclick>
@@ -185,65 +182,28 @@
             <visible>!Window.IsVisible(loginscreen)</visible>
           </control>
           <control type="image">
-            <right>70</right>
-            <top>2</top>
-            <width>22</width>
-            <height>22</height>
+            <include content="WinGlyph">
+              <param name="n" value="1" />
+            </include>
             <texture colordiffuse="text">wc_min_g.png</texture>
             <visible>!Control.HasFocus(9901) + !Window.IsVisible(loginscreen)</visible>
           </control>
           <control type="image">
-            <right>70</right>
-            <top>2</top>
-            <width>22</width>
-            <height>22</height>
+            <include content="WinGlyph">
+              <param name="n" value="1" />
+            </include>
             <texture colordiffuse="titletext">wc_min_g.png</texture>
             <visible>Control.HasFocus(9901) + !Window.IsVisible(loginscreen)</visible>
           </control>
-          <control type="button" id="9902">
-            <right>46</right>
-            <top>2</top>
-            <width>22</width>
-            <height>22</height>
-            <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
-            <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
-            <label />
-            <enable>Player.HasMedia</enable>
-            <onclick>Action(FullScreen)</onclick>
-            <onleft>9901</onleft>
-            <onright>9903</onright>
-            <ondown>9000</ondown>
-          </control>
-          <control type="image">
-            <right>46</right>
-            <top>2</top>
-            <width>22</width>
-            <height>22</height>
-            <texture colordiffuse="text">wc_max_g.png</texture>
-            <visible>!Control.HasFocus(9902) + Player.HasMedia</visible>
-          </control>
-          <control type="image">
-            <right>46</right>
-            <top>2</top>
-            <width>22</width>
-            <height>22</height>
-            <texture colordiffuse="titletext">wc_max_g.png</texture>
-            <visible>Control.HasFocus(9902)</visible>
-          </control>
-          <control type="image">
-            <right>46</right>
-            <top>2</top>
-            <width>22</width>
-            <height>22</height>
-            <texture colordiffuse="textdim">wc_max_dg.png</texture>
-            <visible>!Player.HasMedia</visible>
-          </control>
+          <include content="WinBox_Max">
+            <param name="down" value="$PARAM[down]" />
+            <param name="close" value="true" />
+          </include>
           <control type="button" id="9903">
-            <right>22</right>
-            <top>2</top>
-            <width>22</width>
-            <height>22</height>
-            <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+            <include content="WinBox">
+              <param name="n" value="3" />
+            </include>
+            <texturenofocus border="4" colordiffuse="facetint">wc_face.png</texturenofocus>
             <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
             <label />
             <onclick>Action(Back)</onclick>
@@ -251,18 +211,16 @@
             <ondown>9000</ondown>
           </control>
           <control type="image">
-            <right>22</right>
-            <top>2</top>
-            <width>22</width>
-            <height>22</height>
+            <include content="WinGlyph">
+              <param name="n" value="3" />
+            </include>
             <texture colordiffuse="text">wc_close_g.png</texture>
             <visible>!Control.HasFocus(9903)</visible>
           </control>
           <control type="image">
-            <right>22</right>
-            <top>2</top>
-            <width>22</width>
-            <height>22</height>
+            <include content="WinGlyph">
+              <param name="n" value="3" />
+            </include>
             <texture colordiffuse="titletext">wc_close_g.png</texture>
             <visible>Control.HasFocus(9903)</visible>
           </control>

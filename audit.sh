@@ -157,7 +157,7 @@ chk "profiles: Auto login shows the chosen profile" 'grep -q "<label2>\$INFO\[Sy
 chk "channel manager shows hidden, locked, changed"  'for p in ActiveChannel ParentalLocked Changed Icon; do grep -q "ListItem.Property($p)" $S/xml/DialogPVRChannelManager.xml || exit 1; done'
 chk "no Estuary-only blank buttons (799, 501)"   '! grep -lE "id=\"(799|501)\"" $S/xml/EventLog.xml $S/xml/LoginScreen.xml $S/xml/SettingsProfile.xml $S/xml/MyMusicPlaylistEditor.xml'
 chk "TV guide is titled Guide, not Channel"      '! grep -q "LOCALIZE\[19029\]" $S/xml/MyPVRGuide.xml'
-chk "no unused skin strings"                     'for i in $(sed -n "s/^msgctxt \"#\([0-9]*\)\"/\1/p" $S/language/resource.language.en_gb/strings.po); do case $i in 3191[3-6]) continue;; esac; grep -rqs "$i" $S/xml $S/scripts $S/addon.xml || { echo "unused $i"; exit 1; }; done'
+chk "no unused skin strings"                     '( for i in $(sed -n "s/^msgctxt \"#\([0-9]*\)\"/\1/p" $S/language/resource.language.en_gb/strings.po); do case $i in 3191[3-6]) continue;; esac; grep -rqs "$i" $S/xml $S/scripts $S/fonts $S/addon.xml || { echo "unused $i"; exit 1; }; done )'
 :
 :
 # ===== P4 TV guide =====
@@ -316,8 +316,8 @@ chk "installer copies beside addons before replacing" 'grep -q "arthuros-new" $D
 chk "netbt: failed open Wi-Fi says why"  'grep -A1 "if not net.get(\"secure\"):" $S/scripts/netbt.py | grep -q "dialog.ok"'
 chk "netbt: denied fix names Kodi's user, polkit rule" 'grep -q "pwd.getpwuid(os.getuid())" $S/scripts/netbt.py && grep -q "50-arthuros-nm.rules" $S/scripts/netbt.py $D/install-arthuros.sh && ! grep -q "usermod -aG netdev \$USER" $S/scripts/netbt.py'
 chk "mousewatch skips touch controllers' mouse nodes" 'grep -q "ABS_MT_POSITION_X = 0x35" $S/scripts/mousewatch.py && grep -q "INPUT_PROP_DIRECT" $S/scripts/mousewatch.py'
-chk "mousewatch honours Skin.String(touch.pointer) hide/show, logs why" 'grep -q "POINTER = \"Skin.String(touch.pointer)\"" $S/scripts/mousewatch.py && grep -q "v == \"hide\"" $S/scripts/mousewatch.py && grep -q "v == \"show\"" $S/scripts/mousewatch.py && grep -q "xbmc.LOGINFO" $S/scripts/mousewatch.py'
-chk "skin XML uses only the pointer setting mousewatch reads" '! grep -rhoE "touch\.pointer[A-Za-z0-9_.]*" $S/xml/ | grep -vx "touch.pointer" && ! grep -rhoE "touch\.pointer\)?,[A-Za-z]+" $S/xml/ | grep -vxE "touch\.pointer\)?,(hide|show)"'
+chk "mousewatch honours the touch.pointer.show/hide settings, logs why" 'grep -q "Skin.HasSetting(touch.pointer.show)" $S/scripts/mousewatch.py && grep -q "Skin.HasSetting(touch.pointer.hide)" $S/scripts/mousewatch.py && grep -q "xbmc.LOGINFO" $S/scripts/mousewatch.py'
+chk "skin XML uses only the pointer settings mousewatch reads" '! grep -rhoE "touch\.pointer[A-Za-z0-9_.]*" $S/xml/ | grep -vxE "touch\.pointer\.(show|hide)"'
 chk "mousewatch header doesn't claim a Startup start that isn't there" 'grep -q "mousewatch.py" $S/xml/Startup.xml || ! grep -q "Started from Startup" $S/scripts/mousewatch.py'
 chk "installer probes Kodi's home as Kodi's user (0700 homes)" 'grep -q "if as_kodi test -d \"\$ADDONS/skin.arthuros\"" $D/install-arthuros.sh && grep -q "as_kodi sh -c .ls \"\$1\"/Addons" $D/install-arthuros.sh && grep -q "! as_kodi test -e \"\$ADDONS/skin.arthuros\" && as_kodi test -d \"\$BK\"" $D/install-arthuros.sh && ! grep -qE "^[[:space:]]*(if|elif) \[ !? ?-[de] \"\$(ADDONS|DB|KHOME)" $D/install-arthuros.sh'
 chk "installer never moves the new skin into an old folder" 'grep -B4 "^as_kodi mv \"\$STAGE\" \"\$ADDONS/skin.arthuros\"" $D/install-arthuros.sh | grep -q "if as_kodi test -e \"\$ADDONS/skin.arthuros\""'
