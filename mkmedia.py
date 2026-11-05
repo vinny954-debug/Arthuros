@@ -739,7 +739,21 @@ def ring(n=24, b=4, name=None, c1=K, c2=B):
 ring(name="focus_ring.png")
 ring(name="focus_ring_red.png", c2=R)
 
-# transport glyphs for the OSD
+# transport glyphs for the OSD (P2 art). Two sets from one drawing:
+#  - icons16/<name>.png, icons24/<name>.png: BLACK, as before. Every OSD,
+#    PlayerControls, SlideShow and DialogPVRChannelsOSD texture uses these
+#    untinted, and black stays legible on the light palettes (Default, Acorn,
+#    Paper, High-Contrast-Light, Colorblind-Safe).
+#  - icons16/w_<name>.png, icons24/w_<name>.png: WHITE, for colordiffuse.
+#    A black glyph stays black under colordiffuse, so on the dark palettes
+#    (High-Contrast-Dark, Midnight, Phosphor, Amber) it vanishes into the
+#    button face; white multiplies to exactly the palette colour. A window may
+#    switch to w_* only together with a tint (text on a face, textinv on the
+#    select bar, textdisabled when disabled): an untinted white glyph is
+#    invisible on the light palettes. audit.sh enforces that.
+# Each glyph is centred in its 16x16 cell (they used to sit 2-3 px high on
+# their buttons); Play keeps its drawn x, a triangle looks centred a pixel
+# right of its box centre.
 TRANSPORT = {
 "play": [
 "................","....KK..........","....KKKK........","....KKKKKK......",
@@ -766,15 +780,12 @@ TRANSPORT = {
 "..KK..KKKKKKKK..","..KKKKKKKKKKKK..","..KKKKKKKKKKKK..","..KK..KKKKKKKK..",
 "..KK....KKKKKK..","..KK......KKKK..","..KK........KK..","................",
 "................","................","................","................"],
+# fast-forward: two right-pointing triangles, each 7 px deep with a flat
+# back (rows 1,3,5,7,7,5,3,1 px), one gap column between them
 "ffwd": [
-"................","..K.......K.....","..KKK.....KKK...","..KKKKK...KKKKK.",
-"..KKKKKKK.KKKKKK","..KKKKKKK.KKKKKK","..KKKKK...KKKKK.","..KKK.....KKK...",
-"..K.......K.....","................","................","................",
-"................","................","................","................"],
-"rew": [
-"................",".....K.......K..","...KKK.....KKK..",".KKKKK...KKKKK..",
-"KKKKKKK.KKKKKKK.","KKKKKKK.KKKKKKK.",".KKKKK...KKKKK..","...KKK.....KKK..",
-".....K.......K..","................","................","................",
+"K.......K.......","KKK.....KKK.....","KKKKK...KKKKK...","KKKKKKK.KKKKKKK.",
+"KKKKKKK.KKKKKKK.","KKKKK...KKKKK...","KKK.....KKK.....","K.......K.......",
+"................","................","................","................",
 "................","................","................","................"],
 "shuffle": [
 "................","..........KKK...","...........KKK..","..KK.....KKKKKK.",
@@ -787,9 +798,92 @@ TRANSPORT = {
 "..KK.......KK...","..KKK......KK...","..KKKKKKKKKKK...","...KKKKKKKKKK...",
 "................","................","................","................"],
 }
+# rewind is fast-forward turned round, so the pair matches pixel for pixel
+TRANSPORT["rew"] = [r[::-1] for r in TRANSPORT["ffwd"]]
+# volume and mute for the OSD / Now playing mute button: the same speaker,
+# with sound waves or with a cross
+SPEAKER = [
+"......K.........",
+".....KK.........",
+"....KKK.........",
+"KKKKKKK.........",
+"KKKKKKK.........",
+"KKKKKKK.........",
+"KKKKKKK.........",
+"KKKKKKK.........",
+"KKKKKKK.........",
+"....KKK.........",
+".....KK.........",
+"......K.........",
+]
+def _over(base, marks):
+    return [''.join('K' if m == 'K' else b for b, m in zip(br, mr))
+            for br, mr in zip(base, marks)]
+TRANSPORT["volume"] = _over(SPEAKER, [
+"................",
+"...........K....",
+"............KK..",
+".........K....KK",
+".........KK...KK",
+"..........KK..KK",
+"..........KK..KK",
+".........KK...KK",
+".........K....KK",
+"............KK..",
+"...........K....",
+"................",
+])
+TRANSPORT["mute"] = _over(SPEAKER, [
+"................",
+"................",
+"................",
+".........KK..KK.",
+"..........KKKK..",
+"...........KK...",
+"...........KK...",
+"..........KKKK..",
+".........KK..KK.",
+"................",
+"................",
+"................",
+])
+
+def transport_cell(nm, rows, ink, n=16):
+    """The glyph in `ink`, centred in an n x n cell (Play: vertically only)."""
+    pts = [(x, y) for y, r in enumerate(rows) for x, ch in enumerate(r) if ch != "."]
+    x0 = min(x for x, _ in pts); x1 = max(x for x, _ in pts)
+    y0 = min(y for _, y in pts); y1 = max(y for _, y in pts)
+    dx = 0 if nm == "play" else (n - (x1 - x0 + 1)) // 2 - x0
+    dy = (n - (y1 - y0 + 1)) // 2 - y0
+    out = [["."] * n for _ in range(n)]
+    for x, y in pts:
+        out[y + dy][x + dx] = ink
+    return ["".join(r) for r in out]
+
+# the black set keeps the names the windows use today; volume / mute are new
+# and only exist white (they are meant for a tinted button)
+BLACK_TRANSPORT = ("play", "pause", "stop", "prev", "next", "rew", "ffwd",
+                   "shuffle", "repeat")
+shutil.rmtree(os.path.join(OUT, "icons16"), ignore_errors=True)  # no stale glyphs
 for nm, rows in TRANSPORT.items():
-    grid(rows, scale=2, name="icons24/%s.png" % nm)
-    grid(rows, scale=1, name="icons16/%s.png" % nm)
+    sets = [("w_" + nm, "W")] + ([(nm, "K")] if nm in BLACK_TRANSPORT else [])
+    for fn, ink in sets:
+        cell = transport_cell(nm, rows, ink)
+        grid(cell, scale=2, name="icons24/%s.png" % fn)
+        grid(cell, scale=1, name="icons16/%s.png" % fn)
+
+# --------------------------------------------- P2 art: TV guide "now" line
+# MyPVRGuide's epggrid <progresstexture border="0,0,4,0" colordiffuse="accent1">
+# (genwindows.guide_window). CGUIEPGGridContainer::ProcessProgressIndicator
+# stretches it from the ruler's left edge to the current time over ruler +
+# grid height, clipped there (RenderProgressIndicator), so only the right
+# border shows: the two rightmost columns are the 2 px line, white so the
+# palette's accent1 tints it; the rest stays transparent over the programmes.
+now = Image.new("RGBA", (24, 24))
+for y in range(24):
+    for x in (22, 23):
+        now.putpixel((x, y), (255, 255, 255, 255))
+save(now, "epg_now.png")
 
 
 # ------------------------------------------- P3 screen calibration markers
