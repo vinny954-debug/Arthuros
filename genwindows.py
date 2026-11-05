@@ -720,7 +720,14 @@ def info_dialog(name, ids=None):
         body += row(gids[i], items, 434 + 34 * i, up, down)
     ids = {k: v for k, v in (ids or {}).items() if int(k) < 100 or int(k) == 140}
     body += stubs(ids, {1, 50, 61, 62} | {c for c, *_ in rows})
-    return dialog(name, 900, 440 + 34 * len(chunks), body, default=str(rows[0][0]),
+    # default focus: the first button row, never one button. Kodi hides
+    # buttons itself (10 in recording info via <visible>, 10 in guide info,
+    # 8 for artist info); a hidden default control leaves the dialog with
+    # nothing focused and a remote cannot reach any button. A grouplist
+    # passes the focus to its first child that can take it
+    # (CGUIControlGroup GUI_MSG_SETFOCUS -> GetFirstFocusableControl).
+    return dialog(name, 900, 440 + 34 * len(chunks), body, default=str(gids[0]),
+                  default_always=True,
                   icon="icons24/movies.png", title="$VAR[InfoTitleVar]")
 
 # (id, label[, visible]): label is a string id, a ready-made label, or None

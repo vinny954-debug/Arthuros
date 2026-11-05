@@ -418,6 +418,10 @@ msgstr ""
 # ===== P6 strings: 31865-31874 =====
 
 # ===== P7 strings: 31875-31889, 31740-31759 =====
+msgctxt "#31875"
+msgid "Add-on start page"
+msgstr ""
+
 
 # ===== P8 strings: 31760-31769 =====
 

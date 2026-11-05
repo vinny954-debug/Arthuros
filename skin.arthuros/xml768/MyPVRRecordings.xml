@@ -108,7 +108,7 @@
           <right>100</right><top>0</top><width>460</width><height>26</height>
           <align>right</align><aligny>center</aligny>
           <font>chromesmall</font><textcolor>titletext</textcolor>
-          <label>$VAR[MediaTitle2Var]</label>
+          <label>$VAR[Media_PVRTitle2Var]</label>
         </control>
 
         <!-- The window boxes. Which set a title bar gets is chosen by the
@@ -262,6 +262,14 @@
     <control type="button" id="10">
       <width>196</width><height>34</height><font>chrome</font>
       <label>$LOCALIZE[22015]</label>
+    </control>
+    <control type="label" id="29">
+      <width>10</width><height>34</height><font>small</font>
+      <visible>false</visible>
+    </control>
+    <control type="label" id="30">
+      <width>10</width><height>34</height><font>small</font>
+      <visible>false</visible>
     </control>
       </control>
 

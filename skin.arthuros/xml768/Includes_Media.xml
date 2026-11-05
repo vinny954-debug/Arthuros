@@ -31,6 +31,13 @@
     <value condition="!String.IsEmpty(Container.PluginName)">$VAR[MediaCountVar]</value>
     <value>$INFO[Container.FolderPath]</value>
   </variable>
+  <!-- Live TV channels / recordings: Kodi's header labels (hidden
+       labels 29 and 30 in the second row) - the group name or "Hidden",
+       "Deleted" in the recordings trash, the recordings folder -->
+  <variable name="Media_PVRTitle2Var">
+    <value condition="!String.IsEmpty(Control.GetLabel(29)) + !String.IsEmpty(Control.GetLabel(30))">$INFO[Control.GetLabel(29)]  -  $INFO[Control.GetLabel(30)]</value>
+    <value>$INFO[Control.GetLabel(29)]$INFO[Control.GetLabel(30)]</value>
+  </variable>
   <!-- poster wall art: posters first, then Kodi's own icon chain
        (thumb, then the DefaultVideo/DefaultFolder... icon Kodi sets) -->
   <variable name="PosterArtVar">
@@ -171,7 +178,7 @@
 
   <!-- video library: GUIWindowVideoNav.cpp 8 search, 10 watched filter
        (Kodi writes All videos / Unwatched / Watched), 16 party mode
-       (music videos only, as in Estuary), 20 scan / stop scanning
+       (library music videos only, as in Estuary), 20 scan / stop scanning
        (disabled by Kodi inside add-ons) -->
   <include name="Media_Extras_VideoNav">
     <control type="button" id="8">
@@ -187,12 +194,27 @@
     <control type="radiobutton" id="16">
       <width>154</width><height>34</height><font>chrome</font>
       <label>$LOCALIZE[589]</label>
-      <visible>Container.Content(musicvideos)</visible>
+      <visible>Container.Content(musicvideos) + String.IsEmpty(Container.PluginName)</visible>
     </control>
     <control type="button" id="20">
       <width>154</width><height>34</height><font>chrome</font>
       <label>$VAR[VideoScanLabelVar]</label>
       <visible>String.IsEmpty(Container.PluginName) + !Container.Content(addons)</visible>
+    </control>
+    <!-- inside an add-on Kodi's library buttons do not apply; the row
+         offers the add-on's own page again and its start page instead
+         of staying blank -->
+    <control type="button" id="9503">
+      <width>154</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[184]</label>
+      <onclick>Container.Refresh</onclick>
+      <visible>!String.IsEmpty(Container.PluginName)</visible>
+    </control>
+    <control type="button" id="9504">
+      <width>200</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[31875]</label>
+      <onclick>Container.Update(plugin://$INFO[Container.PluginName]/)</onclick>
+      <visible>!String.IsEmpty(Container.PluginName)</visible>
     </control>
   </include>
 
@@ -213,6 +235,21 @@
       <width>154</width><height>34</height><font>chrome</font>
       <label>$VAR[MusicScanLabelVar]</label>
       <visible>String.IsEmpty(Container.PluginName) + !Container.Content(addons)</visible>
+    </control>
+    <!-- inside an add-on Kodi's library buttons do not apply; the row
+         offers the add-on's own page again and its start page instead
+         of staying blank -->
+    <control type="button" id="9503">
+      <width>154</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[184]</label>
+      <onclick>Container.Refresh</onclick>
+      <visible>!String.IsEmpty(Container.PluginName)</visible>
+    </control>
+    <control type="button" id="9504">
+      <width>200</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[31875]</label>
+      <onclick>Container.Update(plugin://$INFO[Container.PluginName]/)</onclick>
+      <visible>!String.IsEmpty(Container.PluginName)</visible>
     </control>
   </include>
 
@@ -247,6 +284,12 @@
       <width>300</width><height>34</height><font>chrome</font>
       <label>$LOCALIZE[19051]</label>
     </control>
+    <!-- Kodi writes the group name, or "Hidden", into 29; never shown
+         here (no room), the title bar reads it (Media_PVRTitle2) -->
+    <control type="label" id="29">
+      <width>10</width><height>34</height><font>small</font>
+      <visible>false</visible>
+    </control>
   </include>
 
   <!-- recordings: GUIWindowPVRRecordings 5 group items, 7 deleted
@@ -264,6 +307,16 @@
     <control type="button" id="10">
       <width>196</width><height>34</height><font>chrome</font>
       <label>$LOCALIZE[22015]</label>
+    </control>
+    <!-- Kodi writes "Deleted" into 29 while the trash is shown and the
+         group path into 30; the title bar reads them (Media_PVRTitle2) -->
+    <control type="label" id="29">
+      <width>10</width><height>34</height><font>small</font>
+      <visible>false</visible>
+    </control>
+    <control type="label" id="30">
+      <width>10</width><height>34</height><font>small</font>
+      <visible>false</visible>
     </control>
   </include>
 
@@ -432,11 +485,14 @@
 
   <!-- The same with the window's own buttons in a second toolbar row,
        grouplist 9491 over the left column; the views start 36 px lower.
-       extras: one of the Media_Extras_* includes above. -->
+       extras: one of the Media_Extras_* includes above.
+       label2: title-bar right-hand text (PVR windows: Kodi's header
+       labels 29/30, see Media_PVRTitle2Var). -->
   <include name="Media_Window_Extras">
     <param name="icon" default="icons24/folder.png" />
     <param name="colour" default="accent2" />
     <param name="extras" default="Media_Extras_None" />
+    <param name="label2" default="$VAR[MediaTitle2Var]" />
     <definition>
       <include content="Win_Frame">
         <param name="width" value="1012" />
@@ -450,7 +506,7 @@
           <param name="colour" value="$PARAM[colour]" />
           <param name="icon" value="$PARAM[icon]" />
           <param name="label" value="$VAR[BreadcrumbVar]" />
-          <param name="label2" value="$VAR[MediaTitle2Var]" />
+          <param name="label2" value="$PARAM[label2]" />
           <param name="down" value="50" />
           <param name="boxes" value="window" />
         </include>

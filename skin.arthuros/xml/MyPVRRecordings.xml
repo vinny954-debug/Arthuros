@@ -15,6 +15,7 @@
         <param name="icon" value="icons24/pvr_recordings.png" />
         <param name="colour" value="accent2" />
         <param name="extras" value="Media_Extras_PVRRecordings" />
+        <param name="label2" value="$VAR[Media_PVRTitle2Var]" />
       </include>
     </control>
     <include content="Chrome_Taskbar"><param name="up" value="50" /></include>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
-  <defaultcontrol>10</defaultcontrol>
+  <defaultcontrol always="true">9001</defaultcontrol>
   <controls>
     <include>Dialog_Dim</include>
     <control type="group">
@@ -10,7 +10,7 @@
         <param name="width" value="900" /><param name="height" value="508" />
         <param name="innerwidth" value="894" />
         <param name="icon" value="icons24/pvr_info.png" /><param name="colour" value="accent2" />
-        <param name="down" value="10" />
+        <param name="down" value="9001" />
         <param name="boxes" value="dialog" />
         <param name="title" value="$VAR[InfoTitleVar]" />
       </include>

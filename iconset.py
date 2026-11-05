@@ -810,3 +810,8 @@ WINDOW_ICON_EXPR = {
  # MyPlaylist.xml is both the video and the music play queue
  "MyPlaylist": "$VAR[ArthurWindowIcon]",
 }
+
+# P7
+# icons that are row/tile status marks, not pictures: home.py leaves them
+# out of the Desktop Icon picker (1123)
+NON_TILE = {"status_playing", "status_resume", "status_watched"}

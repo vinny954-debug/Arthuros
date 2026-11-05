@@ -266,6 +266,18 @@
       <label>$VAR[MusicScanLabelVar]</label>
       <visible>String.IsEmpty(Container.PluginName) + !Container.Content(addons)</visible>
     </control>
+    <control type="button" id="9503">
+      <width>154</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[184]</label>
+      <onclick>Container.Refresh</onclick>
+      <visible>!String.IsEmpty(Container.PluginName)</visible>
+    </control>
+    <control type="button" id="9504">
+      <width>200</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[31875]</label>
+      <onclick>Container.Update(plugin://$INFO[Container.PluginName]/)</onclick>
+      <visible>!String.IsEmpty(Container.PluginName)</visible>
+    </control>
       </control>
 
       <control type="group">

@@ -264,12 +264,24 @@
     <control type="radiobutton" id="16">
       <width>154</width><height>34</height><font>chrome</font>
       <label>$LOCALIZE[589]</label>
-      <visible>Container.Content(musicvideos)</visible>
+      <visible>Container.Content(musicvideos) + String.IsEmpty(Container.PluginName)</visible>
     </control>
     <control type="button" id="20">
       <width>154</width><height>34</height><font>chrome</font>
       <label>$VAR[VideoScanLabelVar]</label>
       <visible>String.IsEmpty(Container.PluginName) + !Container.Content(addons)</visible>
+    </control>
+    <control type="button" id="9503">
+      <width>154</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[184]</label>
+      <onclick>Container.Refresh</onclick>
+      <visible>!String.IsEmpty(Container.PluginName)</visible>
+    </control>
+    <control type="button" id="9504">
+      <width>200</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[31875]</label>
+      <onclick>Container.Update(plugin://$INFO[Container.PluginName]/)</onclick>
+      <visible>!String.IsEmpty(Container.PluginName)</visible>
     </control>
       </control>
 
