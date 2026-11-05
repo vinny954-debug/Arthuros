@@ -546,7 +546,11 @@ KNOWN_WARNINGS = {
     # busy spinner has no title bar and nothing to focus - Kodi ignores it.
     "DialogBusy: <onup> points at id 9903 which is not in this window",
     "DialogBusy: <onleft> points at id 9903 which is not in this window",
-    # recordings: group button 28 pending a decision (wave 2 triage)
+    # MyPVRRecordings keeps no channel-group button (decided 0.9.7): only
+    # GUIWindowPVRBase handles 28, and the recordings list ignores the
+    # group (GUIWindowPVRRecordings::GetDirectoryPath builds the path from
+    # deleted/radio only), so the button would change nothing on screen.
+    # Estuary's MyPVRRecordings.xml has no 28 either.
     "MyPVRRecordings: missing Kodi control id(s) ['28'] (GUIWindowPVRBase.h: channel groups, show deleted)",
     # MyPVRTimers keeps no channel-group button: timers are not grouped by
     # channel group in the UI (Estuary has none either)

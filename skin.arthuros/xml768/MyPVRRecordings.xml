@@ -209,25 +209,30 @@
 
       <control type="button" id="9500">
         <width>76</width><height>26</height><font>chrome</font>
+        <hitrect x="-2" y="-4" w="80" h="34"/>
         <label>$LOCALIZE[31901]</label>
         <onclick>ParentDir</onclick>
       </control>
       <control type="button" id="2">
         <width>150</width><height>26</height><font>chrome</font>
+        <hitrect x="-2" y="-4" w="154" h="34"/>
         <label>$LOCALIZE[31902]</label>
       </control>
       <control type="button" id="3">
         <width>230</width><height>26</height><font>chrome</font>
+        <hitrect x="-2" y="-4" w="234" h="34"/>
         <label>$LOCALIZE[31903]</label>
       </control>
       <!-- Kodi only marks this button selected when descending and never
            labels it, so the label says which way the list is sorted -->
       <control type="button" id="4">
         <width>120</width><height>26</height><font>chrome</font>
+        <hitrect x="-2" y="-4" w="124" h="34"/>
         <label>$VAR[MediaSortOrderVar]</label>
       </control>
       <control type="button" id="19">
         <width>100</width><height>26</height><font>chrome</font>
+        <hitrect x="-2" y="-4" w="104" h="34"/>
         <label>$LOCALIZE[587]</label>
       </control>
       <!-- Action(ContextMenu) goes to the focused control, which is this
@@ -235,6 +240,7 @@
            view is showing) so the menu is the selected item's -->
       <control type="button" id="9501">
         <width>110</width><height>26</height><font>chrome</font>
+        <hitrect x="-2" y="-4" w="114" h="34"/>
         <label>$LOCALIZE[31906]</label>
         <onclick>SetFocus(50)</onclick>
         <onclick>Action(ContextMenu)</onclick>
@@ -243,6 +249,7 @@
            sign-in, subtitles - one click away instead of only in Options -->
       <control type="button" id="9502">
         <width>180</width><height>26</height><font>chrome</font>
+        <hitrect x="-2" y="-4" w="184" h="34"/>
         <label>$LOCALIZE[10140]</label>
         <onclick>Addon.OpenSettings($INFO[Container.PluginName])</onclick>
         <visible>!String.IsEmpty(Container.PluginName)</visible>
@@ -266,14 +273,17 @@
         <ondown>50</ondown>
         <control type="radiobutton" id="5">
       <width>180</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="184" h="36"/>
       <label>$LOCALIZE[19270]</label>
     </control>
     <control type="radiobutton" id="7">
       <width>246</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="250" h="36"/>
       <label>$LOCALIZE[19184]</label>
     </control>
     <control type="button" id="10">
       <width>196</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="200" h="36"/>
       <label>$LOCALIZE[22015]</label>
     </control>
     <control type="label" id="29">
@@ -589,7 +599,10 @@
           <left>4</left><top>174</top><width>112</width><height>44</height>
           <texture colordiffuse="select">fill.png</texture>
         </control>
-        <!-- a textbox, not a label: labels in list layouts never wrap -->
+        <!-- a textbox, not a label: labels in list layouts never wrap.
+             No <selectedcolor> (C-1): Kodi switches only list labels to
+             it (CGUIListGroup::SetState), never a textbox, so a marked
+             or playing tile keeps textinv on the selection bar -->
         <control type="textbox">
           <left>4</left><top>174</top><width>112</width><height>44</height>
           <font>tiny</font><textcolor>textinv</textcolor>
@@ -698,7 +711,10 @@
           <left>4</left><top>114</top><width>142</width><height>32</height>
           <texture colordiffuse="select">fill.png</texture>
         </control>
-        <!-- a textbox, not a label: labels in list layouts never wrap -->
+        <!-- a textbox, not a label: labels in list layouts never wrap.
+             No <selectedcolor> (C-1): Kodi switches only list labels to
+             it (CGUIListGroup::SetState), never a textbox, so a marked
+             or playing tile keeps textinv on the selection bar -->
         <control type="textbox">
           <left>4</left><top>114</top><width>142</width><height>32</height>
           <font>tiny</font><textcolor>textinv</textcolor>

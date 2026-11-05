@@ -14,6 +14,16 @@
      and the views start 36 px lower. The ids differ per window (20 is
      Shuffle in the playlist but Update library in the libraries), so
      each window has its own Media_Extras_* include.
+
+     Hit areas (for a finger): every toolbar button is drawn 26 px high
+     but its <hitrect> covers 34 px (frame y 30-64, the gap under the
+     title bar down to the second row) plus half of each 4 px gap; every
+     second-row button is drawn 34 px and hits 36 px (64-100, down to
+     the views at 102). A hitrect is in the button's own slot
+     coordinates inside the grouplist (GUIControlFactory::GetHitRect,
+     CGUIControlGroupList::SendMouseEvent), so nothing moves and the
+     same numbers hold in xml768. When you change a button's width,
+     change its hitrect w (= width + 4) with it.
      =================================================================== -->
 <includes>
 
@@ -96,25 +106,30 @@
 
       <control type="button" id="9500">
         <width>76</width><height>26</height><font>chrome</font>
+        <hitrect x="-2" y="-4" w="80" h="34" />
         <label>$LOCALIZE[31901]</label>
         <onclick>ParentDir</onclick>
       </control>
       <control type="button" id="2">
         <width>150</width><height>26</height><font>chrome</font>
+        <hitrect x="-2" y="-4" w="154" h="34" />
         <label>$LOCALIZE[31902]</label>
       </control>
       <control type="button" id="3">
         <width>230</width><height>26</height><font>chrome</font>
+        <hitrect x="-2" y="-4" w="234" h="34" />
         <label>$LOCALIZE[31903]</label>
       </control>
       <!-- Kodi only marks this button selected when descending and never
            labels it, so the label says which way the list is sorted -->
       <control type="button" id="4">
         <width>120</width><height>26</height><font>chrome</font>
+        <hitrect x="-2" y="-4" w="124" h="34" />
         <label>$VAR[MediaSortOrderVar]</label>
       </control>
       <control type="button" id="19">
         <width>100</width><height>26</height><font>chrome</font>
+        <hitrect x="-2" y="-4" w="104" h="34" />
         <label>$LOCALIZE[587]</label>
       </control>
       <!-- Action(ContextMenu) goes to the focused control, which is this
@@ -122,6 +137,7 @@
            view is showing) so the menu is the selected item's -->
       <control type="button" id="9501">
         <width>110</width><height>26</height><font>chrome</font>
+        <hitrect x="-2" y="-4" w="114" h="34" />
         <label>$LOCALIZE[31906]</label>
         <onclick>SetFocus(50)</onclick>
         <onclick>Action(ContextMenu)</onclick>
@@ -130,6 +146,7 @@
            sign-in, subtitles - one click away instead of only in Options -->
       <control type="button" id="9502">
         <width>180</width><height>26</height><font>chrome</font>
+        <hitrect x="-2" y="-4" w="184" h="34" />
         <label>$LOCALIZE[10140]</label>
         <onclick>Addon.OpenSettings($INFO[Container.PluginName])</onclick>
         <visible>!String.IsEmpty(Container.PluginName)</visible>
@@ -160,18 +177,22 @@
   <include name="Media_Extras_Playlist">
     <control type="radiobutton" id="20">
       <width>154</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="158" h="36" />
       <label>$LOCALIZE[191]</label>
     </control>
     <control type="button" id="26">
       <width>154</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="158" h="36" />
       <label>$LOCALIZE[595]</label>
     </control>
     <control type="button" id="21">
       <width>154</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="158" h="36" />
       <label>$LOCALIZE[190]</label>
     </control>
     <control type="button" id="22">
       <width>154</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="158" h="36" />
       <label>$LOCALIZE[192]</label>
     </control>
   </include>
@@ -183,21 +204,25 @@
   <include name="Media_Extras_VideoNav">
     <control type="button" id="8">
       <width>154</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="158" h="36" />
       <label>$LOCALIZE[137]</label>
       <visible>String.IsEmpty(Container.PluginName)</visible>
     </control>
     <control type="button" id="10">
       <width>154</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="158" h="36" />
       <label>$LOCALIZE[16100]</label>
       <visible>Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(musicvideos)</visible>
     </control>
     <control type="radiobutton" id="16">
       <width>154</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="158" h="36" />
       <label>$LOCALIZE[589]</label>
       <visible>Container.Content(musicvideos) + String.IsEmpty(Container.PluginName)</visible>
     </control>
     <control type="button" id="20">
       <width>154</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="158" h="36" />
       <label>$VAR[VideoScanLabelVar]</label>
       <visible>String.IsEmpty(Container.PluginName) + !Container.Content(addons)</visible>
     </control>
@@ -206,12 +231,14 @@
          of staying blank -->
     <control type="button" id="9503">
       <width>154</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="158" h="36" />
       <label>$LOCALIZE[184]</label>
       <onclick>Container.Refresh</onclick>
       <visible>!String.IsEmpty(Container.PluginName)</visible>
     </control>
     <control type="button" id="9504">
       <width>200</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="204" h="36" />
       <label>$LOCALIZE[31875]</label>
       <onclick>Container.Update(plugin://$INFO[Container.PluginName]/)</onclick>
       <visible>!String.IsEmpty(Container.PluginName)</visible>
@@ -223,16 +250,19 @@
   <include name="Media_Extras_MusicNav">
     <control type="button" id="8">
       <width>154</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="158" h="36" />
       <label>$LOCALIZE[137]</label>
       <visible>String.IsEmpty(Container.PluginName)</visible>
     </control>
     <control type="radiobutton" id="16">
       <width>154</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="158" h="36" />
       <label>$LOCALIZE[589]</label>
       <visible>String.IsEmpty(Container.PluginName)</visible>
     </control>
     <control type="button" id="20">
       <width>154</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="158" h="36" />
       <label>$VAR[MusicScanLabelVar]</label>
       <visible>String.IsEmpty(Container.PluginName) + !Container.Content(addons)</visible>
     </control>
@@ -241,12 +271,14 @@
          of staying blank -->
     <control type="button" id="9503">
       <width>154</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="158" h="36" />
       <label>$LOCALIZE[184]</label>
       <onclick>Container.Refresh</onclick>
       <visible>!String.IsEmpty(Container.PluginName)</visible>
     </control>
     <control type="button" id="9504">
       <width>200</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="204" h="36" />
       <label>$LOCALIZE[31875]</label>
       <onclick>Container.Update(plugin://$INFO[Container.PluginName]/)</onclick>
       <visible>!String.IsEmpty(Container.PluginName)</visible>
@@ -259,14 +291,17 @@
   <include name="Media_Extras_Pictures">
     <control type="button" id="6">
       <width>216</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="220" h="36" />
       <label>$LOCALIZE[13317]</label>
     </control>
     <control type="button" id="7">
       <width>216</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="220" h="36" />
       <label>$LOCALIZE[13318]</label>
     </control>
     <control type="radiobutton" id="9">
       <width>216</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="220" h="36" />
       <label>$LOCALIZE[13319]</label>
     </control>
   </include>
@@ -278,10 +313,12 @@
   <include name="Media_Extras_PVRChannels">
     <control type="button" id="28">
       <width>300</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="304" h="36" />
       <label>$LOCALIZE[19141]</label>
     </control>
     <control type="radiobutton" id="6">
       <width>300</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="304" h="36" />
       <label>$LOCALIZE[19051]</label>
     </control>
     <!-- Kodi writes the group name, or "Hidden", into 29; never shown
@@ -298,14 +335,17 @@
   <include name="Media_Extras_PVRRecordings">
     <control type="radiobutton" id="5">
       <width>180</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="184" h="36" />
       <label>$LOCALIZE[19270]</label>
     </control>
     <control type="radiobutton" id="7">
       <width>246</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="250" h="36" />
       <label>$LOCALIZE[19184]</label>
     </control>
     <control type="button" id="10">
       <width>196</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="200" h="36" />
       <label>$LOCALIZE[22015]</label>
     </control>
     <!-- Kodi writes "Deleted" into 29 while the trash is shown and the
@@ -324,6 +364,7 @@
   <include name="Media_Extras_PVRTimers">
     <control type="radiobutton" id="8">
       <width>240</width><height>34</height><font>chrome</font>
+      <hitrect x="-2" y="0" w="244" h="36" />
       <label>$LOCALIZE[19077]</label>
     </control>
   </include>
