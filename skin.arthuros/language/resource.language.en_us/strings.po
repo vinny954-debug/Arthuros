@@ -495,3 +495,13 @@ msgstr ""
 # ===== P9 strings: 31890-31894 =====
 
 # ===== P10 strings: 31895-31899 =====
+#. Fontset name (fonts/Unicode.xml): Kodi's arial.ttf for every alphabet
+msgctxt "#31895"
+msgid "Unicode (all alphabets)"
+msgstr ""
+
+#. Skin settings help, paragraph about fonts (append to 31922 with [CR][CR])
+msgctxt "#31896"
+msgid "The bitmap font has Western European letters and the usual punctuation (’ “ ” – … •). For titles with other letters or alphabets (Polish, Greek, Russian, Japanese...) choose Settings > Interface > Skin > Fonts > Unicode (all alphabets). It uses Kodi's own smooth font at the same sizes."
+msgstr ""
+
