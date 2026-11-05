@@ -133,8 +133,11 @@ for wname, root in sorted(windows.items()):
             errors.append(f"{wname}: control id {cid} defined {n} times" + (f" in {branch.split('?')[0]}" if branch else ""))
         elif branch and seen_ids.get((cid, None)):
             errors.append(f"{wname}: control id {cid} is both unconditional and in {branch.split('?')[0]}")
+    # every target must be a control this window really has (resolve() expands
+    # Chrome_Taskbar, Home's panel and the toolbar, so their ids count only
+    # where they are actually pulled in - no fixed whitelist)
     for tag, v in nav_refs:
-        if v not in ctrl_ids and v not in ("9100","9101","9102","9103","9000","9010","9011","9490","9500","9600"):
+        if v not in ctrl_ids:
             warns.append(f"{wname}: <{tag}> points at id {v} which is not in this window")
     # containers must declare their own layouts now that Defaults.xml has none
     for el, params, chain in resolve(root):
@@ -289,7 +292,240 @@ for p2 in sorted(glob.glob(os.path.join(XML, "*.xml"))):
         if f"Win_Boxes_{mode}" not in includes:
             errors.append(f"{os.path.basename(p2)}: title-bar boxes mode '{mode}' has no Win_Boxes_{mode} include")
 
-print(f"{len(windows)} windows, {len(includes)} includes, {len(media_files)} textures")
+# --- Kodi tables: builtins, actions, windows, info labels --------------------
+# Taken from the Omega sources by vendor/kodi/mktables.py. Anything Kodi does
+# not know fails silently on the box (a button that does nothing, a condition
+# that is always false), so check every name against them.
+HERE = os.path.dirname(os.path.abspath(__file__))
+def table(name):
+    p = os.path.join(HERE, name)
+    if not os.path.exists(p):
+        errors.append(f"{name} is missing - run python3 vendor/kodi/mktables.py"); return []
+    return [l.rstrip("\n").split("\t") for l in open(p) if l.strip() and not l.startswith("#")]
+BUILTINS = {r[0]: int(r[1]) for r in table("vendor/kodi/builtins.txt")}
+ACTIONS = {r[0] for r in table("vendor/kodi/actions.txt")}
+WIN_IDS = {r[0]: int(r[1]) for r in table("vendor/kodi/windowids.txt")}
+WIN_NAMES = {r[0] for r in table("windownames.txt")}
+INFO = collections.defaultdict(set)
+for r in table("vendor/kodi/infolabels.txt"):
+    c, _, p = r[0].partition("."); INFO[c].add(p)
+if set(WIN_IDS) != WIN_NAMES:
+    errors.append("windownames.txt and vendor/kodi/windowids.txt disagree - rerun vendor/kodi/mktables.py")
+# skin windows with their own id (Custom_1120_... = <window id="1120">); Kodi
+# adds 10000 to an id below 9999 both here and in ActivateWindow(1120)
+SKIN_WIN_IDS = set()
+for p2 in glob.glob(os.path.join(XML, "Custom_*.xml")):
+    i = ET.parse(p2).getroot().get("id")
+    if i and i.isdigit():
+        SKIN_WIN_IDS.add(int(i) + 10000 if int(i) < 9999 else int(i))
+KODI_WIN_ID_SET = set(WIN_IDS.values())
+XML_NAMES = {os.path.basename(p)[:-4].lower() for p in glob.glob(os.path.join(XML, "*.xml"))}
+
+def window_ok(w, cond=False):
+    """CWindowTranslator::TranslateWindow, plus 'foo.xml' in conditions."""
+    w = w.strip().strip('"').lower()
+    if not w or "$" in w:
+        return True
+    if cond and w.endswith(".xml"):
+        return w[:-4] in XML_NAMES
+    if w.endswith(".xml"): w = w[:-4]
+    if len(w) > 6 and w.startswith("window"): w = w[6:]
+    if w.startswith("my"): w = w[2:]
+    if w.isdigit():
+        n = int(w); n = n if n > 9999 else 10000 + n
+        return n in KODI_WIN_ID_SET or n in SKIN_WIN_IDS
+    return w in WIN_NAMES
+
+def split_params(s):
+    """CUtil::SplitParams: commas split unless inside (), "" or $INFO[...]."""
+    out, cur, depth, sq, q = [], "", 0, 0, False
+    for ch in s:
+        if q:
+            q = ch != '"'
+        elif ch == '"': q = True
+        elif ch == "(": depth += 1
+        elif ch == ")": depth = max(0, depth - 1)
+        elif ch == "[": sq += 1
+        elif ch == "]": sq = max(0, sq - 1)
+        elif ch == "," and not depth and not sq:
+            out.append(cur.strip()); cur = ""; continue
+        cur += ch
+    if cur.strip() or out: out.append(cur.strip())
+    return [p[1:-1] if len(p) > 1 and p[0] == p[-1] == '"' else p for p in out]
+
+def split_exec(a):
+    """SplitExecFunction: function before the first '(', params up to the last ')'."""
+    i, j = a.find("("), a.rfind(")")
+    if i >= 0 and j > i:
+        return a[:i].strip().lower(), split_params(a[i + 1:j])
+    return a.strip().lower(), []
+
+ACTION_TAGS = ("onclick", "onfocus", "onunfocus", "onload", "onunload", "onback",
+               "onup", "ondown", "onleft", "onright", "onnext", "onprev", "oninfo")
+WINDOW_BUILTINS = ("activatewindow", "replacewindow", "activatewindowandfocus",
+                   "replacewindowandfocus", "dialog.close")
+SKIN_DIR = SKIN
+n_checked = collections.Counter()
+def check_action(where, a):
+    n_checked["actions"] += 1
+    a = a.strip()
+    if not a or a == "-" or re.fullmatch(r"\d+", a) or a.startswith("$"):
+        return
+    fn, params = split_exec(a)
+    if "$" in fn:
+        return
+    if "(" not in a and fn in ACTIONS:
+        return
+    if fn not in BUILTINS:
+        errors.append(f"{where}: '{a}' is neither a Kodi builtin nor an action name - it does nothing")
+        return
+    if BUILTINS[fn] and len(params) < BUILTINS[fn]:
+        errors.append(f"{where}: {fn} needs {BUILTINS[fn]} parameter(s), '{a}' has {len(params)} - Kodi ignores it")
+    if fn == "action" and params and "$" not in params[0] and \
+            params[0].lower() not in ACTIONS and not params[0].isdigit():
+        errors.append(f"{where}: Action({params[0]}) is not a Kodi action name")
+    if fn in WINDOW_BUILTINS and params and not (fn == "dialog.close" and params[0].lower() == "all"):
+        if not window_ok(params[0]):
+            errors.append(f"{where}: '{params[0]}' in {a} is not a window name in windownames.txt")
+    if fn in ("runscript", "runaddon") and params:
+        p = params[0]
+        if p.startswith("special://skin/") and "$" not in p:
+            if not os.path.isfile(os.path.join(SKIN_DIR, p[len("special://skin/"):])):
+                errors.append(f"{where}: {p} does not exist in the skin")
+
+COND_TAGS = ("visible", "enable", "selected", "usealttexture", "onclick", "hidden",
+             "expression", "info", "info2")
+SEG = r"[A-Za-z][A-Za-z0-9_]*"
+INFO_NAME = re.compile(rf"{SEG}(?:\([^()]*\)(?=\.))?(?:\.{SEG}(?:\([^()]*\)(?=\.))?)+")
+def info_names(text, out):
+    """Collect Category[(...)].property names from a condition or label, the
+    way TranslateSingleString splits them. Arguments are only followed where
+    Kodi reads them as info labels: String.*() first argument, Integer.*()."""
+    i, n = 0, len(text)
+    while i < n:
+        m = INFO_NAME.match(text, i)
+        if not m or (i and (text[i - 1].isalnum() or text[i - 1] in "_.$")):
+            i += 1; continue
+        name = m.group(0); i = m.end()
+        args = ""
+        if i < n and text[i] == "(":
+            d, j = 0, i
+            while j < n:
+                d += text[j] == "("; d -= text[j] == ")"
+                if d == 0: break
+                j += 1
+            args, i = text[i + 1:j], j + 1
+        out.append(name)
+        cat = name.lower().split(".")[0]
+        ps = split_params(args)
+        if cat == "string" and ps:
+            info_names(ps[0], out)
+        elif cat == "integer":
+            for p in ps: info_names(p, out)
+
+def check_info(where, name):
+    n_checked["info names"] += 1
+    parts = [re.sub(r"\(.*?\)", "", p).lower() for p in name.split(".")]
+    cat = parts[0]
+    if cat not in INFO or len(parts) < 2:
+        return                      # not an info category (a literal like plugin.video.x)
+    if len(parts) == 2:
+        if parts[1] not in INFO[cat]:
+            warns.append(f"{where}: {name} is not an info label/bool Kodi 21 knows - always empty/false")
+    elif cat == "container" and parts[1].startswith("listitem") and len(parts) == 3:
+        if parts[2] not in INFO["listitem"]:
+            warns.append(f"{where}: {name} is not a ListItem label Kodi 21 knows")
+
+# $VAR / $EXP must name a <variable>/<expression> some includes file defines
+variables, expressions = set(), set()
+for p2 in glob.glob(os.path.join(XML, "*.xml")):
+    r2 = ET.parse(p2).getroot()
+    if r2.tag == "includes":
+        variables |= {v.get("name") for v in r2.iter("variable")}
+        expressions |= {v.get("name") for v in r2.iter("expression")}
+
+for p2 in sorted(glob.glob(os.path.join(XML, "*.xml"))):
+    b = os.path.basename(p2)[:-4]
+    txt = open(p2).read()
+    for v in re.findall(r"\$VAR\[([^\]$]+)\]", txt):
+        if v not in variables:
+            errors.append(f"{b}: $VAR[{v}] is not a defined <variable>")
+    for v in re.findall(r"\$EXP\[([^\]$]+)\]", txt):
+        if v not in expressions:
+            errors.append(f"{b}: $EXP[{v}] is not a defined <expression>")
+    r2 = ET.parse(p2).getroot()
+    if r2.tag not in ("window", "includes"):
+        continue
+    for el in r2.iter():
+        t = (el.text or "").strip()
+        if el.tag in ACTION_TAGS and t and "$PARAM" not in t.split("(")[0]:
+            check_action(b, t)
+        conds = []
+        if el.get("condition"): conds.append(el.get("condition"))
+        if el.tag in COND_TAGS and el.tag not in ACTION_TAGS and t: conds.append(t)
+        for c in conds:
+            if "$PARAM" in c: continue
+            names = []
+            info_names(c, names)
+            for nm in names: check_info(b, nm)
+            for w in re.findall(r"Window\.Is(?:Active|Visible|Topmost|DialogTopmost|ModalDialogTopmost)\(([^()]*)\)", c, re.I):
+                if not window_ok(w, cond=True):
+                    errors.append(f"{b}: Window.Is...({w}) - not a window name in windownames.txt")
+        for lab in re.findall(r"\$(?:ESC)?INFO\[([^\],\]]+)", t):
+            if "$PARAM" not in lab:
+                names = []; info_names(lab, names)
+                for nm in names: check_info(b, nm)
+        for w in re.findall(r"Window\(([^()]*)\)\.Property", t + " " + (el.get("condition") or "")):
+            if not window_ok(w, cond=True):
+                errors.append(f"{b}: Window({w}).Property - not a window name in windownames.txt")
+
+# Per window: focus targets in actions/conditions must be controls this window
+# has; Kodi's own ids must exist in the hand-made windows; and a focusable
+# control with no label, no action and no id Kodi fills is a dead blank box.
+# (Window-scoped, so they run on the window with its includes expanded.)
+REQUIRED = {   # #defines in the Omega window classes; a missing one hides a feature
+ "MyPlaylist": ({"20","21","22","26"}, "GUIWindowMusicPlaylist.cpp/GUIWindowVideoPlaylist.cpp: shuffle, save, clear, repeat"),
+ "MyPVRChannels": ({"28","6"}, "GUIWindowPVRBase.h: channel groups, show hidden"),
+ "MyPVRRecordings": ({"28","7"}, "GUIWindowPVRBase.h: channel groups, show deleted"),
+ "MyPVRTimers": ({"28"}, "GUIWindowPVRBase.h: channel groups"),
+ "MyVideoNav": ({"8","20"}, "GUIWindowVideoNav.cpp: search, update library"),
+ "MyMusicNav": ({"8","20"}, "GUIWindowMusicNav.cpp: search, update library"),
+}
+FOCUS_RE = re.compile(r"(?i)\b(?:control\.setfocus|setfocus|control\.move|control\.message|"
+                      r"control\.setvisible|control\.sethidden)\((\d+)")
+COND_ID_RE = re.compile(r"(?i)\b(?:control\.(?:hasfocus|isvisible|isenabled|getlabel)|"
+                        r"controlgroup)\((\d+)\)|\bcontainer\((\d+)\)")
+for wname, root in sorted(windows.items()):
+    ids, focus_refs, cond_refs = set(), set(), set()
+    for el, params, chain in resolve(root):
+        if el.tag == "control" and sub(el.get("id"), params):
+            ids.add(sub(el.get("id"), params))
+        t = sub((el.text or "").strip(), params) or ""
+        if el.tag in ACTION_TAGS:
+            focus_refs |= set(FOCUS_RE.findall(t))
+        cs = [sub(el.get("condition") or "", params)]
+        if el.tag in COND_TAGS: cs.append(t)
+        for c in cs:
+            for a, b2 in COND_ID_RE.findall(c or ""):
+                cond_refs.add(a or b2)
+    for v in sorted(focus_refs - ids, key=int):
+        errors.append(f"{wname}: SetFocus/Control.*({v}) targets a control this window does not have")
+    for v in sorted(cond_refs - ids, key=int):
+        errors.append(f"{wname}: Control/Container({v}) in a condition names a control this window does not have")
+    if wname in REQUIRED:
+        need, why = REQUIRED[wname]
+        if need - ids:
+            warns.append(f"{wname}: missing Kodi control id(s) {sorted(need - ids, key=int)} ({why})")
+    for el, params, chain in resolve(root):
+        if el.tag == "control" and el.get("type") in ("button", "radiobutton", "togglebutton"):
+            lab = sub(el.findtext("label") or "", params).strip()
+            acts = [c for c in el if c.tag in ("onclick", "onfocus") and (c.text or "").strip()]
+            cid = sub(el.get("id"), params)
+            if not lab and not acts and not cid:
+                errors.append(f"{wname}: {el.get('type')} with no id, no label and no onclick - a dead blank box")
+
+print(f"{len(windows)} windows, {len(includes)} includes, {len(media_files)} textures, "
+      f"{n_checked['actions']} actions, {n_checked['info names']} info names")
 if errors:
     print(f"\n{len(errors)} ERRORS")
     for e in errors[:60]: print("  ✗", e)
@@ -297,5 +533,5 @@ else:
     print("\nno errors")
 if warns:
     print(f"\n{len(warns)} warnings")
-    for x in warns[:30]: print("  ·", x)
+    for x in warns[:80]: print("  ·", x)
 sys.exit(1 if errors else 0)

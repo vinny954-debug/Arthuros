@@ -6,6 +6,7 @@
 # the SSH session:
 #   bash install-arthuros.sh                       # pi4b.local, same username as here
 #   bash install-arthuros.sh pi@pi4b.local         # a different username
+#   bash install-arthuros.sh root@192.168.68.63    # LibreELEC (root, no sudo)
 #   bash install-arthuros.sh pi@pi4b.local some/skin.arthuros-0.9.5.zip
 set -euo pipefail
 
@@ -26,10 +27,20 @@ cat > "$REMOTE" <<'PI'
 set -euo pipefail
 ZIP=/tmp/skin.arthuros.zip
 
+# LibreELEC logs in as root and has no sudo; Raspberry Pi OS needs it.
+SUDO=sudo; [ "$(id -u)" -eq 0 ] && SUDO=
+
 # Who runs Kodi? Its skins live in that user's ~/.kodi/addons.
-KUSER=$(ps -eo user=,comm= | awk '$2 ~ /^kodi/ {print $1; exit}')
-SVC=$(systemctl list-units --type=service --all --no-legend --plain 2>/dev/null \
-      | awk '{print $1}' | grep -i '^kodi' | head -1 || true)
+KUSER=$(ps -eo user=,comm= 2>/dev/null | awk '$2 ~ /^kodi/ {print $1; exit}' || true)
+# exact names first: LibreELEC also has kodi-autostart.service and friends
+SVC=
+for u in kodi.service kodi-gbm.service kodi-standalone.service; do
+  systemctl cat "$u" >/dev/null 2>&1 && { SVC=$u; break; }
+done
+if [ -z "$SVC" ]; then
+  SVC=$(systemctl list-units --type=service --all --no-legend --plain 2>/dev/null \
+        | awk '{print $1}' | grep -iE '^kodi(-gbm|-standalone)?(@[^.]*)?\.service$' | head -1 || true)
+fi
 if [ -z "$KUSER" ] && [ -n "$SVC" ]; then
   KUSER=$(systemctl show -p User --value "$SVC" 2>/dev/null || true)
 fi
@@ -37,11 +48,36 @@ ME=$(id -un)
 KUSER=${KUSER:-$ME}
 KHOME=$(getent passwd "$KUSER" | cut -d: -f6)
 ADDONS="$KHOME/.kodi/addons"
+DB="$KHOME/.kodi/userdata/Database"
 echo "== Kodi runs as '$KUSER'; the skin goes in $ADDONS"
 [ -n "$SVC" ] && echo "== Kodi service: $SVC"
 
-as_kodi() { if [ "$KUSER" = "$ME" ]; then "$@"; else sudo -u "$KUSER" "$@"; fi; }
+as_kodi() {
+  if [ "$KUSER" = "$ME" ]; then "$@"
+  elif [ "$(id -u)" -eq 0 ]; then su -s /bin/sh "$KUSER" -c "$(printf '%q ' "$@")"
+  else sudo -u "$KUSER" "$@"; fi
+}
 ver() { sed -n 's/^[[:space:]]*version="\([0-9.]*\)".*/\1/p' "$1" | head -1; }
+
+# Whatever happens from here on: put the old skin back if the new one isn't in
+# place, and start Kodi again if we stopped it (exactly once, success or not).
+WAS_ACTIVE=no BK= TMP= STAGE=
+restore() {
+  rc=$?
+  if [ ! -d "$ADDONS/skin.arthuros" ] && [ -n "$BK" ] && [ -d "$BK" ]; then
+    echo "== Something failed: putting the old skin back"
+    as_kodi mv "$BK" "$ADDONS/skin.arthuros" || true
+  fi
+  if [ "$WAS_ACTIVE" = yes ]; then
+    echo "== Starting $SVC"
+    $SUDO systemctl start "$SVC" || rc=1
+  fi
+  if [ -n "$STAGE" ]; then as_kodi rm -rf "$STAGE" || true; fi
+  if [ -n "$TMP" ]; then rm -rf "$TMP"; fi
+  rm -f "$ZIP" /tmp/arthuros-install.sh
+  exit $rc
+}
+trap restore EXIT
 
 # unpack and sanity-check before touching anything
 TMP=$(mktemp -d)
@@ -52,17 +88,24 @@ else python3 -m zipfile -e "$ZIP" "$TMP"; fi
 chmod -R a+rX "$TMP"
 NEW=$(ver "$TMP/skin.arthuros/addon.xml")
 
+# copy it beside addons first (outside it, so Kodi never sees two copies):
+# a copy that fails leaves the installed skin alone
+as_kodi mkdir -p "$ADDONS"
+STAGE="$KHOME/arthuros-new"
+as_kodi rm -rf "$STAGE"
+as_kodi cp -r "$TMP/skin.arthuros" "$STAGE"
+
 # stop Kodi so it isn't reading the skin while it's replaced
-WAS_ACTIVE=no
 if [ -n "$SVC" ] && systemctl is-active --quiet "$SVC"; then
   echo "== Stopping $SVC"
-  sudo systemctl stop "$SVC"; WAS_ACTIVE=yes
-elif ps -eo comm= | grep -q '^kodi'; then
+  $SUDO systemctl stop "$SVC"; WAS_ACTIVE=yes
+elif ps -eo comm= 2>/dev/null | grep -q '^kodi'; then
   read -rp "Kodi is running but not as a service I can find. Quit Kodi, then press Enter... " _
 fi
 
-as_kodi mkdir -p "$ADDONS"
+FRESH=yes
 if [ -d "$ADDONS/skin.arthuros" ]; then
+  FRESH=no
   OLD=$(ver "$ADDONS/skin.arthuros/addon.xml")
   BK="$KHOME/arthuros-backup-${OLD:-old}"
   echo "== Moving v${OLD:-?} to $BK (outside addons, so Kodi ignores it)"
@@ -70,16 +113,56 @@ if [ -d "$ADDONS/skin.arthuros" ]; then
   as_kodi mv "$ADDONS/skin.arthuros" "$BK"
 fi
 echo "== Installing v$NEW"
-as_kodi cp -r "$TMP/skin.arthuros" "$ADDONS/"
-rm -rf "$TMP" "$ZIP" /tmp/arthuros-install.sh
+as_kodi mv "$STAGE" "$ADDONS/skin.arthuros"
+STAGE=
 
-if [ "$WAS_ACTIVE" = yes ]; then
-  echo "== Starting $SVC"
-  sudo systemctl start "$SVC"
+# Kodi enters an add-on it finds on disk with no database row as *disabled*
+# (CAddonDatabase::SyncInstalled), so a copied skin would not be in the skin
+# list. Mark it enabled while Kodi is stopped.
+ENABLED=no
+if ls "$DB"/Addons[0-9]*.db >/dev/null 2>&1; then
+  if as_kodi python3 - "$DB" <<'EOF'
+import glob, re, sqlite3, sys
+dbs = sorted(glob.glob(sys.argv[1] + "/Addons[0-9]*.db"),
+             key=lambda p: int(re.search(r"Addons(\d+)\.db$", p).group(1)))
+con = sqlite3.connect(dbs[-1])
+con.execute("INSERT OR IGNORE INTO installed(addonID, enabled, installDate) "
+            "VALUES('skin.arthuros', 1, datetime('now'))")
+con.execute("UPDATE installed SET enabled=1, disabledReason=0 WHERE addonID='skin.arthuros'")
+con.commit()
+print("== Enabled skin.arthuros in " + dbs[-1].rsplit("/", 1)[-1])
+EOF
+  then ENABLED=yes
+  else echo "== Couldn't mark the skin enabled in Kodi's add-on database"; fi
 fi
+
+# Skin settings > Network & Bluetooth (netbt.py) changes Wi-Fi through
+# NetworkManager. Kodi run as a service has no login session, so polkit refuses
+# it unless a rule names the user Kodi runs as. Offer to add one (asked once
+# per install until it exists; LibreELEC has its own settings add-on).
+RULE=/etc/polkit-1/rules.d/50-arthuros-nm.rules
+if command -v nmcli >/dev/null && [ -d /etc/polkit-1/rules.d ] && [ "$KUSER" != root ] \
+   && [ ! -e "$RULE" ] && [ -t 0 ]; then
+  read -rp "Let '$KUSER' (Kodi) change Wi-Fi from Skin settings? Adds $RULE [y/N] " A || A=
+  case "$A" in
+    [yY]*)
+      printf '%s\n' "// ArthurOS: let Kodi (running as a service, no login session) manage networks" \
+        "polkit.addRule(function(action, subject) {" \
+        "  if (action.id.indexOf(\"org.freedesktop.NetworkManager.\") == 0 && subject.user == \"$KUSER\")" \
+        "    return polkit.Result.YES;" \
+        "});" | $SUDO tee "$RULE" >/dev/null && echo "== Added $RULE" ;;
+  esac
+fi
+
 echo
 echo "Done: ArthurOS v$NEW is installed."
-echo "If it isn't your skin yet: Settings > Interface > Skin > Skin > ArthurOS."
+if [ "$ENABLED" = no ] && [ "$FRESH" = yes ]; then
+  echo "First install: Kodi has to see the skin once. Enable it in"
+  echo "Add-ons > My add-ons > Look and feel > Skin > ArthurOS > Enable,"
+  echo "then pick it in Settings > Interface > Skin > Skin."
+else
+  echo "If it isn't your skin yet: Settings > Interface > Skin > Skin > ArthurOS."
+fi
 echo "On the 2048x1536 screen Kodi uses the 4:3 layout by itself; set"
 echo "Settings > Interface > Skin > Zoom to 0% and turn on Skin settings > Touch mode."
 PI
