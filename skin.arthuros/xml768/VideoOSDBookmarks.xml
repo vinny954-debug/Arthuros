@@ -77,15 +77,18 @@
         <onright>11</onright>
         <control type="button" id="2">
           <width>228</width><height>44</height>
+          <hitrect x="0" y="-2" w="228" h="48"/>
           <font>chrome</font><label>$LOCALIZE[294]</label>
         </control>
         <control type="button" id="4">
           <width>228</width><height>44</height>
+          <hitrect x="0" y="-2" w="228" h="48"/>
           <font>chrome</font><label>$LOCALIZE[20406]</label>
           <visible>Control.IsEnabled(4)</visible>
         </control>
         <control type="button" id="9993">
           <width>228</width><height>44</height>
+          <hitrect x="0" y="-2" w="228" h="48"/>
           <font>chrome</font><label>$VAR[BookmarkClearLabelVar]</label>
           <onclick condition="!String.IsEqual(Window(Home).Property(arthuros.clearbm),1)">SetProperty(arthuros.clearbm,1,home)</onclick>
           <onclick condition="String.IsEqual(Window(Home).Property(arthuros.clearbm),1)">ClearProperty(arthuros.clearbm,home)</onclick>
@@ -93,6 +96,7 @@
         </control>
         <control type="button" id="9994">
           <width>228</width><height>44</height>
+          <hitrect x="0" y="-2" w="228" h="48"/>
           <font>chrome</font><label>$LOCALIZE[106]</label>
           <onclick>ClearProperty(arthuros.clearbm,home)</onclick>
           <onclick>SetFocus(9993)</onclick>
@@ -100,6 +104,7 @@
         </control>
         <control type="button" id="9995">
           <width>228</width><height>44</height>
+          <hitrect x="0" y="-2" w="228" h="48"/>
           <font>chrome</font><label>$LOCALIZE[15067]</label>
           <onclick>Dialog.Close(VideoBookmarks)</onclick>
           <visible>!String.IsEqual(Window(Home).Property(arthuros.clearbm),1)</visible>

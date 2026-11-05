@@ -63,12 +63,14 @@
         <ondown>61</ondown>
         <control type="button" id="9011">
           <width>150</width><height>44</height>
+          <hitrect x="-3" y="-3" w="156" h="50" />
           <font>chrome</font><label>$LOCALIZE[31806]</label>
           <onclick>Dialog.Close(FullscreenInfo)</onclick>
           <onclick>ActivateWindow(PlayerProcessInfo)</onclick>
         </control>
         <control type="button" id="9012">
           <width>110</width><height>44</height>
+          <hitrect x="-3" y="-3" w="116" h="50" />
           <font>chrome</font><label>$LOCALIZE[15067]</label>
           <onclick>Dialog.Close(FullscreenInfo)</onclick>
         </control>

@@ -217,6 +217,7 @@
         <onright>9982</onright>
         <control type="radiobutton" id="600">
           <width>60</width><height>48</height>
+          <hitrect x="-3" y="-3" w="66" h="54"/>
           <label/>
           <textureradioonfocus>icons24/prev.png</textureradioonfocus>
           <textureradioonnofocus>icons24/prev.png</textureradioonnofocus>
@@ -230,6 +231,7 @@
         </control>
         <control type="radiobutton" id="602">
           <width>60</width><height>48</height>
+          <hitrect x="-3" y="-3" w="66" h="54"/>
           <label/>
           <textureradioonfocus>icons24/pause.png</textureradioonfocus>
           <textureradioonnofocus>icons24/pause.png</textureradioonnofocus>
@@ -244,6 +246,7 @@
         </control>
         <control type="radiobutton" id="603">
           <width>60</width><height>48</height>
+          <hitrect x="-3" y="-3" w="66" h="54"/>
           <label/>
           <textureradioonfocus>icons24/stop.png</textureradioonfocus>
           <textureradioonnofocus>icons24/stop.png</textureradioonnofocus>
@@ -257,6 +260,7 @@
         </control>
         <control type="radiobutton" id="605">
           <width>60</width><height>48</height>
+          <hitrect x="-3" y="-3" w="66" h="54"/>
           <label/>
           <textureradioonfocus>icons24/next.png</textureradioonfocus>
           <textureradioonnofocus>icons24/next.png</textureradioonnofocus>
@@ -271,6 +275,7 @@
       </control>
       <control type="radiobutton" id="9982">
         <left>290</left><top>146</top><width>60</width><height>48</height>
+        <hitrect x="287" y="143" w="66" h="54"/>
         <label/>
         <textureradioonfocus>icons24/audio_muted.png</textureradioonfocus>
         <textureradioonnofocus>icons24/audio_muted.png</textureradioonnofocus>
@@ -306,17 +311,20 @@
         <ondown>201</ondown>
         <control type="radiobutton" id="607">
           <width>140</width><height>44</height>
+          <hitrect x="-3" y="-3" w="146" h="50"/>
           <font>chrome</font><label>$LOCALIZE[191]</label>
           <selected>Playlist.IsRandom</selected>
           <onclick>PlayerControl(Random)</onclick>
         </control>
         <control type="button" id="704">
           <width>150</width><height>44</height>
+          <hitrect x="-3" y="-3" w="156" h="50"/>
           <font>chrome</font><label>$VAR[OSDRepeatLabelVar]</label>
           <onclick>PlayerControl(Repeat)</onclick>
         </control>
         <control type="button" id="87">
           <width>110</width><height>44</height>
+          <hitrect x="-3" y="-3" w="116" h="50"/>
           <font>chrome</font><label>$LOCALIZE[559]</label>
           <onclick>Dialog.Close(PlayerControls)</onclick>
           <onclick condition="Player.HasVideo">ActivateWindow(VideoPlaylist)</onclick>
@@ -324,6 +332,7 @@
         </control>
         <control type="button" id="9951">
           <width>100</width><height>44</height>
+          <hitrect x="-3" y="-3" w="106" h="50"/>
           <font>chrome</font><label>$LOCALIZE[15067]</label>
           <onclick>Dialog.Close(PlayerControls)</onclick>
         </control>

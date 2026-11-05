@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <window>
+  <onload condition="Skin.HasSetting(touchmode) + !String.IsEqual(System.StartupWindow,10000) + String.IsEmpty(Window(Home).Property(arthuros.mousewatch))">RunScript(special://skin/scripts/mousewatch.py)</onload>
   <onload>ReplaceWindow($INFO[System.StartupWindow])</onload>
   <backgroundcolor>desktop</backgroundcolor>
   <controls>

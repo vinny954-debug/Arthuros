@@ -107,6 +107,7 @@
         <onright>9982</onright>
         <control type="radiobutton" id="602">
           <width>60</width><height>48</height>
+          <hitrect x="-3" y="-3" w="66" h="54"/>
           <label/>
           <textureradioonfocus>icons24/pause.png</textureradioonfocus>
           <textureradioonnofocus>icons24/pause.png</textureradioonnofocus>
@@ -121,6 +122,7 @@
         </control>
         <control type="radiobutton" id="603">
           <width>60</width><height>48</height>
+          <hitrect x="-3" y="-3" w="66" h="54"/>
           <label/>
           <textureradioonfocus>icons24/stop.png</textureradioonfocus>
           <textureradioonnofocus>icons24/stop.png</textureradioonnofocus>
@@ -135,6 +137,7 @@
       </control>
       <control type="radiobutton" id="9982">
         <left>612</left><top>74</top><width>60</width><height>48</height>
+        <hitrect x="609" y="71" w="66" h="54"/>
         <label/>
         <textureradioonfocus>icons24/audio_muted.png</textureradioonfocus>
         <textureradioonnofocus>icons24/audio_muted.png</textureradioonnofocus>
@@ -162,6 +165,7 @@
       </control>
       <control type="button" id="9951">
         <left>906</left><top>74</top><width>110</width><height>48</height>
+        <hitrect x="902" y="71" w="118" h="54"/>
         <font>chromebold</font><label>$LOCALIZE[31800]</label>
         <onclick>Dialog.Close(GameOSD)</onclick>
         <onup>202</onup>
@@ -177,46 +181,55 @@
         <onright>9951</onright>
         <control type="button" id="9970">
           <width>130</width><height>44</height>
+          <hitrect x="-3" y="-3" w="136" h="50"/>
           <font>chrome</font><label>$LOCALIZE[35249]</label>
           <onclick>ActivateWindow(InGameSaves)</onclick>
         </control>
         <control type="button" id="9971">
           <width>70</width><height>44</height>
+          <hitrect x="-3" y="-3" w="76" h="50"/>
           <font>chrome</font><label>$LOCALIZE[13007]</label>
           <onclick>PlayerControl(Reset)</onclick>
         </control>
         <control type="button" id="9977">
           <width>100</width><height>44</height>
+          <hitrect x="-3" y="-3" w="106" h="50"/>
           <font>chrome</font><label>$LOCALIZE[35234]</label>
           <onclick>ActivateWindow(GameControllers)</onclick>
         </control>
         <control type="button" id="9978">
           <width>70</width><height>44</height>
+          <hitrect x="-3" y="-3" w="76" h="50"/>
           <font>chrome</font><label>$LOCALIZE[35110]</label>
           <onclick>ActivateWindow(GamePorts)</onclick>
         </control>
         <control type="button" id="9979">
           <width>90</width><height>44</height>
+          <hitrect x="-3" y="-3" w="96" h="50"/>
           <font>chrome</font><label>$LOCALIZE[35172]</label>
           <onclick>ActivateWindow(GameAgents)</onclick>
         </control>
         <control type="button" id="9972">
           <width>80</width><height>44</height>
+          <hitrect x="-3" y="-3" w="86" h="50"/>
           <font>chrome</font><label>$LOCALIZE[587]</label>
           <onclick>ActivateWindow(GameVideoFilter)</onclick>
         </control>
         <control type="button" id="9973">
           <width>90</width><height>44</height>
+          <hitrect x="-3" y="-3" w="96" h="50"/>
           <font>chrome</font><label>$LOCALIZE[31997]</label>
           <onclick>ActivateWindow(GameStretchMode)</onclick>
         </control>
         <control type="button" id="9974">
           <width>100</width><height>44</height>
+          <hitrect x="-3" y="-3" w="106" h="50"/>
           <font>chrome</font><label>$LOCALIZE[35227]</label>
           <onclick>ActivateWindow(GameVideoRotation)</onclick>
         </control>
         <control type="button" id="9976">
           <width>100</width><height>44</height>
+          <hitrect x="-3" y="-3" w="106" h="50"/>
           <font>chrome</font><label>$LOCALIZE[10038]</label>
           <onclick>ActivateWindow(GameAdvancedSettings)</onclick>
         </control>

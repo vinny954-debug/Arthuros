@@ -122,6 +122,7 @@
         <onright>9982</onright>
         <control type="radiobutton" id="600">
           <width>60</width><height>48</height>
+          <hitrect x="-3" y="-3" w="66" h="54"/>
           <label/>
           <textureradioonfocus>icons24/prev.png</textureradioonfocus>
           <textureradioonnofocus>icons24/prev.png</textureradioonnofocus>
@@ -136,6 +137,7 @@
         </control>
         <control type="radiobutton" id="601">
           <width>60</width><height>48</height>
+          <hitrect x="-3" y="-3" w="66" h="54"/>
           <label/>
           <textureradioonfocus>icons24/rew.png</textureradioonfocus>
           <textureradioonnofocus>icons24/rew.png</textureradioonnofocus>
@@ -151,6 +153,7 @@
         </control>
         <control type="radiobutton" id="602">
           <width>60</width><height>48</height>
+          <hitrect x="-3" y="-3" w="66" h="54"/>
           <label/>
           <textureradioonfocus>icons24/pause.png</textureradioonfocus>
           <textureradioonnofocus>icons24/pause.png</textureradioonnofocus>
@@ -165,6 +168,7 @@
         </control>
         <control type="radiobutton" id="603">
           <width>60</width><height>48</height>
+          <hitrect x="-3" y="-3" w="66" h="54"/>
           <label/>
           <textureradioonfocus>icons24/stop.png</textureradioonfocus>
           <textureradioonnofocus>icons24/stop.png</textureradioonnofocus>
@@ -178,6 +182,7 @@
         </control>
         <control type="radiobutton" id="606">
           <width>60</width><height>48</height>
+          <hitrect x="-3" y="-3" w="66" h="54"/>
           <label/>
           <textureradioonfocus>icons24/ffwd.png</textureradioonfocus>
           <textureradioonnofocus>icons24/ffwd.png</textureradioonnofocus>
@@ -193,6 +198,7 @@
         </control>
         <control type="radiobutton" id="607">
           <width>60</width><height>48</height>
+          <hitrect x="-3" y="-3" w="66" h="54"/>
           <label/>
           <textureradioonfocus>icons24/next.png</textureradioonfocus>
           <textureradioonnofocus>icons24/next.png</textureradioonnofocus>
@@ -208,6 +214,7 @@
       </control>
       <control type="radiobutton" id="9982">
         <left>612</left><top>74</top><width>60</width><height>48</height>
+        <hitrect x="609" y="71" w="66" h="54"/>
         <label/>
         <textureradioonfocus>icons24/audio_muted.png</textureradioonfocus>
         <textureradioonnofocus>icons24/audio_muted.png</textureradioonnofocus>
@@ -239,6 +246,7 @@
       </control>
       <control type="button" id="9951">
         <left>906</left><top>74</top><width>110</width><height>48</height>
+        <hitrect x="902" y="71" w="118" h="54"/>
         <font>chromebold</font><label>$LOCALIZE[31800]</label>
         <onclick>Dialog.Close(VideoOSD)</onclick>
         <onup condition="Player.SeekEnabled + !VideoPlayer.Content(LiveTV)">9980</onup>
@@ -258,28 +266,33 @@
         <onright>9951</onright>
         <control type="button" id="9963">
           <width>110</width><height>44</height>
+          <hitrect x="-3" y="-3" w="116" h="50"/>
           <font>chrome</font><label>$LOCALIZE[287]</label>
           <onclick>ActivateWindow(OSDSubtitleSettings)</onclick>
           <visible>!VideoPlayer.Content(LiveTV) | VideoPlayer.HasSubtitles</visible>
         </control>
         <control type="button" id="9950">
           <width>160</width><height>44</height>
+          <hitrect x="-3" y="-3" w="166" h="50"/>
           <font>chrome</font><label>$LOCALIZE[31998]</label>
           <onclick>ActivateWindow(SubtitleSearch)</onclick>
           <visible>!VideoPlayer.Content(LiveTV)</visible>
         </control>
         <control type="button" id="9962">
           <width>70</width><height>44</height>
+          <hitrect x="-3" y="-3" w="76" h="50"/>
           <font>chrome</font><label>$LOCALIZE[292]</label>
           <onclick>ActivateWindow(OSDAudioSettings)</onclick>
         </control>
         <control type="button" id="9961">
           <width>70</width><height>44</height>
+          <hitrect x="-3" y="-3" w="76" h="50"/>
           <font>chrome</font><label>$LOCALIZE[291]</label>
           <onclick>ActivateWindow(OSDVideoSettings)</onclick>
         </control>
         <control type="button" id="9964">
           <width>110</width><height>44</height>
+          <hitrect x="-3" y="-3" w="116" h="50"/>
           <font>chrome</font><label>$LOCALIZE[298]</label>
           <onclick>Dialog.Close(VideoOSD)</onclick>
           <onclick>ActivateWindow(VideoBookmarks)</onclick>
@@ -287,18 +300,21 @@
         </control>
         <control type="button" id="9965">
           <width>60</width><height>44</height>
+          <hitrect x="-3" y="-3" w="66" h="50"/>
           <font>chrome</font><label>$LOCALIZE[29915]</label>
           <onclick>Dialog.Close(VideoOSD)</onclick>
           <onclick>ActivateWindow(FullscreenInfo)</onclick>
         </control>
         <control type="button" id="804">
           <width>60</width><height>44</height>
+          <hitrect x="-3" y="-3" w="66" h="50"/>
           <font>chrome</font><label>$LOCALIZE[33061]</label>
           <onclick>PlayerControl(ShowVideoMenu)</onclick>
           <visible>VideoPlayer.HasMenu</visible>
         </control>
         <control type="button" id="87">
           <width>100</width><height>44</height>
+          <hitrect x="-3" y="-3" w="106" h="50"/>
           <font>chrome</font><label>$LOCALIZE[559]</label>
           <onclick>Dialog.Close(all,true)</onclick>
           <onclick>ActivateWindow(VideoPlaylist)</onclick>
@@ -306,6 +322,7 @@
         </control>
         <control type="button" id="9966">
           <width>100</width><height>44</height>
+          <hitrect x="-3" y="-3" w="106" h="50"/>
           <font>chrome</font><label>$LOCALIZE[19019]</label>
           <onclick>Dialog.Close(VideoOSD)</onclick>
           <onclick>ActivateWindow(PVROSDChannels)</onclick>
@@ -313,6 +330,7 @@
         </control>
         <control type="button" id="9967">
           <width>70</width><height>44</height>
+          <hitrect x="-3" y="-3" w="76" h="50"/>
           <font>chrome</font><label>$LOCALIZE[19069]</label>
           <onclick>Dialog.Close(VideoOSD)</onclick>
           <onclick>ActivateWindow(PVRChannelGuide)</onclick>
@@ -320,6 +338,7 @@
         </control>
         <control type="button" id="9968">
           <width>100</width><height>44</height>
+          <hitrect x="-3" y="-3" w="106" h="50"/>
           <font>chrome</font><label>$LOCALIZE[10550]</label>
           <onclick>Dialog.Close(VideoOSD)</onclick>
           <onclick>ActivateWindow(Teletext)</onclick>
@@ -327,12 +346,14 @@
         </control>
         <control type="button" id="608">
           <width>160</width><height>44</height>
+          <hitrect x="-3" y="-3" w="166" h="50"/>
           <font>chrome</font><label>$VAR[OSDRecordLabelVar]</label>
           <onclick>PVR.ToggleRecordPlayingChannel</onclick>
           <visible>VideoPlayer.Content(LiveTV) + PVR.CanRecordPlayingChannel</visible>
         </control>
         <control type="button" id="9960">
           <width>170</width><height>44</height>
+          <hitrect x="-3" y="-3" w="176" h="50"/>
           <font>chrome</font><label>$LOCALIZE[10140]</label>
           <onclick>RunScript(special://skin/scripts/addonsettings.py)</onclick>
           <visible>!VideoPlayer.Content(LiveTV) + [String.StartsWith(Player.FilenameAndPath,plugin://) | !String.IsEmpty(Window(Home).Property(arthuros.plugin))]</visible>

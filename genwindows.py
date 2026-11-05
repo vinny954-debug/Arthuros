@@ -489,8 +489,21 @@ def navs(sp, **dirs):
 def glyph_tex(glyph, size):
     return glyph if ("/" in glyph or "$" in glyph) else f"icons{size}/{glyph}.png"
 
+def hitrect(sp, x, y, w, h, pad, pady=None):
+    """T-6: a <hitrect> `pad` px larger than the control on every side, so a
+    finger landing in the gap between two buttons still hits one. The rect
+    is in the PARENT's coordinates (GUIControlFactory::GetHitRect parses x/y
+    like <left>/<top>); a grouplist child sits at 0,0 and Kodi moves the
+    rect with it (CGUIControl::SetPosition). Pads must stay within half of
+    the gap to the neighbour, or two controls would claim the same tap."""
+    pady = pad if pady is None else pady
+    return (f'{sp}<hitrect x="{x - pad}" y="{y - pady}" w="{w + 2 * pad}" h="{h + 2 * pady}" />\n'
+            if pad else "")
+
+OSD_HIT = 3      # half the 6 px itemgap / row gap of the OSD and mini-player
+
 def icon_radio(cid, glyph, w, h, clicks, indent=8, size=16, selected=None,
-               glyph_on=None, visible=None, nav=None, pos=None):
+               glyph_on=None, visible=None, nav=None, pos=None, hit=0):
     """A glyph button that is a single focusable control: the radio texture is
     the glyph (radioposx is measured from the left edge,
     GUIRadioButtonControl.cpp). It keeps keyboard navigation inside a
@@ -509,6 +522,7 @@ def icon_radio(cid, glyph, w, h, clicks, indent=8, size=16, selected=None,
     else:
         s += f"{sp}  "
     s += f"<width>{w}</width><height>{h}</height>\n"
+    s += hitrect(sp + "  ", *(pos or (0, 0)), w, h, hit)
     s += f"{sp}  <label></label>\n"
     for state, tex in (("on", on), ("off", off)):
         for f in ("focus", "nofocus", "disabled"):
@@ -594,22 +608,30 @@ def seek_targets(kind):
     live = OSD_LIVE[kind]
     return [(f"Player.SeekEnabled + !{live}", "9980"), (f"Player.SeekEnabled + {live}", "9981")]
 
+# K-6: the music OSD's visualisation preset buttons sit in the transport
+# row, right of the longest possible transport (6 x 60 + 5 x 6 = 390 px from
+# x 8). Only while the visualisation has presets to pick from.
+VIS_L, VIS_W = 404, 196
+VIS_ON = "Visualisation.HasPresets"
+VIS_IF = "Control.IsVisible(203)"
+
 def osd_transport(kind="video", top=TR_T):
     """Grouplist 201: big glyph buttons. Hidden ones collapse (the grouplist
     lays out visible children only)."""
     up = seek_targets(kind) + [(None, "202")]
+    right = [(VIS_IF, "203"), (None, "9982")] if kind == "music" else "9982"
     s = (f'      <control type="grouplist" id="201">\n'
-         f"        <left>8</left><top>{top}</top><width>{MUTE_L - 16}</width><height>{TR_H}</height>\n"
+         f"        <left>8</left><top>{top}</top><width>{(VIS_L if kind == 'music' else MUTE_L) - 16}</width><height>{TR_H}</height>\n"
          f"        <orientation>horizontal</orientation><itemgap>6</itemgap>\n"
-         + navs("        ", up=up, down="202", left="9951", right="9982"))
+         + navs("        ", up=up, down="202", left="9951", right=right))
     for cid, glyph, acts, vis in OSD_BUTTONS:
         if kind not in vis:
             continue
         if cid == 602:
             s += icon_radio(cid, "play", TR_W, TR_H, acts, size=24, selected=PLAYING,
-                            glyph_on="pause", visible=vis[kind])
+                            glyph_on="pause", visible=vis[kind], hit=OSD_HIT)
         else:
-            s += icon_radio(cid, glyph, TR_W, TR_H, acts, size=24, visible=vis[kind])
+            s += icon_radio(cid, glyph, TR_W, TR_H, acts, size=24, visible=vis[kind], hit=OSD_HIT)
     s += "      </control>\n"
     return s
 
@@ -617,7 +639,8 @@ def osd_transport(kind="video", top=TR_T):
 # add-on is playing when the stream path does not say.
 PLUGIN_PROP = "Window(Home).Property(arthuros.plugin)"
 
-def osd_buttons(gid, top, buttons, onup, ondown, onright=None, left=8, width=None, h=TX_H):
+def osd_buttons(gid, top, buttons, onup, ondown, onright=None, left=8, width=None, h=TX_H,
+                hit=OSD_HIT, onleft=None, visible=None):
     """A row of text buttons: (id, width, label, [actions], visible[, selected]).
     With `selected` the entry is a radiobutton, whose circle shows the state
     (shuffle). Chrome font: at most 20 px, so the row fits every fontset."""
@@ -625,13 +648,15 @@ def osd_buttons(gid, top, buttons, onup, ondown, onright=None, left=8, width=Non
     s = (f'      <control type="grouplist" id="{gid}">\n'
          f"        <left>{left}</left><top>{top}</top><width>{width}</width><height>{h}</height>\n"
          f"        <orientation>horizontal</orientation><itemgap>6</itemgap>\n"
-         + navs("        ", up=onup, down=ondown, right=onright))
+         + navs("        ", up=onup, down=ondown, left=onleft, right=onright)
+         + (f"        <visible>{visible}</visible>\n" if visible else ""))
     for b in buttons:
         cid, w, label, acts, vis = b[:5]
         sel = b[5] if len(b) > 5 else None
         kind = "radiobutton" if sel else "button"
         s += f'        <control type="{kind}" id="{cid}">\n'
         s += f"          <width>{w}</width><height>{h}</height>\n"
+        s += hitrect("          ", 0, 0, w, h, hit)
         s += f"          <font>chrome</font><label>{label}</label>\n"
         if sel:
             s += f"          <selected>{sel}</selected>\n"
@@ -664,12 +689,30 @@ def record_button(live):
     return (608, 160, "$VAR[OSDRecordLabelVar]", ["PVR.ToggleRecordPlayingChannel"],
             f"{live} + PVR.CanRecordPlayingChannel")
 
+def vis_presets():
+    """K-6, music only: Preset opens Kodi's preset list (CGUIDialogVisualisation
+    PresetList finds the visualisation through control id 2 of the
+    visualisation window, which music_vis() gives it); 501 is Kodi's own
+    lock button (GUIDialogMusicOSD.cpp CONTROL_LOCK_BUTTON sends
+    ACTION_VIS_PRESET_LOCK), shown as a radiobutton that follows
+    Visualisation.Locked. CGUIDialogMusicOSD::FrameMove keeps the bar up
+    while the preset list is open."""
+    up = seek_targets("music") + [(None, "202")]
+    return osd_buttons(203, TR_T, [
+        (9986, 80, "$LOCALIZE[13388]", ["ActivateWindow(VisualisationPresetList)"], None),
+        (501, 110, "$LOCALIZE[20166]", [], None, "Visualisation.Locked"),
+    ], up, "202", onright="9982", left=VIS_L, width=VIS_W, h=TR_H,
+       onleft="201", visible=VIS_ON)
+
 def osd_rows(name, kind):
     """The text-button row (grouplist 202), 1008 px. Widths are what each
     label needs at Extra large (10 px a glyph + 2x10 textoffsetx). The video
     row's guards keep its widest possible set inside 1008 (every gap 6):
     Teletext and the disc Menu never show together (a disc has no teletext),
-    and Add-on settings never with the live TV buttons."""
+    and Add-on settings never with the live TV buttons. The music row's
+    widest sets: 790 px (shuffle, repeat, audio, queue, visualisation,
+    add-on) and 806 px live (audio, queue, visualisation, channels, guide,
+    RDS, record)."""
     if kind == "game":
         return [(9970, 130, "$LOCALIZE[35249]", ["ActivateWindow(InGameSaves)"], None),
                 (9971, 70, "$LOCALIZE[13007]", ["PlayerControl(Reset)"], None),
@@ -705,6 +748,9 @@ def osd_rows(name, kind):
             AUDIO,
             (87, 100, "$LOCALIZE[559]", ["Dialog.Close(all,true)", "ActivateWindow(MusicPlaylist)"],
              "Integer.IsGreater(Playlist.Length(music),0)"),
+            # K-6: Kodi's visualisation chooser (GUIDialogMusicOSD.cpp
+            # CONTROL_VIS_BUTTON 500: pick an add-on, or None, and reload)
+            (500, 150, "$LOCALIZE[250]", [], None),
             *live_buttons(name, L),
             (9969, 120, "$LOCALIZE[31801]", [f"Dialog.Close({name})", "ActivateWindow(PVRRadioRDSInfo)"],
              f"{L} + RDS.HasRDS"),
@@ -778,18 +824,24 @@ def osd_window(name, kind="video"):
                  f"        <info>Player.Progress</info>\n"
                  f"        <visible>!Player.SeekEnabled</visible>\n      </control>\n")
     body += osd_transport(kind)
+    if kind == "music":
+        body += vis_presets()
     # V-2: mute and volume, by touch. Tap or drag the slider (fireOnDrag:
     # the volume follows the finger); not while the receiver decodes.
+    left = [(VIS_IF, "203"), (None, "201")] if kind == "music" else "201"
     body += icon_radio(9982, "audio", TR_W, TR_H, ["Mute"], indent=6, size=24,
                        selected="Player.Muted", glyph_on="audio_muted", pos=(MUTE_L, TR_T),
-                       nav={"up": up, "down": "202", "left": "201", "right": "9983"})
+                       nav={"up": up, "down": "202", "left": left, "right": "9983"},
+                       hit=OSD_HIT)
     body += slider(9983, VOL_L, TR_T + 6, VOL_W, TR_H - 12, "volume", "Player.Volume",
                    enable="!Player.Passthrough",
                    nav={"up": up, "down": "202"})
     # V-3: Hide closes the bar only; playback carries on underneath
     body += (f'      <control type="button" id="9951">\n'
              f"        <left>{HIDE_L}</left><top>{TR_T}</top><width>{HIDE_W}</width><height>{TR_H}</height>\n"
-             f"        <font>chromebold</font><label>$LOCALIZE[31800]</label>\n"
+             # 8 px to the volume slider and to the frame edge: 4 sideways
+             + hitrect("        ", HIDE_L, TR_T, HIDE_W, TR_H, 4, OSD_HIT)
+             + f"        <font>chromebold</font><label>$LOCALIZE[31800]</label>\n"
              f"        <onclick>Dialog.Close({name})</onclick>\n"
              + navs("        ", up=up, down="202", left="9983", right="201")
              + "      </control>\n")
@@ -890,6 +942,7 @@ def bookmarks_dialog():
     the real 3. A bottom panel, so the picture being bookmarked stays in view."""
     W, Hh = OSD_W, 250
     armed = "String.IsEqual(Window(Home).Property(arthuros.clearbm),1)"
+    # T-6: each button's hit rect covers half of the 4 px gap above and below
     body = well(8, 34, 244, Hh - 42, "panel_sunken_grey.png")
     body += (f'      <control type="grouplist" id="9000">\n'
              f"        <left>16</left><top>42</top><width>228</width><height>{Hh - 58}</height>\n"
@@ -897,13 +950,16 @@ def bookmarks_dialog():
              f"        <onright>11</onright>\n"
              f'        <control type="button" id="2">\n'
              f"          <width>228</width><height>44</height>\n"
+             f"          <hitrect x=\"0\" y=\"-2\" w=\"228\" h=\"48\" />\n"
              f"          <font>chrome</font><label>$LOCALIZE[294]</label>\n        </control>\n"
              f'        <control type="button" id="4">\n'
              f"          <width>228</width><height>44</height>\n"
+             f"          <hitrect x=\"0\" y=\"-2\" w=\"228\" h=\"48\" />\n"
              f"          <font>chrome</font><label>$LOCALIZE[20406]</label>\n"
              f"          <visible>Control.IsEnabled(4)</visible>\n        </control>\n"
              f'        <control type="button" id="9993">\n'
              f"          <width>228</width><height>44</height>\n"
+             f"          <hitrect x=\"0\" y=\"-2\" w=\"228\" h=\"48\" />\n"
              f"          <font>chrome</font><label>$VAR[BookmarkClearLabelVar]</label>\n"
              f"          <onclick condition=\"!{armed}\">SetProperty(arthuros.clearbm,1,home)</onclick>\n"
              f"          <onclick condition=\"{armed}\">ClearProperty(arthuros.clearbm,home)</onclick>\n"
@@ -911,6 +967,7 @@ def bookmarks_dialog():
              f"        </control>\n"
              f'        <control type="button" id="9994">\n'
              f"          <width>228</width><height>44</height>\n"
+             f"          <hitrect x=\"0\" y=\"-2\" w=\"228\" h=\"48\" />\n"
              f"          <font>chrome</font><label>$LOCALIZE[106]</label>\n"
              f"          <onclick>ClearProperty(arthuros.clearbm,home)</onclick>\n"
              f"          <onclick>SetFocus(9993)</onclick>\n"
@@ -919,6 +976,7 @@ def bookmarks_dialog():
              # while Clear is armed, Cancel takes its place
              f'        <control type="button" id="9995">\n'
              f"          <width>228</width><height>44</height>\n"
+             f"          <hitrect x=\"0\" y=\"-2\" w=\"228\" h=\"48\" />\n"
              f"          <font>chrome</font><label>$LOCALIZE[15067]</label>\n"
              f"          <onclick>Dialog.Close(VideoBookmarks)</onclick>\n"
              f"          <visible>!{armed}</visible>\n        </control>\n"
@@ -1803,7 +1861,17 @@ def small_dialogs():
     # peripherals (CEC) wait, and the window ignores the mouse. It must
     # replace itself at once with the configured start window, exactly as
     # Estuary's does. It shows only the desktop so the hand-over does not flash.
+    # T-14: Touch mode's mouse detection starts on Home's load (home.py), so
+    # a start window other than Home (Settings > Interface > Startup window)
+    # would leave a plugged-in mouse without a pointer. Start it here then;
+    # with Home (10000, WINDOW_HOME) as start window Home's own onload does
+    # it, and two copies started a few ms apart could both pass
+    # mousewatch.py's "already running" test. A profile login screen never
+    # loads Startup (CApplication::Initialize), Home starts it after login.
     out["Startup"] = (H + "<window>\n"
+      "  <onload condition=\"Skin.HasSetting(touchmode) + !String.IsEqual(System.StartupWindow,10000)"
+      " + String.IsEmpty(Window(Home).Property(arthuros.mousewatch))\">"
+      "RunScript(special://skin/scripts/mousewatch.py)</onload>\n"
       "  <onload>ReplaceWindow($INFO[System.StartupWindow])</onload>\n"
       "  <backgroundcolor>desktop</backgroundcolor>\n"
       "  <controls>\n"
@@ -2486,15 +2554,16 @@ def player_controls():
              "        <left>13</left><top>146</top><width>270</width><height>48</height>\n"
              "        <orientation>horizontal</orientation><itemgap>6</itemgap>\n"
              + navs("        ", up=seek, down="202", left="9983", right="9982"))
-    body += icon_radio(600, "prev", 60, 48, ["PlayerControl(Previous)"], size=24)
+    body += icon_radio(600, "prev", 60, 48, ["PlayerControl(Previous)"], size=24, hit=OSD_HIT)
     body += icon_radio(602, "play", 60, 48, ["PlayerControl(Play)"], size=24,
-                       selected=PLAYING, glyph_on="pause")
-    body += icon_radio(603, "stop", 60, 48, ["PlayerControl(Stop)"], size=24)
-    body += icon_radio(605, "next", 60, 48, ["PlayerControl(Next)"], size=24)
+                       selected=PLAYING, glyph_on="pause", hit=OSD_HIT)
+    body += icon_radio(603, "stop", 60, 48, ["PlayerControl(Stop)"], size=24, hit=OSD_HIT)
+    body += icon_radio(605, "next", 60, 48, ["PlayerControl(Next)"], size=24, hit=OSD_HIT)
     body += "      </control>\n"
     body += icon_radio(9982, "audio", 60, 48, ["Mute"], indent=6, size=24,
                        selected="Player.Muted", glyph_on="audio_muted", pos=(290, 146),
-                       nav={"up": seek, "down": "202", "left": "201", "right": "9983"})
+                       nav={"up": seek, "down": "202", "left": "201", "right": "9983"},
+                       hit=OSD_HIT)
     body += slider(9983, 356, 152, 290, 36, "volume", "Player.Volume",
                    enable="!Player.Passthrough", nav={"up": seek, "down": "202"})
     body += osd_buttons(202, 202, [

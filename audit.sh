@@ -75,6 +75,33 @@ chk "xml768 skin settings say 1024x768" 'grep -q "v$VER  -  1024x768" $S/xml768/
 chk "xml768 version stamp matches"      'grep -q "(v$VER)" $S/xml768/Home.xml'
 # ===== P1 video/music/game OSD =====
 OSDS="VideoOSD MusicOSD GameOSD"
+chk "T-14 Startup starts mousewatch unless Home (which does) is the start window" 'for r in xml xml768; do grep "<onload condition=" $S/$r/Startup.xml | grep "Skin.HasSetting(touchmode)" | grep "!String.IsEqual(System.StartupWindow,10000)" | grep -q "RunScript(special://skin/scripts/mousewatch.py)" && grep -q "<onload>ReplaceWindow(\$INFO\[System.StartupWindow\])</onload>" $S/$r/Startup.xml && grep -q "mousewatch.py" $S/$r/Home.xml || exit 1; done'
+chk "K-6 music OSD: visualisation chooser 500, preset list, lock 501" 'for r in xml xml768; do f=$S/$r/MusicOSD.xml; grep -A3 "type=\"button\" id=\"500\"" $f | grep -q "LOCALIZE\[250\]" && grep -q "ActivateWindow(VisualisationPresetList)" $f && grep -A4 "type=\"radiobutton\" id=\"501\"" $f | grep -q "<selected>Visualisation.Locked</selected>" && grep -q "<onright condition=\"Control.IsVisible(203)\">203</onright>" $f && ! grep -q "id=\"50[01]\"" $S/$r/VideoOSD.xml $S/$r/GameOSD.xml || exit 1; done'
+chk "T-6 OSD/mini-player buttons: 44+ px, hit rects cover the gaps, never overlap" 'python3 -c "
+import sys,xml.etree.ElementTree as E
+bad=[]
+for f in sys.argv[1:]:
+  r=E.parse(f).getroot(); rows={}
+  G=dict((g.get(\"id\"),g) for g in r.iter(\"control\") if g.get(\"type\")==\"grouplist\")
+  for gid in (\"201\",\"202\",\"203\"):
+    g=G.get(gid)
+    if g is None: continue
+    gap=int(g.findtext(\"itemgap\")); top=int(g.findtext(\"top\")); h=int(g.findtext(\"height\"))
+    for c in g.findall(\"control\"):
+      hr=c.find(\"hitrect\"); w=int(c.findtext(\"width\")); ch=int(c.findtext(\"height\"))
+      if hr is None or ch<44: bad.append((f,c.get(\"id\"))); continue
+      px=(int(hr.get(\"w\"))-w)/2.0; py=(int(hr.get(\"h\"))-ch)/2.0
+      if px<=0 or px>gap/2.0 or -int(hr.get(\"x\"))!=px or -int(hr.get(\"y\"))!=py: bad.append((f,c.get(\"id\")))
+      rows[gid]=(top-py,top+h+py)
+  for gid in (\"201\",\"203\"):
+    if gid in rows and rows[gid][1]>rows[\"202\"][0]: bad.append((f,gid))
+  for c in r.iter(\"control\"):
+    if c.get(\"id\") in (\"9982\",\"9951\") and c.find(\"top\") is not None:
+      hr=c.find(\"hitrect\")
+      if hr is None or int(hr.get(\"y\"))+int(hr.get(\"h\"))>rows[\"202\"][0]: bad.append((f,c.get(\"id\")))
+print(bad); sys.exit(1 if bad or len(sys.argv)<9 else 0)" $S/xml/VideoOSD.xml $S/xml/MusicOSD.xml $S/xml/GameOSD.xml $S/xml/PlayerControls.xml $S/xml768/VideoOSD.xml $S/xml768/MusicOSD.xml $S/xml768/GameOSD.xml $S/xml768/PlayerControls.xml'
+chk "T-6 bookmark buttons' hit rects cover half the 4 px gap" 'for r in xml xml768; do test $(grep -c "<hitrect x=\"0\" y=\"-2\" w=\"228\" h=\"48\" */>" $S/$r/VideoOSDBookmarks.xml) -eq 5 || exit 1; done'
+chk "V-12(g) unused transport strings 31913-31916 are gone" '! grep -q "msgctxt \"#3191[3-6]\"" $S/language/resource.language.en_gb/strings.po'
 chk "buffering box: no id-less child, Kodi hides id 0 at init (V-21)" 'for r in xml xml768; do g=$(sed -n "/<control type=\"group\" id=\"1\">/,/<\/controls>/p" $S/$r/VideoFullScreen.xml); n=$(echo "$g" | grep -c "<control "); test $n -ge 4 && test $(echo "$g" | grep "<control " | grep -c "id=\"1\"") -eq $n && ! echo "$g" | grep -q "<include" || exit 1; done'
 chk "bookmarks over playback: no title-bar boxes, own Close" 'grep -q "name=\"boxes\" value=\"none\"" $S/xml/VideoOSDBookmarks.xml && for r in xml xml768; do f=$S/$r/VideoOSDBookmarks.xml; ! grep -q "id=\"990[12]\"\|ActivateWindow(Home)\|Action(FullScreen)" $f && grep -A4 "id=\"9995\"" $f | grep -q "Dialog.Close(VideoBookmarks)" || exit 1; done'
 chk "video OSD text row fits 1008 px (teletext/menu, add-on/live)" 'f=$S/xml/VideoOSD.xml; grep -q "VideoPlayer.HasTeletext + !VideoPlayer.HasMenu" $f && grep -A6 "id=\"9960\"" $f | grep -q "!VideoPlayer.Content(LiveTV) + \[" && grep -A6 "id=\"9960\"" $S/xml/MusicOSD.xml | grep -q "!MusicPlayer.Content(LiveTV) + \["'
@@ -157,7 +184,7 @@ chk "profiles: Auto login shows the chosen profile" 'grep -q "<label2>\$INFO\[Sy
 chk "channel manager shows hidden, locked, changed"  'for p in ActiveChannel ParentalLocked Changed Icon; do grep -q "ListItem.Property($p)" $S/xml/DialogPVRChannelManager.xml || exit 1; done'
 chk "no Estuary-only blank buttons (799, 501)"   '! grep -lE "id=\"(799|501)\"" $S/xml/EventLog.xml $S/xml/LoginScreen.xml $S/xml/SettingsProfile.xml $S/xml/MyMusicPlaylistEditor.xml'
 chk "TV guide is titled Guide, not Channel"      '! grep -q "LOCALIZE\[19029\]" $S/xml/MyPVRGuide.xml'
-chk "no unused skin strings"                     '( for i in $(sed -n "s/^msgctxt \"#\([0-9]*\)\"/\1/p" $S/language/resource.language.en_gb/strings.po); do case $i in 3191[3-6]) continue;; esac; grep -rqs "$i" $S/xml $S/scripts $S/fonts $S/addon.xml || { echo "unused $i"; exit 1; }; done )'
+chk "no unused skin strings"                     '( for i in $(sed -n "s/^msgctxt \"#\([0-9]*\)\"/\1/p" $S/language/resource.language.en_gb/strings.po); do grep -rqs "$i" $S/xml $S/scripts $S/fonts $S/addon.xml || { echo "unused $i"; exit 1; }; done )'
 :
 :
 # ===== P4 TV guide =====
