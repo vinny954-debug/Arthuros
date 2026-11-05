@@ -310,22 +310,22 @@
         <left>324</left><top>236</top><width>670</width><height>30</height>
       </control>
       <control type="label" id="8">
-        <left>324</left><top>268</top><width>670</width><height>198</height>
+        <left>324</left><top>268</top><width>670</width><height>30</height>
       </control>
       <control type="label" id="9">
-        <left>324</left><top>468</top><width>670</width><height>30</height>
+        <left>324</left><top>300</top><width>670</width><height>30</height>
       </control>
       <control type="label" id="10">
-        <left>324</left><top>500</top><width>670</width><height>30</height>
+        <left>324</left><top>332</top><width>670</width><height>30</height>
       </control>
       <control type="label" id="11">
-        <left>324</left><top>532</top><width>670</width><height>30</height>
+        <left>324</left><top>364</top><width>670</width><height>30</height>
       </control>
       <control type="label" id="12">
-        <left>324</left><top>564</top><width>670</width><height>30</height>
+        <left>324</left><top>396</top><width>670</width><height>30</height>
       </control>
       <control type="label" id="13">
-        <left>324</left><top>596</top><width>670</width><height>30</height>
+        <left>324</left><top>428</top><width>670</width><height>30</height>
       </control>
       <control type="textbox" id="30">
         <left>324</left><top>76</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="628"/></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="640"/></include><height>558</height>

@@ -472,6 +472,14 @@ chk "C-1 focused rows keep textinv when marked (file browser, music info)" 'test
 :
 :
 # ===== P8 4:3 layout =====
+T="python3 $(dirname "$0")/tallpass.py --check"
+chk "L-1 4:3: no one-line label/button stretched (System info, Weather)" "$T lines"
+chk "L-1 4:3: System information's lines keep their stack" "$T stack"
+chk "4:3: bottom-edge dialogs (OSDs, seek bar, bookmarks) stay on the bottom edge" "$T bottom"
+chk "T-9 4:3: context menu 996/997/999 use the extra height, 999 at 0,0" "$T contextmenu"
+chk "L-3 4:3: on-screen keyboard drawn for 768 (56 px keys, same ids)" "$T keyboard"
+chk "L-3 4:3: keyboard_window takes the layout height" 'grep -q "^def keyboard_window(h=600):" $(dirname "$0")/genwindows.py && grep -q "\"DialogKeyboard\": \"keyboard_window\"" $(dirname "$0")/tallpass.py'
+chk "L-3 4:3: Settings hub rows fill the panel, icons at 64 px" "$T cells"
 :
 :
 # ===== P9 scripts & tooling =====

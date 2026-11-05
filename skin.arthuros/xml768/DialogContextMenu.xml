@@ -4,7 +4,7 @@
   <coordinates><left>0</left><top>0</top></coordinates>
   <controls>
     <control type="image" id="999">
-      <left>0</left><top>0</top><width>380</width><height>568</height>
+      <left>0</left><top>0</top><width>380</width><height>736</height>
       <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
     </control>
     <control type="group">
@@ -143,7 +143,7 @@
       </control>
     </control>
     <control type="grouplist" id="996">
-      <left>10</left><top>38</top><height>520</height>
+      <left>10</left><top>38</top><height>688</height>
       <include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="326"/></include>
       <include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="360"/></include>
       <orientation>vertical</orientation><itemgap>2</itemgap>
@@ -158,7 +158,7 @@
       </control>
     </control>
     <control type="scrollbar" id="997">
-      <top>38</top><height>520</height>
+      <top>38</top><height>688</height>
       <include content="Size_Left" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="340"/></include>
       <include content="Size_Left" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="352"/></include>
       <include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30"/></include>

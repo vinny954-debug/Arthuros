@@ -316,19 +316,19 @@
         <aspectratio>keep</aspectratio>
       </control>
       <control type="label" id="32">
-        <left>14</left><top>286</top><width>80</width><height>194</height>
+        <left>14</left><top>286</top><width>80</width><height>26</height>
         <font>bold</font><align>right</align>
       </control>
       <control type="label">
-        <left>94</left><top>286</top><width>20</width><height>194</height>
+        <left>94</left><top>286</top><width>20</width><height>26</height>
         <font>bold</font><align>center</align><label>/</label>
       </control>
       <control type="label" id="33">
-        <left>114</left><top>286</top><width>80</width><height>194</height>
+        <left>114</left><top>286</top><width>80</width><height>26</height>
         <font>bold</font><align>left</align>
       </control>
       <control type="label" id="34">
-        <left>14</left><top>482</top><width>180</width><height>70</height>
+        <left>14</left><top>314</top><width>180</width><height>238</height>
         <font>small</font><textcolor>textdim</textcolor><align>center</align><aligny>top</aligny>
         <wrapmultiline>true</wrapmultiline>
       </control>
@@ -345,19 +345,19 @@
         <aspectratio>keep</aspectratio>
       </control>
       <control type="label" id="42">
-        <left>214</left><top>286</top><width>80</width><height>194</height>
+        <left>214</left><top>286</top><width>80</width><height>26</height>
         <font>bold</font><align>right</align>
       </control>
       <control type="label">
-        <left>294</left><top>286</top><width>20</width><height>194</height>
+        <left>294</left><top>286</top><width>20</width><height>26</height>
         <font>bold</font><align>center</align><label>/</label>
       </control>
       <control type="label" id="43">
-        <left>314</left><top>286</top><width>80</width><height>194</height>
+        <left>314</left><top>286</top><width>80</width><height>26</height>
         <font>bold</font><align>left</align>
       </control>
       <control type="label" id="44">
-        <left>214</left><top>482</top><width>180</width><height>70</height>
+        <left>214</left><top>314</top><width>180</width><height>238</height>
         <font>small</font><textcolor>textdim</textcolor><align>center</align><aligny>top</aligny>
         <wrapmultiline>true</wrapmultiline>
       </control>
@@ -374,19 +374,19 @@
         <aspectratio>keep</aspectratio>
       </control>
       <control type="label" id="52">
-        <left>414</left><top>286</top><width>80</width><height>194</height>
+        <left>414</left><top>286</top><width>80</width><height>26</height>
         <font>bold</font><align>right</align>
       </control>
       <control type="label">
-        <left>494</left><top>286</top><width>20</width><height>194</height>
+        <left>494</left><top>286</top><width>20</width><height>26</height>
         <font>bold</font><align>center</align><label>/</label>
       </control>
       <control type="label" id="53">
-        <left>514</left><top>286</top><width>80</width><height>194</height>
+        <left>514</left><top>286</top><width>80</width><height>26</height>
         <font>bold</font><align>left</align>
       </control>
       <control type="label" id="54">
-        <left>414</left><top>482</top><width>180</width><height>70</height>
+        <left>414</left><top>314</top><width>180</width><height>238</height>
         <font>small</font><textcolor>textdim</textcolor><align>center</align><aligny>top</aligny>
         <wrapmultiline>true</wrapmultiline>
       </control>
@@ -403,19 +403,19 @@
         <aspectratio>keep</aspectratio>
       </control>
       <control type="label" id="62">
-        <left>614</left><top>286</top><width>80</width><height>194</height>
+        <left>614</left><top>286</top><width>80</width><height>26</height>
         <font>bold</font><align>right</align>
       </control>
       <control type="label">
-        <left>694</left><top>286</top><width>20</width><height>194</height>
+        <left>694</left><top>286</top><width>20</width><height>26</height>
         <font>bold</font><align>center</align><label>/</label>
       </control>
       <control type="label" id="63">
-        <left>714</left><top>286</top><width>80</width><height>194</height>
+        <left>714</left><top>286</top><width>80</width><height>26</height>
         <font>bold</font><align>left</align>
       </control>
       <control type="label" id="64">
-        <left>614</left><top>482</top><width>180</width><height>70</height>
+        <left>614</left><top>314</top><width>180</width><height>238</height>
         <font>small</font><textcolor>textdim</textcolor><align>center</align><aligny>top</aligny>
         <wrapmultiline>true</wrapmultiline>
       </control>
@@ -432,19 +432,19 @@
         <aspectratio>keep</aspectratio>
       </control>
       <control type="label" id="72">
-        <left>814</left><top>286</top><width>80</width><height>194</height>
+        <left>814</left><top>286</top><width>80</width><height>26</height>
         <font>bold</font><align>right</align>
       </control>
       <control type="label">
-        <left>894</left><top>286</top><width>20</width><height>194</height>
+        <left>894</left><top>286</top><width>20</width><height>26</height>
         <font>bold</font><align>center</align><label>/</label>
       </control>
       <control type="label" id="73">
-        <left>914</left><top>286</top><width>80</width><height>194</height>
+        <left>914</left><top>286</top><width>80</width><height>26</height>
         <font>bold</font><align>left</align>
       </control>
       <control type="label" id="74">
-        <left>814</left><top>482</top><width>180</width><height>70</height>
+        <left>814</left><top>314</top><width>180</width><height>238</height>
         <font>small</font><textcolor>textdim</textcolor><align>center</align><aligny>top</aligny>
         <wrapmultiline>true</wrapmultiline>
       </control>
