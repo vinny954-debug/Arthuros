@@ -71,8 +71,8 @@
         <left>0</left><top>0</top><width>1</width><height>1</height>
       </control>
       <control type="label">
-        <left>874</left><top>3</top><width>140</width><height>26</height>
-        <font>chromebold</font><textcolor>titletext</textcolor>
+        <left>922</left><top>3</top><width>96</width><height>26</height>
+        <font>chromesmall</font><textcolor>titletext</textcolor>
         <align>right</align><aligny>center</aligny>
         <label>$VAR[OSDStateVar]</label>
       </control>
@@ -321,7 +321,7 @@
           <font>chrome</font><label>$LOCALIZE[10550]</label>
           <onclick>Dialog.Close(VideoOSD)</onclick>
           <onclick>ActivateWindow(Teletext)</onclick>
-          <visible>VideoPlayer.HasTeletext</visible>
+          <visible>VideoPlayer.HasTeletext + !VideoPlayer.HasMenu</visible>
         </control>
         <control type="button" id="608">
           <width>160</width><height>44</height>
@@ -333,7 +333,7 @@
           <width>170</width><height>44</height>
           <font>chrome</font><label>$LOCALIZE[10140]</label>
           <onclick>RunScript(special://skin/scripts/addonsettings.py)</onclick>
-          <visible>String.StartsWith(Player.FilenameAndPath,plugin://) | !String.IsEmpty(Window(Home).Property(arthuros.plugin))</visible>
+          <visible>!VideoPlayer.Content(LiveTV) + [String.StartsWith(Player.FilenameAndPath,plugin://) | !String.IsEmpty(Window(Home).Property(arthuros.plugin))]</visible>
         </control>
       </control>
     </control>

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <window>
   <visible>[Window.IsActive(fullscreenvideo) | Window.IsActive(visualisation)]</visible>
-  <visible>![Window.IsVisible(videoosd) | Window.IsVisible(musicosd) | Window.IsVisible(sliderdialog) | Window.IsVisible(pvrosdchannels) | Window.IsVisible(pvrchannelguide) | Window.IsVisible(fullscreeninfo) | Window.IsVisible(playerprocessinfo) | Window.IsVisible(videobookmarks) | Window.IsVisible(osdvideosettings) | Window.IsVisible(osdaudiosettings) | Window.IsVisible(osdsubtitlesettings) | Window.IsVisible(pvrradiordsinfo)]</visible>
+  <visible>![Window.IsVisible(videoosd) | Window.IsVisible(musicosd) | Window.IsVisible(sliderdialog) | Window.IsVisible(pvrosdchannels) | Window.IsVisible(pvrchannelguide) | Window.IsVisible(fullscreeninfo) | Window.IsVisible(playerprocessinfo) | Window.IsVisible(videobookmarks) | Window.IsVisible(osdvideosettings) | Window.IsVisible(osdaudiosettings) | Window.IsVisible(osdsubtitlesettings) | Window.IsVisible(pvrradiordsinfo) | Window.IsVisible(teletext) | Window.IsVisible(subtitlesearch) | Window.IsVisible(osdcmssettings)]</visible>
   <visible>Player.Seeking | Player.HasPerformedSeek(3) | [Player.Paused + !Player.Caching] | Player.Forwarding | Player.Rewinding | Player.ShowTime | !String.IsEmpty(Player.SeekNumeric)</visible>
   <zorder>3</zorder>
   <controls>

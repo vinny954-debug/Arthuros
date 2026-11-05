@@ -34,8 +34,8 @@
         <left>0</left><top>0</top><width>1</width><height>1</height>
       </control>
       <control type="label">
-        <left>874</left><top>3</top><width>140</width><height>26</height>
-        <font>chromebold</font><textcolor>titletext</textcolor>
+        <left>922</left><top>3</top><width>96</width><height>26</height>
+        <font>chromesmall</font><textcolor>titletext</textcolor>
         <align>right</align><aligny>center</aligny>
         <label>$VAR[OSDStateVar]</label>
       </control>

@@ -369,7 +369,7 @@ BOXES.update({"VideoOSD": "none", "MusicOSD": "none", "GameOSD": "none",
               # these carry their own Close button; over playback the title
               # bar's minimise / full-screen boxes would leave or do nothing
               "DialogFullScreenInfo": "none", "DialogPlayerProcessInfo": "none",
-              "DialogPVRRadioRDSInfo": "none"})
+              "DialogPVRRadioRDSInfo": "none", "VideoOSDBookmarks": "none"})
 
 OSD_W = 1024
 SEEK_T, SEEK_H = 32, 36       # time | seek slider | duration (game: help text)
@@ -574,8 +574,11 @@ def osd_buttons(gid, top, buttons, onup, ondown, onright=None, left=8, width=Non
 AUDIO = (9962, 70, "$LOCALIZE[292]", ["ActivateWindow(OSDAudioSettings)"], None)
 # The add-on that is playing: plugin:// paths name it; otherwise the browser
 # it was started from recorded it (scripts/addonsettings.py).
-ADDON = (9960, 170, "$LOCALIZE[10140]", ["RunScript(special://skin/scripts/addonsettings.py)"],
-         f"String.StartsWith(Player.FilenameAndPath,plugin://) | !String.IsEmpty({PLUGIN_PROP})")
+# Never during live TV/radio: the path is pvr://, so only a stale recorded
+# plugin could show it, and the row would run out of room (below).
+def addon_button(live):
+    return (9960, 170, "$LOCALIZE[10140]", ["RunScript(special://skin/scripts/addonsettings.py)"],
+            f"!{live} + [String.StartsWith(Player.FilenameAndPath,plugin://) | !String.IsEmpty({PLUGIN_PROP})]")
 
 def live_buttons(name, live):
     """Channels, Guide (and the radio's RDS text): close the bar first, so it
@@ -590,7 +593,11 @@ def record_button(live):
             f"{live} + PVR.CanRecordPlayingChannel")
 
 def osd_rows(name, kind):
-    """The text-button row (grouplist 202)."""
+    """The text-button row (grouplist 202), 1008 px. Widths are what each
+    label needs at Extra large (10 px a glyph + 2x10 textoffsetx). The video
+    row's guards keep its widest possible set inside 1008 (every gap 6):
+    Teletext and the disc Menu never show together (a disc has no teletext),
+    and Add-on settings never with the live TV buttons."""
     if kind == "game":
         return [(9970, 130, "$LOCALIZE[35249]", ["ActivateWindow(InGameSaves)"], None),
                 (9971, 70, "$LOCALIZE[13007]", ["PlayerControl(Reset)"], None),
@@ -616,9 +623,9 @@ def osd_rows(name, kind):
                  "Integer.IsGreater(Playlist.Length(video),1)"),
                 *live_buttons(name, L),
                 (9968, 100, "$LOCALIZE[10550]", [f"Dialog.Close({name})", "ActivateWindow(Teletext)"],
-                 "VideoPlayer.HasTeletext"),
+                 "VideoPlayer.HasTeletext + !VideoPlayer.HasMenu"),
                 record_button(L),
-                ADDON]
+                addon_button(L)]
     L = LIVE_M
     not_live = f"![{L} | MusicPartyMode.Enabled]"
     return [(9984, 130, "$LOCALIZE[191]", ["PlayerControl(Random)"], not_live, "Playlist.IsRandom"),
@@ -630,7 +637,7 @@ def osd_rows(name, kind):
             (9969, 120, "$LOCALIZE[31801]", [f"Dialog.Close({name})", "ActivateWindow(PVRRadioRDSInfo)"],
              f"{L} + RDS.HasRDS"),
             record_button(L),
-            ADDON]
+            addon_button(L)]
 
 def osd_window(name, kind="video"):
     up = seek_targets(kind) + [(None, "202")]
@@ -648,10 +655,13 @@ def osd_window(name, kind="video"):
         # ids Kodi skins traditionally carry; empty here
         body += (f'      <control type="group" id="{gid}">\n'
                  f"        <left>0</left><top>0</top><width>1</width><height>1</height>\n      </control>\n")
-    # play state on the right of the title bar, where the window boxes would be
+    # play state on the right of the title bar, where the window boxes would
+    # be: right of x 921, where Win_Title's title label stops (right 100), so
+    # a long title never runs under it. chromesmall: "Buffering..." is 96 px
+    # at Extra large.
     body += ("      <control type=\"label\">\n"
-             "        <left>874</left><top>3</top><width>140</width><height>26</height>\n"
-             "        <font>chromebold</font><textcolor>titletext</textcolor>\n"
+             "        <left>922</left><top>3</top><width>96</width><height>26</height>\n"
+             "        <font>chromesmall</font><textcolor>titletext</textcolor>\n"
              "        <align>right</align><aligny>center</aligny>\n"
              "        <label>$VAR[OSDStateVar]</label>\n      </control>\n")
     if kind == "game":
@@ -763,7 +773,8 @@ def seek_bar():
     seek target (GUIDialogSeekBar.cpp FrameMove)."""
     over = ("videoosd", "musicosd", "sliderdialog", "pvrosdchannels", "pvrchannelguide",
             "fullscreeninfo", "playerprocessinfo", "videobookmarks", "osdvideosettings",
-            "osdaudiosettings", "osdsubtitlesettings", "pvrradiordsinfo")
+            "osdaudiosettings", "osdsubtitlesettings", "pvrradiordsinfo",
+            "teletext", "subtitlesearch", "osdcmssettings")
     vis = ["[Window.IsActive(fullscreenvideo) | Window.IsActive(visualisation)]",
            "![" + " | ".join(f"Window.IsVisible({w})" for w in over) + "]",
            "Player.Seeking | Player.HasPerformedSeek(3) | [Player.Paused + !Player.Caching] | "
@@ -832,6 +843,13 @@ def bookmarks_dialog():
              f"          <onclick>ClearProperty(arthuros.clearbm,home)</onclick>\n"
              f"          <onclick>SetFocus(9993)</onclick>\n"
              f"          <visible>{armed}</visible>\n        </control>\n"
+             # no title-bar boxes over playback (BOXES), so Close lives here;
+             # while Clear is armed, Cancel takes its place
+             f'        <control type="button" id="9995">\n'
+             f"          <width>228</width><height>44</height>\n"
+             f"          <font>chrome</font><label>$LOCALIZE[15067]</label>\n"
+             f"          <onclick>Dialog.Close(VideoBookmarks)</onclick>\n"
+             f"          <visible>!{armed}</visible>\n        </control>\n"
              f"      </control>\n")
     # the real Clear: only ever clicked by 9993's second tap
     body += ('      <control type="button" id="3">\n'
@@ -1875,17 +1893,19 @@ def fullscreen_video():
     """Kodi draws the picture itself (CGUIWindowFullScreen::Render); a
     videowindow here would only take taps meant for DVD/Blu-ray menus (V-22).
     Labels 10-12 are the zoom / view-mode readout Kodi fills and shows for a
-    few seconds after a change (FrameMove). Kodi also toggles id 0, but id 0
-    is never in the lookup (GUIControlLookup::AddLookup), so the frame follows
-    label 10 instead (V-20). Group 1: the buffering box (V-21)."""
+    few seconds after a change (FrameMove). FrameMove also sends
+    SET_CONTROL_VISIBLE/HIDDEN(0): a message for id 0 is not looked up,
+    CGUIControlGroup::OnMessage broadcasts it to every child, recursively,
+    and CGUIControl::OnMessage shows/hides every control whose id is 0. So
+    group 0 and its id-less frame toggle together with labels 10-12 (V-20),
+    and EVERY id-less control anywhere in this window is force-hidden from
+    window init until the next zoom change. Hence every child of group 1
+    (the buffering box, V-21) carries id 1, as in Estuary; never add an
+    id-less control outside group 0 here."""
     return (H + "<window>\n  <controls>\n"
       "    <control type=\"group\" id=\"0\">\n"
       "      <left>6</left><top>6</top><width>620</width><height>84</height>\n"
-      "      <control type=\"group\">\n"
-      "        <left>0</left><top>0</top><width>620</width><height>84</height>\n"
-      "        <visible>Control.IsVisible(10)</visible>\n"
-      "        <include content=\"Win_Frame\"><param name=\"width\" value=\"620\" /><param name=\"height\" value=\"84\" /></include>\n"
-      "      </control>\n"
+      "      <include content=\"Win_Frame\"><param name=\"width\" value=\"620\" /><param name=\"height\" value=\"84\" /></include>\n"
       "      <control type=\"label\" id=\"10\"><left>10</left><top>6</top><width>600</width><height>24</height><font>small</font></control>\n"
       "      <control type=\"label\" id=\"11\"><left>10</left><top>30</top><width>600</width><height>24</height><font>small</font></control>\n"
       "      <control type=\"label\" id=\"12\"><left>10</left><top>54</top><width>600</width><height>24</height><font>small</font></control>\n"
@@ -1893,13 +1913,16 @@ def fullscreen_video():
       "    <control type=\"group\" id=\"1\">\n"
       "      <centerleft>50%</centerleft><centertop>50%</centertop><width>240</width><height>90</height>\n"
       "      <visible>Player.Caching + Integer.IsGreater(Player.CacheLevel,0)</visible>\n"
-      "      <include content=\"Win_Frame\"><param name=\"width\" value=\"240\" /><param name=\"height\" value=\"90\" /></include>\n"
-      "      <control type=\"label\">\n"
+      "      <control type=\"image\" id=\"1\">\n"
+      "        <left>0</left><top>0</top><width>240</width><height>90</height>\n"
+      "        <texture border=\"2\" colordiffuse=\"facetint\">panel_raised.png</texture>\n"
+      "      </control>\n"
+      "      <control type=\"label\" id=\"1\">\n"
       "        <left>10</left><top>10</top><width>220</width><height>28</height>\n"
       "        <font>chromebold</font><align>center</align><aligny>center</aligny>\n"
       "        <label>$LOCALIZE[15107] $INFO[Player.CacheLevel]%</label>\n"
       "      </control>\n"
-      "      <control type=\"progress\">\n"
+      "      <control type=\"progress\" id=\"1\">\n"
       "        <left>16</left><top>50</top><width>208</width><height>24</height>\n"
       "        <info>Player.CacheLevel</info>\n"
       "      </control>\n"

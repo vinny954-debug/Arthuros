@@ -22,7 +22,7 @@
         <param name="innerwidth" value="1018" />
         <param name="icon" value="icons24/bookmarks.png" /><param name="colour" value="accent2" />
         <param name="down" value="2" />
-        <param name="boxes" value="dialog" />
+        <param name="boxes" value="none" />
         <param name="title" value="$LOCALIZE[298]" />
       </include>
       <control type="image">
@@ -55,6 +55,12 @@
           <onclick>ClearProperty(arthuros.clearbm,home)</onclick>
           <onclick>SetFocus(9993)</onclick>
           <visible>String.IsEqual(Window(Home).Property(arthuros.clearbm),1)</visible>
+        </control>
+        <control type="button" id="9995">
+          <width>228</width><height>44</height>
+          <font>chrome</font><label>$LOCALIZE[15067]</label>
+          <onclick>Dialog.Close(VideoBookmarks)</onclick>
+          <visible>!String.IsEqual(Window(Home).Property(arthuros.clearbm),1)</visible>
         </control>
       </control>
       <control type="button" id="3">
