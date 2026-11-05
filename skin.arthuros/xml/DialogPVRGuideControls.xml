@@ -1,67 +1,167 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
-  <defaultcontrol>600</defaultcontrol>
+  <defaultcontrol always="true">602</defaultcontrol>
   <controls>
-    <include>Dialog_Dim</include>
+    <control type="button" id="9971">
+      <left>0</left><top>0</top><width>94</width><height>600</height>
+      <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>
+      <label />
+      <onclick>Action(close)</onclick>
+    </control>
+    <control type="button" id="9972">
+      <right>0</right><top>0</top><width>94</width><height>600</height>
+      <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>
+      <label />
+      <onclick>Action(close)</onclick>
+    </control>
+    <control type="button" id="9973">
+      <left>94</left><top>0</top><width>836</width><height>164</height>
+      <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>
+      <label />
+      <onclick>Action(close)</onclick>
+    </control>
+    <control type="button" id="9974">
+      <left>94</left><bottom>0</bottom><width>836</width><height>164</height>
+      <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>
+      <label />
+      <onclick>Action(close)</onclick>
+    </control>
     <control type="group">
       <centerleft>50%</centerleft><centertop>50%</centertop>
-      <width>900</width><height>500</height>
+      <width>836</width><height>272</height>
       <include content="Dialog_Box">
-        <param name="width" value="900" /><param name="height" value="500" />
-        <param name="innerwidth" value="894" />
+        <param name="width" value="836" /><param name="height" value="272" />
+        <param name="innerwidth" value="830" />
         <param name="icon" value="icons24/pvr_controls.png" /><param name="colour" value="accent2" />
-        <param name="down" value="600" />
+        <param name="down" value="602" />
         <param name="boxes" value="dialog" />
+        <param name="title" value="$LOCALIZE[19222]" />
       </include>
-      <include content="Dialog_Heading"><param name="width" value="794" /></include>
       <control type="image">
-        <left>10</left><top>36</top><width>880</width><height>420</height>
+        <left>8</left><top>34</top><width>820</width><height>176</height>
         <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
       </control>
-      <control type="grouplist">
-        <left>18</left><top>42</top><width>864</width><height>408</height>
-        <orientation>vertical</orientation><itemgap>3</itemgap>
-        <onup>9100</onup><ondown>9100</ondown>
-        <control type="radiobutton" id="600">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
+      <control type="group" id="200">
+        <control type="label">
+          <left>14</left><top>38</top><width>400</width><height>22</height>
+          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+          <label>$LOCALIZE[19325]</label>
         </control>
-        <control type="radiobutton" id="601">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
+        <control type="grouplist" id="201">
+          <left>14</left><top>62</top><width>196</width><height>148</height>
+          <orientation>vertical</orientation><itemgap>3</itemgap>
+          <onleft>203</onleft><onright>204</onright>
+          <onup>9970</onup><ondown>9970</ondown>
+          <control type="button" id="600">
+            <width>196</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><font>chrome</font>
+            <align>left</align><textoffsetx>8</textoffsetx>
+            <label>$LOCALIZE[19063]</label>
+            <onclick>PVR.EpgGridControl(FirstProgramme)</onclick>
+          </control>
+          <control type="button" id="601">
+            <width>196</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><font>chrome</font>
+            <align>left</align><textoffsetx>8</textoffsetx>
+            <label>$LOCALIZE[19317]</label>
+            <onclick>PVR.EpgGridControl(-12)</onclick>
+          </control>
+          <control type="button" id="602">
+            <width>196</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><font>chrome</font>
+            <align>left</align><textoffsetx>8</textoffsetx>
+            <label>$LOCALIZE[19070]</label>
+            <onclick>PVR.EpgGridControl(CurrentProgramme)</onclick>
+          </control>
         </control>
-        <control type="radiobutton" id="602">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
+        <control type="grouplist" id="204">
+          <left>218</left><top>62</top><width>196</width><height>148</height>
+          <orientation>vertical</orientation><itemgap>3</itemgap>
+          <onleft>201</onleft><onright>202</onright>
+          <onup>9970</onup><ondown>9970</ondown>
+          <control type="button" id="603">
+            <width>196</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><font>chrome</font>
+            <align>left</align><textoffsetx>8</textoffsetx>
+            <label>$LOCALIZE[19318]</label>
+            <onclick>PVR.EpgGridControl(+12)</onclick>
+          </control>
+          <control type="button" id="604">
+            <width>196</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><font>chrome</font>
+            <align>left</align><textoffsetx>8</textoffsetx>
+            <label>$LOCALIZE[19064]</label>
+            <onclick>PVR.EpgGridControl(LastProgramme)</onclick>
+          </control>
+          <control type="button" id="605">
+            <width>196</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><font>chrome</font>
+            <align>left</align><textoffsetx>8</textoffsetx>
+            <label>$LOCALIZE[19288]</label>
+            <onclick>PVR.EpgGridControl(SelectDate)</onclick>
+          </control>
         </control>
-        <control type="radiobutton" id="603">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
+        <control type="label">
+          <left>422</left><top>38</top><width>196</width><height>22</height>
+          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+          <label>$LOCALIZE[19148]</label>
         </control>
-        <control type="radiobutton" id="604">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
+        <control type="grouplist" id="202">
+          <left>422</left><top>62</top><width>196</width><height>148</height>
+          <orientation>vertical</orientation><itemgap>3</itemgap>
+          <onleft>204</onleft><onright>203</onright>
+          <onup>9970</onup><ondown>9970</ondown>
+          <control type="button" id="70040">
+            <width>196</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><font>chrome</font>
+            <align>left</align><textoffsetx>8</textoffsetx>
+            <label>$LOCALIZE[19322]</label>
+            <onclick>PVR.EpgGridControl(FirstChannel)</onclick>
+          </control>
+          <control type="button" id="70041">
+            <width>196</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><font>chrome</font>
+            <align>left</align><textoffsetx>8</textoffsetx>
+            <label>$LOCALIZE[19323]</label>
+            <onclick>PVR.EpgGridControl(PlayingChannel)</onclick>
+            <visible>PVR.IsPlayingTV | PVR.IsPlayingRadio | PVR.IsPlayingEpgTag</visible>
+          </control>
+          <control type="button" id="70042">
+            <width>196</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><font>chrome</font>
+            <align>left</align><textoffsetx>8</textoffsetx>
+            <label>$LOCALIZE[19324]</label>
+            <onclick>PVR.EpgGridControl(LastChannel)</onclick>
+          </control>
         </control>
-        <control type="radiobutton" id="605">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
+        <control type="label">
+          <left>626</left><top>38</top><width>196</width><height>22</height>
+          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+          <label>$LOCALIZE[19141]</label>
+        </control>
+        <control type="grouplist" id="203">
+          <left>626</left><top>62</top><width>196</width><height>148</height>
+          <orientation>vertical</orientation><itemgap>3</itemgap>
+          <onleft>202</onleft><onright>201</onright>
+          <onup>9970</onup><ondown>9970</ondown>
+          <control type="button" id="70043">
+            <width>196</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><font>chrome</font>
+            <align>left</align><textoffsetx>8</textoffsetx>
+            <label>$LOCALIZE[19319]</label>
+            <onclick>PVR.EpgGridControl(PreviousGroup)</onclick>
+          </control>
+          <control type="button" id="70044">
+            <width>196</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><font>chrome</font>
+            <align>left</align><textoffsetx>8</textoffsetx>
+            <label>$LOCALIZE[19320]</label>
+            <onclick>PVR.EpgGridControl(NextGroup)</onclick>
+          </control>
+          <control type="button" id="70045">
+            <width>196</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><font>chrome</font>
+            <align>left</align><textoffsetx>8</textoffsetx>
+            <label>$LOCALIZE[19321]</label>
+            <onclick>PVR.EpgGridControl(SelectGroup)</onclick>
+          </control>
         </control>
       </control>
-      <control type="group" id="200"><left>-3000</left><top>0</top><width>10</width><height>10</height></control>
-      <control type="grouplist" id="201">
-        <left>-3000</left><top>0</top><width>200</width><height>24</height>
-      </control>
-      <control type="grouplist" id="202">
-        <left>-3000</left><top>0</top><width>200</width><height>24</height>
-      </control>
-      <control type="grouplist" id="203">
-        <left>-3000</left><top>0</top><width>200</width><height>24</height>
+      <control type="button" id="9970">
+        <right>14</right><bottom>10</bottom><width>160</width>
+        <include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <font>chrome</font><label>$LOCALIZE[15067]</label>
+        <onclick>Action(close)</onclick>
+        <onup>602</onup><ondown>602</ondown><onleft>70045</onleft><onright>600</onright>
       </control>
     </control>
   </controls>

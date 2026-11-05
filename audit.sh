@@ -80,6 +80,31 @@ chk "xml768 version stamp matches"      'grep -q "(v$VER)" $S/xml768/Home.xml'
 :
 :
 # ===== P4 TV guide =====
+chk "guide has a real epggrid 50 in <views>" 'for d in xml xml768; do python3 -c "
+import sys; from lxml import etree
+r = etree.parse(sys.argv[1]).getroot()
+assert (r.findtext(\"views\") or \"\").strip() == \"50\"
+g = r.xpath(\"//control[@type=\\\"epggrid\\\"][@id=\\\"50\\\"]\")[0]
+assert int(g.findtext(\"left\")) >= 0 and int(g.findtext(\"top\")) >= 0
+for t in (\"channellayout\", \"focusedchannellayout\", \"rulerlayout\", \"itemlayout\", \"focusedlayout\"):
+    assert len(g.findall(t)) == 2 and \"touchmode\" in (g.find(t).get(\"condition\") or \"\"), t
+assert g.findtext(\"pagecontrol\") == \"60\" and r.xpath(\"//control[@type=\\\"scrollbar\\\"][@id=\\\"60\\\"]\")
+assert not r.xpath(\"//control[@type=\\\"epggrid\\\"][@id!=\\\"50\\\"]\")
+" $S/$d/MyPVRGuide.xml || exit 1; done'
+chk "guide title is Guide, not Channel"  'grep -q "value=\"\$LOCALIZE\[19069\]\"" $S/xml/MyPVRGuide.xml && ! grep -q "LOCALIZE\[19029\]" $S/xml/MyPVRGuide.xml'
+chk "guide strip: group, now, navigate, options" 'for a in "id=\"28\"" "EpgGridControl(CurrentProgramme)" "ActivateWindow(PVRGuideControls)" "Action(ContextMenu)" "Action(PageDown)"; do grep -q "$a" $S/xml/MyPVRGuide.xml || exit 1; done'
+chk "guide controls: 12 jumps, every button labelled" 'for d in xml xml768; do python3 -c "
+import sys; from lxml import etree
+r = etree.parse(sys.argv[1]).getroot()
+bs = r.xpath(\"//control[@type=\\\"button\\\" or @type=\\\"radiobutton\\\"][not(starts-with(@id,\\\"99\\\"))]\")
+assert len(bs) == 12
+for b in bs:
+    assert (b.findtext(\"label\") or \"\").strip() and b.findtext(\"onclick\"), b.get(\"id\")
+args = {b.findtext(\"onclick\") for b in bs}
+want = \"FirstProgramme -12 CurrentProgramme +12 LastProgramme SelectDate FirstChannel PlayingChannel LastChannel PreviousGroup NextGroup SelectGroup\"
+assert args == {\"PVR.EpgGridControl(%s)\" % a for a in want.split()}, args
+assert r.xpath(\"//onclick[text()=\\\"Action(close)\\\"]\")
+" $S/$d/DialogPVRGuideControls.xml || exit 1; done'
 :
 :
 # ===== P5 touch chrome & controls =====

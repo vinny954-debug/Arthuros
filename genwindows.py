@@ -1655,6 +1655,280 @@ def subtitles_dialog():
     return dialog("DialogSubtitles", 900, 466, b, default="150",
                   icon="icons24/video_subtitles.png", title="$LOCALIZE[24012]")
 
+# ====================================================== TV / radio guide
+# Taller rows in Extra large fonts or Touch mode (sizepass.XLC). The epggrid is
+# not a list, so sizepass leaves it alone: its XL layouts are written here.
+XLC = "[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"
+GUIDE_NOW_TEX = os.path.join(os.path.dirname(OUT), "media", "epg_now.png")
+
+def _guide_layouts(cid, chw, row, ruler, cond, ids):
+    """One set of epggrid layouts (GUIEPGGridContainer::LoadLayout):
+    channellayout / focusedchannellayout - the channel column, chw wide;
+    rulerlayout - a time mark (and the date in the top-left corner);
+    itemlayout / focusedlayout - a programme.
+    Kodi stretches each programme cell to its duration through the controls
+    with ids 1-14 (CGUIListGroup::EnlargeWidth; id 1 is also hidden when the
+    cell gets too narrow), so whatever must follow the cell's width carries
+    such an id. ids = six of them, distinct between the two layout sets.
+    The ruler bar is drawn behind the grid by guide_window() and the
+    channel column has a fixed width, so neither layout needs one."""
+    c = f' condition="{cond}"' if cond else ""
+    lab, rule, prog, ffill, flab, fprog = ids
+    ic = row - 6                                 # channel logo, square
+    nw = chw - ic - 12                           # channel name width
+    rb = row - 1                                 # programme cell bottom line
+    hf = f"Control.HasFocus({cid})"
+    chan_label = "$INFO[ListItem.ChannelNumberLabel,,  ]$INFO[ListItem.ChannelName]"
+    s  = f"""        <channellayout height="{row}" width="{chw}"{c}>
+          <control type="image"><left>0</left><top>0</top><width>{chw-2}</width><height>{row}</height><texture border="2">panel_raised.png</texture></control>
+          <control type="image"><left>4</left><top>3</top><width>{ic}</width><height>{ic}</height><aspectratio>keep</aspectratio><texture>$INFO[ListItem.Icon]</texture></control>
+          <control type="label"><left>{ic+8}</left><top>0</top><width>{nw}</width><height>{row}</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>{chan_label}</label></control>
+        </channellayout>
+        <focusedchannellayout height="{row}" width="{chw}"{c}>
+          <control type="image"><left>0</left><top>0</top><width>{chw-2}</width><height>{row}</height><texture border="2">panel_raised.png</texture><visible>!{hf}</visible></control>
+          <control type="image"><left>0</left><top>0</top><width>{chw-2}</width><height>{row}</height><texture border="2">button_focus.png</texture><visible>{hf}</visible></control>
+          <control type="image"><left>4</left><top>3</top><width>{ic}</width><height>{ic}</height><aspectratio>keep</aspectratio><texture>$INFO[ListItem.Icon]</texture></control>
+          <control type="label"><left>{ic+8}</left><top>0</top><width>{nw}</width><height>{row}</height><font>bold</font><textcolor>text</textcolor><aligny>center</aligny><label>{chan_label}</label><visible>!{hf}</visible></control>
+          <control type="label"><left>{ic+8}</left><top>0</top><width>{nw}</width><height>{row}</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>{chan_label}</label><visible>{hf}</visible></control>
+        </focusedchannellayout>
+        <rulerlayout height="{ruler}" width="150"{c}>
+          <control type="image"><left>0</left><top>3</top><width>1</width><height>{ruler-6}</height><texture colordiffuse="text">fill.png</texture></control>
+          <control type="label"><left>5</left><top>0</top><width>140</width><height>{ruler}</height><font>small</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+        </rulerlayout>
+"""
+    # a programme: white cell (the well shows through), 1px rules on the left
+    # and bottom so neighbours share one line, a red dot for a timer and a
+    # progress bar while it is on air; the selected one is a select-coloured
+    # block, as in every other list
+    onair = "<visible>Integer.IsGreater(ListItem.Progress,0) + Integer.IsLess(ListItem.Progress,100)</visible>"
+    timer = (f'<control type="image"><left>3</left><top>2</top><width>6</width><height>6</height>'
+             f'<texture colordiffuse="accent1">fill.png</texture><visible>ListItem.HasTimer | ListItem.IsRecording</visible></control>')
+    title = "$INFO[ListItem.Label]"
+    s += f"""        <itemlayout height="{row}" width="60"{c}>
+          <control type="image"><left>0</left><top>0</top><width>1</width><height>{row}</height><texture colordiffuse="text">fill.png</texture></control>
+          <control type="image" id="{rule}"><left>0</left><top>{rb}</top><width>60</width><height>1</height><texture colordiffuse="text">fill.png</texture></control>
+          <control type="progress" id="{prog}"><left>4</left><top>{rb-6}</top><width>52</width><height>4</height><info>ListItem.Progress</info>{onair}</control>
+          {timer}
+          <control type="label" id="{lab}"><left>6</left><top>0</top><width>50</width><height>{rb}</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>{title}</label></control>
+        </itemlayout>
+        <focusedlayout height="{row}" width="60"{c}>
+          <control type="image" id="{ffill}"><left>0</left><top>0</top><width>60</width><height>{row}</height><texture colordiffuse="select">fill.png</texture></control>
+          <control type="progress" id="{fprog}"><left>4</left><top>{rb-6}</top><width>52</width><height>4</height><info>ListItem.Progress</info>{onair}</control>
+          {timer}
+          <control type="label" id="{flab}"><left>6</left><top>0</top><width>50</width><height>{rb}</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>{title}</label></control>
+        </focusedlayout>
+"""
+    return s
+
+GUIDE_STRIP = [  # id, label, onclick(s); 28 is Kodi's "Group: <name>" button
+    (28,   "$LOCALIZE[19141]", []),
+    (9481, "$LOCALIZE[19030]", ["PVR.EpgGridControl(CurrentProgramme)"]),
+    (9482, "$LOCALIZE[31845]", ["PVR.EpgGridControl(-12)"]),
+    (9483, "$LOCALIZE[31846]", ["PVR.EpgGridControl(+12)"]),
+    (9484, "$LOCALIZE[552]",   ["PVR.EpgGridControl(SelectDate)"]),
+    (9485, "$LOCALIZE[31847]", ["SetFocus(50)", "Action(PageUp)"]),
+    (9486, "$LOCALIZE[31848]", ["SetFocus(50)", "Action(PageDown)"]),
+    (9487, "$LOCALIZE[19033]", ["SetFocus(50)", "Action(Info)"]),
+    (9488, "$LOCALIZE[31906]", ["SetFocus(50)", "Action(ContextMenu)"]),
+    (9489, "$LOCALIZE[19326]", ["ActivateWindow(PVRGuideControls)"]),
+]
+
+def guide_window():
+    """MyPVRGuide.xml - loaded by both the TV and the Radio guide
+    (CGUIWindowPVRGuideBase). The window only works through a real epggrid
+    named in <views>: CGUIMediaWindow builds its view control from <views>,
+    and GetGridControl() is that control. Without one the guide is blank and
+    PVR.EpgGridControl / waking from suspend dereference a null grid.
+
+    Kodi itself labels 28 ("Group: <name>") and 29/30 (header labels), binds
+    the channel groups to container 11 and drives grid 50. Tapping a
+    programme is Kodi's EPG select action, a long-press its context menu
+    (touchscreen.xml: longpress = RightClick); dragging pans the grid
+    (ACTION_GESTURE_PAN). The strip on the left gives every jump a button,
+    because touch has no keys for them."""
+    meta = INV["MyPVRGuide"]
+    ids = {int(k): v for k, v in meta["ids"].items()}
+    CHW, GX, GY, GW, GH = 180, 171, 37, 812, 362     # grid inside its well
+    placed = {28, 50, 60}
+    b  = well(6, 34, 156, 494, "panel_sunken_grey.png")
+    b += ("      <control type=\"grouplist\" id=\"9480\">\n"
+          "        <left>12</left><top>40</top><width>144</width><height>482</height>\n"
+          "        <orientation>vertical</orientation><itemgap>2</itemgap>\n"
+          "        <onup>9100</onup><ondown>9100</ondown><onleft>50</onleft><onright>50</onright>\n")
+    for cid, lab, clicks in GUIDE_STRIP:
+        b += (f"        <control type=\"button\" id=\"{cid}\">\n"
+              f"          <width>144</width><height>30</height><font>chrome</font>\n"
+              f"          <align>left</align><textoffsetx>6</textoffsetx>\n"
+              f"          <label>{lab}</label>\n"
+              + "".join(f"          <onclick>{a}</onclick>\n" for a in clicks) +
+              "        </control>\n")
+    b += "      </control>\n"
+    b += well(GX - 3, GY - 3, GW + 26, GH + 6, "panel_sunken.png")
+    for rh, vis in ((40, XLC), (24, "!" + XLC)):      # the time ruler's bar
+        b += (f"      <control type=\"image\">\n"
+              f"        <left>{GX}</left><top>{GY}</top><width>{GW}</width><height>{rh}</height>\n"
+              f"        <texture border=\"2\">bevel_thin.png</texture>\n"
+              f"        <visible>{vis}</visible>\n      </control>\n")
+    # Keys: left/right move through time and only reach onleft at the start
+    # of the guide data, so Up from the first channel is the way to the strip
+    # (CGUIEPGGridContainer::OnUp navigates once it cannot move).
+    b += f"""      <control type="epggrid" id="50">
+        <left>{GX}</left><top>{GY}</top><width>{GW}</width><height>{GH}</height>
+        <orientation>vertical</orientation>
+        <timeblocks>24</timeblocks><rulerunit>6</rulerunit>
+        <scrolltime tween="linear">0</scrolltime>
+        <pagecontrol>60</pagecontrol>
+        <viewtype label="19298">list</viewtype>
+        <onleft>9480</onleft><onright>60</onright><onup>9480</onup><ondown>9100</ondown>
+"""
+    if os.path.exists(GUIDE_NOW_TEX):   # "now" line, once mkmedia draws it
+        b += '        <progresstexture border="0,0,4,0" colordiffuse="accent1">epg_now.png</progresstexture>\n'
+    # XL set first: Kodi takes the first layout whose condition passes.
+    # Ids 1-14 only; 11 is the group list, so the XL set skips it.
+    b += _guide_layouts(50, CHW, 50, 40, XLC, (7, 8, 9, 10, 12, 13))
+    b += _guide_layouts(50, CHW, 34, 24, None, (1, 2, 3, 4, 5, 6))
+    b += f"""      </control>
+      <control type="scrollbar" id="60">
+        <left>{GX+GW+2}</left><top>{GY}</top><width>18</width><height>{GH}</height>
+        <orientation>vertical</orientation>
+        <onleft>50</onleft><onright>9480</onright>
+      </control>
+"""
+    # the selected programme, under the grid (ListItem.* is the grid's item:
+    # CGUIWindowPVRGuideBase::GetCurrentListItem). Spaced for the XL fonts.
+    IY = GY + GH + 6
+    b += well(GX - 3, IY, GW + 26, 528 - IY, "panel_sunken_grey.png")
+    b += f"""      <control type="image">
+        <left>{GX+5}</left><top>{IY+8}</top><width>64</width><height>64</height>
+        <aspectratio>keep</aspectratio><texture>$INFO[ListItem.Icon]</texture>
+      </control>
+      <control type="label">
+        <left>{GX+78}</left><top>{IY+6}</top><width>420</width><height>30</height>
+        <font>bold</font><textcolor>text</textcolor><aligny>center</aligny>
+        <label>$INFO[ListItem.EpgEventTitle]</label>
+      </control>
+      <control type="label">
+        <left>{GX+500}</left><top>{IY+6}</top><width>{GW+16-500}</width><height>30</height>
+        <font>small</font><textcolor>textdim</textcolor><align>right</align><aligny>center</aligny>
+        <label>$INFO[ListItem.StartDate,,  ]$INFO[ListItem.StartTime]$INFO[ListItem.EndTime, - ]</label>
+      </control>
+      <control type="label">
+        <left>{GX+78}</left><top>{IY+36}</top><width>{GW-62}</width><height>26</height>
+        <font>small</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$INFO[ListItem.ChannelName]$INFO[ListItem.Genre,  -  ]$INFO[ListItem.EpisodeName,  -  ]</label>
+      </control>
+      <control type="textbox">
+        <left>{GX+78}</left><top>{IY+64}</top><width>{GW-62}</width><height>{528-IY-70}</height>
+        <font>small</font><textcolor>text</textcolor>
+        <label>$INFO[ListItem.Plot]</label>
+      </control>
+"""
+    # digits typed on a remote jump to that channel (PVR.ChannelNumberInput)
+    b += f"""      <control type="group">
+        <left>{GX + GW//2 - 110}</left><top>{GY + 110}</top><width>220</width><height>70</height>
+        <visible>!String.IsEmpty(PVR.ChannelNumberInput)</visible>
+        <control type="image">
+          <left>0</left><top>0</top><width>220</width><height>70</height>
+          <texture border="2">panel_raised.png</texture>
+        </control>
+        <control type="label">
+          <left>0</left><top>0</top><width>220</width><height>70</height>
+          <font>bigbold</font><textcolor>text</textcolor><align>center</align><aligny>center</aligny>
+          <label>$INFO[PVR.ChannelNumberInput]</label>
+        </control>
+      </control>
+"""
+    # Off-screen stubs: 11 (Kodi binds the channel groups to it; the Group
+    # button 28 is the visible way to switch) and the header labels 29/30.
+    # The other ids Kodi may label (2-8, 10, 31: sort, filters) do nothing
+    # in the guide and are safely absent - SET_CONTROL_* on a missing id is
+    # a no-op - and ids 1-14 are needed by the grid's layouts. Estuary's
+    # side-blade ids and grids 51-53 (not in <views>) are left out.
+    KODI = {11, 29, 30}
+    rest = {i: t for i, t in ids.items() if i in KODI}
+    b += stubs(rest, placed)
+    return fullwindow("MyPVRGuide", b, default="50", views="50",
+                      icon="icons24/pvr_guide.png")
+
+def pvr_guide_controls():
+    """DialogPVRGuideControls.xml - 'Navigate...' in the guide's context menu
+    and 'n' on a keyboard. CGUIDialogPVRGuideControls has no ids of its own:
+    every button is the skin's, calling PVR.EpgGridControl on the guide
+    window underneath (PVRBuiltins.cpp). Kodi only uses this dialog because
+    the file exists (OnContextButtonNavigate, HasSkinFile), so it must offer
+    all twelve jumps of Kodi's own fallback menu."""
+    cols = [  # grouplist id, caption, buttons (id, label, EpgGridControl arg, visible)
+        (201, "$LOCALIZE[19325]", [(600, 19063, "FirstProgramme", None),
+                                   (601, 19317, "-12", None),
+                                   (602, 19070, "CurrentProgramme", None)]),
+        (204, "",                 [(603, 19318, "+12", None),
+                                   (604, 19064, "LastProgramme", None),
+                                   (605, 19288, "SelectDate", None)]),
+        (202, "$LOCALIZE[19148]", [(70040, 19322, "FirstChannel", None),
+                                   (70041, 19323, "PlayingChannel",
+                                    "PVR.IsPlayingTV | PVR.IsPlayingRadio | PVR.IsPlayingEpgTag"),
+                                   (70042, 19324, "LastChannel", None)]),
+        (203, "$LOCALIZE[19141]", [(70043, 19319, "PreviousGroup", None),
+                                   (70044, 19320, "NextGroup", None),
+                                   (70045, 19321, "SelectGroup", None)]),
+    ]
+    CW, GAP, X0, TOP = 196, 8, 14, 62
+    WD = 2 * X0 + 4 * CW + 3 * GAP          # 836
+    HT = 272                                 # fits the XL rows (3 x 46 + gaps) and Close
+    CLOSE = 9970
+    b  = well(8, 34, WD - 16, HT - 34 - 62, "panel_sunken_grey.png")
+    b += "      <control type=\"group\" id=\"200\">\n"
+    for k, (gid, cap, btns) in enumerate(cols):
+        x = X0 + k * (CW + GAP)
+        if cap:
+            span = 2 * CW + GAP if gid == 201 else CW
+            b += (f"        <control type=\"label\">\n"
+                  f"          <left>{x}</left><top>38</top><width>{span}</width><height>22</height>\n"
+                  f"          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>\n"
+                  f"          <label>{cap}</label>\n        </control>\n")
+        prev_g = cols[k - 1][0] if k else cols[-1][0]
+        next_g = cols[(k + 1) % len(cols)][0]
+        b += (f"        <control type=\"grouplist\" id=\"{gid}\">\n"
+              f"          <left>{x}</left><top>{TOP}</top><width>{CW}</width><height>148</height>\n"
+              f"          <orientation>vertical</orientation><itemgap>3</itemgap>\n"
+              f"          <onleft>{prev_g}</onleft><onright>{next_g}</onright>\n"
+              f"          <onup>{CLOSE}</onup><ondown>{CLOSE}</ondown>\n")
+        for cid, sid, arg, vis in btns:
+            b += (f"          <control type=\"button\" id=\"{cid}\">\n"
+                  f"            <width>{CW}</width><height>30</height><font>chrome</font>\n"
+                  f"            <align>left</align><textoffsetx>8</textoffsetx>\n"
+                  f"            <label>$LOCALIZE[{sid}]</label>\n"
+                  f"            <onclick>PVR.EpgGridControl({arg})</onclick>\n"
+                  + (f"            <visible>{vis}</visible>\n" if vis else "") +
+                  "          </control>\n")
+        b += "        </control>\n"
+    b += "      </control>\n"
+    # touch has no Esc: a real Close button, sized for the finger in touch mode
+    b += f"""      <control type="button" id="{CLOSE}">
+        <right>14</right><bottom>10</bottom><width>160</width>
+        <include content="Height_30_XL" condition="{XLC}" />
+        <include content="Height_30" condition="!{XLC}" />
+        <font>chrome</font><label>$LOCALIZE[15067]</label>
+        <onclick>Action(close)</onclick>
+        <onup>602</onup><ondown>602</ondown><onleft>70045</onleft><onright>600</onright>
+      </control>
+"""
+    # no dimming: the grid stays visible behind, so each jump shows at once.
+    # A tap outside the box closes it, as in Kodi's own skin: four empty
+    # buttons around the centred box (not one under it - a tap on the box's
+    # own background would fall through to it and close the dialog).
+    bx, by = (1024 - WD) // 2, (600 - HT) // 2
+    pre = ""
+    for k, geo in enumerate((f"<left>0</left><top>0</top><width>{bx}</width><height>600</height>",
+                             f"<right>0</right><top>0</top><width>{bx}</width><height>600</height>",
+                             f"<left>{bx}</left><top>0</top><width>{WD}</width><height>{by}</height>",
+                             f"<left>{bx}</left><bottom>0</bottom><width>{WD}</width><height>{by}</height>")):
+        pre += (f'    <control type="button" id="{9971 + k}">\n      {geo}\n'
+                 '      <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>\n'
+                 '      <label></label>\n      <onclick>Action(close)</onclick>\n    </control>\n')
+    return dialog("DialogPVRGuideControls", WD, HT, b, default="602", heading=False,
+                  icon="icons24/pvr_controls.png", default_always=True, dim=False, pre=pre)
+
 # ====================================================== game controllers
 def _game_box(wd, ht, title, body, heading_id=None, boxes="dialog", down="3"):
     """A centred Arthur dialog as a plain group, for use inside an include."""
@@ -1861,6 +2135,8 @@ def main():
     written["DialogAddonInfo"] = addon_info_dialog()
     written["DialogGameControllers"] = game_controllers()
     written["DialogSubtitles"] = subtitles_dialog()
+    written["MyPVRGuide"] = guide_window()
+    written["DialogPVRGuideControls"] = pvr_guide_controls()
 
     count = 0
     for name, meta in INV.items():

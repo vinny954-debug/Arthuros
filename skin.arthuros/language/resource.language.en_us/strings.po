@@ -412,6 +412,21 @@ msgstr ""
 # ===== P3 strings: 31830-31844, 31720-31739 =====
 
 # ===== P4 strings: 31845-31854 =====
+msgctxt "#31845"
+msgid "-12 hours"
+msgstr ""
+
+msgctxt "#31846"
+msgid "+12 hours"
+msgstr ""
+
+msgctxt "#31847"
+msgid "Page up"
+msgstr ""
+
+msgctxt "#31848"
+msgid "Page down"
+msgstr ""
 
 # ===== P5 strings: 31855-31864 =====
 
