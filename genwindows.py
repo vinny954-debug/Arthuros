@@ -1714,7 +1714,8 @@ def small_dialogs():
       "    <!-- no dimming over a playing video (Estuary does the same) -->\n"
       "    <control type=\"group\">\n"
       "      <visible>!Window.IsVisible(fullscreenvideo) + !Window.IsVisible(fullscreengame)</visible>\n"
-      "      <include>Dialog_Dim</include>\n"
+      "      <!-- no title bar here: Up/Left from the touch Back go to Cancel -->\n"
+      "      <include content=\"Dialog_Dim\"><param name=\"up\" value=\"9810\" /></include>\n"
       "    </control>\n"
       + busy_box(True) + busy_box(False) +
       "  </controls>\n</window>\n")
@@ -1772,6 +1773,11 @@ def small_dialogs():
                                      icon="icons24/file.png")
 
     # GUIDialogSlider.cpp uses only 10 (heading), 11 (slider) and 12 (value).
+    # Kodi's slider default is VERTICAL (CGUIControlFactory::Create:
+    # ORIENTATION orientation = VERTICAL), and a vertical slider ignores
+    # Left/Right (CGUISliderControl::OnAction moves only on Up/Down then), so
+    # the - and + buttons below would do nothing without the explicit
+    # horizontal.
     # The heading goes on the title bar (Kodi never writes id 1 here). 13/14
     # are skin buttons - Estuary's touch minus/plus: focus the slider, step
     # it, and keep focus on the button so it can be tapped again.
@@ -2081,7 +2087,7 @@ def media_source():
     body += """      <control type="list" id="10">
         <left>16</left><top>66</top><width>648</width><height>168</height>
         <onleft>11</onleft><onright>11</onright>
-        <onup>10</onup><ondown>12</ondown>
+        <onup>10</onup><ondown>9011</ondown>
         <scrolltime tween="linear">0</scrolltime>
         <itemlayout height="28" width="648">
           <control type="label">
@@ -2101,34 +2107,120 @@ def media_source():
           </control>
         </focusedlayout>
       </control>
-      <control type="grouplist">
-        <left>13</left><top>248</top><width>654</width><height>36</height>
-        <orientation>horizontal</orientation><align>center</align><itemgap>6</itemgap>
-        <onup>10</onup><ondown>12</ondown>
-        <control type="button" id="11"><width>210</width><height>36</height><label>$LOCALIZE[1024]</label></control>
-        <control type="button" id="13"><width>210</width><height>36</height><label>$LOCALIZE[15019]</label></control>
-        <control type="button" id="14"><width>210</width><height>36</height><label>$LOCALIZE[1210]</label></control>
-      </control>
-      <control type="edit" id="12">
-        <left>13</left><top>292</top><width>654</width><height>36</height>
-        <label>$LOCALIZE[551]</label>
-        <onup>11</onup><ondown>18</ondown>
-      </control>
       <!-- 20 (set content) is always hidden by Kodi (UpdateButtons) -->
       <control type="button" id="20">
         <left>-3000</left><top>0</top><width>200</width><height>30</height>
       </control>
-      <control type="grouplist">
-        <left>13</left><top>338</top><width>654</width><height>36</height>
-        <orientation>horizontal</orientation><align>center</align><itemgap>8</itemgap>
-        <onup>12</onup>
-        <control type="button" id="18"><width>280</width><height>36</height><label>$LOCALIZE[186]</label></control>
-        <control type="button" id="19"><width>280</width><height>36</height><label>$LOCALIZE[222]</label></control>
-      </control>
-      <control type="scrollbar" id="60"><left>-3000</left><top>0</top><width>18</width><height>100</height></control>
 """
-    return dialog("DialogMediaSource", 680, 386, body, default="10",
-                  icon="icons24/harddisk.png", heading=False)
+    # The three rows under the path list (Browse/Add/Remove, the name, OK/
+    # Cancel) are 34 px, 50 with taller rows (Extra large or Touch mode).
+    # They stack in a vertical grouplist, so each row moves down as the one
+    # above it grows, and the dialog box grows by the 3 x 16 px. The group
+    # keeps the normal height, so the normal dialog stays exactly centred;
+    # the taller one reaches 24 px further down (still clear of the task
+    # bar at 600). Kodi resolves include conditions once, at load (a font
+    # or Touch mode change reloads the skin), so only one Dialog_Box exists.
+    # Kodi adds a group to its parent BEFORE loading the group's children
+    # (CGUIWindow::LoadControl), and a grouplist overwrites the Up/Down of
+    # each control added to it (CGUIControlGroupList::AddControl) while the
+    # children only inherit what their row has at that moment. So the outer
+    # grouplist wires the rows to each other, and every button names its own
+    # Up/Down; Down on OK/Cancel stays put instead of wrapping to the top.
+    def hpair(ind):
+        return (f'{ind}<include content="Height_34_XL" condition="{INFO_XLC}" />\n'
+                f'{ind}<include content="Height_34" condition="!{INFO_XLC}" />\n')
+    def btn(cid, wd, sid, up, down):
+        return (f'          <control type="button" id="{cid}"><width>{wd}</width>'
+                f'<include content="Height_34_XL" condition="{INFO_XLC}" />'
+                f'<include content="Height_34" condition="!{INFO_XLC}" />'
+                f'<label>$LOCALIZE[{sid}]</label><onup>{up}</onup><ondown>{down}</ondown></control>\n')
+    body += ('      <control type="grouplist" id="9010">\n'
+             '        <left>13</left><top>248</top><width>654</width><height>166</height>\n'
+             '        <orientation>vertical</orientation><itemgap>8</itemgap>\n'
+             '        <onup>10</onup>\n'
+             '        <control type="grouplist" id="9011">\n'
+             '          <width>654</width>\n' + hpair("          ") +
+             '          <orientation>horizontal</orientation><align>center</align><itemgap>6</itemgap>\n'
+             + btn(11, 210, 1024, 10, 12) + btn(13, 210, 15019, 10, 12) + btn(14, 210, 1210, 10, 12) +
+             '        </control>\n'
+             '        <control type="edit" id="12">\n'
+             '          <width>654</width>\n' + hpair("          ") +
+             '          <label>$LOCALIZE[551]</label>\n'
+             '        </control>\n'
+             '        <control type="grouplist" id="9012">\n'
+             '          <width>654</width>\n' + hpair("          ") +
+             '          <orientation>horizontal</orientation><align>center</align><itemgap>8</itemgap>\n'
+             + btn(18, 280, 186, 12, 18) + btn(19, 280, 222, 12, 19) +
+             '        </control>\n'
+             '      </control>\n')
+    body += """      <control type="scrollbar" id="60"><left>-3000</left><top>0</top><width>18</width><height>100</height></control>
+"""
+    # themepass sets only the FIRST icon param to the registry's title-bar
+    # icon (iconset.WINDOW_ICONS), so both Dialog_Box copies name it here
+    out = dialog("DialogMediaSource", 680, 378, body, default="10",
+                 icon="icons24/addsource.png", heading=False)
+    a = out.index('      <include content="Dialog_Box">\n')
+    b = out.index("      </include>\n", a) + len("      </include>\n")
+    box = out[a:b]
+    tall = box.replace('<include content="Dialog_Box">', f'<include content="Dialog_Box" condition="{INFO_XLC}">', 1)
+    tall = tall.replace('<param name="height" value="378" />', '<param name="height" value="426" />', 1)
+    norm = box.replace('<include content="Dialog_Box">', f'<include content="Dialog_Box" condition="!{INFO_XLC}">', 1)
+    assert tall != box and 'value="426"' in tall
+    return out[:a] + tall + norm + out[b:]
+
+def picture_info():
+    """S-3/S-4: Picture information (from the picture viewer's OSD or a
+    picture's context menu). GUIDialogPictureInfo.cpp fills only list 5:
+    one item per known tag, the tag's name as Label and its value as Label2
+    (UpdatePictureInfo). It also follows the viewer: next/previous/play/
+    pause pass through to the slideshow and FrameMove refreshes the list.
+    The picture itself is the current slide (CGUIDialogPictureInfo::
+    SetPicture -> CPicturesGUIInfo::SetCurrentSlide), which Slideshow.Path
+    (the folder, with a trailing separator) plus Slideshow.Filename name in
+    both cases. The dim covers the viewer, so a preview sits beside the
+    list. Known limit: Slideshow.Path is CURL(dir).GetWithoutUserDetails()
+    (PicturesGUIInfo.cpp), so on a source whose URL carries the login
+    (smb://user:pass@..., ftp://user:pass@...) the rebuilt path has no
+    credentials and the preview may show the DefaultPicture fallback;
+    URL-style paths with options (plugin, http) may be rebuilt wrongly the
+    same way. Local and guest/password-manager shares are unaffected. No
+    infolabel gives the slide's full path with credentials. Names and values get columns of their own, so a long value (a
+    path, a camera model) no longer runs over its name."""
+    W, Hh = 900, 466
+    body  = well(10, 36, 320, 420, "panel_sunken_grey.png")
+    body += """      <control type="image">
+        <left>16</left><top>42</top><width>308</width><height>408</height>
+        <texture background="true" fallback="DefaultPicture.png">$INFO[Slideshow.Path]$INFO[Slideshow.Filename]</texture>
+        <aspectratio>keep</aspectratio>
+      </control>
+"""
+    def layouts(iw):
+        kw = 190
+        out = ""
+        for focused in (False, True):
+            tag = "focusedlayout" if focused else "itemlayout"
+            out += f'        <{tag} height="28" width="{iw}">\n'
+            if focused:
+                out += (f'          <control type="image"><left>0</left><top>0</top><width>{iw}</width>'
+                        '<height>28</height><texture colordiffuse="select">fill.png</texture></control>\n')
+            kcol = "textinv" if focused else "textdim"
+            vcol = "textinv" if focused else "text"
+            # Long tag names ('Supplemental categories' is ~15 cells of
+            # the XL 'small') and long values (the file path, camera
+            # models) scroll on the focused row instead of being cut.
+            scroll = "<scroll>true</scroll>" if focused else ""
+            out += (f'          <control type="label"><left>8</left><top>0</top><width>{kw}</width>'
+                    f'<height>28</height><font>small</font><textcolor>{kcol}</textcolor>'
+                    f'<aligny>center</aligny>{scroll}<label>$INFO[ListItem.Label]</label></control>\n'
+                    f'          <control type="label"><left>{kw + 16}</left><top>0</top><width>{iw - kw - 24}</width>'
+                    f'<height>28</height><font>normal</font><textcolor>{vcol}</textcolor>'
+                    f'<aligny>center</aligny>{scroll}<label>$INFO[ListItem.Label2]</label></control>\n')
+            out += f"        </{tag}>\n"
+        return out
+    body += xlist(5, 60, 336, 36, 554, 420, {"onup": "5", "ondown": "5", "onleft": "5"},
+                  layouts=layouts)
+    return dialog("DialogPictureInfo", W, Hh, body, default="5",
+                  icon="icons24/pictures_info.png", heading=False)
 
 
 
@@ -2136,7 +2228,8 @@ def system_info():
     """Kodi's contract (GUIWindowSystemInfo.cpp): the focused button 94-101 IS
     the selected section; Kodi writes the section title to 40, up to twelve
     lines to 2-13, app/version to 52, build date to 53, and shows textbox 30
-    only for the privacy policy. The skin supplies the button labels."""
+    only for the privacy policy and group 102 only for 'Thank you!' (101).
+    The skin supplies the button labels."""
     sections = [(95, 20037, "file"), (94, 13277, "harddisk"), (96, 13279, "network"),
                 (97, 13280, "movies"), (98, 13281, "program"), (99, 19191, "tvshows"),
                 (100, 12389, "file"), (101, 12396, "favourites")]
@@ -2144,7 +2237,7 @@ def system_info():
     body += """      <control type="grouplist">
         <left>12</left><top>40</top><width>288</width><height>482</height>
         <orientation>vertical</orientation><itemgap>3</itemgap>
-        <onup>9100</onup><ondown>9100</ondown>
+        <onup>9100</onup><ondown>9100</ondown><onright condition="Control.IsVisible(30)">60</onright>
 """
     for cid, sid, ic in sections:
         body += f"""        <control type="button" id="{cid}">
@@ -2155,9 +2248,12 @@ def system_info():
 """
     body += "      </control>\n"
     body += well(312, 34, 694, 440, "panel_sunken.png")
+    # Kodi never writes 40 for 'Thank you!' (FrameMove has no branch for
+    # it), so the last section's title would stay up: group 102 has its own.
     body += """      <control type="label" id="40">
         <left>324</left><top>40</top><width>670</width><height>28</height>
         <font>bigbold</font>
+        <visible>!Control.IsVisible(102)</visible>
       </control>
       <control type="image">
         <left>324</left><top>70</top><width>670</width><height>1</height>
@@ -2169,9 +2265,42 @@ def system_info():
         <left>324</left><top>{76 + i*32}</top><width>670</width><height>30</height>
       </control>
 """
+    # The privacy policy is long, and a textbox moves only through its page
+    # control (CGUITextBox has no wheel or gesture handling): scrollbar 60
+    # beside it, which a finger can drag (sizepass widens it in Touch mode /
+    # Extra large). It scrolls by itself too, except while 60 has the focus.
+    # Right from the section buttons reaches 60 only while the policy shows:
+    # the buttons inherit the grouplist's conditional <onright> (AddControl
+    # copies the whole CGUIAction). It must be conditional and 60 must have
+    # no <onright>: CGUIWindow::OnMove walks past a hidden control along its
+    # own onright, so an unconditional 60 -> 100 chain would jump from any
+    # section straight to the Privacy policy. Focusing 60 keeps the section
+    # (Kodi switches only on 94-101).
     body += """      <control type="textbox" id="30">
-        <left>324</left><top>76</top><width>670</width><height>390</height>
+        <left>324</left><top>76</top><width>640</width><height>390</height>
         <font>small</font>
+        <pagecontrol>60</pagecontrol>
+        <autoscroll delay="6000" time="4000" repeat="8000">!Control.HasFocus(60)</autoscroll>
+      </control>
+      <control type="scrollbar" id="60">
+        <left>976</left><top>76</top><width>18</width><height>390</height>
+        <onleft>100</onleft>
+        <visible>Control.IsVisible(30)</visible>
+      </control>
+      <control type="group" id="102">
+        <left>324</left><top>40</top><width>670</width><height>426</height>
+        <control type="label">
+          <left>0</left><top>0</top><width>670</width><height>28</height>
+          <font>bigbold</font><label>$LOCALIZE[12396]</label>
+        </control>
+        <control type="label">
+          <left>0</left><top>36</top><width>670</width><height>28</height>
+          <font>bold</font><label>$LOCALIZE[12398]</label>
+        </control>
+        <control type="textbox">
+          <left>0</left><top>72</top><width>670</width><height>200</height>
+          <label>$LOCALIZE[12397]</label>
+        </control>
       </control>
 """
     body += well(312, 480, 694, 48, "panel_sunken_grey.png")
@@ -3950,6 +4079,7 @@ def main():
     written["DialogButtonMenu"] = button_menu()
     written["FileBrowser"]      = file_browser()
     written["DialogMediaSource"] = media_source()
+    written["DialogPictureInfo"] = picture_info()
     written["SettingsSystemInfo"] = system_info()
     written["VideoOSD"]       = osd_window("VideoOSD", "video")
     written["MusicOSD"]       = osd_window("MusicOSD", "music")

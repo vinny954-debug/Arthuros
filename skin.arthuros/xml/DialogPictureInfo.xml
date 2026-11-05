@@ -5,9 +5,9 @@
     <include>Dialog_Dim</include>
     <control type="group">
       <centerleft>50%</centerleft><centertop>50%</centertop>
-      <width>900</width><height>500</height>
+      <width>900</width><height>466</height>
       <include content="Dialog_Box">
-        <param name="width" value="900" /><param name="height" value="500" />
+        <param name="width" value="900" /><param name="height" value="466" />
         <param name="innerwidth" value="894" />
         <param name="icon" value="icons24/pictures_info.png" /><param name="colour" value="accent2" />
         <param name="down" value="5" />
@@ -15,25 +15,39 @@
         <param name="title" value="$LOCALIZE[13406]" />
       </include>
       <control type="image">
-        <left>10</left><top>36</top><width>880</width><height>420</height>
+        <left>10</left><top>36</top><width>320</width><height>420</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      </control>
+      <control type="image">
+        <left>16</left><top>42</top><width>308</width><height>408</height>
+        <texture background="true" fallback="DefaultPicture.png">$INFO[Slideshow.Path]$INFO[Slideshow.Filename]</texture>
+        <aspectratio>keep</aspectratio>
+      </control>
+      <control type="image">
+        <left>336</left><top>36</top><width>554</width><height>420</height>
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
       <control type="list" id="5">
-        <left>13</left><top>39</top><width>856</width><height>414</height>
-        <onleft>5</onleft><onright>60</onright>
-        <onup>5</onup><ondown>5</ondown>
+        <left>339</left><top>39</top><width>530</width><height>414</height>
+        <onup>5</onup><ondown>5</ondown><onleft>5</onleft><onright>60</onright>
         <pagecontrol>60</pagecontrol>
-        <itemlayout height="44" width="856" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <include content="Arthur_ItemLayout_XL"><param name="width" value="848" /></include>
+        <itemlayout height="44" width="530" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="label"><left>8</left><top>0</top><width>190</width><height>44</height><font>small</font><textcolor>textdim</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>206</left><top>0</top><width>316</width><height>44</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label2]</label></control>
         </itemlayout>
-        <focusedlayout height="44" width="856" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <include content="Arthur_FocusedLayout_XL"><param name="width" value="856" /></include>
+        <focusedlayout height="44" width="530" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image"><left>0</left><top>0</top><width>530</width><height>44</height><texture colordiffuse="select">fill.png</texture></control>
+          <control type="label"><left>8</left><top>0</top><width>190</width><height>44</height><font>small</font><textcolor>textinv</textcolor><aligny>center</aligny><scroll>true</scroll><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>206</left><top>0</top><width>316</width><height>44</height><font>normal</font><textcolor>textinv</textcolor><aligny>center</aligny><scroll>true</scroll><label>$INFO[ListItem.Label2]</label></control>
         </focusedlayout>
-      <itemlayout height="28" width="856">
-          <include content="Arthur_ItemLayout"><param name="width" value="848" /></include>
+      <itemlayout height="28" width="530">
+          <control type="label"><left>8</left><top>0</top><width>190</width><height>28</height><font>small</font><textcolor>textdim</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>206</left><top>0</top><width>316</width><height>28</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label2]</label></control>
         </itemlayout>
-        <focusedlayout height="28" width="856">
-          <include content="Arthur_FocusedLayout"><param name="width" value="856" /></include>
+        <focusedlayout height="28" width="530">
+          <control type="image"><left>0</left><top>0</top><width>530</width><height>28</height><texture colordiffuse="select">fill.png</texture></control>
+          <control type="label"><left>8</left><top>0</top><width>190</width><height>28</height><font>small</font><textcolor>textinv</textcolor><aligny>center</aligny><scroll>true</scroll><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>206</left><top>0</top><width>316</width><height>28</height><font>normal</font><textcolor>textinv</textcolor><aligny>center</aligny><scroll>true</scroll><label>$INFO[ListItem.Label2]</label></control>
         </focusedlayout>
       </control>
       <control type="scrollbar" id="60">

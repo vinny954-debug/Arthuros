@@ -5,7 +5,8 @@
     <!-- no dimming over a playing video (Estuary does the same) -->
     <control type="group">
       <visible>!Window.IsVisible(fullscreenvideo) + !Window.IsVisible(fullscreengame)</visible>
-      <include>Dialog_Dim</include>
+      <!-- no title bar here: Up/Left from the touch Back go to Cancel -->
+      <include content="Dialog_Dim"><param name="up" value="9810" /></include>
     </control>
     <control type="group">
       <visible>Window.Is(busydialog)</visible>
