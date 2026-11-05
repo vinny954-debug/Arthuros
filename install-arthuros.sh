@@ -57,14 +57,16 @@ as_kodi() {
   elif [ "$(id -u)" -eq 0 ]; then su -s /bin/sh "$KUSER" -c "$(printf '%q ' "$@")"
   else sudo -u "$KUSER" "$@"; fi
 }
-ver() { sed -n 's/^[[:space:]]*version="\([0-9.]*\)".*/\1/p' "$1" | head -1; }
+# Kodi's home can be 0700 (Raspberry Pi OS Bookworm), so every look inside it
+# runs as Kodi's user too, never as the SSH user
+ver() { as_kodi cat "$1" 2>/dev/null | sed -n 's/^[[:space:]]*version="\([0-9.]*\)".*/\1/p' | head -1 || true; }
 
 # Whatever happens from here on: put the old skin back if the new one isn't in
 # place, and start Kodi again if we stopped it (exactly once, success or not).
 WAS_ACTIVE=no BK= TMP= STAGE=
 restore() {
   rc=$?
-  if [ ! -d "$ADDONS/skin.arthuros" ] && [ -n "$BK" ] && [ -d "$BK" ]; then
+  if [ -n "$BK" ] && ! as_kodi test -e "$ADDONS/skin.arthuros" && as_kodi test -d "$BK"; then
     echo "== Something failed: putting the old skin back"
     as_kodi mv "$BK" "$ADDONS/skin.arthuros" || true
   fi
@@ -104,13 +106,18 @@ elif ps -eo comm= 2>/dev/null | grep -q '^kodi'; then
 fi
 
 FRESH=yes
-if [ -d "$ADDONS/skin.arthuros" ]; then
+if as_kodi test -d "$ADDONS/skin.arthuros"; then
   FRESH=no
   OLD=$(ver "$ADDONS/skin.arthuros/addon.xml")
   BK="$KHOME/arthuros-backup-${OLD:-old}"
   echo "== Moving v${OLD:-?} to $BK (outside addons, so Kodi ignores it)"
   as_kodi rm -rf "$BK"
   as_kodi mv "$ADDONS/skin.arthuros" "$BK"
+fi
+# mv into an existing folder would nest the new skin inside the old one (and
+# busybox mv may not know -T), so make sure the name is free first
+if as_kodi test -e "$ADDONS/skin.arthuros"; then
+  echo "== $ADDONS/skin.arthuros is still there, not installing over it"; exit 1
 fi
 echo "== Installing v$NEW"
 as_kodi mv "$STAGE" "$ADDONS/skin.arthuros"
@@ -120,7 +127,7 @@ STAGE=
 # (CAddonDatabase::SyncInstalled), so a copied skin would not be in the skin
 # list. Mark it enabled while Kodi is stopped.
 ENABLED=no
-if ls "$DB"/Addons[0-9]*.db >/dev/null 2>&1; then
+if as_kodi sh -c 'ls "$1"/Addons[0-9]*.db' _ "$DB" >/dev/null 2>&1; then
   if as_kodi python3 - "$DB" <<'EOF'
 import glob, re, sqlite3, sys
 dbs = sorted(glob.glob(sys.argv[1] + "/Addons[0-9]*.db"),
@@ -138,11 +145,12 @@ fi
 
 # Skin settings > Network & Bluetooth (netbt.py) changes Wi-Fi through
 # NetworkManager. Kodi run as a service has no login session, so polkit refuses
-# it unless a rule names the user Kodi runs as. Offer to add one (asked once
-# per install until it exists; LibreELEC has its own settings add-on).
+# it unless a rule names the user Kodi runs as. Offer to add one (asked on each
+# install until it exists; LibreELEC has its own settings add-on). rules.d is
+# 0700 polkitd, so only sudo can see whether the rule is there.
 RULE=/etc/polkit-1/rules.d/50-arthuros-nm.rules
 if command -v nmcli >/dev/null && [ -d /etc/polkit-1/rules.d ] && [ "$KUSER" != root ] \
-   && [ ! -e "$RULE" ] && [ -t 0 ]; then
+   && [ -t 0 ] && ! $SUDO test -e "$RULE"; then
   read -rp "Let '$KUSER' (Kodi) change Wi-Fi from Skin settings? Adds $RULE [y/N] " A || A=
   case "$A" in
     [yY]*)

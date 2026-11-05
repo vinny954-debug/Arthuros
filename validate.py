@@ -524,6 +524,30 @@ for wname, root in sorted(windows.items()):
             if not lab and not acts and not cid:
                 errors.append(f"{wname}: {el.get('type')} with no id, no label and no onclick - a dead blank box")
 
+# Warnings are allowed only if they are known. A new one (a dead onup/ondown
+# target, an info label Kodi doesn't have, a missing Kodi id) fails the build:
+# fix it, or add it here with a reason. Fixed ones are only reported, so a
+# package that fixes one doesn't break the build until this list is trimmed.
+KNOWN_WARNINGS = {
+    # 0.9.6 dialogs: onup/ondown to the removed 9100 list (genwindows.py)
+    *(f"{w}: <{t}> points at id 9100 which is not in this window"
+      for w in ("DialogColorPicker", "DialogFullScreenInfo", "DialogPVRChannelManager",
+                "DialogPVRGroupManager", "DialogPVRGuideControls", "DialogPVRGuideSearch",
+                "DialogPVRRadioRDSInfo", "DialogPictureInfo", "DialogVideoManager")
+      for t in ("onup", "ondown")),
+    # 0.9.6 codec overlay (genwindows.py video_fullscreen)
+    "VideoFullScreen: Player.ShowCodec is not an info label/bool Kodi 21 knows - always empty/false",
+    # hand-made media windows that leave out Kodi buttons (design gaps, not crashes)
+    *(f"{w}: missing Kodi control id(s) {sorted(REQUIRED[w][0], key=int)} ({REQUIRED[w][1]})"
+      for w in ("MyMusicNav", "MyPVRChannels", "MyPVRRecordings", "MyPVRTimers",
+                "MyPlaylist", "MyVideoNav")),
+}
+for x in warns:
+    if x not in KNOWN_WARNINGS:
+        errors.append(f"{x}  [new warning: fix it, or list it in KNOWN_WARNINGS in validate.py]")
+gone = sorted(KNOWN_WARNINGS - set(warns))
+warns = [x for x in warns if x in KNOWN_WARNINGS]
+
 print(f"{len(windows)} windows, {len(includes)} includes, {len(media_files)} textures, "
       f"{n_checked['actions']} actions, {n_checked['info names']} info names")
 if errors:
@@ -534,4 +558,7 @@ else:
 if warns:
     print(f"\n{len(warns)} warnings")
     for x in warns[:80]: print("  ·", x)
+if gone:
+    print(f"\n{len(gone)} known warning(s) no longer seen - remove from KNOWN_WARNINGS in validate.py")
+    for x in gone: print("  -", x)
 sys.exit(1 if errors else 0)
