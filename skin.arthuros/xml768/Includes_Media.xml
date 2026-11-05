@@ -7,17 +7,92 @@
      Control ids 2, 3, 4 and 19 are fixed by Kodi (view / sort by /
      sort order / filter) and must keep those numbers.
      Geometry is relative to a group placed at 6,30 sized 1012x534.
+
+     Windows with buttons of their own (play queue, libraries, pictures,
+     Live TV) use Media_Window_Extras: a second toolbar row (grouplist
+     9491, left column only) carries the ids that window's C++ acts on,
+     and the views start 36 px lower. The ids differ per window (20 is
+     Shuffle in the playlist but Update library in the libraries), so
+     each window has its own Media_Extras_* include.
      =================================================================== -->
 <includes>
 
+  <!-- ===== variables used by the browsers and the info dialogs ======= -->
+  <!-- the item count; Kodi writes "N Objects" into any control id 12, so
+       this label has no id and stays live -->
+  <variable name="MediaCountVar">
+    <value condition="Integer.IsGreater(Container.NumItems,0)">$INFO[Container.NumItems] $LOCALIZE[127]</value>
+    <value></value>
+  </variable>
+  <!-- title-bar right-hand text: inside an add-on the folder path is a
+       plugin:// address, so show the item count there instead (the
+       toolbar has no room for it next to Add-on settings) -->
+  <variable name="MediaTitle2Var">
+    <value condition="!String.IsEmpty(Container.PluginName)">$VAR[MediaCountVar]</value>
+    <value>$INFO[Container.FolderPath]</value>
+  </variable>
+  <!-- Live TV channels / recordings: Kodi's header labels (hidden
+       labels 29 and 30 in the second row) - the group name or "Hidden",
+       "Deleted" in the recordings trash, the recordings folder -->
+  <variable name="Media_PVRTitle2Var">
+    <value condition="!String.IsEmpty(Control.GetLabel(29)) + !String.IsEmpty(Control.GetLabel(30))">$INFO[Control.GetLabel(29)]  -  $INFO[Control.GetLabel(30)]</value>
+    <value>$INFO[Control.GetLabel(29)]$INFO[Control.GetLabel(30)]</value>
+  </variable>
+  <!-- poster wall art: posters first, then Kodi's own icon chain
+       (thumb, then the DefaultVideo/DefaultFolder... icon Kodi sets) -->
+  <variable name="PosterArtVar">
+    <value condition="!String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
+    <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
+    <value>$INFO[ListItem.Icon]</value>
+  </variable>
+  <variable name="VideoInfoArtVar">
+    <value condition="!String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
+    <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
+    <value condition="!String.IsEmpty(ListItem.Art(season.poster))">$INFO[ListItem.Art(season.poster)]</value>
+    <value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+    <value>$INFO[ListItem.Icon]</value>
+  </variable>
+  <variable name="MusicInfoArtVar">
+    <value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+    <value condition="String.IsEqual(ListItem.DBType,artist)">DefaultArtist.png</value>
+    <value condition="String.IsEqual(ListItem.DBType,album)">DefaultAlbumCover.png</value>
+    <value>DefaultAudio.png</value>
+  </variable>
+  <!-- Play on a TV show, season or set opens its episodes / films -->
+  <variable name="InfoPlayLabelVar">
+    <value condition="String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,set)">$LOCALIZE[1024]</value>
+    <value>$LOCALIZE[208]</value>
+  </variable>
+  <!-- button 20 starts a scan, or stops the one running -->
+  <variable name="VideoScanLabelVar">
+    <value condition="Library.IsScanningVideo">$LOCALIZE[13353]</value>
+    <value>$LOCALIZE[653]</value>
+  </variable>
+  <variable name="MusicScanLabelVar">
+    <value condition="Library.IsScanningMusic">$LOCALIZE[13353]</value>
+    <value>$LOCALIZE[653]</value>
+  </variable>
+
+  <!-- Ascending / Descending; "Order" where the list has no sort order -->
+  <variable name="MediaSortOrderVar">
+    <value condition="!String.IsEmpty(Container.SortOrder)">$INFO[Container.SortOrder]</value>
+    <value>$LOCALIZE[31904]</value>
+  </variable>
+
+  <!-- scrollbar beside a long text: wider for a finger -->
+  <include name="Media_SBWidth"><width>24</width></include>
+  <include name="Media_SBWidth_XL"><width>30</width></include>
+
   <include name="Media_Toolbar">
+    <param name="down" default="50" />
+    <definition>
     <control type="grouplist" id="9490">
       <left>6</left><top>34</top><width>1000</width><height>26</height>
       <orientation>horizontal</orientation>
       <itemgap>4</itemgap>
       <align>left</align>
       <onup>9100</onup>
-      <ondown>50</ondown>
+      <ondown>$PARAM[down]</ondown>
 
       <control type="button" id="9500">
         <width>76</width><height>26</height><font>chrome</font>
@@ -29,20 +104,26 @@
         <label>$LOCALIZE[31902]</label>
       </control>
       <control type="button" id="3">
-        <width>190</width><height>26</height><font>chrome</font>
+        <width>230</width><height>26</height><font>chrome</font>
         <label>$LOCALIZE[31903]</label>
       </control>
+      <!-- Kodi only marks this button selected when descending and never
+           labels it, so the label says which way the list is sorted -->
       <control type="button" id="4">
-        <width>110</width><height>26</height><font>chrome</font>
-        <label>$LOCALIZE[31904]</label>
+        <width>120</width><height>26</height><font>chrome</font>
+        <label>$VAR[MediaSortOrderVar]</label>
       </control>
       <control type="button" id="19">
         <width>100</width><height>26</height><font>chrome</font>
         <label>$LOCALIZE[587]</label>
       </control>
+      <!-- Action(ContextMenu) goes to the focused control, which is this
+           button; focus the view first (Kodi redirects 50 to whichever
+           view is showing) so the menu is the selected item's -->
       <control type="button" id="9501">
         <width>110</width><height>26</height><font>chrome</font>
         <label>$LOCALIZE[31906]</label>
+        <onclick>SetFocus(50)</onclick>
         <onclick>Action(ContextMenu)</onclick>
       </control>
       <!-- inside an add-on (YouTube, Plex...): its own settings - quality,
@@ -55,13 +136,208 @@
       </control>
     </control>
 
-    <!-- item count, right hand end of the toolbar strip -->
-    <control type="label" id="12">
-      <left>770</left><top>34</top><width>236</width><height>26</height>
+    <!-- item count, right hand end of the toolbar strip (in an add-on it
+         moves to the title bar, see MediaTitle2Var) -->
+    <control type="label">
+      <left>816</left><top>34</top><width>190</width><height>26</height>
       <font>small</font><textcolor>textdim</textcolor>
       <align>right</align><aligny>center</aligny>
-      <label>$VAR[ItemCountVar]</label>
+      <label>$VAR[MediaCountVar]</label>
       <visible>String.IsEmpty(Container.PluginName)</visible>
+    </control>
+    </definition>
+  </include>
+
+  <!-- ===== second toolbar row: window-specific buttons (Kodi's ids) === -->
+  <!-- Each goes inside grouplist 9491 (Media_Window_Extras). -->
+  <include name="Media_Extras_None">
+    <definition />
+  </include>
+
+  <!-- play queue (video and music playlists): GUIWindow*Playlist.cpp
+       20 shuffle (selected when on), 21 save, 22 clear, 26 repeat
+       (Kodi writes "Repeat: Off/One/All") -->
+  <include name="Media_Extras_Playlist">
+    <control type="radiobutton" id="20">
+      <width>154</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[191]</label>
+    </control>
+    <control type="button" id="26">
+      <width>154</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[595]</label>
+    </control>
+    <control type="button" id="21">
+      <width>154</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[190]</label>
+    </control>
+    <control type="button" id="22">
+      <width>154</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[192]</label>
+    </control>
+  </include>
+
+  <!-- video library: GUIWindowVideoNav.cpp 8 search, 10 watched filter
+       (Kodi writes All videos / Unwatched / Watched), 16 party mode
+       (library music videos only, as in Estuary), 20 scan / stop scanning
+       (disabled by Kodi inside add-ons) -->
+  <include name="Media_Extras_VideoNav">
+    <control type="button" id="8">
+      <width>154</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[137]</label>
+      <visible>String.IsEmpty(Container.PluginName)</visible>
+    </control>
+    <control type="button" id="10">
+      <width>154</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[16100]</label>
+      <visible>Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(musicvideos)</visible>
+    </control>
+    <control type="radiobutton" id="16">
+      <width>154</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[589]</label>
+      <visible>Container.Content(musicvideos) + String.IsEmpty(Container.PluginName)</visible>
+    </control>
+    <control type="button" id="20">
+      <width>154</width><height>34</height><font>chrome</font>
+      <label>$VAR[VideoScanLabelVar]</label>
+      <visible>String.IsEmpty(Container.PluginName) + !Container.Content(addons)</visible>
+    </control>
+    <!-- inside an add-on Kodi's library buttons do not apply; the row
+         offers the add-on's own page again and its start page instead
+         of staying blank -->
+    <control type="button" id="9503">
+      <width>154</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[184]</label>
+      <onclick>Container.Refresh</onclick>
+      <visible>!String.IsEmpty(Container.PluginName)</visible>
+    </control>
+    <control type="button" id="9504">
+      <width>200</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[31875]</label>
+      <onclick>Container.Update(plugin://$INFO[Container.PluginName]/)</onclick>
+      <visible>!String.IsEmpty(Container.PluginName)</visible>
+    </control>
+  </include>
+
+  <!-- music library: GUIWindowMusicNav.cpp 8 search, 16 party mode,
+       20 scan / stop scanning -->
+  <include name="Media_Extras_MusicNav">
+    <control type="button" id="8">
+      <width>154</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[137]</label>
+      <visible>String.IsEmpty(Container.PluginName)</visible>
+    </control>
+    <control type="radiobutton" id="16">
+      <width>154</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[589]</label>
+      <visible>String.IsEmpty(Container.PluginName)</visible>
+    </control>
+    <control type="button" id="20">
+      <width>154</width><height>34</height><font>chrome</font>
+      <label>$VAR[MusicScanLabelVar]</label>
+      <visible>String.IsEmpty(Container.PluginName) + !Container.Content(addons)</visible>
+    </control>
+    <!-- inside an add-on Kodi's library buttons do not apply; the row
+         offers the add-on's own page again and its start page instead
+         of staying blank -->
+    <control type="button" id="9503">
+      <width>154</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[184]</label>
+      <onclick>Container.Refresh</onclick>
+      <visible>!String.IsEmpty(Container.PluginName)</visible>
+    </control>
+    <control type="button" id="9504">
+      <width>200</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[31875]</label>
+      <onclick>Container.Update(plugin://$INFO[Container.PluginName]/)</onclick>
+      <visible>!String.IsEmpty(Container.PluginName)</visible>
+    </control>
+  </include>
+
+  <!-- pictures: GUIWindowPictures.cpp 6 slideshow, 7 recursive
+       slideshow (both disabled by Kodi when there is nothing to show),
+       9 randomise (selected when on) -->
+  <include name="Media_Extras_Pictures">
+    <control type="button" id="6">
+      <width>208</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[13317]</label>
+    </control>
+    <control type="button" id="7">
+      <width>208</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[13318]</label>
+    </control>
+    <control type="radiobutton" id="9">
+      <width>208</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[13319]</label>
+    </control>
+  </include>
+
+  <!-- TV / radio channels: GUIWindowPVRBase 28 channel group picker
+       (Kodi writes "Group: <name>"), GUIWindowPVRChannels 6 show hidden
+       channels - must be a radiobutton, Kodi casts it; Kodi hides it
+       when there are no hidden channels -->
+  <include name="Media_Extras_PVRChannels">
+    <control type="button" id="28">
+      <width>300</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[19141]</label>
+    </control>
+    <control type="radiobutton" id="6">
+      <width>300</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[19051]</label>
+    </control>
+    <!-- Kodi writes the group name, or "Hidden", into 29; never shown
+         here (no room), the title bar reads it (Media_PVRTitle2) -->
+    <control type="label" id="29">
+      <width>10</width><height>34</height><font>small</font>
+      <visible>false</visible>
+    </control>
+  </include>
+
+  <!-- recordings: GUIWindowPVRRecordings 5 group items, 7 deleted
+       recordings (radiobutton, Kodi casts it and hides it when the trash
+       is empty), 10 watched filter (Kodi writes the label) -->
+  <include name="Media_Extras_PVRRecordings">
+    <control type="radiobutton" id="5">
+      <width>180</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[19270]</label>
+    </control>
+    <control type="radiobutton" id="7">
+      <width>246</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[19184]</label>
+    </control>
+    <control type="button" id="10">
+      <width>196</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[22015]</label>
+    </control>
+    <!-- Kodi writes "Deleted" into 29 while the trash is shown and the
+         group path into 30; the title bar reads them (Media_PVRTitle2) -->
+    <control type="label" id="29">
+      <width>10</width><height>34</height><font>small</font>
+      <visible>false</visible>
+    </control>
+    <control type="label" id="30">
+      <width>10</width><height>34</height><font>small</font>
+      <visible>false</visible>
+    </control>
+  </include>
+
+  <!-- timers and timer rules: GUIWindowPVRTimersBase 8 hide disabled -->
+  <include name="Media_Extras_PVRTimers">
+    <control type="radiobutton" id="8">
+      <width>240</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[19077]</label>
+    </control>
+  </include>
+
+  <!-- guide search: GUIWindowPVRSearch writes the search title into 29
+       and [saved] / [not saved] into 30 -->
+  <include name="Media_Extras_PVRSearch">
+    <control type="label" id="29">
+      <width>460</width><height>34</height>
+      <font>bold</font><textcolor>text</textcolor><aligny>center</aligny>
+    </control>
+    <control type="label" id="30">
+      <width>170</width><height>34</height>
+      <font>small</font><textcolor>textdim</textcolor><aligny>center</aligny>
     </control>
   </include>
 
@@ -78,9 +354,11 @@
         <left>8</left><top>8</top><width>120</width><height>170</height>
         <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
       </control>
+      <!-- ListItem.Icon is Kodi's own chain: thumb, then the type icon
+           (DefaultVideo, DefaultAudio, DefaultFolderBack...) -->
       <control type="image">
         <left>14</left><top>14</top><width>108</width><height>158</height>
-        <texture fallback="DefaultFolder.png">$INFO[ListItem.Art(thumb)]</texture>
+        <texture fallback="DefaultFile.png">$INFO[ListItem.Icon]</texture>
         <aspectratio>keep</aspectratio>
       </control>
 
@@ -136,6 +414,46 @@
     </control>
   </include>
 
+  <!-- The views and what shows when there is nothing in them. -->
+  <include name="Media_Views">
+    <param name="top" default="66" />
+    <param name="height" default="462" />
+    <param name="inner" default="456" />
+    <param name="panel" default="450" />
+    <param name="up" default="9490" />
+    <definition>
+      <control type="group">
+        <left>6</left><top>$PARAM[top]</top><width>634</width><height>$PARAM[height]</height>
+        <include content="View_50_List">
+          <param name="height" value="$PARAM[height]" /><param name="inner" value="$PARAM[inner]" />
+          <param name="up" value="$PARAM[up]" />
+        </include>
+        <include content="View_51_Poster">
+          <param name="height" value="$PARAM[height]" /><param name="inner" value="$PARAM[inner]" />
+          <param name="panel" value="$PARAM[panel]" /><param name="up" value="$PARAM[up]" />
+        </include>
+        <include content="View_52_IconWall">
+          <param name="height" value="$PARAM[height]" /><param name="inner" value="$PARAM[inner]" />
+          <param name="panel" value="$PARAM[panel]" /><param name="up" value="$PARAM[up]" />
+        </include>
+        <!-- an empty folder or add-on page says so instead of staying blank
+             (Container.NumItems leaves out the ".." item) -->
+        <control type="label">
+          <left>20</left><top>150</top><width>594</width><height>30</height>
+          <font>normal</font><textcolor>textdim</textcolor><align>center</align>
+          <label>$LOCALIZE[2080]</label>
+          <visible>Integer.IsEqual(Container.NumItems,0) + !Container.IsUpdating</visible>
+        </control>
+        <control type="label">
+          <left>20</left><top>150</top><width>594</width><height>30</height>
+          <font>normal</font><textcolor>textdim</textcolor><align>center</align>
+          <label>$LOCALIZE[1040]</label>
+          <visible>Integer.IsEqual(Container.NumItems,0) + Container.IsUpdating</visible>
+        </control>
+      </control>
+    </definition>
+  </include>
+
   <!-- The whole browser window. Place inside a group at 6,30. -->
   <include name="Media_Window">
     <param name="icon" default="icons24/folder.png" />
@@ -153,21 +471,68 @@
           <param name="colour" value="$PARAM[colour]" />
           <param name="icon" value="$PARAM[icon]" />
           <param name="label" value="$VAR[BreadcrumbVar]" />
-          <param name="label2" value="$INFO[Container.FolderPath]" />
+          <param name="label2" value="$VAR[MediaTitle2Var]" />
           <param name="down" value="50" />
           <param name="boxes" value="window" />
         </include>
       </control>
 
       <include>Media_Toolbar</include>
+      <include>Media_Views</include>
+      <include>Media_InfoPanel</include>
+    </definition>
+  </include>
+
+  <!-- The same with the window's own buttons in a second toolbar row,
+       grouplist 9491 over the left column; the views start 36 px lower.
+       extras: one of the Media_Extras_* includes above.
+       label2: title-bar right-hand text (PVR windows: Kodi's header
+       labels 29/30, see Media_PVRTitle2Var). -->
+  <include name="Media_Window_Extras">
+    <param name="icon" default="icons24/folder.png" />
+    <param name="colour" default="accent2" />
+    <param name="extras" default="Media_Extras_None" />
+    <param name="label2" default="$VAR[MediaTitle2Var]" />
+    <definition>
+      <include content="Win_Frame">
+        <param name="width" value="1012" />
+        <param name="height" value="534" />
+      </include>
 
       <control type="group">
-        <left>6</left><top>66</top><width>634</width><height>462</height>
-        <include>View_50_List</include>
-        <include>View_51_Poster</include>
-        <include>View_52_IconWall</include>
+        <left>3</left><top>3</top>
+        <include content="Win_Title">
+          <param name="width" value="1006" />
+          <param name="colour" value="$PARAM[colour]" />
+          <param name="icon" value="$PARAM[icon]" />
+          <param name="label" value="$VAR[BreadcrumbVar]" />
+          <param name="label2" value="$PARAM[label2]" />
+          <param name="down" value="50" />
+          <param name="boxes" value="window" />
+        </include>
       </control>
 
+      <include content="Media_Toolbar">
+        <param name="down" value="9491" />
+      </include>
+
+      <control type="grouplist" id="9491">
+        <left>6</left><top>64</top><width>634</width><height>34</height>
+        <orientation>horizontal</orientation>
+        <itemgap>4</itemgap>
+        <align>left</align>
+        <onup>9490</onup>
+        <ondown>50</ondown>
+        <include content="$PARAM[extras]" />
+      </control>
+
+      <include content="Media_Views">
+        <param name="top" value="102" />
+        <param name="height" value="426" />
+        <param name="inner" value="420" />
+        <param name="panel" value="414" />
+        <param name="up" value="9491" />
+      </include>
       <include>Media_InfoPanel</include>
     </definition>
   </include>

@@ -913,6 +913,8 @@ def icon_dialog():
     W, Hh = 800, 520
     names = sorted(os.path.splitext(os.path.basename(p))[0]
                    for p in glob.glob(os.path.join(MEDIA, "icons", "*.png")))
+    import iconset
+    names = [n for n in names if n not in iconset.NON_TILE]
     k = SLOTKEY
     b = sunken(16, 44, W - 32, Hh - 100)
     # cells stretch to fill the well (no dead strip right of the scrollbar):

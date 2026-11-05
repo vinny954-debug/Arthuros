@@ -487,6 +487,66 @@ BASES["tick"] = [
 "................",
 "................",
 ]
+# P7
+# list and tile status marks (Includes_Lists.xml): now playing
+BASES["status_playing"] = [
+"................",
+"..KKKKKKKKKKKK..",
+".KBBBBBBBBBBBBK.",
+".KBBBBBBBBBBBBK.",
+".KBBBBWBBBBBBBK.",
+".KBBBBWWBBBBBBK.",
+".KBBBBWWWBBBBBK.",
+".KBBBBWWWWBBBBK.",
+".KBBBBWWWWWBBBK.",
+".KBBBBWWWWBBBBK.",
+".KBBBBWWWBBBBBK.",
+".KBBBBWWBBBBBBK.",
+".KBBBBWBBBBBBBK.",
+".KBBBBBBBBBBBBK.",
+"..KKKKKKKKKKKK..",
+"................",
+]
+# P7
+# part watched: a half-filled disc
+BASES["status_resume"] = [
+"................",
+".....KKKKKK.....",
+"...KKOOOWWWKK...",
+"..KOOOOOWWWWWK..",
+"..KOOOOOWWWWWK..",
+".KOOOOOOWWWWWWK.",
+".KOOOOOOWWWWWWK.",
+".KOOOOOOWWWWWWK.",
+".KOOOOOOWWWWWWK.",
+".KOOOOOOWWWWWWK.",
+".KOOOOOOWWWWWWK.",
+"..KOOOOOWWWWWK..",
+"..KOOOOOWWWWWK..",
+"...KKOOOWWWKK...",
+".....KKKKKK.....",
+"................",
+]
+# P7
+# watched: a tick in a green box
+BASES["status_watched"] = [
+"................",
+"..KKKKKKKKKKKK..",
+".KGGGGGGGGGGGGK.",
+".KGGGGGGGGGGWGK.",
+".KGGGGGGGGGWWGK.",
+".KGGGGGGGGWWWGK.",
+".KGGGGGGGWWWGGK.",
+".KGWGGGGWWWGGGK.",
+".KGWWGGWWWGGGGK.",
+".KGWWWWWWGGGGGK.",
+".KGGWWWWGGGGGGK.",
+".KGGGWWGGGGGGGK.",
+".KGGGGGGGGGGGGK.",
+".KGGGGGGGGGGGGK.",
+"..KKKKKKKKKKKK..",
+"................",
+]
 
 EMBLEMS = {
  "star":    ("B", "Y", ["...#...", "..###..", "#######", ".#####.", "..###..", ".##.##.", ".#...#."]),
@@ -773,4 +833,12 @@ WINDOW_ICONS = {
 # windows whose title icon follows what they are showing
 WINDOW_ICON_EXPR = {
  "SettingsCategory": "$VAR[ArthurWindowIcon]",
+ # P7
+ # MyPlaylist.xml is both the video and the music play queue
+ "MyPlaylist": "$VAR[ArthurWindowIcon]",
 }
+
+# P7
+# icons that are row/tile status marks, not pictures: home.py leaves them
+# out of the Desktop Icon picker (1123)
+NON_TILE = {"status_playing", "status_resume", "status_watched"}

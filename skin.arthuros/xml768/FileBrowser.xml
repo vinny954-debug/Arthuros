@@ -217,13 +217,13 @@
           </control>
           <control type="label">
             <left>28</left><top>0</top><width>640</width><height>42</height>
-            <font>bold</font><textcolor>textinv</textcolor>
+            <font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
             <aligny>center</aligny><label>$INFO[ListItem.Label]</label>
           </control>
           <control type="label">
             <left>28</left><top>0</top><width>816</width><height>42</height>
             <align>right</align><aligny>center</aligny><font>small</font>
-            <textcolor>textinv</textcolor><label>$INFO[ListItem.Label2]</label>
+            <textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><label>$INFO[ListItem.Label2]</label>
           </control>
         </focusedlayout>
       <itemlayout height="26" width="848">
@@ -254,13 +254,13 @@
           </control>
           <control type="label">
             <left>28</left><top>0</top><width>640</width><height>26</height>
-            <font>bold</font><textcolor>textinv</textcolor>
+            <font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
             <aligny>center</aligny><label>$INFO[ListItem.Label]</label>
           </control>
           <control type="label">
             <left>28</left><top>0</top><width>816</width><height>26</height>
             <align>right</align><aligny>center</aligny><font>small</font>
-            <textcolor>textinv</textcolor><label>$INFO[ListItem.Label2]</label>
+            <textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><label>$INFO[ListItem.Label2]</label>
           </control>
         </focusedlayout>
       </control>
@@ -270,7 +270,44 @@
         <onup>451</onup><ondown>413</ondown>
         <pagecontrol>60</pagecontrol>
         <scrolltime tween="linear">0</scrolltime>
-        <itemlayout height="26" width="848">
+        <itemlayout height="42" width="848" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image">
+            <left>4</left><top>13</top><width>16</width><height>16</height>
+            <texture fallback="DefaultFolder.png">$INFO[ListItem.Icon]</texture>
+            <aspectratio>keep</aspectratio>
+          </control>
+          <control type="label">
+            <left>28</left><top>0</top><width>640</width><height>42</height>
+            <aligny>center</aligny><label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <left>28</left><top>0</top><width>816</width><height>42</height>
+            <align>right</align><aligny>center</aligny><font>small</font>
+            <textcolor>textdim</textcolor><label>$INFO[ListItem.Label2]</label>
+          </control>
+        </itemlayout>
+        <focusedlayout height="42" width="848" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image">
+            <left>0</left><top>0</top><width>848</width><height>42</height>
+            <texture colordiffuse="select">fill.png</texture>
+          </control>
+          <control type="image">
+            <left>4</left><top>13</top><width>16</width><height>16</height>
+            <texture fallback="DefaultFolder.png">$INFO[ListItem.Icon]</texture>
+            <aspectratio>keep</aspectratio>
+          </control>
+          <control type="label">
+            <left>28</left><top>0</top><width>640</width><height>42</height>
+            <font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
+            <aligny>center</aligny><label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <left>28</left><top>0</top><width>816</width><height>42</height>
+            <align>right</align><aligny>center</aligny><font>small</font>
+            <textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><label>$INFO[ListItem.Label2]</label>
+          </control>
+        </focusedlayout>
+        <itemlayout height="26" width="848" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image">
             <left>4</left><top>5</top><width>16</width><height>16</height>
             <texture fallback="DefaultFolder.png">$INFO[ListItem.Icon]</texture>
@@ -286,7 +323,7 @@
             <textcolor>textdim</textcolor><label>$INFO[ListItem.Label2]</label>
           </control>
         </itemlayout>
-        <focusedlayout height="26" width="848">
+        <focusedlayout height="26" width="848" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image">
             <left>0</left><top>0</top><width>848</width><height>26</height>
             <texture colordiffuse="select">fill.png</texture>
@@ -298,13 +335,13 @@
           </control>
           <control type="label">
             <left>28</left><top>0</top><width>640</width><height>26</height>
-            <font>bold</font><textcolor>textinv</textcolor>
+            <font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
             <aligny>center</aligny><label>$INFO[ListItem.Label]</label>
           </control>
           <control type="label">
             <left>28</left><top>0</top><width>816</width><height>26</height>
             <align>right</align><aligny>center</aligny><font>small</font>
-            <textcolor>textinv</textcolor><label>$INFO[ListItem.Label2]</label>
+            <textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><label>$INFO[ListItem.Label2]</label>
           </control>
         </focusedlayout>
       </control>
@@ -318,8 +355,13 @@
         <onup>450</onup>
         <control type="button" id="413"><width>200</width><height>32</height><label>$LOCALIZE[186]</label></control>
         <control type="button" id="414"><width>200</width><height>32</height><label>$LOCALIZE[222]</label></control>
-        <control type="button" id="415"><width>230</width><height>32</height><label>$LOCALIZE[20309]</label></control>
-        <control type="togglebutton" id="416"><width>200</width><height>32</height></control>
+        <control type="button" id="415"><width>230</width><height>32</height><label>$LOCALIZE[20309]</label><visible>Control.IsEnabled(415)</visible></control>
+        <control type="togglebutton" id="416"><width>200</width><height>32</height><label>$LOCALIZE[749]</label>
+          <usealttexture/>
+          <alttexturefocus border="2" colordiffuse="select">select_bevel.png</alttexturefocus>
+          <alttexturenofocus border="2" colordiffuse="facetint">button_down.png</alttexturenofocus>
+          <visible>Control.IsEnabled(416)</visible>
+        </control>
       </control>
     </control>
   </controls>

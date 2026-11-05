@@ -1088,15 +1088,43 @@ def rds_info():
 
 
 # ====================================================== info dialogs
+INFO_XLC = "[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"
+
+def info_sb_width(indent=8):
+    """A scrollbar width that grows for a finger (Media_SBWidth* live in
+    Includes_Media.xml)."""
+    sp = " " * indent
+    return (f'{sp}<include content="Media_SBWidth_XL" condition="{INFO_XLC}" />\n'
+            f'{sp}<include content="Media_SBWidth" condition="!{INFO_XLC}" />\n')
+
+def info_label(sid):
+    """INFO_BUTTONS label: a Kodi/skin string id, a ready-made $VAR/$INFO
+    label, or None (Kodi writes the label itself)."""
+    if sid is None:
+        return ""
+    if isinstance(sid, str):
+        return f"<label>{sid}</label>"
+    return f"<label>$LOCALIZE[{sid}]</label>"
+
 def info_dialog(name, ids=None):
+    music = name == "DialogMusicInfo"
+    # art: Kodi gives albums and artists 'thumb', never 'poster'; episodes
+    # and add-on videos often have neither (VideoInfoArtVar falls back to
+    # the show's poster, the thumb, then Kodi's own icon)
+    art, fb = (("$VAR[MusicInfoArtVar]", "DefaultAlbumCover.png") if music
+               else ("$VAR[VideoInfoArtVar]", "DefaultVideo.png"))
+    rows = INFO_BUTTONS[name]
+    chunks = [rows[i:i + 4] for i in range(0, len(rows), 4)]
+    gids = [9001 + i for i in range(len(chunks))]
     body  = well(10, 36, 500, 260, "panel_sunken_grey.png")
-    body += """      <control type="image">
+    body += f"""      <control type="image">
         <left>20</left><top>46</top><width>150</width><height>220</height>
         <texture border="2">panel_raised.png</texture>
       </control>
       <control type="image">
         <left>26</left><top>52</top><width>138</width><height>208</height>
-        <texture fallback="DefaultVideo.png">$INFO[ListItem.Art(poster)]</texture>\n        <aspectratio>keep</aspectratio>
+        <texture fallback="{fb}">{art}</texture>
+        <aspectratio>keep</aspectratio>
       </control>
       <control type="label">
         <left>184</left><top>46</top><width>316</width><height>52</height>
@@ -1119,21 +1147,73 @@ def info_dialog(name, ids=None):
         <label>$INFO[ListItem.Rating]  $INFO[ListItem.Studio]$INFO[ListItem.Artist]</label>
       </control>
 """
+    # the plot: a textbox scrolls only through a pagecontrol, so give it a
+    # scrollbar a finger can drag; it still scrolls by itself, except while
+    # the scrollbar has the focus
     body += well(520, 36, 370, 260, "panel_sunken.png")
-    body += """      <control type="textbox">
-        <left>528</left><top>44</top><width>354</width><height>244</height>
+    body += f"""      <control type="textbox">
+        <left>528</left><top>44</top><width>322</width><height>244</height>
         <font>small</font>
+        <pagecontrol>61</pagecontrol>
+        <autoscroll delay="6000" time="4000" repeat="8000">!Control.HasFocus(61)</autoscroll>
         <label>$INFO[ListItem.Plot]$INFO[ListItem.Comment]</label>
+      </control>
+      <control type="scrollbar" id="61">
+        <right>14</right><top>44</top><height>244</height>
+{info_sb_width()}        <onup>{gids[-1]}</onup><ondown>50</ondown>
+        <onleft>50</onleft><onright>50</onright>
       </control>
 """
     body += well(10, 304, 880, 120, "panel_sunken.png")
-    body += """      <control type="panel" id="50">
+    if music:
+        # album: its songs; artist: the discography. Full-width rows so a
+        # title is not cut off after a few letters (GUIDialogMusicInfo binds
+        # either list to 50; any container type works)
+        def mrow(tag, focused):
+            col = "textinv" if focused else "text"
+            dim = "textinv" if focused else "textdim"
+            sel = "<selectedcolor>textinv</selectedcolor>" if focused else ""
+            bar = ("""          <control type="image">
+            <left>0</left><top>0</top><width>838</width><height>26</height>
+            <texture colordiffuse="select">fill.png</texture>
+          </control>
+""" if focused else "")
+            return f"""        <{tag} height="26" width="838">
+{bar}          <control type="label">
+            <left>8</left><top>0</top><width>720</width><height>26</height>
+            <font>{'bold' if focused else 'normal'}</font><textcolor>{col}</textcolor>{sel}
+            <aligny>center</aligny>
+            <label>$INFO[ListItem.TrackNumber,,.  ]$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <left>0</left><top>0</top><width>830</width><height>26</height>
+            <font>small</font><textcolor>{dim}</textcolor>{sel}
+            <align>right</align><aligny>center</aligny>
+            <label>$INFO[ListItem.Label2]</label>
+          </control>
+        </{tag}>
+"""
+        body += f"""      <control type="list" id="50">
+        <left>16</left><top>310</top><width>838</width><height>108</height>
+        <onup>61</onup><ondown>9001</ondown><onright>62</onright>
+        <pagecontrol>62</pagecontrol>
+        <scrolltime tween="linear">0</scrolltime>
+{mrow("itemlayout", False)}{mrow("focusedlayout", True)}      </control>
+      <control type="scrollbar" id="62">
+        <right>14</right><top>310</top><height>108</height>
+{info_sb_width()}        <onleft>50</onleft><onright>50</onright>
+        <onup>61</onup><ondown>9001</ondown>
+      </control>
+"""
+    else:
+        body += """      <control type="panel" id="50">
         <left>16</left><top>310</top><width>868</width><height>108</height>
-        <onup>9001</onup><ondown>9001</ondown>
+        <onup>61</onup><ondown>9001</ondown>
         <itemlayout height="108" width="90">
           <control type="image">
             <left>4</left><top>2</top><width>80</width><height>80</height>
-            <texture fallback="DefaultActor.png">$INFO[ListItem.Icon]</texture>\n            <aspectratio>keep</aspectratio>
+            <texture fallback="DefaultActor.png">$INFO[ListItem.Icon]</texture>
+            <aspectratio>keep</aspectratio>
           </control>
           <control type="label">
             <left>0</left><top>84</top><width>88</width><height>22</height>
@@ -1148,7 +1228,8 @@ def info_dialog(name, ids=None):
           </control>
           <control type="image">
             <left>4</left><top>2</top><width>80</width><height>80</height>
-            <texture fallback="DefaultActor.png">$INFO[ListItem.Icon]</texture>\n            <aspectratio>keep</aspectratio>
+            <texture fallback="DefaultActor.png">$INFO[ListItem.Icon]</texture>
+            <aspectratio>keep</aspectratio>
           </control>
           <control type="label">
             <left>0</left><top>84</top><width>88</width><height>22</height>
@@ -1159,43 +1240,67 @@ def info_dialog(name, ids=None):
       </control>
 """
     # Buttons by Kodi's own ids (GUIDialogVideoInfo.cpp, GUIDialogMusicInfo.cpp,
-    # GUIDialogPVRGuideInfo.cpp / RecordingInfo.cpp). Kodi hides or disables the
-    # ones that don't apply; hidden ones drop out of the grouplist row.
-    # Button 5 (Cast/Plot toggle) is left out on purpose: without it Kodi lets
-    # the skin keep the plot and the cast list both on screen.
-    rows = INFO_BUTTONS[name]
-    chunks = [rows[i:i + 4] for i in range(0, len(rows), 4)]
+    # GUIDialogPVRGuideInfo.cpp / RecordingInfo.cpp). Kodi hides some itself;
+    # the rest carry a <visible> so buttons that do nothing never show.
+    # Hidden ones drop out of the grouplist row; a row whose buttons are all
+    # conditional is hidden with them, and Up/Down pass through a hidden row
+    # (CGUIWindow::OnMove follows the hidden control's own navigation).
+    # Button 5 (Cast/Plot toggle) is left out on purpose in video info:
+    # without it Kodi lets the skin keep the plot and the cast list both on
+    # screen.
     def row(gid, items, top, up, down):
+        conds = list(dict.fromkeys(v[0] if v else None for _, _, *v in items))
+        rowvis = ("" if None in conds else
+                  "        <visible>" + " | ".join(f"[{c}]" for c in conds) + "</visible>\n")
         s = (f"      <control type=\"grouplist\" id=\"{gid}\">\n"
              f"        <left>13</left><top>{top}</top><width>874</width><height>30</height>\n"
              "        <orientation>horizontal</orientation><align>center</align><itemgap>6</itemgap>\n"
-             f"        <onup>{up}</onup><ondown>{down}</ondown>\n")
-        for cid, sid in items:
-            lab = f"<label>$LOCALIZE[{sid}]</label>" if sid else ""
+             f"        <onup>{up}</onup><ondown>{down}</ondown>\n" + rowvis)
+        for (cid, sid, *vis) in items:
+            v = f"<visible>{vis[0]}</visible>" if vis else ""
             # chrome font: these rows stay one line high in every fontset
             s += (f"        <control type=\"button\" id=\"{cid}\"><width>212</width><height>30</height>"
-                  f"<font>chrome</font><textoffsetx>4</textoffsetx><align>center</align>{lab}</control>\n")
+                  f"<font>chrome</font><textoffsetx>4</textoffsetx><align>center</align>"
+                  f"{info_label(sid)}{v}</control>\n")
         return s + "      </control>\n"
-    gids = [9001 + i for i in range(len(chunks))]
     for i, items in enumerate(chunks):
         up = gids[i - 1] if i else 50
-        down = gids[i + 1] if i + 1 < len(gids) else 50
+        down = gids[i + 1] if i + 1 < len(gids) else 61
         body += row(gids[i], items, 434 + 34 * i, up, down)
     ids = {k: v for k, v in (ids or {}).items() if int(k) < 100 or int(k) == 140}
-    body += stubs(ids, {1, 50} | {c for c, _ in rows})
-    return dialog(name, 900, 440 + 34 * len(chunks), body, default=str(rows[0][0]),
+    body += stubs(ids, {1, 50, 61, 62} | {c for c, *_ in rows})
+    # default focus: the first button row, never one button. Kodi hides
+    # buttons itself (10 in recording info via <visible>, 10 in guide info,
+    # 8 for artist info); a hidden default control leaves the dialog with
+    # nothing focused and a remote cannot reach any button. A grouplist
+    # passes the focus to its first child that can take it
+    # (CGUIControlGroup GUI_MSG_SETFOCUS -> GetFirstFocusableControl).
+    return dialog(name, 900, 440 + 34 * len(chunks), body, default=str(gids[0]),
+                  default_always=True,
                   icon="icons24/movies.png", title="$VAR[InfoTitleVar]")
 
-# label None: Kodi writes the label itself
+# (id, label[, visible]): label is a string id, a ready-made label, or None
+# when Kodi writes the label itself. Kodi only enables/disables 6, 7, 9, 10
+# and 12 in video info (GUIDialogVideoInfo::Update); 11, 13, 14 and 15 are
+# always enabled and must be hidden by the skin when they do not apply
+# (as Estuary does).
+PVR_GUIDE = "Window.IsActive(PVRGuideInfo)"
 INFO_BUTTONS = {
- "DialogVideoInfo": [(8, 208), (9, 13404), (11, 20410), (14, 40001), (15, 40211),
-                     (6, 184), (7, 38023), (10, 13511), (12, 20413), (13, 20339)],
- "DialogMusicInfo": [(8, 208), (6, None), (7, None), (10, None), (12, None)],
- "DialogPVRInfo":   [(10, 19190), (8, 19687), (5, 19000), (6, None), (9, 19061),
-                     (11, 826), (4, 19003), (7, 186)],
+ "DialogVideoInfo": [(8, "$VAR[InfoPlayLabelVar]"), (9, 13404, "Control.IsEnabled(9)"),
+                     (6, 184, "Control.IsEnabled(6)"), (7, 38023, "Control.IsEnabled(7)"),
+                     (11, 20410, "!String.IsEmpty(ListItem.Trailer)"),
+                     (13, 20339, "!String.IsEmpty(ListItem.Director)"),
+                     (14, 40001, "String.IsEqual(ListItem.DBType,movie)"),
+                     (15, 40211, "String.IsEqual(ListItem.DBType,movie)"),
+                     (10, 13511, "Control.IsEnabled(10)"), (12, 20413, "Control.IsEnabled(12)")],
+ "DialogMusicInfo": [(8, None), (6, None), (7, None), (10, None), (12, None)],
+ # DialogPVRInfo.xml is shared by the guide and the recording info dialog;
+ # the recording dialog acts only on 4, 7 and 8, the guide dialog labels 6
+ # (Record / Delete timer...) and hides what does not apply
+ "DialogPVRInfo":   [(10, 19190, PVR_GUIDE), (8, 19687), (5, 19000, PVR_GUIDE),
+                     (6, 264, PVR_GUIDE), (9, 19061, PVR_GUIDE), (11, 826, PVR_GUIDE),
+                     (4, 19003), (7, 186)],
 }
-
-
 
 def addon_info_dialog():
     """Kodi hides whichever of these do not apply, but every one of them has to
@@ -1239,18 +1344,27 @@ def addon_info_dialog():
       </control>
 """
     body += well(10, 212, 880, 150, "panel_sunken.png")
+    # description, disclaimer and news: a textbox scrolls only through a
+    # pagecontrol, so a scrollbar a finger can drag (it still scrolls by
+    # itself, except while the scrollbar has the focus)
     body += """      <control type="textbox">
-        <left>18</left><top>220</top><width>864</width><height>134</height>
+        <left>18</left><top>220</top><width>830</width><height>134</height>
         <font>small</font>
-        <autoscroll delay="6000" time="2500" repeat="6000">true</autoscroll>
+        <pagecontrol>61</pagecontrol>
+        <autoscroll delay="6000" time="2500" repeat="6000">!Control.HasFocus(61)</autoscroll>
         <!-- Kodi 21 exposes add-on details as ListItem.Addon* info labels;
              the old Addon.* item properties are always empty. -->
         <label>$INFO[ListItem.AddonDescription]$INFO[ListItem.AddonDisclaimer,[CR][CR]]$INFO[ListItem.AddonNews,[CR][CR]]</label>
       </control>
+      <control type="scrollbar" id="61">
+        <right>14</right><top>220</top><height>134</height>
+""" + info_sb_width() + """        <onup>9</onup><ondown>12</ondown>
+        <onleft>12</onleft><onright>12</onright>
+      </control>
       <control type="grouplist">
         <left>13</left><top>370</top><width>874</width><height>32</height>
         <orientation>horizontal</orientation><align>center</align><itemgap>6</itemgap>
-        <ondown>9</ondown>
+        <onup>61</onup><ondown>9</ondown>
         <control type="button" id="12"><width>210</width><height>32</height><label>$LOCALIZE[502]</label></control>
         <control type="button" id="6"><width>210</width><height>32</height><label>$LOCALIZE[24038]</label></control>
         <control type="button" id="7"><width>210</width><height>32</height><label>$LOCALIZE[24022]</label></control>
@@ -1259,7 +1373,7 @@ def addon_info_dialog():
       <control type="grouplist">
         <left>13</left><top>408</top><width>874</width><height>32</height>
         <orientation>horizontal</orientation><align>center</align><itemgap>6</itemgap>
-        <onup>12</onup>
+        <onup>12</onup><ondown>61</ondown>
         <control type="button" id="9"><width>210</width><height>32</height><label>$LOCALIZE[24020]</label></control>
         <control type="button" id="14"><width>210</width><height>32</height><label>$LOCALIZE[24069]</label></control>
         <control type="button" id="10"><width>210</width><height>32</height><label>$LOCALIZE[39024]</label></control>
@@ -1777,53 +1891,77 @@ def file_browser():
       </control>
 """
     body += well(10, 68, 880, 328, "panel_sunken.png")
+
+    def fb_layout(tag, h, focused, cond=None):
+        """One row of the file list. h: 26, or 42 for Extra large / Touch
+        mode. The focused row's labels carry selectedcolor textinv: Kodi
+        draws a marked item's labels in selectedcolor, and the default
+        (marked) is unreadable on the selection bar."""
+        c = f' condition="{cond}"' if cond else ""
+        it = (h - 16) // 2
+        s = f'        <{tag} height="{h}" width="848"{c}>\n'
+        if focused:
+            s += f"""          <control type="image">
+            <left>0</left><top>0</top><width>848</width><height>{h}</height>
+            <texture>bar_blue.png</texture>
+          </control>
+"""
+        s += f"""          <control type="image">
+            <left>4</left><top>{it}</top><width>16</width><height>16</height>
+            <texture fallback="DefaultFolder.png">$INFO[ListItem.Icon]</texture>
+            <aspectratio>keep</aspectratio>
+          </control>
+"""
+        if focused:
+            s += f"""          <control type="label">
+            <left>28</left><top>0</top><width>640</width><height>{h}</height>
+            <font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
+            <aligny>center</aligny><label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <left>28</left><top>0</top><width>816</width><height>{h}</height>
+            <align>right</align><aligny>center</aligny><font>small</font>
+            <textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><label>$INFO[ListItem.Label2]</label>
+          </control>
+"""
+        else:
+            s += f"""          <control type="label">
+            <left>28</left><top>0</top><width>640</width><height>{h}</height>
+            <aligny>center</aligny><label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <left>28</left><top>0</top><width>816</width><height>{h}</height>
+            <align>right</align><aligny>center</aligny><font>small</font>
+            <textcolor>textdim</textcolor><label>$INFO[ListItem.Label2]</label>
+          </control>
+"""
+        return s + f"        </{tag}>\n"
+
     for cid, kind in ((450, "list"), (451, "panel")):
         vis = "" if cid == 450 else "        <visible>Control.IsVisible(451)</visible>\n"
+        if cid == 450:
+            # sizepass.py gives the list its Extra large / Touch rows
+            layouts = fb_layout("itemlayout", 26, False) + fb_layout("focusedlayout", 26, True)
+        else:
+            # 451 is what Kodi shows when you browse for a picture (a tile
+            # image, a source thumbnail); sizepass skips panels, so its
+            # taller rows are written here, first, as sizepass does for lists
+            x = INFO_XLC
+            layouts = (fb_layout("itemlayout", 42, False, x) + fb_layout("focusedlayout", 42, True, x)
+                       + fb_layout("itemlayout", 26, False, "!" + x)
+                       + fb_layout("focusedlayout", 26, True, "!" + x))
         body += f"""      <control type="{kind}" id="{cid}">
         <left>16</left><top>74</top><width>848</width><height>316</height>
         <onleft>413</onleft><onright>60</onright>
         <onup>{cid}</onup><ondown>413</ondown>
         <pagecontrol>60</pagecontrol>
         <scrolltime tween="linear">0</scrolltime>
-        <itemlayout height="26" width="848">
-          <control type="image">
-            <left>4</left><top>5</top><width>16</width><height>16</height>
-            <texture fallback="DefaultFolder.png">$INFO[ListItem.Icon]</texture>
-            <aspectratio>keep</aspectratio>
-          </control>
-          <control type="label">
-            <left>28</left><top>0</top><width>640</width><height>26</height>
-            <aligny>center</aligny><label>$INFO[ListItem.Label]</label>
-          </control>
-          <control type="label">
-            <left>28</left><top>0</top><width>816</width><height>26</height>
-            <align>right</align><aligny>center</aligny><font>small</font>
-            <textcolor>textdim</textcolor><label>$INFO[ListItem.Label2]</label>
-          </control>
-        </itemlayout>
-        <focusedlayout height="26" width="848">
-          <control type="image">
-            <left>0</left><top>0</top><width>848</width><height>26</height>
-            <texture>bar_blue.png</texture>
-          </control>
-          <control type="image">
-            <left>4</left><top>5</top><width>16</width><height>16</height>
-            <texture fallback="DefaultFolder.png">$INFO[ListItem.Icon]</texture>
-            <aspectratio>keep</aspectratio>
-          </control>
-          <control type="label">
-            <left>28</left><top>0</top><width>640</width><height>26</height>
-            <font>bold</font><textcolor>textinv</textcolor>
-            <aligny>center</aligny><label>$INFO[ListItem.Label]</label>
-          </control>
-          <control type="label">
-            <left>28</left><top>0</top><width>816</width><height>26</height>
-            <align>right</align><aligny>center</aligny><font>small</font>
-            <textcolor>textinv</textcolor><label>$INFO[ListItem.Label2]</label>
-          </control>
-        </focusedlayout>
-      </control>
+{layouts}      </control>
 """
+    # 415 (New folder) and 416 (Mirror image) are enabled by Kodi only when
+    # they apply (416: browsing for pictures); hide them otherwise. 416 is a
+    # togglebutton: the empty <usealttexture> keeps the default's
+    # always-true condition out, so it toggles and shows its state.
     body += """      <control type="scrollbar" id="60">
         <left>868</left><top>74</top><width>18</width><height>316</height>
         <onleft>450</onleft><onright>413</onright>
@@ -1834,13 +1972,17 @@ def file_browser():
         <onup>450</onup>
         <control type="button" id="413"><width>200</width><height>32</height><label>$LOCALIZE[186]</label></control>
         <control type="button" id="414"><width>200</width><height>32</height><label>$LOCALIZE[222]</label></control>
-        <control type="button" id="415"><width>230</width><height>32</height><label>$LOCALIZE[20309]</label></control>
-        <control type="togglebutton" id="416"><width>200</width><height>32</height></control>
+        <control type="button" id="415"><width>230</width><height>32</height><label>$LOCALIZE[20309]</label><visible>Control.IsEnabled(415)</visible></control>
+        <control type="togglebutton" id="416"><width>200</width><height>32</height><label>$LOCALIZE[749]</label>
+          <usealttexture></usealttexture>
+          <alttexturefocus border="2" colordiffuse="select">select_bevel.png</alttexturefocus>
+          <alttexturenofocus border="2" colordiffuse="facetint">button_down.png</alttexturenofocus>
+          <visible>Control.IsEnabled(416)</visible>
+        </control>
       </control>
 """
     return dialog("FileBrowser", 900, 452, body, default="450",
                   icon="icons24/harddisk.png", heading=False)
-
 
 def media_source():
     """Add / edit a source. Ids from GUIDialogMediaSource.cpp: 2 heading,

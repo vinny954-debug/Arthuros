@@ -485,6 +485,10 @@ msgid "The skin settings file could not be read."
 msgstr ""
 
 # ===== P7 strings: 31875-31889, 31740-31759 =====
+msgctxt "#31875"
+msgid "Add-on start page"
+msgstr ""
+
 
 # ===== P8 strings: 31760-31769 =====
 

@@ -10,9 +10,12 @@
     <include>Chrome_Menubar</include>
     <control type="group">
       <left>6</left><top>30</top><width>1012</width><height>534</height>
-      <include content="Media_Window">
+      <!-- second toolbar row: this window's own buttons (Kodi's ids) -->
+      <include content="Media_Window_Extras">
         <param name="icon" value="icons24/pvr_recordings.png" />
         <param name="colour" value="accent2" />
+        <param name="extras" value="Media_Extras_PVRRecordings" />
+        <param name="label2" value="$VAR[Media_PVRTitle2Var]" />
       </include>
     </control>
     <include content="Chrome_Taskbar"><param name="up" value="50" /></include>

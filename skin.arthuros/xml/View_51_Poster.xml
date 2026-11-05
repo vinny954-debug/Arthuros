@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Poster wall: 5 across, 100x150 art in a bevelled tile. -->
+<!-- Poster wall: 5 across, 100x160 art in a bevelled tile. -->
 <includes>
   <include name="View_51_Poster">
+    <!-- height: the views area; inner = height-6, panel = height-12;
+         up: the toolbar row above -->
+    <param name="height" default="462" />
+    <param name="inner" default="456" />
+    <param name="panel" default="450" />
+    <param name="up" default="9490" />
+    <definition>
     <control type="group">
       <visible>Control.IsVisible(51)</visible>
       <include content="Arthur_ListWell">
         <param name="width" value="634" />
-        <param name="height" value="462" />
+        <param name="height" value="$PARAM[height]" />
       </include>
     </control>
 
     <control type="panel" id="51">
-      <left>6</left><top>6</top><width>604</width><height>450</height>
+      <left>6</left><top>6</top><width>604</width><height>$PARAM[panel]</height>
+      <!-- the name Kodi shows on the View button -->
+      <viewtype label="20021">icon</viewtype>
       <onleft>9490</onleft>
       <onright>61</onright>
-      <onup>9490</onup>
+      <onup>$PARAM[up]</onup>
       <ondown>9100</ondown>
       <pagecontrol>61</pagecontrol>
       <scrolltime tween="linear">0</scrolltime>
@@ -25,15 +34,21 @@
         </control>
         <control type="image">
           <left>10</left><top>6</top><width>100</width><height>160</height>
-          <texture fallback="DefaultVideo.png">$INFO[ListItem.Art(poster)]</texture>
-          <aspectratio>stretch</aspectratio>
+          <texture fallback="DefaultFile.png">$VAR[PosterArtVar]</texture>
+          <aspectratio>keep</aspectratio>
         </control>
-        <control type="label">
+        <include content="Arthur_TileStatus">
+          <param name="left" value="92" /><param name="top" value="8" />
+          <param name="barleft" value="10" /><param name="bartop" value="160" />
+          <param name="barwidth" value="100" />
+        </include>
+        <!-- a textbox, not a label: labels in list layouts never wrap -->
+        <control type="textbox">
           <left>4</left><top>174</top><width>112</width><height>44</height>
           <font>tiny</font><textcolor>text</textcolor>
-          <align>center</align><aligny>top</aligny>
+          <align>center</align>
+          <autoscroll>false</autoscroll>
           <label>$INFO[ListItem.Label]</label>
-          <wrapmultiline>true</wrapmultiline>
         </control>
       </itemlayout>
       <focusedlayout height="222" width="120">
@@ -43,28 +58,35 @@
         </control>
         <control type="image">
           <left>10</left><top>6</top><width>100</width><height>160</height>
-          <texture fallback="DefaultVideo.png">$INFO[ListItem.Art(poster)]</texture>
-          <aspectratio>stretch</aspectratio>
+          <texture fallback="DefaultFile.png">$VAR[PosterArtVar]</texture>
+          <aspectratio>keep</aspectratio>
         </control>
+        <include content="Arthur_TileStatus">
+          <param name="left" value="92" /><param name="top" value="8" />
+          <param name="barleft" value="10" /><param name="bartop" value="160" />
+          <param name="barwidth" value="100" />
+        </include>
         <control type="image">
           <left>4</left><top>174</top><width>112</width><height>44</height>
           <texture colordiffuse="select">fill.png</texture>
         </control>
-        <control type="label">
+        <!-- a textbox, not a label: labels in list layouts never wrap -->
+        <control type="textbox">
           <left>4</left><top>174</top><width>112</width><height>44</height>
           <font>tiny</font><textcolor>textinv</textcolor>
-          <align>center</align><aligny>top</aligny>
+          <align>center</align>
+          <autoscroll>false</autoscroll>
           <label>$INFO[ListItem.Label]</label>
-          <wrapmultiline>true</wrapmultiline>
         </control>
       </focusedlayout>
     </control>
 
     <control type="scrollbar" id="61">
-      <left>611</left><top>3</top><width>18</width><height>456</height>
+      <left>611</left><top>3</top><width>18</width><height>$PARAM[inner]</height>
       <onleft>51</onleft>
       <onright>9490</onright>
       <visible>Control.IsVisible(51)</visible>
     </control>
+    </definition>
   </include>
 </includes>

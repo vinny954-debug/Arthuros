@@ -66,6 +66,7 @@
     </control>
     <control type="group">
       <left>6</left><top>30</top><width>1012</width><height>702</height>
+      <!-- second toolbar row: this window's own buttons (Kodi's ids) -->
       <control type="image">
         <left>0</left><top>0</top>
         <width>1012</width><height>702</height>
@@ -109,7 +110,7 @@
       <include content="WinTitle_Right_Touch" condition="Skin.HasSetting(touchmode)"/><top>0</top><width>460</width><height>26</height>
           <align>right</align><aligny>center</aligny>
           <font>chromesmall</font><textcolor>titletext</textcolor>
-          <label>$INFO[Container.FolderPath]</label>
+          <label>$VAR[Media_PVRTitle2Var]</label>
         </control>
 
         <!-- The window boxes. Which set a title bar gets is chosen by the
@@ -204,7 +205,7 @@
       <itemgap>4</itemgap>
       <align>left</align>
       <onup>9100</onup>
-      <ondown>50</ondown>
+      <ondown>9491</ondown>
 
       <control type="button" id="9500">
         <width>76</width><height>26</height><font>chrome</font>
@@ -216,20 +217,26 @@
         <label>$LOCALIZE[31902]</label>
       </control>
       <control type="button" id="3">
-        <width>190</width><height>26</height><font>chrome</font>
+        <width>230</width><height>26</height><font>chrome</font>
         <label>$LOCALIZE[31903]</label>
       </control>
+      <!-- Kodi only marks this button selected when descending and never
+           labels it, so the label says which way the list is sorted -->
       <control type="button" id="4">
-        <width>110</width><height>26</height><font>chrome</font>
-        <label>$LOCALIZE[31904]</label>
+        <width>120</width><height>26</height><font>chrome</font>
+        <label>$VAR[MediaSortOrderVar]</label>
       </control>
       <control type="button" id="19">
         <width>100</width><height>26</height><font>chrome</font>
         <label>$LOCALIZE[587]</label>
       </control>
+      <!-- Action(ContextMenu) goes to the focused control, which is this
+           button; focus the view first (Kodi redirects 50 to whichever
+           view is showing) so the menu is the selected item's -->
       <control type="button" id="9501">
         <width>110</width><height>26</height><font>chrome</font>
         <label>$LOCALIZE[31906]</label>
+        <onclick>SetFocus(50)</onclick>
         <onclick>Action(ContextMenu)</onclick>
       </control>
       <!-- inside an add-on (YouTube, Plex...): its own settings - quality,
@@ -242,30 +249,61 @@
       </control>
     </control>
 
-    <control type="label" id="12">
-      <left>770</left><top>34</top><width>236</width><height>26</height>
+    <control type="label">
+      <left>816</left><top>34</top><width>190</width><height>26</height>
       <font>small</font><textcolor>textdim</textcolor>
       <align>right</align><aligny>center</aligny>
-      <label>$VAR[ItemCountVar]</label>
+      <label>$VAR[MediaCountVar]</label>
       <visible>String.IsEmpty(Container.PluginName)</visible>
     </control>
 
+      <control type="grouplist" id="9491">
+        <left>6</left><top>64</top><width>634</width><height>34</height>
+        <orientation>horizontal</orientation>
+        <itemgap>4</itemgap>
+        <align>left</align>
+        <onup>9490</onup>
+        <ondown>50</ondown>
+        <control type="radiobutton" id="5">
+      <width>180</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[19270]</label>
+    </control>
+    <control type="radiobutton" id="7">
+      <width>246</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[19184]</label>
+    </control>
+    <control type="button" id="10">
+      <width>196</width><height>34</height><font>chrome</font>
+      <label>$LOCALIZE[22015]</label>
+    </control>
+    <control type="label" id="29">
+      <width>10</width><height>34</height><font>small</font>
+      <visible>false</visible>
+    </control>
+    <control type="label" id="30">
+      <width>10</width><height>34</height><font>small</font>
+      <visible>false</visible>
+    </control>
+      </control>
+
       <control type="group">
-        <left>6</left><top>66</top><width>634</width><height>630</height>
+        <left>6</left><top>102</top><width>634</width><height>594</height>
         <control type="group">
       <visible>Control.IsVisible(50)</visible>
       <control type="image">
         <left>0</left><top>0</top>
-        <width>634</width><height>630</height>
+        <width>634</width><height>594</height>
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
     </control>
 
     <control type="list" id="50">
-      <left>3</left><top>3</top><width>604</width><height>624</height>
+      <!-- the name Kodi shows on the View button ("View: List") -->
+      <viewtype label="535">list</viewtype>
+      <left>3</left><top>3</top><width>604</width><height>588</height>
       <onleft>9490</onleft>
       <onright>60</onright>
-      <onup>9490</onup>
+      <onup>9491</onup>
       <ondown>9100</ondown>
       <pagecontrol>60</pagecontrol>
       <scrolltime tween="linear">0</scrolltime>
@@ -287,6 +325,29 @@
         <font>small</font><textcolor>textdim</textcolor>
         <align>right</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label2]</label>
+        <visible>!ListItem.IsPlaying + !ListItem.IsResumable + !Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <control type="label">
+        <right>24</right><top>0</top><height>40</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <align>right</align><aligny>center</aligny>
+        <label>$INFO[ListItem.Label2]</label>
+        <visible>ListItem.IsPlaying | ListItem.IsResumable | Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>12</top><width>16</width><height>16</height>
+        <texture>icons24/status_playing.png</texture>
+        <visible>ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>12</top><width>16</width><height>16</height>
+        <texture>icons24/status_resume.png</texture>
+        <visible>ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>12</top><width>16</width><height>16</height>
+        <texture>icons24/status_watched.png</texture>
+        <visible>Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsResumable + !ListItem.IsPlaying</visible>
       </control>
       </itemlayout>
       <focusedlayout height="40" width="604" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
@@ -312,9 +373,32 @@
         <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
         <align>right</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label2]</label>
+        <visible>!ListItem.IsPlaying + !ListItem.IsResumable + !Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <control type="label">
+        <right>24</right><top>0</top><height>40</height>
+        <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
+        <align>right</align><aligny>center</aligny>
+        <label>$INFO[ListItem.Label2]</label>
+        <visible>ListItem.IsPlaying | ListItem.IsResumable | Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>12</top><width>16</width><height>16</height>
+        <texture>icons24/status_playing.png</texture>
+        <visible>ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>12</top><width>16</width><height>16</height>
+        <texture>icons24/status_resume.png</texture>
+        <visible>ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>12</top><width>16</width><height>16</height>
+        <texture>icons24/status_watched.png</texture>
+        <visible>Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsResumable + !ListItem.IsPlaying</visible>
       </control>
       </focusedlayout>
-    <itemlayout height="24" width="604">
+      <itemlayout height="24" width="604">
         <control type="image">
         <left>4</left><top>4</top><width>16</width><height>16</height>
         <texture>$INFO[ListItem.Icon]</texture>
@@ -332,6 +416,29 @@
         <font>small</font><textcolor>textdim</textcolor>
         <align>right</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label2]</label>
+        <visible>!ListItem.IsPlaying + !ListItem.IsResumable + !Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <control type="label">
+        <right>24</right><top>0</top><height>24</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <align>right</align><aligny>center</aligny>
+        <label>$INFO[ListItem.Label2]</label>
+        <visible>ListItem.IsPlaying | ListItem.IsResumable | Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>4</top><width>16</width><height>16</height>
+        <texture>icons24/status_playing.png</texture>
+        <visible>ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>4</top><width>16</width><height>16</height>
+        <texture>icons24/status_resume.png</texture>
+        <visible>ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>4</top><width>16</width><height>16</height>
+        <texture>icons24/status_watched.png</texture>
+        <visible>Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsResumable + !ListItem.IsPlaying</visible>
       </control>
       </itemlayout>
       <focusedlayout height="24" width="604">
@@ -357,12 +464,35 @@
         <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
         <align>right</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label2]</label>
+        <visible>!ListItem.IsPlaying + !ListItem.IsResumable + !Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <control type="label">
+        <right>24</right><top>0</top><height>24</height>
+        <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
+        <align>right</align><aligny>center</aligny>
+        <label>$INFO[ListItem.Label2]</label>
+        <visible>ListItem.IsPlaying | ListItem.IsResumable | Integer.IsGreater(ListItem.PlayCount,0)</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>4</top><width>16</width><height>16</height>
+        <texture>icons24/status_playing.png</texture>
+        <visible>ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>4</top><width>16</width><height>16</height>
+        <texture>icons24/status_resume.png</texture>
+        <visible>ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <right>4</right><top>4</top><width>16</width><height>16</height>
+        <texture>icons24/status_watched.png</texture>
+        <visible>Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsResumable + !ListItem.IsPlaying</visible>
       </control>
       </focusedlayout>
     </control>
 
     <control type="scrollbar" id="60">
-      <left>611</left><top>3</top><width>18</width><height>624</height>
+      <left>611</left><top>3</top><width>18</width><height>588</height>
       <onleft>50</onleft>
       <onright>9490</onright>
       <visible>Control.IsVisible(50)</visible>
@@ -371,16 +501,18 @@
       <visible>Control.IsVisible(51)</visible>
       <control type="image">
         <left>0</left><top>0</top>
-        <width>634</width><height>630</height>
+        <width>634</width><height>594</height>
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
     </control>
 
     <control type="panel" id="51">
-      <left>6</left><top>6</top><width>604</width><height>618</height>
+      <left>6</left><top>6</top><width>604</width><height>582</height>
+      <!-- the name Kodi shows on the View button -->
+      <viewtype label="20021">icon</viewtype>
       <onleft>9490</onleft>
       <onright>61</onright>
-      <onup>9490</onup>
+      <onup>9491</onup>
       <ondown>9100</ondown>
       <pagecontrol>61</pagecontrol>
       <scrolltime tween="linear">0</scrolltime>
@@ -391,15 +523,36 @@
         </control>
         <control type="image">
           <left>10</left><top>6</top><width>100</width><height>160</height>
-          <texture fallback="DefaultVideo.png">$INFO[ListItem.Art(poster)]</texture>
-          <aspectratio>stretch</aspectratio>
+          <texture fallback="DefaultFile.png">$VAR[PosterArtVar]</texture>
+          <aspectratio>keep</aspectratio>
         </control>
-        <control type="label">
+        <control type="image">
+        <left>92</left><top>8</top><width>16</width><height>16</height>
+        <texture>icons24/status_playing.png</texture>
+        <visible>ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <left>92</left><top>8</top><width>16</width><height>16</height>
+        <texture>icons24/status_resume.png</texture>
+        <visible>ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <left>92</left><top>8</top><width>16</width><height>16</height>
+        <texture>icons24/status_watched.png</texture>
+        <visible>Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="progress">
+        <left>10</left><top>160</top><width>100</width><height>6</height>
+        <info>ListItem.PercentPlayed</info>
+        <visible>ListItem.IsResumable</visible>
+      </control>
+        <!-- a textbox, not a label: labels in list layouts never wrap -->
+        <control type="textbox">
           <left>4</left><top>174</top><width>112</width><height>44</height>
           <font>tiny</font><textcolor>text</textcolor>
-          <align>center</align><aligny>top</aligny>
+          <align>center</align>
+          <autoscroll>false</autoscroll>
           <label>$INFO[ListItem.Label]</label>
-          <wrapmultiline>true</wrapmultiline>
         </control>
       </itemlayout>
       <focusedlayout height="222" width="120">
@@ -409,25 +562,46 @@
         </control>
         <control type="image">
           <left>10</left><top>6</top><width>100</width><height>160</height>
-          <texture fallback="DefaultVideo.png">$INFO[ListItem.Art(poster)]</texture>
-          <aspectratio>stretch</aspectratio>
+          <texture fallback="DefaultFile.png">$VAR[PosterArtVar]</texture>
+          <aspectratio>keep</aspectratio>
         </control>
+        <control type="image">
+        <left>92</left><top>8</top><width>16</width><height>16</height>
+        <texture>icons24/status_playing.png</texture>
+        <visible>ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <left>92</left><top>8</top><width>16</width><height>16</height>
+        <texture>icons24/status_resume.png</texture>
+        <visible>ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <left>92</left><top>8</top><width>16</width><height>16</height>
+        <texture>icons24/status_watched.png</texture>
+        <visible>Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="progress">
+        <left>10</left><top>160</top><width>100</width><height>6</height>
+        <info>ListItem.PercentPlayed</info>
+        <visible>ListItem.IsResumable</visible>
+      </control>
         <control type="image">
           <left>4</left><top>174</top><width>112</width><height>44</height>
           <texture colordiffuse="select">fill.png</texture>
         </control>
-        <control type="label">
+        <!-- a textbox, not a label: labels in list layouts never wrap -->
+        <control type="textbox">
           <left>4</left><top>174</top><width>112</width><height>44</height>
           <font>tiny</font><textcolor>textinv</textcolor>
-          <align>center</align><aligny>top</aligny>
+          <align>center</align>
+          <autoscroll>false</autoscroll>
           <label>$INFO[ListItem.Label]</label>
-          <wrapmultiline>true</wrapmultiline>
         </control>
       </focusedlayout>
     </control>
 
     <control type="scrollbar" id="61">
-      <left>611</left><top>3</top><width>18</width><height>624</height>
+      <left>611</left><top>3</top><width>18</width><height>588</height>
       <onleft>51</onleft>
       <onright>9490</onright>
       <visible>Control.IsVisible(51)</visible>
@@ -436,16 +610,18 @@
       <visible>Control.IsVisible(52)</visible>
       <control type="image">
         <left>0</left><top>0</top>
-        <width>634</width><height>630</height>
+        <width>634</width><height>594</height>
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
     </control>
 
     <control type="panel" id="52">
-      <left>6</left><top>6</top><width>604</width><height>618</height>
+      <left>6</left><top>6</top><width>604</width><height>582</height>
+      <!-- the name Kodi shows on the View button -->
+      <viewtype label="536">bigicon</viewtype>
       <onleft>9490</onleft>
       <onright>62</onright>
-      <onup>9490</onup>
+      <onup>9491</onup>
       <ondown>9100</ondown>
       <pagecontrol>62</pagecontrol>
       <scrolltime tween="linear">0</scrolltime>
@@ -456,15 +632,36 @@
         </control>
         <control type="image">
           <left>22</left><top>8</top><width>106</width><height>98</height>
-          <texture fallback="DefaultFolder.png">$INFO[ListItem.Art(thumb)]</texture>
+          <texture fallback="DefaultFile.png">$INFO[ListItem.Icon]</texture>
           <aspectratio>keep</aspectratio>
         </control>
-        <control type="label">
+        <control type="image">
+        <left>110</left><top>10</top><width>16</width><height>16</height>
+        <texture>icons24/status_playing.png</texture>
+        <visible>ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <left>110</left><top>10</top><width>16</width><height>16</height>
+        <texture>icons24/status_resume.png</texture>
+        <visible>ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <left>110</left><top>10</top><width>16</width><height>16</height>
+        <texture>icons24/status_watched.png</texture>
+        <visible>Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="progress">
+        <left>22</left><top>100</top><width>106</width><height>6</height>
+        <info>ListItem.PercentPlayed</info>
+        <visible>ListItem.IsResumable</visible>
+      </control>
+        <!-- a textbox, not a label: labels in list layouts never wrap -->
+        <control type="textbox">
           <left>4</left><top>114</top><width>142</width><height>32</height>
           <font>tiny</font><textcolor>text</textcolor>
-          <align>center</align><aligny>top</aligny>
+          <align>center</align>
+          <autoscroll>false</autoscroll>
           <label>$INFO[ListItem.Label]</label>
-          <wrapmultiline>true</wrapmultiline>
         </control>
       </itemlayout>
       <focusedlayout height="146" width="150">
@@ -474,31 +671,65 @@
         </control>
         <control type="image">
           <left>22</left><top>8</top><width>106</width><height>98</height>
-          <texture fallback="DefaultFolder.png">$INFO[ListItem.Art(thumb)]</texture>
+          <texture fallback="DefaultFile.png">$INFO[ListItem.Icon]</texture>
           <aspectratio>keep</aspectratio>
         </control>
+        <control type="image">
+        <left>110</left><top>10</top><width>16</width><height>16</height>
+        <texture>icons24/status_playing.png</texture>
+        <visible>ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <left>110</left><top>10</top><width>16</width><height>16</height>
+        <texture>icons24/status_resume.png</texture>
+        <visible>ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="image">
+        <left>110</left><top>10</top><width>16</width><height>16</height>
+        <texture>icons24/status_watched.png</texture>
+        <visible>Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsResumable + !ListItem.IsPlaying</visible>
+      </control>
+      <control type="progress">
+        <left>22</left><top>100</top><width>106</width><height>6</height>
+        <info>ListItem.PercentPlayed</info>
+        <visible>ListItem.IsResumable</visible>
+      </control>
         <control type="image">
           <left>4</left><top>114</top><width>142</width><height>32</height>
           <texture colordiffuse="select">fill.png</texture>
         </control>
-        <control type="label">
+        <!-- a textbox, not a label: labels in list layouts never wrap -->
+        <control type="textbox">
           <left>4</left><top>114</top><width>142</width><height>32</height>
           <font>tiny</font><textcolor>textinv</textcolor>
-          <align>center</align><aligny>top</aligny>
+          <align>center</align>
+          <autoscroll>false</autoscroll>
           <label>$INFO[ListItem.Label]</label>
-          <wrapmultiline>true</wrapmultiline>
         </control>
       </focusedlayout>
     </control>
 
     <control type="scrollbar" id="62">
-      <left>611</left><top>3</top><width>18</width><height>624</height>
+      <left>611</left><top>3</top><width>18</width><height>588</height>
       <onleft>52</onleft>
       <onright>9490</onright>
       <visible>Control.IsVisible(52)</visible>
     </control>
+        <!-- an empty folder or add-on page says so instead of staying blank
+             (Container.NumItems leaves out the ".." item) -->
+        <control type="label">
+          <left>20</left><top>150</top><width>594</width><height>30</height>
+          <font>normal</font><textcolor>textdim</textcolor><align>center</align>
+          <label>$LOCALIZE[2080]</label>
+          <visible>Integer.IsEqual(Container.NumItems,0) + !Container.IsUpdating</visible>
+        </control>
+        <control type="label">
+          <left>20</left><top>150</top><width>594</width><height>30</height>
+          <font>normal</font><textcolor>textdim</textcolor><align>center</align>
+          <label>$LOCALIZE[1040]</label>
+          <visible>Integer.IsEqual(Container.NumItems,0) + Container.IsUpdating</visible>
+        </control>
       </control>
-
       <control type="group">
       <left>646</left><top>66</top><width>360</width><height>630</height>
 
@@ -511,9 +742,11 @@
         <left>8</left><top>8</top><width>120</width><height>170</height>
         <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
       </control>
+      <!-- ListItem.Icon is Kodi's own chain: thumb, then the type icon
+           (DefaultVideo, DefaultAudio, DefaultFolderBack...) -->
       <control type="image">
         <left>14</left><top>14</top><width>108</width><height>158</height>
-        <texture fallback="DefaultFolder.png">$INFO[ListItem.Art(thumb)]</texture>
+        <texture fallback="DefaultFile.png">$INFO[ListItem.Icon]</texture>
         <aspectratio>keep</aspectratio>
       </control>
 
