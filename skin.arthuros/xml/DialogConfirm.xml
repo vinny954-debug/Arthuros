@@ -34,17 +34,34 @@
         <left>20</left><top>100</top><width>540</width><height>24</height>
         <align>center</align>
       </control>
+      <!-- Long messages scroll by themselves (as in Estuary) and can be
+           dragged by the scrollbar, which only shows when there is more
+           text than fits. Touching the bar stops the auto-scroll. -->
       <control type="textbox" id="9">
-        <left>20</left><top>48</top><width>540</width><height>132</height>
+        <left>20</left><top>48</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="506" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="518" /></include><height>132</height>
         <align>center</align>
+        <pagecontrol>61</pagecontrol>
+        <autoscroll time="3000" delay="4000" repeat="5000">!Control.HasFocus(61)</autoscroll>
+      </control>
+      <control type="scrollbar" id="61">
+        <include content="Size_Left" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="530" /></include><include content="Size_Left" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="542" /></include><top>48</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="18" /></include><height>132</height>
+        <showonepage>false</showonepage>
+        <!-- Progress shows only 10 (Cancel), OK only 11, and a hidden
+             button with no way on would strand the focus here
+             (CGUIDialogProgress::UpdateChoices, CGUIWindow::OnMove) -->
+        <onleft condition="Control.IsVisible(11)">11</onleft><onleft condition="!Control.IsVisible(11)">10</onleft>
+        <onright condition="Control.IsVisible(11)">11</onright><onright condition="!Control.IsVisible(11)">10</onright>
+        <ondown condition="Control.IsVisible(11)">11</ondown><ondown condition="!Control.IsVisible(11)">10</ondown>
       </control>
       <control type="progress" id="20">
         <left>20</left><top>190</top><width>540</width><height>20</height>
       </control>
 
       <control type="group">
-        <left>13</left><top>246</top>
-        <include content="Dialog_ButtonRow"><param name="width" value="554" /></include>
+        <left>13</left>
+        <include content="ConfirmRow_Top_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="ConfirmRow_Top" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Dialog_ButtonRow"><param name="width" value="554" /><param name="up" value="61" /></include>
       </control>
     </control>
   </controls>

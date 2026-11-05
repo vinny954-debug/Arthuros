@@ -9,4 +9,8 @@
   <include name="Height_32_XL"><height>48</height></include>
   <include name="Height_34"><height>34</height></include>
   <include name="Height_34_XL"><height>50</height></include>
+  <include name="SpinSize_XL"><spinwidth>32</spinwidth><spinheight>32</spinheight></include>
+  <include name="SliderSize_XL"><sliderwidth>240</sliderwidth><sliderheight>32</sliderheight></include>
+  <include name="Size_Left"><param name="v" default="0" /><definition><left>$PARAM[v]</left></definition></include>
+  <include name="Size_Width"><param name="v" default="0" /><definition><width>$PARAM[v]</width></definition></include>
 </includes>

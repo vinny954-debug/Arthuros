@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
-  <defaultcontrol>5</defaultcontrol>
+  <defaultcontrol>60</defaultcontrol>
   <controls>
     <include>Dialog_Dim</include>
     <control type="group">
@@ -10,7 +10,7 @@
         <param name="width" value="860" /><param name="height" value="430" />
         <param name="innerwidth" value="854" />
         <param name="icon" value="icons24/file.png" /><param name="colour" value="accent2" />
-        <param name="down" value="5" />
+        <param name="down" value="60" />
         <param name="boxes" value="dialog" />
       </include>
       <include content="Dialog_Heading"><param name="width" value="754" /></include>
@@ -19,11 +19,13 @@
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
       <control type="textbox" id="5">
-        <left>18</left><top>44</top><width>806</width><height>364</height>
+        <left>18</left><top>44</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="794" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="806" /></include><height>364</height>
         <font>small</font>
+        <pagecontrol>60</pagecontrol>
       </control>
       <control type="scrollbar" id="60">
-        <left>828</left><top>44</top><width>18</width><height>364</height>
+        <include content="Size_Left" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="816" /></include><include content="Size_Left" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="828" /></include><top>44</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="18" /></include><height>364</height>
+        <onup>9903</onup>
       </control>
     </control>
   </controls>

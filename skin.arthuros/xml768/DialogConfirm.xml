@@ -7,6 +7,37 @@
       <texture>dim.png</texture>
     </control>
     <control type="group">
+      <right>4</right><top>736</top><width>116</width><height>32</height>
+      <visible>Skin.HasSetting(touchmode)</visible>
+      <control type="image">
+        <left>0</left><top>0</top><width>116</width><height>32</height>
+        <texture border="2" colordiffuse="facetint">panel_chrome.png</texture>
+      </control>
+      <control type="button" id="9108">
+        <left>0</left><top>0</top><width>116</width><height>32</height>
+        <hitrect x="-2" y="0" w="122" h="32"/>
+        <label/>
+        <onup>9903</onup><onleft>9903</onleft>
+        <onclick>Action(Back)</onclick>
+      </control>
+      <control type="image">
+        <left>8</left><top>8</top><width>16</width><height>16</height>
+        <texture>icons24/parent.png</texture>
+      </control>
+      <control type="label">
+        <left>30</left><top>0</top><width>80</width><height>32</height>
+        <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[31994]</label>
+        <visible>!Control.HasFocus(9108)</visible>
+      </control>
+      <control type="label">
+        <left>30</left><top>0</top><width>80</width><height>32</height>
+        <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[31994]</label>
+        <visible>Control.HasFocus(9108)</visible>
+      </control>
+    </control>
+    <control type="group">
       <centerleft>50%</centerleft><centertop>50%</centertop>
       <width>580</width><height>300</height>
 
@@ -40,14 +71,16 @@
         <!-- left + right with no width: Kodi derives the width, so the title
              stops before the window boxes instead of running underneath them -->
         <control type="label">
-          <left>26</left><right>100</right><top>0</top><height>26</height>
+          <left>26</left><include content="WinTitle_Right_Mouse" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinTitle_Right_Touch" condition="Skin.HasSetting(touchmode)"/><top>0</top><height>26</height>
           <align>left</align><aligny>center</aligny>
           <font>chromebold</font><textcolor>titletext</textcolor>
           <label></label>
         </control>
 
         <control type="label">
-          <right>100</right><top>0</top><width>460</width><height>26</height>
+          <include content="WinTitle_Right_Mouse" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinTitle_Right_Touch" condition="Skin.HasSetting(touchmode)"/><top>0</top><width>460</width><height>26</height>
           <align>right</align><aligny>center</aligny>
           <font>chromesmall</font><textcolor>titletext</textcolor>
           <label></label>
@@ -57,8 +90,9 @@
              "boxes" parameter: window, dialog, home or none. -->
         <control type="group">
       <control type="button" id="9901">
-        <right>70</right><top>2</top><width>22</width><height>22</height>
-        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinBox_1_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <texturenofocus border="4" colordiffuse="facetint">wc_face.png</texturenofocus>
         <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
         <label/>
         <onclick>Dialog.Close(all,true)</onclick>
@@ -67,44 +101,52 @@
         <ondown></ondown>
       </control>
       <control type="image">
-        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_1_Touch" condition="Skin.HasSetting(touchmode)"/>
         <texture colordiffuse="text">wc_min_g.png</texture>
         <visible>!Control.HasFocus(9901)</visible>
       </control>
       <control type="image">
-        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_1_Touch" condition="Skin.HasSetting(touchmode)"/>
         <texture colordiffuse="titletext">wc_min_g.png</texture>
         <visible>Control.HasFocus(9901)</visible>
       </control>
       <control type="button" id="9902">
-        <right>46</right><top>2</top><width>22</width><height>22</height>
-        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <include content="WinBox_2" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinBox_2_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <texturenofocus border="4" colordiffuse="facetint">wc_face.png</texturenofocus>
         <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
         <label/>
-        <enable>Player.HasMedia</enable>
+        <enable>$EXP[ArthurCanShowPlayer]</enable>
+        <onclick condition="true">Dialog.Close(all,true)</onclick>
         <onclick>Action(FullScreen)</onclick>
         <onleft>9901</onleft>
         <onright>9903</onright>
         <ondown></ondown>
       </control>
       <control type="image">
-        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <include content="WinBox_2" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_2_Touch" condition="Skin.HasSetting(touchmode)"/>
         <texture colordiffuse="text">wc_max_g.png</texture>
-        <visible>!Control.HasFocus(9902) + Player.HasMedia</visible>
+        <visible>!Control.HasFocus(9902) + $EXP[ArthurCanShowPlayer]</visible>
       </control>
       <control type="image">
-        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <include content="WinBox_2" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_2_Touch" condition="Skin.HasSetting(touchmode)"/>
         <texture colordiffuse="titletext">wc_max_g.png</texture>
         <visible>Control.HasFocus(9902)</visible>
       </control>
       <control type="image">
-        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <include content="WinBox_2" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_2_Touch" condition="Skin.HasSetting(touchmode)"/>
         <texture colordiffuse="textdim">wc_max_dg.png</texture>
-        <visible>!Player.HasMedia</visible>
+        <visible>!$EXP[ArthurCanShowPlayer]</visible>
       </control>
       <control type="button" id="9903">
-        <right>22</right><top>2</top><width>22</width><height>22</height>
-        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <include content="WinBox_3" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinBox_3_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <texturenofocus border="4" colordiffuse="facetint">wc_face.png</texturenofocus>
         <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
         <label/>
         <onclick>Action(Back)</onclick>
@@ -112,12 +154,14 @@
         <ondown></ondown>
       </control>
       <control type="image">
-        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <include content="WinBox_3" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_3_Touch" condition="Skin.HasSetting(touchmode)"/>
         <texture colordiffuse="text">wc_close_g.png</texture>
         <visible>!Control.HasFocus(9903)</visible>
       </control>
       <control type="image">
-        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <include content="WinBox_3" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_3_Touch" condition="Skin.HasSetting(touchmode)"/>
         <texture colordiffuse="titletext">wc_close_g.png</texture>
         <visible>Control.HasFocus(9903)</visible>
       </control>
@@ -126,7 +170,9 @@
       </control>
 
       <control type="label" id="1">
-        <left>29</left><top>3</top><width>460</width><height>26</height>
+        <left>29</left><top>3</top><height>26</height>
+        <include content="Dialog_Heading_Width" condition="!Skin.HasSetting(touchmode)"><param name="width" value="460"/></include>
+        <include content="Dialog_Heading_Touch" condition="Skin.HasSetting(touchmode)"/>
         <font>chromebold</font><textcolor>titletext</textcolor>
         <align>left</align><aligny>center</aligny>
       </control>
@@ -148,31 +194,58 @@
         <left>20</left><top>100</top><width>540</width><height>24</height>
         <align>center</align>
       </control>
+      <!-- Long messages scroll by themselves (as in Estuary) and can be
+           dragged by the scrollbar, which only shows when there is more
+           text than fits. Touching the bar stops the auto-scroll. -->
       <control type="textbox" id="9">
-        <left>20</left><top>48</top><width>540</width><height>132</height>
+        <left>20</left><top>48</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="506"/></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="518"/></include><height>132</height>
         <align>center</align>
+        <pagecontrol>61</pagecontrol>
+        <autoscroll time="3000" delay="4000" repeat="5000">!Control.HasFocus(61)</autoscroll>
+      </control>
+      <control type="scrollbar" id="61">
+        <include content="Size_Left" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="530"/></include><include content="Size_Left" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="542"/></include><top>48</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30"/></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="18"/></include><height>132</height>
+        <showonepage>false</showonepage>
+        <!-- Progress shows only 10 (Cancel), OK only 11, and a hidden
+             button with no way on would strand the focus here
+             (CGUIDialogProgress::UpdateChoices, CGUIWindow::OnMove) -->
+        <onleft condition="Control.IsVisible(11)">11</onleft><onleft condition="!Control.IsVisible(11)">10</onleft>
+        <onright condition="Control.IsVisible(11)">11</onright><onright condition="!Control.IsVisible(11)">10</onright>
+        <ondown condition="Control.IsVisible(11)">11</ondown><ondown condition="!Control.IsVisible(11)">10</ondown>
       </control>
       <control type="progress" id="20">
         <left>20</left><top>190</top><width>540</width><height>20</height>
       </control>
 
       <control type="group">
-        <left>13</left><top>246</top>
+        <left>13</left>
+        <include content="ConfirmRow_Top_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+        <include content="ConfirmRow_Top" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
         <control type="grouplist">
-        <width>554</width><height>30</height>
+        <width>554</width>
+        <!-- passed on to every button (CGUIControlGroupList::AddControl) -->
+        <onup>61</onup>
+        <include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
         <orientation>horizontal</orientation>
         <align>center</align>
         <itemgap>8</itemgap>
         <control type="button" id="11">
-          <width>150</width><height>30</height>
+          <width>150</width>
+          <include content="DialogButton_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <include content="DialogButton" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <label>$LOCALIZE[186]</label>
         </control>
         <control type="button" id="10">
-          <width>150</width><height>30</height>
+          <width>150</width>
+          <include content="DialogButton_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <include content="DialogButton" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <label>$LOCALIZE[222]</label>
         </control>
         <control type="button" id="12">
-          <width>150</width><height>30</height>
+          <width>150</width>
+          <include content="DialogButton_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <include content="DialogButton" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <label/>
         </control>
       </control>

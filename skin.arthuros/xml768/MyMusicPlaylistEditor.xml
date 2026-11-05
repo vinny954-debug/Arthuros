@@ -94,14 +94,16 @@
         <!-- left + right with no width: Kodi derives the width, so the title
              stops before the window boxes instead of running underneath them -->
         <control type="label">
-          <left>26</left><right>100</right><top>0</top><height>26</height>
+          <left>26</left><include content="WinTitle_Right_Mouse" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinTitle_Right_Touch" condition="Skin.HasSetting(touchmode)"/><top>0</top><height>26</height>
           <align>left</align><aligny>center</aligny>
           <font>chromebold</font><textcolor>titletext</textcolor>
           <label>$LOCALIZE[10503]</label>
         </control>
 
         <control type="label">
-          <right>100</right><top>0</top><width>460</width><height>26</height>
+          <include content="WinTitle_Right_Mouse" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinTitle_Right_Touch" condition="Skin.HasSetting(touchmode)"/><top>0</top><width>460</width><height>26</height>
           <align>right</align><aligny>center</aligny>
           <font>chromesmall</font><textcolor>titletext</textcolor>
           <label></label>
@@ -111,57 +113,66 @@
              "boxes" parameter: window, dialog, home or none. -->
         <control type="group">
       <control type="button" id="9901">
-        <right>70</right><top>2</top><width>22</width><height>22</height>
-        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinBox_1_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <texturenofocus border="4" colordiffuse="facetint">wc_face.png</texturenofocus>
         <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
         <label/>
-        <onclick>Skin.SetString(arthur.minwin,$VAR[ArthurWindowName])</onclick>
-        <onclick>Skin.SetString(arthur.minpath,$ESCINFO[Container.FolderPath])</onclick>
-        <onclick>Skin.SetString(arthur.mintitle,$ESCINFO[System.CurrentWindow])</onclick>
-        <onclick>Skin.SetString(arthur.minicon,$VAR[ArthurWindowIcon])</onclick>
+        <onclick condition="$EXP[ArthurParkable]">Skin.SetString(arthur.minwin,$VAR[ArthurWindowName])</onclick>
+        <onclick condition="$EXP[ArthurParkable]">Skin.SetString(arthur.minpath,$ESCINFO[Container.FolderPath])</onclick>
+        <onclick condition="$EXP[ArthurParkable]">Skin.SetString(arthur.mintitle,$ESCINFO[System.CurrentWindow])</onclick>
+        <onclick condition="$EXP[ArthurParkable]">Skin.SetString(arthur.minicon,$VAR[ArthurWindowIcon])</onclick>
         <onclick>ActivateWindow(Home)</onclick>
         <onright>9902</onright>
         <ondown>50</ondown>
       </control>
       <control type="image">
-        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_1_Touch" condition="Skin.HasSetting(touchmode)"/>
         <texture colordiffuse="text">wc_min_g.png</texture>
         <visible>!Control.HasFocus(9901)</visible>
       </control>
       <control type="image">
-        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_1_Touch" condition="Skin.HasSetting(touchmode)"/>
         <texture colordiffuse="titletext">wc_min_g.png</texture>
         <visible>Control.HasFocus(9901)</visible>
       </control>
       <control type="button" id="9902">
-        <right>46</right><top>2</top><width>22</width><height>22</height>
-        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <include content="WinBox_2" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinBox_2_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <texturenofocus border="4" colordiffuse="facetint">wc_face.png</texturenofocus>
         <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
         <label/>
-        <enable>Player.HasMedia</enable>
+        <enable>$EXP[ArthurCanShowPlayer]</enable>
+        <onclick condition="false">Dialog.Close(all,true)</onclick>
         <onclick>Action(FullScreen)</onclick>
         <onleft>9901</onleft>
         <onright>9903</onright>
         <ondown>50</ondown>
       </control>
       <control type="image">
-        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <include content="WinBox_2" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_2_Touch" condition="Skin.HasSetting(touchmode)"/>
         <texture colordiffuse="text">wc_max_g.png</texture>
-        <visible>!Control.HasFocus(9902) + Player.HasMedia</visible>
+        <visible>!Control.HasFocus(9902) + $EXP[ArthurCanShowPlayer]</visible>
       </control>
       <control type="image">
-        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <include content="WinBox_2" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_2_Touch" condition="Skin.HasSetting(touchmode)"/>
         <texture colordiffuse="titletext">wc_max_g.png</texture>
         <visible>Control.HasFocus(9902)</visible>
       </control>
       <control type="image">
-        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <include content="WinBox_2" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_2_Touch" condition="Skin.HasSetting(touchmode)"/>
         <texture colordiffuse="textdim">wc_max_dg.png</texture>
-        <visible>!Player.HasMedia</visible>
+        <visible>!$EXP[ArthurCanShowPlayer]</visible>
       </control>
       <control type="button" id="9903">
-        <right>22</right><top>2</top><width>22</width><height>22</height>
-        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <include content="WinBox_3" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinBox_3_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <texturenofocus border="4" colordiffuse="facetint">wc_face.png</texturenofocus>
         <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
         <label/>
         <onclick>ActivateWindow(Home)</onclick>
@@ -169,12 +180,14 @@
         <ondown>50</ondown>
       </control>
       <control type="image">
-        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <include content="WinBox_3" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_3_Touch" condition="Skin.HasSetting(touchmode)"/>
         <texture colordiffuse="text">wc_close_g.png</texture>
         <visible>!Control.HasFocus(9903)</visible>
       </control>
       <control type="image">
-        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <include content="WinBox_3" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_3_Touch" condition="Skin.HasSetting(touchmode)"/>
         <texture colordiffuse="titletext">wc_close_g.png</texture>
         <visible>Control.HasFocus(9903)</visible>
       </control>
@@ -455,9 +468,12 @@
         <left>4</left><top>4</top><width>104</width><height>24</height>
         <control type="button" id="9100">
           <left>0</left><top>0</top><width>104</width><height>24</height>
+          <hitrect x="-4" y="-4" w="110" h="32"/>
           <label/>
           <onup>50</onup>
-          <onright>9101</onright>
+          <onright>9106</onright>
+          <!-- with the task bar hidden, Down carries on to the floating Back -->
+          <ondown>9107</ondown>
           <onclick>ActivateWindow(Home)</onclick>
         </control>
         <control type="image">
@@ -477,23 +493,56 @@
           <visible>Control.HasFocus(9100)</visible>
         </control>
       </control>
-      <!-- Kodi pads button text by textoffsetx on BOTH sides, so an icon inset
-           used to be charged twice and "Start" truncated under larger fonts.
-           The label is a separate control now, sized to the space it really has. -->
+      <!-- Power: the shutdown / reboot / exit menu, always there, so the box
+           can be switched off by touch alone. Next to Start, so with nothing
+           playing the bar still packs from the left. -->
       <control type="group">
-        <left>112</left><top>4</top><width>200</width><height>24</height>
-        <visible>Player.HasMedia</visible>
-        <control type="button" id="9101">
-          <left>0</left><top>0</top><width>200</width><height>24</height>
+        <left>112</left><top>4</top><width>100</width><height>24</height>
+        <control type="button" id="9106">
+          <left>0</left><top>0</top><width>100</width><height>24</height>
+          <hitrect x="-2" y="-4" w="104" h="32"/>
           <label/>
           <onup>50</onup>
-          <onleft>9100</onleft><onright>9102</onright>
-          <onclick>ActivateWindow(FullscreenVideo)</onclick>
-          <onclick>ActivateWindow(Visualisation)</onclick>
+          <onleft>9100</onleft><onright>9101</onright>
+          <onclick>ActivateWindow(ShutdownMenu)</onclick>
         </control>
         <control type="image">
           <left>6</left><top>4</top><width>16</width><height>16</height>
-          <texture>icons24/audio.png</texture>
+          <texture>icons24/power.png</texture>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>68</width><height>24</height>
+          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+          <label>$LOCALIZE[33060]</label>
+          <visible>!Control.HasFocus(9106)</visible>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>68</width><height>24</height>
+          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <label>$LOCALIZE[33060]</label>
+          <visible>Control.HasFocus(9106)</visible>
+        </control>
+      </control>
+      <!-- Back to the picture of whatever plays. The conditions are all
+           evaluated before any action runs (CGUIAction), so exactly one of
+           the three fires: a game (RetroPlayer also reports HasVideo), a
+           video, or music. -->
+      <control type="group">
+        <left>216</left><top>4</top><width>200</width><height>24</height>
+        <visible>Player.HasMedia</visible>
+        <control type="button" id="9101">
+          <left>0</left><top>0</top><width>200</width><height>24</height>
+          <onclick condition="Player.HasGame">ActivateWindow(FullscreenGame)</onclick>
+          <onclick condition="Player.HasVideo + !Player.HasGame">ActivateWindow(FullscreenVideo)</onclick>
+          <onclick condition="!Player.HasVideo + !Player.HasGame">ActivateWindow(Visualisation)</onclick>
+          <hitrect x="-2" y="-4" w="204" h="32"/>
+          <label/>
+          <onup>50</onup>
+          <onleft>9106</onleft><onright>9102</onright>
+        </control>
+        <control type="image">
+          <left>6</left><top>4</top><width>16</width><height>16</height>
+          <texture>$VAR[NowPlayingIconVar]</texture>
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>168</width><height>24</height>
@@ -508,14 +557,13 @@
           <visible>Control.HasFocus(9101)</visible>
         </control>
       </control>
-      <!-- Kodi pads button text by textoffsetx on BOTH sides, so an icon inset
-           used to be charged twice and "Start" truncated under larger fonts.
-           The label is a separate control now, sized to the space it really has. -->
+      <!-- The desktop mini player (PlayerControls, titled "Now playing"). -->
       <control type="group">
-        <left>316</left><top>4</top><width>150</width><height>24</height>
+        <left>420</left><top>4</top><width>150</width><height>24</height>
         <visible>Player.HasMedia</visible>
         <control type="button" id="9102">
           <left>0</left><top>0</top><width>150</width><height>24</height>
+          <hitrect x="-2" y="-4" w="154" h="32"/>
           <label/>
           <onup>50</onup>
           <onleft>9101</onleft><onright>9104</onright>
@@ -523,24 +571,21 @@
         </control>
         <control type="image">
           <left>6</left><top>4</top><width>16</width><height>16</height>
-          <texture>icons24/playlist.png</texture>
+          <texture>icons24/player.png</texture>
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>118</width><height>24</height>
           <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
-          <label>$LOCALIZE[136]</label>
+          <label>$LOCALIZE[31907]</label>
           <visible>!Control.HasFocus(9102)</visible>
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>118</width><height>24</height>
           <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
-          <label>$LOCALIZE[136]</label>
+          <label>$LOCALIZE[31907]</label>
           <visible>Control.HasFocus(9102)</visible>
         </control>
       </control>
-      <!-- Kodi pads button text by textoffsetx on BOTH sides, so an icon inset
-           used to be charged twice and "Start" truncated under larger fonts.
-           The label is a separate control now, sized to the space it really has. -->
       <!-- A window parked by its title-bar "_" box. Click to bring it back
            to the folder it was showing; the button then goes away. -->
       <control type="group">
@@ -548,6 +593,7 @@
         <visible>!String.IsEmpty(Skin.String(arthur.minwin)) + !String.IsEqual(Skin.String(arthur.minwin),home)</visible>
         <control type="button" id="9104">
           <left>0</left><top>0</top><width>182</width><height>24</height>
+          <hitrect x="-2" y="-4" w="186" h="32"/>
           <label/>
           <onup>50</onup>
           <onleft>9102</onleft><onright>9103</onright>
@@ -578,6 +624,7 @@
         <right>124</right><top>4</top><width>140</width><height>24</height>
         <control type="button" id="9103">
           <left>0</left><top>0</top><width>140</width><height>24</height>
+          <hitrect x="-2" y="-4" w="144" h="32"/>
           <label/>
           <onup>50</onup>
           <onleft>9104</onleft><onright>9105</onright>
@@ -609,41 +656,73 @@
         <visible>Skin.HasSetting(touchmode)</visible>
         <control type="button" id="9105">
           <left>0</left><top>0</top><width>116</width><height>32</height>
+          <hitrect x="-2" y="0" w="122" h="32"/>
           <label/>
           <onup>50</onup>
           <onleft>9103</onleft>
           <onclick>Action(Back)</onclick>
         </control>
         <control type="image">
-          <left>8</left><top>8</top><width>16</width><height>16</height>
-          <texture>icons24/parent.png</texture>
-        </control>
-        <control type="label">
-          <left>30</left><top>0</top><width>80</width><height>32</height>
-          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
-          <label>$LOCALIZE[31994]</label>
-          <visible>!Control.HasFocus(9105)</visible>
-        </control>
-        <control type="label">
-          <left>30</left><top>0</top><width>80</width><height>32</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
-          <label>$LOCALIZE[31994]</label>
-          <visible>Control.HasFocus(9105)</visible>
-        </control>
+        <left>8</left><top>8</top><width>16</width><height>16</height>
+        <texture>icons24/parent.png</texture>
+      </control>
+      <control type="label">
+        <left>30</left><top>0</top><width>80</width><height>32</height>
+        <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[31994]</label>
+        <visible>!Control.HasFocus(9105)</visible>
+      </control>
+      <control type="label">
+        <left>30</left><top>0</top><width>80</width><height>32</height>
+        <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[31994]</label>
+        <visible>Control.HasFocus(9105)</visible>
+      </control>
       </control>
 
-      <!-- tray -->
+      <!-- tray: the clock, unless Skin settings hide the date and clock -->
       <control type="image">
         <right>4</right><top>4</top><width>116</width><height>24</height>
         <texture border="2" colordiffuse="facetint">panel_sunken_chrome.png</texture>
-        <visible>!Skin.HasSetting(touchmode)</visible>
+        <visible>!Skin.HasSetting(touchmode) + !Skin.HasSetting(hideclock)</visible>
       </control>
       <control type="label">
-        <visible>!Skin.HasSetting(touchmode)</visible>
+        <visible>!Skin.HasSetting(touchmode) + !Skin.HasSetting(hideclock)</visible>
         <right>10</right><top>4</top><width>104</width><height>24</height>
         <font>chromebold</font><textcolor>text</textcolor>
         <align>center</align><aligny>center</aligny>
         <label>$INFO[System.Time]</label>
+      </control>
+    </control>
+
+    <control type="group">
+      <right>4</right><top>736</top><width>116</width><height>32</height>
+      <visible>Skin.HasSetting(touchmode) + Skin.HasSetting(hidetaskbar)</visible>
+      <control type="image">
+        <left>0</left><top>0</top><width>116</width><height>32</height>
+        <texture border="2" colordiffuse="facetint">panel_chrome.png</texture>
+      </control>
+      <control type="button" id="9107">
+        <left>0</left><top>0</top><width>116</width><height>32</height>
+        <label/>
+        <onup>50</onup><onleft>50</onleft>
+        <onclick>Action(Back)</onclick>
+      </control>
+      <control type="image">
+        <left>8</left><top>8</top><width>16</width><height>16</height>
+        <texture>icons24/parent.png</texture>
+      </control>
+      <control type="label">
+        <left>30</left><top>0</top><width>80</width><height>32</height>
+        <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[31994]</label>
+        <visible>!Control.HasFocus(9107)</visible>
+      </control>
+      <control type="label">
+        <left>30</left><top>0</top><width>80</width><height>32</height>
+        <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[31994]</label>
+        <visible>Control.HasFocus(9107)</visible>
       </control>
     </control>
   </controls>

@@ -6,10 +6,38 @@
 <includes>
 
   <include name="Dialog_Dim">
+    <!-- up: where Up/Left go if the mouse or a tap left the focus on the
+         touch Back and the remote is used next (9903 = the title bar's
+         close box; a missing id just keeps the focus where it is) -->
+    <param name="up" default="9903" />
+    <definition>
     <control type="image">
       <left>0</left><top>0</top><width>1024</width><height>600</height>
       <texture>dim.png</texture>
     </control>
+    <!-- Touch mode: a live Back button over the task bar's Back. While a
+         modal dialog is open Kodi hands every tap to the dialog
+         (CGUIWindowManager::HandleAction), so the window's own task bar
+         underneath is dead; this one belongs to the dialog. It sits first in
+         the dialog, so the dialog's own controls win wherever they overlap,
+         and nothing navigates to it, so the remote never lands on it. -->
+    <control type="group">
+      <right>4</right><top>568</top><width>116</width><height>32</height>
+      <visible>Skin.HasSetting(touchmode)</visible>
+      <control type="image">
+        <left>0</left><top>0</top><width>116</width><height>32</height>
+        <texture border="2" colordiffuse="facetint">panel_chrome.png</texture>
+      </control>
+      <control type="button" id="9108">
+        <left>0</left><top>0</top><width>116</width><height>32</height>
+        <hitrect x="-2" y="0" w="122" h="32" />
+        <label></label>
+        <onup>$PARAM[up]</onup><onleft>$PARAM[up]</onleft>
+        <onclick>Action(Back)</onclick>
+      </control>
+      <include content="Chrome_BackFace"><param name="id" value="9108" /></include>
+    </control>
+    </definition>
   </include>
 
   <!-- Frame + title bar. Place inside a group of the same width/height. -->
@@ -42,41 +70,72 @@
   </include>
 
   <!-- Kodi writes the dialog heading into control id 1, so it lives on the
-       title bar itself rather than being mirrored with Control.GetLabel. -->
+       title bar itself rather than being mirrored with Control.GetLabel.
+       (The on-screen keyboard is the exception: it writes label 311.)
+       In Touch mode the title-bar boxes are wider, so the heading stops 138
+       px from the dialog's right edge instead (left + right, no width). -->
   <include name="Dialog_Heading">
     <param name="width" default="470" />
     <definition>
       <control type="label" id="1">
-        <left>29</left><top>3</top><width>$PARAM[width]</width><height>26</height>
+        <left>29</left><top>3</top><height>26</height>
+        <include content="Dialog_Heading_Width" condition="!Skin.HasSetting(touchmode)"><param name="width" value="$PARAM[width]" /></include>
+        <include content="Dialog_Heading_Touch" condition="Skin.HasSetting(touchmode)" />
         <font>chromebold</font><textcolor>titletext</textcolor>
         <align>left</align><aligny>center</aligny>
       </control>
     </definition>
   </include>
 
-  <!-- A row of dialog buttons along the bottom. -->
+  <include name="Dialog_Heading_Width">
+    <param name="width" default="470" />
+    <definition><width>$PARAM[width]</width></definition>
+  </include>
+  <include name="Dialog_Heading_Touch"><definition><right>138</right></definition></include>
+
+  <!-- A row of dialog buttons along the bottom. With taller rows (Extra
+       large fonts or Touch mode) the buttons grow 16 px; the caller moves the
+       row up by the same amount (DialogConfirm). Their hit rects reach 6 px
+       above and below the face either way. -->
   <include name="Dialog_ButtonRow">
     <param name="width" default="554" />
+    <param name="up" default="" />
     <definition>
       <control type="grouplist">
-        <width>$PARAM[width]</width><height>30</height>
+        <width>$PARAM[width]</width>
+        <!-- passed on to every button (CGUIControlGroupList::AddControl) -->
+        <onup>$PARAM[up]</onup>
+        <include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
         <orientation>horizontal</orientation>
         <align>center</align>
         <itemgap>8</itemgap>
         <control type="button" id="11">
-          <width>150</width><height>30</height>
+          <width>150</width>
+          <include content="DialogButton_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="DialogButton" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <label>$LOCALIZE[186]</label>
         </control>
         <control type="button" id="10">
-          <width>150</width><height>30</height>
+          <width>150</width>
+          <include content="DialogButton_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="DialogButton" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <label>$LOCALIZE[222]</label>
         </control>
         <control type="button" id="12">
-          <width>150</width><height>30</height>
+          <width>150</width>
+          <include content="DialogButton_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="DialogButton" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <label></label>
         </control>
       </control>
     </definition>
   </include>
+
+  <include name="DialogButton"><definition><height>30</height><hitrect x="0" y="-6" w="150" h="42" /></definition></include>
+  <include name="DialogButton_XL"><definition><height>46</height><hitrect x="0" y="-6" w="150" h="58" /></definition></include>
+  <!-- DialogConfirm's button row: 30 px rows at 246, 46 px rows at 230 -->
+  <include name="ConfirmRow_Top"><definition><top>246</top></definition></include>
+  <include name="ConfirmRow_Top_XL"><definition><top>230</top></definition></include>
 
 </includes>
