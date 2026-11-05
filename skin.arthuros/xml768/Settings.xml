@@ -236,121 +236,94 @@
         <scrolltime tween="linear">0</scrolltime>
         <pagecontrol>-</pagecontrol>
 
-        <itemlayout width="198" height="162">
-          <control type="image">
-            <left>3</left><top>3</top><width>192</width><height>156</height>
-            <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
-          </control>
-          <control type="image">
-            <left>6</left><top>6</top><width>186</width><height>14</height>
-            <texture colordiffuse="accent1">fill.png</texture>
-            <visible>String.IsEqual(ListItem.Property(bar),accent1)</visible>
-          </control>
-          <control type="image">
-            <left>6</left><top>6</top><width>186</width><height>14</height>
-            <texture colordiffuse="accent2">fill.png</texture>
-            <visible>String.IsEqual(ListItem.Property(bar),accent2)</visible>
-          </control>
-          <control type="image">
-            <left>75</left><top>34</top><width>48</width><height>48</height>
-            <texture>$INFO[ListItem.Icon]</texture>
-          </control>
-          <control type="label">
-            <left>10</left><top>92</top><width>178</width><height>58</height>
-            <font>bold</font><align>center</align><aligny>center</aligny>
-            <label>$INFO[ListItem.Label]</label>
-            <wrapmultiline>true</wrapmultiline>
-          </control>
-        </itemlayout>
-
-        <focusedlayout width="198" height="162">
-          <control type="image">
-            <left>3</left><top>3</top><width>192</width><height>156</height>
-            <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
-          </control>
-          <control type="image">
-            <left>6</left><top>6</top><width>186</width><height>14</height>
-            <texture colordiffuse="accent1">fill.png</texture>
-            <visible>String.IsEqual(ListItem.Property(bar),accent1)</visible>
-          </control>
-          <control type="image">
-            <left>6</left><top>6</top><width>186</width><height>14</height>
-            <texture colordiffuse="accent2">fill.png</texture>
-            <visible>String.IsEqual(ListItem.Property(bar),accent2)</visible>
-          </control>
-          <control type="image">
-            <left>75</left><top>34</top><width>48</width><height>48</height>
-            <texture>$INFO[ListItem.Icon]</texture>
-          </control>
-          <control type="image">
-            <left>8</left><top>90</top><width>182</width><height>62</height>
-            <texture colordiffuse="accent1">fill.png</texture>
-          </control>
-          <control type="label">
-            <left>10</left><top>92</top><width>178</width><height>58</height>
-            <font>bold</font><textcolor>textinv</textcolor>
-            <align>center</align><aligny>center</aligny>
-            <label>$INFO[ListItem.Label]</label>
-            <wrapmultiline>true</wrapmultiline>
-          </control>
-          <control type="image">
-            <left>3</left><top>3</top><width>192</width><height>156</height>
-            <texture border="4" colordiffuse="accent1">select_ring.png</texture>
-          </control>
-        </focusedlayout>
+        <!-- tile layouts from home.py (Includes_Home.xml): three rows fill
+             the panel at 600 and at 768, icons at their native size, names
+             in a textbox because list-layout labels never wrap -->
+        <itemlayout width="198" height="218">
+      <control type="image"><left>3</left><top>3</top><width>192</width><height>212</height><texture border="2" colordiffuse="facetint">panel_raised.png</texture></control>
+      <control type="image"><left>6</left><top>6</top><width>186</width><height>14</height><texture colordiffuse="accent1">fill.png</texture><visible>String.IsEqual(ListItem.Property(bar),accent1)</visible></control>
+      <control type="image"><left>6</left><top>6</top><width>186</width><height>14</height><texture colordiffuse="accent2">fill.png</texture><visible>String.IsEqual(ListItem.Property(bar),accent2)</visible></control>
+      <control type="image"><left>67</left><top>38</top><width>64</width><height>64</height><texture>icons64/$INFO[ListItem.Property(ico)].png</texture></control>
+      <control type="textbox"><left>10</left><top>112</top><width>178</width><height>94</height><font>bold</font><textcolor>text</textcolor><align>center</align><aligny>center</aligny><autoscroll>false</autoscroll><label>$INFO[ListItem.Label]</label></control>
+    </itemlayout>
+    <focusedlayout width="198" height="218">
+      <control type="image"><left>3</left><top>3</top><width>192</width><height>212</height><texture border="2" colordiffuse="facetint">panel_raised.png</texture></control>
+      <control type="image"><left>6</left><top>6</top><width>186</width><height>14</height><texture colordiffuse="accent1">fill.png</texture><visible>String.IsEqual(ListItem.Property(bar),accent1)</visible></control>
+      <control type="image"><left>6</left><top>6</top><width>186</width><height>14</height><texture colordiffuse="accent2">fill.png</texture><visible>String.IsEqual(ListItem.Property(bar),accent2)</visible></control>
+      <control type="image"><left>67</left><top>38</top><width>64</width><height>64</height><texture>icons64/$INFO[ListItem.Property(ico)].png</texture></control>
+      <control type="image"><left>8</left><top>110</top><width>182</width><height>98</height><texture colordiffuse="accent1">fill.png</texture></control>
+      <control type="textbox"><left>10</left><top>112</top><width>178</width><height>94</height><font>bold</font><textcolor>textinv</textcolor><align>center</align><aligny>center</aligny><autoscroll>false</autoscroll><label>$INFO[ListItem.Label]</label></control>
+      <control type="image"><left>3</left><top>3</top><width>192</width><height>212</height><texture border="4" colordiffuse="accent1">select_ring.png</texture></control>
+    </focusedlayout>
 
         <content>
-          <item><label>$LOCALIZE[14200]</label><icon>icons64/player.png</icon>
+          <item><label>$LOCALIZE[14200]</label><icon>icons/player.png</icon>
+            <property name="ico">player</property>
             <property name="bar">accent2</property>
             <onclick>ActivateWindow(PlayerSettings)</onclick></item>
-          <item><label>$LOCALIZE[14211]</label><icon>icons64/media.png</icon>
+          <item><label>$LOCALIZE[14211]</label><icon>icons/media.png</icon>
+            <property name="ico">media</property>
             <property name="bar">accent2</property>
             <onclick>ActivateWindow(MediaSettings)</onclick></item>
-          <item><label>$LOCALIZE[14206]</label><icon>icons64/interface.png</icon>
+          <item><label>$LOCALIZE[14206]</label><icon>icons/interface.png</icon>
+            <property name="ico">interface</property>
             <property name="bar">accent2</property>
             <onclick>ActivateWindow(InterfaceSettings)</onclick></item>
-          <item><label>$LOCALIZE[20077]</label><icon>icons64/skin.png</icon>
+          <item><label>$LOCALIZE[20077]</label><icon>icons/skin.png</icon>
+            <property name="ico">skin</property>
             <property name="bar">accent1</property>
             <onclick>ActivateWindow(SkinSettings)</onclick></item>
-          <item><label>$LOCALIZE[14036]</label><icon>icons64/services.png</icon>
+          <item><label>$LOCALIZE[14036]</label><icon>icons/services.png</icon>
+            <property name="ico">services</property>
             <property name="bar">accent2</property>
             <onclick>ActivateWindow(ServiceSettings)</onclick></item>
-          <item><label>$LOCALIZE[13000]</label><icon>icons64/system.png</icon>
+          <item><label>$LOCALIZE[13000]</label><icon>icons/system.png</icon>
+            <property name="ico">system</property>
             <property name="bar">accent1</property>
             <onclick>ActivateWindow(SystemSettings)</onclick></item>
-          <item><label>$LOCALIZE[19020]</label><icon>icons64/livetv.png</icon>
+          <item><label>$LOCALIZE[19020]</label><icon>icons/livetv.png</icon>
+            <property name="ico">livetv</property>
             <property name="bar">accent2</property>
             <onclick>ActivateWindow(PVRSettings)</onclick>
             <visible>System.HasPVRAddon</visible></item>
-          <item><label>$LOCALIZE[15016]</label><icon>icons64/games.png</icon>
+          <item><label>$LOCALIZE[15016]</label><icon>icons/games.png</icon>
+            <property name="ico">games</property>
             <property name="bar">accent2</property>
             <onclick>ActivateWindow(GameSettings)</onclick></item>
-          <item><label>$LOCALIZE[24001]</label><icon>icons64/addons.png</icon>
+          <item><label>$LOCALIZE[24001]</label><icon>icons/addons.png</icon>
+            <property name="ico">addons</property>
             <property name="bar">accent2</property>
             <onclick>ActivateWindow(AddonBrowser,addons://,return)</onclick></item>
-          <item><label>$LOCALIZE[7]</label><icon>icons64/harddisk.png</icon>
+          <item><label>$LOCALIZE[7]</label><icon>icons/harddisk.png</icon>
+            <property name="ico">harddisk</property>
             <property name="bar">accent2</property>
             <onclick>ActivateWindow(FileManager)</onclick></item>
-          <item><label>$LOCALIZE[10007]</label><icon>icons64/info.png</icon>
+          <item><label>$LOCALIZE[10007]</label><icon>icons/info.png</icon>
+            <property name="ico">info</property>
             <property name="bar">accent2</property>
             <onclick>ActivateWindow(SystemInfo)</onclick></item>
-          <item><label>$LOCALIZE[13200]</label><icon>icons64/person.png</icon>
+          <item><label>$LOCALIZE[13200]</label><icon>icons/person.png</icon>
+            <property name="ico">person</property>
             <property name="bar">accent2</property>
             <onclick>ActivateWindow(Profiles)</onclick></item>
-          <item><label>$LOCALIZE[14111]</label><icon>icons64/events.png</icon>
+          <item><label>$LOCALIZE[14111]</label><icon>icons/events.png</icon>
+            <property name="ico">events</property>
             <property name="bar">accent2</property>
             <onclick>ActivateWindow(EventLog)</onclick></item>
-          <item><label>LibreELEC</label><icon>icons64/tools.png</icon>
+          <item><label>LibreELEC</label><icon>icons/tools.png</icon>
+            <property name="ico">tools</property>
             <property name="bar">accent1</property>
             <onclick>RunAddon(service.libreelec.settings)</onclick>
             <visible>System.HasAddon(service.libreelec.settings)</visible></item>
           <!-- on plain Linux, the skin's own Wi-Fi / Bluetooth / sound output settings -->
-          <item><label>$LOCALIZE[31996]</label><icon>icons64/network.png</icon>
+          <item><label>$LOCALIZE[31996]</label><icon>icons/network.png</icon>
+            <property name="ico">network</property>
             <property name="bar">accent1</property>
             <onclick>RunScript(special://skin/scripts/netbt.py)</onclick>
             <visible>!System.HasAddon(service.libreelec.settings) + System.Platform.Linux + !System.Platform.Android</visible></item>
           <!-- Shut down / Reboot: at most 15 items show, which the 5 x 3 panel holds -->
-          <item><label>$LOCALIZE[31976]</label><icon>icons64/power.png</icon>
+          <item><label>$LOCALIZE[31976]</label><icon>icons/power.png</icon>
+            <property name="ico">power</property>
             <property name="bar">accent1</property>
             <onclick>ActivateWindow(ShutdownMenu)</onclick></item>
         </content>

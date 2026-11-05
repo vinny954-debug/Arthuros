@@ -3,6 +3,22 @@
   <defaultcontrol>200</defaultcontrol>
   <controls>
     <control type="group">
+      <right>4</right><top>568</top><width>116</width><height>32</height>
+      <visible>Skin.HasSetting(touchmode)</visible>
+      <control type="image">
+        <left>0</left><top>0</top><width>116</width><height>32</height>
+        <texture border="2" colordiffuse="facetint">panel_chrome.png</texture>
+      </control>
+      <control type="button" id="9108">
+        <left>0</left><top>0</top><width>116</width><height>32</height>
+        <hitrect x="-2" y="0" w="122" h="32" />
+        <label></label>
+        <onup>9903</onup><onleft>9903</onleft>
+        <onclick>Action(Back)</onclick>
+      </control>
+      <include content="Chrome_BackFace"><param name="id" value="9108" /></include>
+    </control>
+    <control type="group">
       <centerleft>50%</centerleft><centertop>50%</centertop>
       <width>780</width><height>500</height>
       <include content="Dialog_Box">
@@ -106,6 +122,7 @@
         <left>258</left><top>47</top><width>18</width><height>434</height>
         <onleft>200</onleft>
         <onright>210</onright>
+        <hitrect x="254" y="47" w="28" h="434" />
       </control>
       <control type="image"><left>296</left><top>44</top><width>472</width><height>440</height><texture border="2" colordiffuse="facetint">panel_sunken.png</texture></control>
       <control type="list" id="210">
@@ -1326,6 +1343,7 @@
         <left>744</left><top>47</top><width>18</width><height>434</height>
         <onleft>210</onleft>
         <onright>200</onright>
+        <hitrect x="740" y="47" w="28" h="434" />
       </control>
     </control>
   </controls>
