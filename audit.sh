@@ -135,6 +135,13 @@ sys.exit(bad)" $S/xml/DialogSubtitles.xml $S/xml/Includes_Games.xml $S/xml/Dialo
 :
 :
 # ===== P3 generic windows & text =====
+chk "slider dialog's slider is horizontal (Kodi default is vertical: - and + would do nothing)" '( for d in xml xml768; do grep -A2 "type=\"slider\" id=\"11\"" $S/$d/DialogSlider.xml | grep -q "<orientation>horizontal</orientation>" || exit 1; done )'
+chk "busy dialog: touch Back's Up/Left go to Cancel, not a missing 9903" 'grep -q "<param name=\"up\" value=\"9810\" />" $S/xml/DialogBusy.xml'
+chk "Startup starts mousewatch when Kodi starts outside Home (T-14)" '( for d in xml xml768; do grep "mousewatch.py" $S/$d/Startup.xml | grep -q "!String.IsEqual(System.StartupWindow,10000)" || exit 1; grep -q "<onload>ReplaceWindow(\$INFO\[System.StartupWindow\])</onload>" $S/$d/Startup.xml || exit 1; done )'
+chk "privacy policy scrolls: textbox 30 pages scrollbar 60 (T-5)" 'grep -A4 "type=\"textbox\" id=\"30\"" $S/xml/SettingsSystemInfo.xml | grep -q "<pagecontrol>60</pagecontrol>" && grep -q "type=\"scrollbar\" id=\"60\"" $S/xml/SettingsSystemInfo.xml && grep -A6 "type=\"scrollbar\" id=\"60\"" $S/xml/SettingsSystemInfo.xml | grep -q "Control.IsVisible(30)"'
+chk "system info Thank you! page has content (group 102)" 'grep -q "type=\"group\" id=\"102\"" $S/xml/SettingsSystemInfo.xml && grep -q "LOCALIZE\[12397\]" $S/xml/SettingsSystemInfo.xml'
+chk "media source rows grow with taller rows, box grows with them" '( for d in xml xml768; do test $(grep -c "content=\"Height_34_XL\"" $S/$d/DialogMediaSource.xml) -ge 8 && grep -qE "<param name=\"height\" value=\"426\" ?/>" $S/$d/DialogMediaSource.xml || exit 1; done )'
+chk "picture info has its own layout (preview + name/value columns)" 'grep -q "Slideshow.Filename" $S/xml/DialogPictureInfo.xml && grep -q "def picture_info" $(dirname "$0")/genwindows.py'
 chk "Kodi-driven windows have captions and titles (labelcheck)" 'python3 "$(dirname "$0")/labelcheck.py"'
 chk "numeric keypad shows digits, not string ids" 'grep -q "<label>\$LOCALIZE\[12317\]</label>" $S/xml/DialogNumeric.xml && ! grep -qE "<label>(OK|[0-9]+)</label>" $S/xml/DialogNumeric.xml'
 chk "media source Browse/Add/Remove captioned"  'grep -q "id=\"11\"><width>210</width>.*LOCALIZE\[1024\]" $S/xml/DialogMediaSource.xml && grep -q "LOCALIZE\[15019\]" $S/xml/DialogMediaSource.xml && grep -q "LOCALIZE\[1210\]" $S/xml/DialogMediaSource.xml'

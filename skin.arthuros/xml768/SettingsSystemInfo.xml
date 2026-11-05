@@ -200,7 +200,7 @@
       <control type="grouplist">
         <left>12</left><top>40</top><width>288</width><height>650</height>
         <orientation>vertical</orientation><itemgap>3</itemgap>
-        <onup>9100</onup><ondown>9100</ondown>
+        <onup>9100</onup><ondown>9100</ondown><onright>60</onright>
         <control type="button" id="95">
           <width>288</width><include content="Height_34_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_34" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
@@ -257,6 +257,7 @@
       <control type="label" id="40">
         <left>324</left><top>40</top><width>670</width><height>28</height>
         <font>bigbold</font>
+        <visible>!Control.IsVisible(102)</visible>
       </control>
       <control type="image">
         <left>324</left><top>70</top><width>670</width><height>1</height>
@@ -299,8 +300,30 @@
         <left>324</left><top>596</top><width>670</width><height>30</height>
       </control>
       <control type="textbox" id="30">
-        <left>324</left><top>76</top><width>670</width><height>558</height>
+        <left>324</left><top>76</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="628"/></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="640"/></include><height>558</height>
         <font>small</font>
+        <pagecontrol>60</pagecontrol>
+        <autoscroll delay="6000" time="4000" repeat="8000">!Control.HasFocus(60)</autoscroll>
+      </control>
+      <control type="scrollbar" id="60">
+        <include content="Size_Left" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="964"/></include><include content="Size_Left" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="976"/></include><top>76</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30"/></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="18"/></include><height>558</height>
+        <onleft>100</onleft><onright>100</onright>
+        <visible>Control.IsVisible(30)</visible>
+      </control>
+      <control type="group" id="102">
+        <left>324</left><top>40</top><width>670</width><height>594</height>
+        <control type="label">
+          <left>0</left><top>0</top><width>670</width><height>28</height>
+          <font>bigbold</font><label>$LOCALIZE[12396]</label>
+        </control>
+        <control type="label">
+          <left>0</left><top>36</top><width>670</width><height>28</height>
+          <font>bold</font><label>$LOCALIZE[12398]</label>
+        </control>
+        <control type="textbox">
+          <left>0</left><top>72</top><width>670</width><height>368</height>
+          <label>$LOCALIZE[12397]</label>
+        </control>
       </control>
       <control type="image">
         <left>312</left><top>648</top><width>694</width><height>48</height>

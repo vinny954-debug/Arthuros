@@ -5,6 +5,7 @@
     <!-- no dimming over a playing video (Estuary does the same) -->
     <control type="group">
       <visible>!Window.IsVisible(fullscreenvideo) + !Window.IsVisible(fullscreengame)</visible>
+      <!-- no title bar here: Up/Left from the touch Back go to Cancel -->
       <control type="image">
       <left>0</left><top>0</top><width>1024</width><height>768</height>
       <texture>dim.png</texture>
@@ -20,7 +21,7 @@
         <left>0</left><top>0</top><width>116</width><height>32</height>
         <hitrect x="-2" y="0" w="122" h="32"/>
         <label/>
-        <onup>9903</onup><onleft>9903</onleft>
+        <onup>9810</onup><onleft>9810</onleft>
         <onclick>Action(Back)</onclick>
       </control>
       <control type="image">
