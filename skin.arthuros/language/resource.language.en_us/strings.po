@@ -424,3 +424,8 @@ msgstr ""
 # ===== P9 strings: 31890-31894 =====
 
 # ===== P10 strings: 31895-31899 =====
+#. Fontset name (fonts/Unicode.xml): Kodi's arial.ttf for every alphabet
+msgctxt "#31895"
+msgid "Unicode (all alphabets)"
+msgstr ""
+

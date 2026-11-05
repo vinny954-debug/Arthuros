@@ -98,6 +98,11 @@ chk "xml768 version stamp matches"      'grep -q "(v$VER)" $S/xml768/Home.xml'
 :
 :
 # ===== P10 fonts =====
+chk "Unicode fontset in fonts/Unicode.xml only"  'grep -q "<fontset id=\"Unicode\" idloc=\"31895\"" $S/fonts/Unicode.xml && ! grep -q "id=\"Unicode\"" $S/xml/Font.xml $S/xml768/Font.xml'
+chk "Unicode fontset name string 31895 exists"   'grep -A1 "^msgctxt \"#31895\"" $S/language/resource.language.en_gb/strings.po | grep -q "^msgid \"Unicode"'
+chk "Unicode fontset uses only Kodi's arial.ttf" 'grep -q "<filename>arial.ttf</filename>" $S/fonts/Unicode.xml && ! grep "<filename>" $S/fonts/Unicode.xml | grep -qv "<filename>arial.ttf</filename>" && ! ls $S/fonts | grep -qi "^arial"'
+chk "Unicode fontset has Default's font names"   'test "$(sed -n "/fontset id=\"Default\"/,/<\/fontset>/p" $S/xml/Font.xml | grep -o "<name>[^<]*</name>" | sort)" = "$(grep -o "<name>[^<]*</name>" $S/fonts/Unicode.xml | sort)"'
+chk "every font the windows use is in Unicode"   '( for n in $(cat $S/xml/*.xml $S/xml768/*.xml | grep -o "<font>[^<]*</font>" | sed "s/<[^>]*>//g" | sort -u); do grep -q "<name>$n</name>" $S/fonts/Unicode.xml || exit 1; done )'
 :
 :
 [ $fail -eq 0 ] && echo "all good" || echo "AUDIT FAILED"
