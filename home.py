@@ -343,7 +343,8 @@ def variables():
           for d in DIRECT if d[3] != 31951]
     v += ["    <value>$LOCALIZE[31951]</value>", "  </variable>"]
     # Skin settings, "Pointer in Touch mode": Auto (mousewatch decides),
-    # Always or Never; read by mousewatch.py and the pointer rule
+    # Always or Never; acted on by mousewatch.py override() (pkg/tooling,
+    # 0.9.7 - must ship together, or the setting only changes this label)
     v += ['  <variable name="TouchPointerVar">',
           '    <value condition="Skin.HasSetting(touch.pointer.show)">$LOCALIZE[20422]</value>',
           '    <value condition="Skin.HasSetting(touch.pointer.hide)">$LOCALIZE[20420]</value>',

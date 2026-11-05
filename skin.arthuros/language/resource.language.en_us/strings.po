@@ -426,7 +426,7 @@ msgid "Put back the desktop the skin came with and switch every skin option off?
 msgstr "Put back the desktop the skin came with and switch every skin option off? Touch mode, colors and fonts are kept."
 
 msgctxt "#31867"
-msgid "Back up first"
+msgid "Back up"
 msgstr ""
 
 msgctxt "#31868"
@@ -439,6 +439,10 @@ msgstr ""
 
 msgctxt "#31870"
 msgid "Skin settings reset"
+msgstr ""
+
+msgctxt "#31871"
+msgid "The skin settings file could not be read."
 msgstr ""
 
 # ===== P7 strings: 31875-31889, 31740-31759 =====

@@ -98,6 +98,8 @@ chk "D-7 parked-window state is transient"    'grep -q "TRANSIENT_PREFIX = (\"sw
 chk "T-10 skin settings list scrolls"         'for d in xml xml768; do grep -A4 "type=\"grouplist\" id=\"99\"" $S/$d/SkinSettings.xml | grep -q "<pagecontrol>98</pagecontrol>" && grep -q "type=\"scrollbar\" id=\"98\"" $S/$d/SkinSettings.xml || exit 1; done'
 chk "T-5 skin help text scrolls"              'grep -q "<pagecontrol>97</pagecontrol>" $S/xml/SkinSettings.xml && grep -q "type=\"scrollbar\" id=\"97\"" $S/xml/SkinSettings.xml'
 chk "touch pointer choice in skin settings"   'grep -q "Skin.SetBool(touch.pointer.show)" $S/xml/SkinSettings.xml && grep -q "Skin.SetBool(touch.pointer.hide)" $S/xml/SkinSettings.xml && grep -q "name=\"TouchPointerVar\"" $S/xml/Includes_Home.xml'
+chk "D-2 reset button label fits 130 px at XL"  'grep -A1 "\"#31867\"" $S/language/resource.language.en_gb/strings.po | grep -q "msgid \"Back up\"$"'
+chk "backup names an unreadable settings file" 'grep -A3 "if settings is None" $S/scripts/backup.py | grep -q "L(31871)" && grep -A1 "\"#31871\"" $S/language/resource.language.en_gb/strings.po | grep -q "could not be read"'
 chk "L-2 Customise desktop rows fit at XL"    'test $(grep -c "Height_30_XL" $S/xml/Custom_1120_DesktopEditor.xml) -eq 9 && ! grep -q "Height_34" $S/xml/Custom_1120_DesktopEditor.xml'
 chk "L-4 icon picker cells fill the well"     'grep -q "itemlayout width=\"74\" height=\"68\"" $S/xml/Custom_1123_DesktopIcon.xml && grep -q "<left>763</left>" $S/xml/Custom_1123_DesktopIcon.xml'
 :

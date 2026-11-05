@@ -97,7 +97,8 @@ def backup():
             return False
     settings = current_settings()
     if settings is None:
-        xbmcgui.Dialog().ok(L(31979), L(31989))
+        # settings.xml unreadable: the folder is fine, the source is not
+        xbmcgui.Dialog().ok(L(31979), L(31871))
         return False
     root = ET.Element("arthuros_backup", version="1", skin=SKIN,
                       created=time.strftime("%Y-%m-%d %H:%M"))
