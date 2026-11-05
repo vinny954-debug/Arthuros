@@ -148,7 +148,7 @@
           <property name="bar">accent1</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.1.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.1.id))">$INFO[Skin.String(tile.1.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.1.name)) | !String.IsEmpty(Skin.String(tile.1.lid))]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.1.id)) | !String.IsEmpty(Skin.String(tile.1.action))]</visible>
         </item>
         <item id="2">
           <label>$INFO[Skin.String(tile.2.name)]</label>
@@ -164,7 +164,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.2.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.2.id))">$INFO[Skin.String(tile.2.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.2.name)) | !String.IsEmpty(Skin.String(tile.2.lid))]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.2.id)) | !String.IsEmpty(Skin.String(tile.2.action))]</visible>
         </item>
         <item id="3">
           <label>$INFO[Skin.String(tile.3.name)]</label>
@@ -180,7 +180,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.3.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.3.id))">$INFO[Skin.String(tile.3.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.3.name)) | !String.IsEmpty(Skin.String(tile.3.lid))]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.3.id)) | !String.IsEmpty(Skin.String(tile.3.action))]</visible>
         </item>
         <item id="4">
           <label>$INFO[Skin.String(tile.4.name)]</label>
@@ -196,7 +196,7 @@
           <property name="bar">accent1</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.4.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.4.id))">$INFO[Skin.String(tile.4.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.4.name)) | !String.IsEmpty(Skin.String(tile.4.lid))]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.4.id)) | !String.IsEmpty(Skin.String(tile.4.action))]</visible>
         </item>
         <item id="5">
           <label>$INFO[Skin.String(tile.5.name)]</label>
@@ -212,7 +212,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.5.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.5.id))">$INFO[Skin.String(tile.5.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.5.name)) | !String.IsEmpty(Skin.String(tile.5.lid))]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.5.id)) | !String.IsEmpty(Skin.String(tile.5.action))]</visible>
         </item>
         <item id="6">
           <label>$INFO[Skin.String(tile.6.name)]</label>
@@ -228,7 +228,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.6.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.6.id))">$INFO[Skin.String(tile.6.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.6.name)) | !String.IsEmpty(Skin.String(tile.6.lid))]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.6.id)) | !String.IsEmpty(Skin.String(tile.6.action))]</visible>
         </item>
         <item id="7">
           <label>$INFO[Skin.String(tile.7.name)]</label>
@@ -244,7 +244,7 @@
           <property name="bar">accent1</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.7.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.7.id))">$INFO[Skin.String(tile.7.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.7.name)) | !String.IsEmpty(Skin.String(tile.7.lid))]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.7.id)) | !String.IsEmpty(Skin.String(tile.7.action))]</visible>
         </item>
         <item id="8">
           <label>$INFO[Skin.String(tile.8.name)]</label>
@@ -260,7 +260,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.8.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.8.id))">$INFO[Skin.String(tile.8.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.8.name)) | !String.IsEmpty(Skin.String(tile.8.lid))]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.8.id)) | !String.IsEmpty(Skin.String(tile.8.action))]</visible>
         </item>
         <item id="9">
           <label>$INFO[Skin.String(tile.9.name)]</label>
@@ -276,7 +276,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.9.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.9.id))">$INFO[Skin.String(tile.9.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.9.name)) | !String.IsEmpty(Skin.String(tile.9.lid))]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.9.id)) | !String.IsEmpty(Skin.String(tile.9.action))]</visible>
         </item>
         <item id="10">
           <label>$INFO[Skin.String(tile.10.name)]</label>
@@ -292,7 +292,7 @@
           <property name="bar">accent1</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.10.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.10.id))">$INFO[Skin.String(tile.10.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.10.name)) | !String.IsEmpty(Skin.String(tile.10.lid))] + !String.IsEqual(Skin.String(home.layout),3x3)</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.10.id)) | !String.IsEmpty(Skin.String(tile.10.action))] + !String.IsEqual(Skin.String(home.layout),3x3)</visible>
         </item>
         <item id="11">
           <label>$INFO[Skin.String(tile.11.name)]</label>
@@ -308,7 +308,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.11.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.11.id))">$INFO[Skin.String(tile.11.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.11.name)) | !String.IsEmpty(Skin.String(tile.11.lid))] + !String.IsEqual(Skin.String(home.layout),3x3)</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.11.id)) | !String.IsEmpty(Skin.String(tile.11.action))] + !String.IsEqual(Skin.String(home.layout),3x3)</visible>
         </item>
         <item id="12">
           <label>$INFO[Skin.String(tile.12.name)]</label>
@@ -324,7 +324,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.12.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.12.id))">$INFO[Skin.String(tile.12.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.12.name)) | !String.IsEmpty(Skin.String(tile.12.lid))] + !String.IsEqual(Skin.String(home.layout),3x3)</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.12.id)) | !String.IsEmpty(Skin.String(tile.12.action))] + !String.IsEqual(Skin.String(home.layout),3x3)</visible>
         </item>
         <item id="13">
           <label>$INFO[Skin.String(tile.13.name)]</label>
@@ -340,7 +340,7 @@
           <property name="bar">accent1</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.13.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.13.id))">$INFO[Skin.String(tile.13.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.13.name)) | !String.IsEmpty(Skin.String(tile.13.lid))] + [String.IsEqual(Skin.String(home.layout),4x4) | String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.13.id)) | !String.IsEmpty(Skin.String(tile.13.action))] + [String.IsEqual(Skin.String(home.layout),4x4) | String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="14">
           <label>$INFO[Skin.String(tile.14.name)]</label>
@@ -356,7 +356,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.14.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.14.id))">$INFO[Skin.String(tile.14.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.14.name)) | !String.IsEmpty(Skin.String(tile.14.lid))] + [String.IsEqual(Skin.String(home.layout),4x4) | String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.14.id)) | !String.IsEmpty(Skin.String(tile.14.action))] + [String.IsEqual(Skin.String(home.layout),4x4) | String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="15">
           <label>$INFO[Skin.String(tile.15.name)]</label>
@@ -372,7 +372,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.15.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.15.id))">$INFO[Skin.String(tile.15.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.15.name)) | !String.IsEmpty(Skin.String(tile.15.lid))] + [String.IsEqual(Skin.String(home.layout),4x4) | String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.15.id)) | !String.IsEmpty(Skin.String(tile.15.action))] + [String.IsEqual(Skin.String(home.layout),4x4) | String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="16">
           <label>$INFO[Skin.String(tile.16.name)]</label>
@@ -388,7 +388,7 @@
           <property name="bar">accent1</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.16.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.16.id))">$INFO[Skin.String(tile.16.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.16.name)) | !String.IsEmpty(Skin.String(tile.16.lid))] + [String.IsEqual(Skin.String(home.layout),4x4) | String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.16.id)) | !String.IsEmpty(Skin.String(tile.16.action))] + [String.IsEqual(Skin.String(home.layout),4x4) | String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="17">
           <label>$INFO[Skin.String(tile.17.name)]</label>
@@ -404,7 +404,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.17.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.17.id))">$INFO[Skin.String(tile.17.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.17.name)) | !String.IsEmpty(Skin.String(tile.17.lid))] + [String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.17.id)) | !String.IsEmpty(Skin.String(tile.17.action))] + [String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="18">
           <label>$INFO[Skin.String(tile.18.name)]</label>
@@ -420,7 +420,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.18.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.18.id))">$INFO[Skin.String(tile.18.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.18.name)) | !String.IsEmpty(Skin.String(tile.18.lid))] + [String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.18.id)) | !String.IsEmpty(Skin.String(tile.18.action))] + [String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="19">
           <label>$INFO[Skin.String(tile.19.name)]</label>
@@ -436,7 +436,7 @@
           <property name="bar">accent1</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.19.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.19.id))">$INFO[Skin.String(tile.19.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.19.name)) | !String.IsEmpty(Skin.String(tile.19.lid))] + [String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.19.id)) | !String.IsEmpty(Skin.String(tile.19.action))] + [String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="20">
           <label>$INFO[Skin.String(tile.20.name)]</label>
@@ -452,7 +452,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.20.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.20.id))">$INFO[Skin.String(tile.20.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.20.name)) | !String.IsEmpty(Skin.String(tile.20.lid))] + [String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.20.id)) | !String.IsEmpty(Skin.String(tile.20.action))] + [String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="21">
           <label>$INFO[Skin.String(tile.21.name)]</label>
@@ -468,7 +468,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.21.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.21.id))">$INFO[Skin.String(tile.21.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.21.name)) | !String.IsEmpty(Skin.String(tile.21.lid))] + [String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.21.id)) | !String.IsEmpty(Skin.String(tile.21.action))] + [String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="22">
           <label>$INFO[Skin.String(tile.22.name)]</label>
@@ -484,7 +484,7 @@
           <property name="bar">accent1</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.22.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.22.id))">$INFO[Skin.String(tile.22.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.22.name)) | !String.IsEmpty(Skin.String(tile.22.lid))] + [String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.22.id)) | !String.IsEmpty(Skin.String(tile.22.action))] + [String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="23">
           <label>$INFO[Skin.String(tile.23.name)]</label>
@@ -500,7 +500,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.23.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.23.id))">$INFO[Skin.String(tile.23.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.23.name)) | !String.IsEmpty(Skin.String(tile.23.lid))] + [String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.23.id)) | !String.IsEmpty(Skin.String(tile.23.action))] + [String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="24">
           <label>$INFO[Skin.String(tile.24.name)]</label>
@@ -516,7 +516,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.24.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.24.id))">$INFO[Skin.String(tile.24.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.24.name)) | !String.IsEmpty(Skin.String(tile.24.lid))] + [String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.24.id)) | !String.IsEmpty(Skin.String(tile.24.action))] + [String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="25">
           <label>$INFO[Skin.String(tile.25.name)]</label>
@@ -532,7 +532,7 @@
           <property name="bar">accent1</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.25.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.25.id))">$INFO[Skin.String(tile.25.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.25.name)) | !String.IsEmpty(Skin.String(tile.25.lid))] + [String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.25.id)) | !String.IsEmpty(Skin.String(tile.25.action))] + [String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="26">
           <label>$INFO[Skin.String(tile.26.name)]</label>
@@ -548,7 +548,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.26.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.26.id))">$INFO[Skin.String(tile.26.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.26.name)) | !String.IsEmpty(Skin.String(tile.26.lid))] + [String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.26.id)) | !String.IsEmpty(Skin.String(tile.26.action))] + [String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="27">
           <label>$INFO[Skin.String(tile.27.name)]</label>
@@ -564,7 +564,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.27.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.27.id))">$INFO[Skin.String(tile.27.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.27.name)) | !String.IsEmpty(Skin.String(tile.27.lid))] + [String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.27.id)) | !String.IsEmpty(Skin.String(tile.27.action))] + [String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="28">
           <label>$INFO[Skin.String(tile.28.name)]</label>
@@ -580,7 +580,7 @@
           <property name="bar">accent1</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.28.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.28.id))">$INFO[Skin.String(tile.28.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.28.name)) | !String.IsEmpty(Skin.String(tile.28.lid))] + [String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.28.id)) | !String.IsEmpty(Skin.String(tile.28.action))] + [String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="29">
           <label>$INFO[Skin.String(tile.29.name)]</label>
@@ -596,7 +596,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.29.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.29.id))">$INFO[Skin.String(tile.29.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.29.name)) | !String.IsEmpty(Skin.String(tile.29.lid))] + [String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.29.id)) | !String.IsEmpty(Skin.String(tile.29.action))] + [String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="30">
           <label>$INFO[Skin.String(tile.30.name)]</label>
@@ -612,7 +612,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.30.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.30.id))">$INFO[Skin.String(tile.30.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.30.name)) | !String.IsEmpty(Skin.String(tile.30.lid))] + [String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.30.id)) | !String.IsEmpty(Skin.String(tile.30.action))] + [String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="31">
           <label>$INFO[Skin.String(tile.31.name)]</label>
@@ -628,7 +628,7 @@
           <property name="bar">accent1</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.31.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.31.id))">$INFO[Skin.String(tile.31.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.31.name)) | !String.IsEmpty(Skin.String(tile.31.lid))] + [String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.31.id)) | !String.IsEmpty(Skin.String(tile.31.action))] + [String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="32">
           <label>$INFO[Skin.String(tile.32.name)]</label>
@@ -644,7 +644,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.32.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.32.id))">$INFO[Skin.String(tile.32.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.32.name)) | !String.IsEmpty(Skin.String(tile.32.lid))] + [String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.32.id)) | !String.IsEmpty(Skin.String(tile.32.action))] + [String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="33">
           <label>$INFO[Skin.String(tile.33.name)]</label>
@@ -660,7 +660,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.33.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.33.id))">$INFO[Skin.String(tile.33.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.33.name)) | !String.IsEmpty(Skin.String(tile.33.lid))] + [String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.33.id)) | !String.IsEmpty(Skin.String(tile.33.action))] + [String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="34">
           <label>$INFO[Skin.String(tile.34.name)]</label>
@@ -676,7 +676,7 @@
           <property name="bar">accent1</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.34.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.34.id))">$INFO[Skin.String(tile.34.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.34.name)) | !String.IsEmpty(Skin.String(tile.34.lid))] + [String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.34.id)) | !String.IsEmpty(Skin.String(tile.34.action))] + [String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="35">
           <label>$INFO[Skin.String(tile.35.name)]</label>
@@ -692,7 +692,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.35.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.35.id))">$INFO[Skin.String(tile.35.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.35.name)) | !String.IsEmpty(Skin.String(tile.35.lid))] + [String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.35.id)) | !String.IsEmpty(Skin.String(tile.35.action))] + [String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
         <item id="36">
           <label>$INFO[Skin.String(tile.36.name)]</label>
@@ -708,7 +708,7 @@
           <property name="bar">accent2</property>
           <onclick condition="!String.IsEmpty(Skin.String(tile.36.id))">SetFocus(9010,0)</onclick>
           <onclick condition="String.IsEmpty(Skin.String(tile.36.id))">$INFO[Skin.String(tile.36.action)]</onclick>
-          <visible>[!String.IsEmpty(Skin.String(tile.36.name)) | !String.IsEmpty(Skin.String(tile.36.lid))] + [String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          <visible>[!String.IsEmpty(Skin.String(tile.36.id)) | !String.IsEmpty(Skin.String(tile.36.action))] + [String.IsEqual(Skin.String(home.layout),6x6)]</visible>
         </item>
       </content>
     </control>
@@ -923,6 +923,9 @@
           <visible>String.IsEqual(Container(9000).ListItem.Property(id),settings) + !System.HasAddon(service.libreelec.settings) + System.Platform.Linux + !System.Platform.Android</visible></item>
         <item><label>$LOCALIZE[31953]</label><icon>icons24/desktop_edit.png</icon>
           <onclick>ActivateWindow(1120)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),settings)</visible></item>
+        <item><label>$LOCALIZE[31976]</label><icon>icons24/power.png</icon>
+          <onclick>ActivateWindow(ShutdownMenu)</onclick>
           <visible>String.IsEqual(Container(9000).ListItem.Property(id),settings)</visible></item>
         <!-- all -->
         <item><label>$LOCALIZE[342]</label><icon>icons24/movies.png</icon>

@@ -531,7 +531,8 @@
           <include content="Height_34" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
           <label>$LOCALIZE[31966]</label>
-          <onclick condition="String.IsEmpty(Container(1150).ListItem.Property(name))">Skin.SetString(tile.$INFO[Skin.String(edit.slot)].name,$ESCVAR[EditTileName])</onclick>
+          <enable>![String.IsEmpty(Container(1150).ListItem.Property(id)) + String.IsEmpty(Container(1150).ListItem.Property(action))]</enable>
+          <onclick condition="String.IsEmpty(Container(1150).ListItem.Property(name)) + !String.IsEmpty(Container(1150).ListItem.Property(lid))">Skin.SetString(tile.$INFO[Skin.String(edit.slot)].name,$ESCVAR[EditTileName])</onclick>
           <onclick>Skin.SetString(tile.$INFO[Skin.String(edit.slot)].name)</onclick>
         </control>
         <control type="button" id="1135">

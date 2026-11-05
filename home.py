@@ -140,7 +140,9 @@ SECTIONS = [
    (14111, "events", "ActivateWindow(EventLog)"),
    (31993, "tools", "RunAddon(service.libreelec.settings)", None, LIBREELEC),
    (31996, "network", NETBT_ACTION, None, NETBT),
-   (31953, "desktop_edit", "ActivateWindow(1120)")]),
+   (31953, "desktop_edit", "ActivateWindow(1120)"),
+   # D-1: Shut down / Reboot by touch, even with the task bar hidden
+   (31976, "power", "ActivateWindow(ShutdownMenu)")]),
  # every top-level menu Estuary and Confluence offer, in one list
  ("all", 31990, "file_list", 31991, [
    (342, "movies", vid("videodb://movies/titles/")),
@@ -340,6 +342,13 @@ def variables():
     v += [f'    <value condition="String.IsEqual({f}(lid),{d[0]})">$LOCALIZE[{d[3]}]</value>'
           for d in DIRECT if d[3] != 31951]
     v += ["    <value>$LOCALIZE[31951]</value>", "  </variable>"]
+    # Skin settings, "Pointer in Touch mode": Auto (mousewatch decides),
+    # Always or Never; acted on by mousewatch.py override() (pkg/tooling,
+    # 0.9.7 - must ship together, or the setting only changes this label)
+    v += ['  <variable name="TouchPointerVar">',
+          '    <value condition="Skin.HasSetting(touch.pointer.show)">$LOCALIZE[20422]</value>',
+          '    <value condition="Skin.HasSetting(touch.pointer.hide)">$LOCALIZE[20420]</value>',
+          "    <value>$LOCALIZE[16316]</value>", "  </variable>"]
     return v
 
 # ------------------------------------------------------------ tile drawing
@@ -507,7 +516,9 @@ def tile_items(onclick, extra_vis=None, indent=8, bar=True, fit=True):
     out = []
     for n in range(1, SLOTS + 1):
         k = f"tile.{n}"
-        vis = [f"[!String.IsEmpty(Skin.String({k}.name)) | !String.IsEmpty(Skin.String({k}.lid))]"]
+        # every real tile has an id (a menu) or an action (direct, shortcut,
+        # add-on); a slot holding only a typed name opens nothing, so stays off
+        vis = [f"[!String.IsEmpty(Skin.String({k}.id)) | !String.IsEmpty(Skin.String({k}.action))]"]
         if extra_vis:
             vis = [extra_vis(n)] if extra_vis(n) is not None else []
         f = fits(n) if fit else ""
@@ -653,7 +664,9 @@ def heading(l, t, w, sid):
 EDIT_ICON = "icons24/desktop_edit.png"
 
 def editor_window():
-    """1120: the whole desktop at a glance."""
+    """1120: the whole desktop at a glance. The nine rows on the left are 30
+    px (46 with XLC): 9 x 46 + 8 x 4 = 446 fits the 450 px list, so Done is
+    whole and tappable (a grouplist only sends taps to children that fit)."""
     b = heading(16, 40, 220, 31956)
     b += '      <control type="grouplist" id="300">\n'
     b += "        <left>16</left><top>70</top><width>220</width><height>450</height>\n"
@@ -663,18 +676,18 @@ def editor_window():
         sel = lcond(n) if n != DEFAULT_LAYOUT else \
             f"[String.IsEmpty(Skin.String(home.layout)) | String.IsEqual(Skin.String(home.layout),{n})]"
         b += f'        <control type="radiobutton" id="{301 + i}">\n'
-        b += "          <width>220</width><height>34</height>\n"
+        b += "          <width>220</width><height>30</height>\n"
         b += f"          <label>{c} x {r}  ({c * r})</label>\n"
         b += f"          <onclick>Skin.SetString(home.layout,{n})</onclick>\n"
         b += f"          <selected>{sel}</selected>\n"
         b += "        </control>\n"
     b += ('        <control type="button" id="310">\n'
-          "          <width>220</width><height>34</height>\n"
+          "          <width>220</width><height>30</height>\n"
           "          <label>$LOCALIZE[31957]</label>\n"
           "          <onclick>ActivateWindow(1125)</onclick>\n"
           "        </control>\n"
           '        <control type="button" id="311">\n'
-          "          <width>220</width><height>34</height>\n"
+          "          <width>220</width><height>30</height>\n"
           "          <label>$LOCALIZE[31958]</label>\n"
           "          <onclick>ActivateWindow(Home)</onclick>\n"
           "        </control>\n"
@@ -769,7 +782,9 @@ def tile_dialog():
      (1133, 31965, [f"Skin.SetImage({k}.image)"], None),
      (1139, 31987, [f"Skin.SetString({k}.image,$ESCINFO[System.AddonIcon(Container(1150).ListItem.Property(addon))])"],
       "!String.IsEmpty(Container(1150).ListItem.Property(addon))"),
-     (1134, 31966, None, None),
+     # an empty slot has nothing to name until "Choose what it opens" is used
+     (1134, 31966, None, "![String.IsEmpty(Container(1150).ListItem.Property(id)) + "
+                         "String.IsEmpty(Container(1150).ListItem.Property(action))]"),
      (1135, 31967, None, "!String.IsEqual(Skin.String(edit.slot),1)"),
      (1136, 31968, None, lastslot()),
      (1137, 31969, [f"Skin.Reset({k}.{f})" for f in FIELDS], None),
@@ -788,8 +803,10 @@ def tile_dialog():
         if enable:
             b += f"          <enable>{enable}</enable>\n"
         if cid == 1134:   # start the keyboard from the name the tile shows now
+            # only from a looked-up name: never copy "(empty)" into a slot
             acts_x = [oc(f"Skin.SetString({k}.name,$ESCVAR[EditTileName])",
-                         "String.IsEmpty(Container(1150).ListItem.Property(name))"),
+                         "String.IsEmpty(Container(1150).ListItem.Property(name)) + "
+                         "!String.IsEmpty(Container(1150).ListItem.Property(lid))"),
                       oc(f"Skin.SetString({k}.name)")]
         elif cid == 1135:
             acts_x = swap(-1)
@@ -820,17 +837,24 @@ def catalogue_dialog():
     groups = [("menus", 31971, "folder"), ("direct", 31972, "file_shortcut"),
               ("addon", 31973, "addons_program")]
     groups += [(s[0], s[1], s[2]) for s in SECTIONS]
-    b = sunken(16, 44, 246, Hh - 60)
+    # left: group list GW wide + its scrollbar; 236 keeps "Open directly"
+    # whole at Extra large (13 x 14 px) next to the 32 px icon
+    GW = 236
+    RX = 16 + GW + 30 + 14          # where the right-hand frame starts
+    b = sunken(16, 44, GW + 30, Hh - 60)
     def gbody(h, foc, xl):
         s = 32 if xl else 16
         return [f'<control type="image"><left>6</left><top>{(h - s) // 2}</top><width>{s}</width><height>{s}</height>'
                 "<texture>$INFO[ListItem.Icon]</texture></control>",
-                lbl(s + 14, 0, 240 - s - 20, h, "$INFO[ListItem.Label]", foc)]
+                lbl(s + 14, 0, GW - s - 20, h, "$INFO[ListItem.Label]", foc)]
+    # 15 groups: 660 px of 44 px touch rows in a 434 px list, so it gets a
+    # scrollbar (201) of its own inside its frame
     g = ('      <control type="list" id="200">\n'
-         f"        <left>19</left><top>47</top><width>240</width><height>{Hh - 66}</height>\n"
+         f"        <left>19</left><top>47</top><width>{GW}</width><height>{Hh - 66}</height>\n"
          "        <onright>210</onright><onleft>200</onleft>\n"
+         "        <pagecontrol>201</pagecontrol>\n"
          '        <scrolltime tween="linear">0</scrolltime>\n')
-    g += row_layouts(240, 28, 44, gbody)
+    g += row_layouts(GW, 28, 44, gbody)
     g += "        <content>\n"
     for gid, sid, icon in groups:
         g += f'          <item><label>$LOCALIZE[{sid}]</label><icon>icons24/{icon}.png</icon>\n'
@@ -843,9 +867,10 @@ def catalogue_dialog():
             g += "            <onclick>SetFocus(210,0)</onclick>\n"
         g += "          </item>\n"
     g += "        </content>\n      </control>\n"
+    g += ctl("scrollbar", 201, 19 + GW + 3, 47, 18, Hh - 66, ["<onleft>200</onleft>", "<onright>210</onright>"])
     b += g
-    rw = W - 278 - 16 - 24
-    b += sunken(276, 44, rw + 6 + 24, Hh - 60)
+    rw = W - 12 - 30 - RX
+    b += sunken(RX, 44, rw + 6 + 24, Hh - 60)
     items = []
     def item(label, icon, gid, acts, vis=None):
         s = f"          <item><label>{label}</label><icon>icons24/{icon}.png</icon>\n"
@@ -871,14 +896,14 @@ def catalogue_dialog():
                 "<texture>$INFO[ListItem.Icon]</texture></control>",
                 lbl(s + 14, 0, rw - s - 20, h, "$INFO[ListItem.Label]", foc)]
     r = ('      <control type="list" id="210">\n'
-         f"        <left>279</left><top>47</top><width>{rw}</width><height>{Hh - 66}</height>\n"
+         f"        <left>{RX + 3}</left><top>47</top><width>{rw}</width><height>{Hh - 66}</height>\n"
          "        <onleft>200</onleft><onright>211</onright>\n"
          "        <pagecontrol>211</pagecontrol>\n"
          '        <scrolltime tween="linear">0</scrolltime>\n')
     r += row_layouts(rw, 28, 44, ibody)
     r += "        <content>\n" + "".join(items) + "        </content>\n      </control>\n"
     b += r
-    b += ctl("scrollbar", 211, 279 + rw + 3, 47, 18, Hh - 66, ["<onleft>210</onleft>", "<onright>200</onright>"])
+    b += ctl("scrollbar", 211, RX + 3 + rw + 3, 47, 18, Hh - 66, ["<onleft>210</onleft>", "<onright>200</onright>"])
     x = gw.dialog("Custom_1122_DesktopChoose", W, Hh, b, default="200", icon=EDIT_ICON,
                   title="$LOCALIZE[31970]", dim=False)
     return custom(x, 1122, "dialog")
@@ -890,20 +915,23 @@ def icon_dialog():
                    for p in glob.glob(os.path.join(MEDIA, "icons", "*.png")))
     k = SLOTKEY
     b = sunken(16, 44, W - 32, Hh - 100)
-    pw = W - 32 - 6 - 24
-    cols = pw // 68
-    pw = cols * 68
+    # cells stretch to fill the well (no dead strip right of the scrollbar):
+    # 740 px = 10 cells of 74, scrollbar at 763..781 against the 782 edge
+    room = W - 32 - 6 - 22
+    cols = room // 68
+    cw = room // cols
+    pw = cols * cw
     b += ('      <control type="panel" id="400">\n'
           f"        <left>19</left><top>47</top><width>{pw}</width><height>{(Hh - 106) // 68 * 68}</height>\n"
           "        <onright>401</onright><onleft>400</onleft><ondown>400</ondown>\n"
           "        <pagecontrol>401</pagecontrol>\n"
           '        <scrolltime tween="linear">0</scrolltime>\n')
     for kind, foc in (("itemlayout", False), ("focusedlayout", True)):
-        b += f'        <{kind} width="68" height="68">\n'
+        b += f'        <{kind} width="{cw}" height="68">\n'
         if foc:
-            b += ('          <control type="image"><left>2</left><top>2</top><width>64</width><height>64</height>'
+            b += (f'          <control type="image"><left>{(cw - 64) // 2}</left><top>2</top><width>64</width><height>64</height>'
                   '<texture border="4" colordiffuse="select">select_ring.png</texture></control>\n')
-        b += ('          <control type="image"><left>10</left><top>10</top><width>48</width><height>48</height>'
+        b += (f'          <control type="image"><left>{(cw - 48) // 2}</left><top>10</top><width>48</width><height>48</height>'
               "<texture>$INFO[ListItem.Icon]</texture></control>\n")
         b += f"        </{kind}>\n"
     b += "        <content>\n"
