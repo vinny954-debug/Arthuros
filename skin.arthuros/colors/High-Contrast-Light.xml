@@ -13,4 +13,5 @@
   <color name="textdisabled">FF4A4A4A</color>
   <color name="marked">FF7A0000</color>
   <color name="titletext">FFFFFFFF</color>
+  <color name="epgnow">FFB00000</color>
 </colors>

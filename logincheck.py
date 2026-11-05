@@ -14,10 +14,9 @@ Includes are expanded the way Kodi does (with $PARAM substitution, so
 Win_Boxes_$PARAM[boxes] resolves), for xml/ and xml768/.
 
 DialogConfirm.xml and DialogSelect.xml (hand-maintained, also reachable:
-the incorrect-password OK box, the profile choice) are checked too. They
-take their title-bar boxes from Win_Boxes_dialog in Includes_Chrome.xml,
-whose 9901 box still runs an unguarded ActivateWindow(Home); until that
-include guards it, those two are listed in KNOWN (reported, not failed).
+the incorrect-password OK box, the profile choice) are checked too. All of
+them take their title-bar boxes from Win_Boxes_dialog in Includes_Chrome.xml,
+whose _ box (9901) guards its ActivateWindow(Home) itself.
 Any other hole, or a known one in a new place, fails.
 """
 import copy, glob, os, re, sys
@@ -28,11 +27,8 @@ WINDOWS = ["LoginScreen", "DialogButtonMenu", "DialogKeyboard", "DialogNumeric",
            "DialogConfirm", "DialogSelect"]
 GUARD = "!Window.IsVisible(loginscreen)"
 ALLOWED = {"shutdownmenu"}
-# Win_Boxes_dialog's 9901 (Includes_Chrome.xml, another package's file):
-# fix there with <onclick condition="!Window.IsVisible(loginscreen)"> and
-# the same in 9901's <visible>, then empty this set.
-KNOWN = {f"{d}/{w}.xml: <onclick>ActivateWindow(Home)</onclick> is reachable from the login screen"
-         for d in ("xml", "xml768") for w in ("DialogConfirm", "DialogSelect")}
+# Holes that are known and accepted (reported, not failed). Empty: keep it so.
+KNOWN = set()
 
 def definitions(d):
     defs = {}

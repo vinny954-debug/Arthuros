@@ -42,4 +42,5 @@
   <color name="marked">FFA8141A</color>        <!-- items marked for an operation (file manager, multi-select) -->
   <color name="titletext">FFFFFFFF</color>
   <color name="dimmer">A8000000</color>
+  <color name="epgnow">FFCC1A1F</color>      <!-- the TV guide's "now" line: not select, not text, 3:1 on a programme cell -->
 </colors>

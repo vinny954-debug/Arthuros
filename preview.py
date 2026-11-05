@@ -637,7 +637,9 @@ def render_list(img, c, x, y, w, h):
         it = items[i] if i < len(items) else None
         ix, iy = x + cx*iw, y + cy*ih
         if iy + ih > y + h: break
-        lay = (pick("focusedlayout", it) if i == 0 else None) or pick("itemlayout", it)
+        lay = pick("focusedlayout", it) if i == 0 else None
+        if lay is None:      # an Element with no children is falsy: test for None
+            lay = pick("itemlayout", it)
         sub = ET.Element("control"); sub.set("type", "group")
         for e in expand(lay): sub.append(e)
         render(img, expand(sub), ix, iy, iw, ih, 1, it)

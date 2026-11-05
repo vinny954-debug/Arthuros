@@ -840,5 +840,5 @@ WINDOW_ICON_EXPR = {
 
 # P7
 # icons that are row/tile status marks, not pictures: home.py leaves them
-# out of the Desktop Icon picker (1123)
-NON_TILE = {"status_playing", "status_resume", "status_watched"}
+# out of the Desktop Icon picker (1123). tick is the select-list mark.
+NON_TILE = {"status_playing", "status_resume", "status_watched", "tick"}

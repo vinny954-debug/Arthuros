@@ -15,6 +15,17 @@
       <left>0</left><top>0</top><width>1024</width><height>600</height>
       <texture>dim.png</texture>
     </control>
+    <include content="Dialog_TouchBack"><param name="up" value="$PARAM[up]" /></include>
+    </definition>
+  </include>
+
+  <!-- The touch Back on its own, for a dialog stacked over another one that
+       already dims the screen (the desktop editor's Choose / Choose an icon,
+       home.py): the dialog underneath is dead while it is on top, so its
+       Back is too. -->
+  <include name="Dialog_TouchBack">
+    <param name="up" default="9903" />
+    <definition>
     <!-- Touch mode: a live Back button over the task bar's Back. While a
          modal dialog is open Kodi hands every tap to the dialog
          (CGUIWindowManager::HandleAction), so the window's own task bar

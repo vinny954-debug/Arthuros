@@ -11,7 +11,7 @@
         <param name="innerwidth" value="894" />
         <param name="icon" value="icons24/file_font.png" /><param name="colour" value="accent2" />
         <param name="down" value="300" />
-        <param name="boxes" value="none" />
+        <param name="boxes" value="dialog" />
       </include>
       <control type="image">
         <left>10</left><top>36</top><width>880</width><height>46</height>
@@ -273,97 +273,6 @@
         <control type="button" id="310"><width>120</width><height>34</height><label>$LOCALIZE[31918]</label></control>
       </control>
       <control type="button" id="307"><left>-3000</left><top>0</top><width>100</width><height>30</height></control>
-      <!-- the dialog boxes, login-safe (LOGIN_SAFE) -->
-      <control type="group">
-        <left>3</left><top>3</top><width>894</width><height>26</height>
-        <control type="group">
-          <control type="image">
-            <include content="WinBox">
-              <param name="n" value="1" />
-            </include>
-            <texture colordiffuse="facetint">wc_face.png</texture>
-            <visible>Window.IsVisible(loginscreen)</visible>
-          </control>
-          <control type="image">
-            <include content="WinBox">
-              <param name="n" value="1" />
-            </include>
-            <texture colordiffuse="textdim">wc_min_dg.png</texture>
-            <visible>Window.IsVisible(loginscreen)</visible>
-          </control>
-          <control type="image">
-            <include content="WinBox">
-              <param name="n" value="1" />
-            </include>
-            <texture border="4" colordiffuse="facetint">wc_face.png</texture>
-            <visible>Window.IsVisible(loginscreen)</visible>
-          </control>
-          <control type="image">
-            <include content="WinGlyph">
-              <param name="n" value="1" />
-            </include>
-            <texture colordiffuse="textdim">wc_min_dg.png</texture>
-            <visible>Window.IsVisible(loginscreen)</visible>
-          </control>
-          <control type="button" id="9901">
-            <include content="WinBox">
-              <param name="n" value="1" />
-            </include>
-            <texturenofocus border="4" colordiffuse="facetint">wc_face.png</texturenofocus>
-            <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
-            <label />
-            <onclick>Dialog.Close(all,true)</onclick>
-            <onclick condition="!Window.IsVisible(loginscreen) + [!Window.IsVisible(loginscreen)]">ActivateWindow(Home)</onclick>
-            <onright>9902</onright>
-            <ondown>300</ondown>
-            <visible>!Window.IsVisible(loginscreen)</visible>
-            <visible>!Window.IsVisible(loginscreen)</visible>
-          </control>
-          <control type="image">
-            <include content="WinGlyph">
-              <param name="n" value="1" />
-            </include>
-            <texture colordiffuse="text">wc_min_g.png</texture>
-            <visible>!Control.HasFocus(9901) + !Window.IsVisible(loginscreen) + !Window.IsVisible(loginscreen)</visible>
-          </control>
-          <control type="image">
-            <include content="WinGlyph">
-              <param name="n" value="1" />
-            </include>
-            <texture colordiffuse="titletext">wc_min_g.png</texture>
-            <visible>Control.HasFocus(9901) + !Window.IsVisible(loginscreen) + !Window.IsVisible(loginscreen)</visible>
-          </control>
-          <include content="WinBox_Max">
-            <param name="down" value="$PARAM[down]" />
-            <param name="close" value="true" />
-          </include>
-          <control type="button" id="9903">
-            <include content="WinBox">
-              <param name="n" value="3" />
-            </include>
-            <texturenofocus border="4" colordiffuse="facetint">wc_face.png</texturenofocus>
-            <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
-            <label />
-            <onclick>Action(Back)</onclick>
-            <onleft>9902</onleft>
-            <ondown>300</ondown>
-          </control>
-          <control type="image">
-            <include content="WinGlyph">
-              <param name="n" value="3" />
-            </include>
-            <texture colordiffuse="text">wc_close_g.png</texture>
-            <visible>!Control.HasFocus(9903)</visible>
-          </control>
-          <control type="image">
-            <include content="WinGlyph">
-              <param name="n" value="3" />
-            </include>
-            <texture colordiffuse="titletext">wc_close_g.png</texture>
-            <visible>Control.HasFocus(9903)</visible>
-          </control>
-        </control>
-      </control>
     </control>
   </controls>
 </window>

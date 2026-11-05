@@ -15,13 +15,13 @@
 #
 # Skin settings can override it (Skin settings > Pointer in Touch mode):
 # Skin.HasSetting(touch.pointer.hide) keeps the pointer hidden,
-# Skin.HasSetting(touch.pointer.show) keeps it shown, neither is Auto. The decision, and the device that made it, goes to kodi.log
-# when it changes.
+# Skin.HasSetting(touch.pointer.show) keeps it shown, neither is Auto. The
+# decision, and the device that made it, goes to kodi.log when it changes.
 #
-# Started from Home and from Skin settings when Touch mode is turned on (a
-# Startup.xml onload, so it also runs when Kodi starts in another window, is
-# pending in genwindows.py); only one copy runs, and it stops when Kodi quits,
-# Touch mode is turned off, or another skin is chosen.
+# Started from Startup (when Kodi starts in a window other than Home), from
+# Home, and from Skin settings when Touch mode is turned on; only one copy
+# runs, and it stops when Kodi quits, Touch mode is turned off, or another
+# skin is chosen.
 import xbmc
 import xbmcgui
 

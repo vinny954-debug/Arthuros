@@ -11,4 +11,5 @@
   <color name="textdisabled">FF5A5A66</color>
   <color name="marked">FFFF9090</color>
   <color name="textinv">FFFFFFFF</color>
+  <color name="epgnow">FFFF8080</color>
 </colors>

@@ -65,7 +65,13 @@
         </control>
         <control type="image">
           <left>28</left><top>18</top><width>32</width><height>32</height>
-          <texture>icons24/prev.png</texture>
+          <texture colordiffuse="text">icons24/w_prev.png</texture>
+          <visible>!Control.HasFocus(9801)</visible>
+        </control>
+        <control type="image">
+          <left>28</left><top>18</top><width>32</width><height>32</height>
+          <texture colordiffuse="textinv">icons24/w_prev.png</texture>
+          <visible>Control.HasFocus(9801)</visible>
         </control>
         <control type="button" id="9802">
           <left>86</left><top>8</top><width>72</width><height>52</height>
@@ -75,13 +81,23 @@
         </control>
         <control type="image">
           <left>106</left><top>18</top><width>32</width><height>32</height>
-          <texture>icons24/pause.png</texture>
-          <visible>Slideshow.IsActive + !Slideshow.IsPaused</visible>
+          <texture colordiffuse="text">icons24/w_pause.png</texture>
+          <visible>[Slideshow.IsActive + !Slideshow.IsPaused] + !Control.HasFocus(9802)</visible>
         </control>
         <control type="image">
           <left>106</left><top>18</top><width>32</width><height>32</height>
-          <texture>icons24/play.png</texture>
-          <visible>![Slideshow.IsActive + !Slideshow.IsPaused]</visible>
+          <texture colordiffuse="textinv">icons24/w_pause.png</texture>
+          <visible>[Slideshow.IsActive + !Slideshow.IsPaused] + Control.HasFocus(9802)</visible>
+        </control>
+        <control type="image">
+          <left>106</left><top>18</top><width>32</width><height>32</height>
+          <texture colordiffuse="text">icons24/w_play.png</texture>
+          <visible>[![Slideshow.IsActive + !Slideshow.IsPaused]] + !Control.HasFocus(9802)</visible>
+        </control>
+        <control type="image">
+          <left>106</left><top>18</top><width>32</width><height>32</height>
+          <texture colordiffuse="textinv">icons24/w_play.png</texture>
+          <visible>[![Slideshow.IsActive + !Slideshow.IsPaused]] + Control.HasFocus(9802)</visible>
         </control>
         <control type="button" id="9803">
           <left>164</left><top>8</top><width>72</width><height>52</height>
@@ -91,7 +107,13 @@
         </control>
         <control type="image">
           <left>184</left><top>18</top><width>32</width><height>32</height>
-          <texture>icons24/next.png</texture>
+          <texture colordiffuse="text">icons24/w_next.png</texture>
+          <visible>!Control.HasFocus(9803)</visible>
+        </control>
+        <control type="image">
+          <left>184</left><top>18</top><width>32</width><height>32</height>
+          <texture colordiffuse="textinv">icons24/w_next.png</texture>
+          <visible>Control.HasFocus(9803)</visible>
         </control>
         <control type="button" id="9804">
           <left>254</left><top>8</top><width>72</width><height>52</height>

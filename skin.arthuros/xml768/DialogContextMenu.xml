@@ -3,6 +3,34 @@
   <defaultcontrol>996</defaultcontrol>
   <coordinates><left>0</left><top>0</top></coordinates>
   <controls>
+    <control type="button" id="9971">
+      <left>-2048</left><top>-2048</top><width>2048</width><height>4096</height>
+      <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>
+      <label/>
+      <onclick>Action(close)</onclick>
+      <onup>996</onup><ondown>996</ondown><onleft>996</onleft><onright>996</onright>
+    </control>
+    <control type="button" id="9972">
+      <left>380</left><top>-2048</top><width>2048</width><height>4096</height>
+      <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>
+      <label/>
+      <onclick>Action(close)</onclick>
+      <onup>996</onup><ondown>996</ondown><onleft>996</onleft><onright>996</onright>
+    </control>
+    <control type="button" id="9973">
+      <left>0</left><top>-2048</top><width>380</width><height>2048</height>
+      <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>
+      <label/>
+      <onclick>Action(close)</onclick>
+      <onup>996</onup><ondown>996</ondown><onleft>996</onleft><onright>996</onright>
+    </control>
+    <control type="button" id="9974">
+      <left>0</left><top>38</top><width>380</width><height>2048</height>
+      <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>
+      <label/>
+      <onclick>Action(close)</onclick>
+      <onup>996</onup><ondown>996</ondown><onleft>996</onleft><onright>996</onright>
+    </control>
     <control type="image" id="999">
       <left>0</left><top>0</top><width>380</width><height>736</height>
       <texture border="2" colordiffuse="facetint">panel_raised.png</texture>

@@ -87,7 +87,97 @@
 
         <!-- The window boxes. Which set a title bar gets is chosen by the
              "boxes" parameter: window, dialog, home or none. -->
-        <control type="group"/>
+        <control type="group">
+      <control type="image">
+        <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinBox_1_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <texture border="4" colordiffuse="facetint">wc_face.png</texture>
+        <visible>Window.IsVisible(loginscreen)</visible>
+      </control>
+      <control type="image">
+        <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_1_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <texture colordiffuse="textdim">wc_min_dg.png</texture>
+        <visible>Window.IsVisible(loginscreen)</visible>
+      </control>
+      <control type="button" id="9901">
+        <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinBox_1_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <texturenofocus border="4" colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label/>
+        <onclick>Dialog.Close(all,true)</onclick>
+        <onclick condition="!Window.IsVisible(loginscreen)">ActivateWindow(Home)</onclick>
+        <onright>9902</onright>
+        <ondown>300</ondown>
+        <visible>!Window.IsVisible(loginscreen)</visible>
+      </control>
+      <control type="image">
+        <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_1_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <texture colordiffuse="text">wc_min_g.png</texture>
+        <visible>!Control.HasFocus(9901) + !Window.IsVisible(loginscreen)</visible>
+      </control>
+      <control type="image">
+        <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_1_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <texture colordiffuse="titletext">wc_min_g.png</texture>
+        <visible>Control.HasFocus(9901) + !Window.IsVisible(loginscreen)</visible>
+      </control>
+      <control type="button" id="9902">
+        <include content="WinBox_2" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinBox_2_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <texturenofocus border="4" colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label/>
+        <enable>$EXP[ArthurCanShowPlayer]</enable>
+        <onclick condition="true">Dialog.Close(all,true)</onclick>
+        <onclick>Action(FullScreen)</onclick>
+        <onleft>9901</onleft>
+        <onright>9903</onright>
+        <ondown>300</ondown>
+      </control>
+      <control type="image">
+        <include content="WinBox_2" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_2_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <texture colordiffuse="text">wc_max_g.png</texture>
+        <visible>!Control.HasFocus(9902) + $EXP[ArthurCanShowPlayer]</visible>
+      </control>
+      <control type="image">
+        <include content="WinBox_2" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_2_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <texture colordiffuse="titletext">wc_max_g.png</texture>
+        <visible>Control.HasFocus(9902)</visible>
+      </control>
+      <control type="image">
+        <include content="WinBox_2" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_2_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <texture colordiffuse="textdim">wc_max_dg.png</texture>
+        <visible>!$EXP[ArthurCanShowPlayer]</visible>
+      </control>
+      <control type="button" id="9903">
+        <include content="WinBox_3" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinBox_3_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <texturenofocus border="4" colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label/>
+        <onclick>Action(Back)</onclick>
+        <onleft>9902</onleft>
+        <ondown>300</ondown>
+      </control>
+      <control type="image">
+        <include content="WinBox_3" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_3_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <texture colordiffuse="text">wc_close_g.png</texture>
+        <visible>!Control.HasFocus(9903)</visible>
+      </control>
+      <control type="image">
+        <include content="WinBox_3" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_3_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <texture colordiffuse="titletext">wc_close_g.png</texture>
+        <visible>Control.HasFocus(9903)</visible>
+      </control>
+    </control>
       </control>
       </control>
       <control type="image">
@@ -350,114 +440,6 @@
         <control type="button" id="310"><width>120</width><height>44</height><label>$LOCALIZE[31918]</label></control>
       </control>
       <control type="button" id="307"><left>-3000</left><top>0</top><width>100</width><height>30</height></control>
-      <!-- the dialog boxes, login-safe (LOGIN_SAFE) -->
-      <control type="group">
-        <left>3</left><top>3</top><width>894</width><height>26</height>
-        <control type="group">
-          <control type="image">
-            <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
-      <include content="WinBox_1_Touch" condition="Skin.HasSetting(touchmode)"/>
-            <texture colordiffuse="facetint">wc_face.png</texture>
-            <visible>Window.IsVisible(loginscreen)</visible>
-          </control>
-          <control type="image">
-            <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
-      <include content="WinBox_1_Touch" condition="Skin.HasSetting(touchmode)"/>
-            <texture colordiffuse="textdim">wc_min_dg.png</texture>
-            <visible>Window.IsVisible(loginscreen)</visible>
-          </control>
-          <control type="image">
-            <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
-      <include content="WinBox_1_Touch" condition="Skin.HasSetting(touchmode)"/>
-            <texture border="4" colordiffuse="facetint">wc_face.png</texture>
-            <visible>Window.IsVisible(loginscreen)</visible>
-          </control>
-          <control type="image">
-            <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
-      <include content="WinGlyph_1_Touch" condition="Skin.HasSetting(touchmode)"/>
-            <texture colordiffuse="textdim">wc_min_dg.png</texture>
-            <visible>Window.IsVisible(loginscreen)</visible>
-          </control>
-          <control type="button" id="9901">
-            <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
-      <include content="WinBox_1_Touch" condition="Skin.HasSetting(touchmode)"/>
-            <texturenofocus border="4" colordiffuse="facetint">wc_face.png</texturenofocus>
-            <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
-            <label/>
-            <onclick>Dialog.Close(all,true)</onclick>
-            <onclick condition="!Window.IsVisible(loginscreen) + [!Window.IsVisible(loginscreen)]">ActivateWindow(Home)</onclick>
-            <onright>9902</onright>
-            <ondown>300</ondown>
-            <visible>!Window.IsVisible(loginscreen)</visible>
-            <visible>!Window.IsVisible(loginscreen)</visible>
-          </control>
-          <control type="image">
-            <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
-      <include content="WinGlyph_1_Touch" condition="Skin.HasSetting(touchmode)"/>
-            <texture colordiffuse="text">wc_min_g.png</texture>
-            <visible>!Control.HasFocus(9901) + !Window.IsVisible(loginscreen) + !Window.IsVisible(loginscreen)</visible>
-          </control>
-          <control type="image">
-            <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
-      <include content="WinGlyph_1_Touch" condition="Skin.HasSetting(touchmode)"/>
-            <texture colordiffuse="titletext">wc_min_g.png</texture>
-            <visible>Control.HasFocus(9901) + !Window.IsVisible(loginscreen) + !Window.IsVisible(loginscreen)</visible>
-          </control>
-          <control type="button" id="9902">
-        <include content="WinBox_2" condition="!Skin.HasSetting(touchmode)"/>
-      <include content="WinBox_2_Touch" condition="Skin.HasSetting(touchmode)"/>
-        <texturenofocus border="4" colordiffuse="facetint">wc_face.png</texturenofocus>
-        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
-        <label/>
-        <enable>$EXP[ArthurCanShowPlayer]</enable>
-        <onclick condition="true">Dialog.Close(all,true)</onclick>
-        <onclick>Action(FullScreen)</onclick>
-        <onleft>9901</onleft>
-        <onright>9903</onright>
-        <ondown>$PARAM[down]</ondown>
-      </control>
-      <control type="image">
-        <include content="WinBox_2" condition="!Skin.HasSetting(touchmode)"/>
-      <include content="WinGlyph_2_Touch" condition="Skin.HasSetting(touchmode)"/>
-        <texture colordiffuse="text">wc_max_g.png</texture>
-        <visible>!Control.HasFocus(9902) + $EXP[ArthurCanShowPlayer]</visible>
-      </control>
-      <control type="image">
-        <include content="WinBox_2" condition="!Skin.HasSetting(touchmode)"/>
-      <include content="WinGlyph_2_Touch" condition="Skin.HasSetting(touchmode)"/>
-        <texture colordiffuse="titletext">wc_max_g.png</texture>
-        <visible>Control.HasFocus(9902)</visible>
-      </control>
-      <control type="image">
-        <include content="WinBox_2" condition="!Skin.HasSetting(touchmode)"/>
-      <include content="WinGlyph_2_Touch" condition="Skin.HasSetting(touchmode)"/>
-        <texture colordiffuse="textdim">wc_max_dg.png</texture>
-        <visible>!$EXP[ArthurCanShowPlayer]</visible>
-      </control>
-          <control type="button" id="9903">
-            <include content="WinBox_3" condition="!Skin.HasSetting(touchmode)"/>
-      <include content="WinBox_3_Touch" condition="Skin.HasSetting(touchmode)"/>
-            <texturenofocus border="4" colordiffuse="facetint">wc_face.png</texturenofocus>
-            <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
-            <label/>
-            <onclick>Action(Back)</onclick>
-            <onleft>9902</onleft>
-            <ondown>300</ondown>
-          </control>
-          <control type="image">
-            <include content="WinBox_3" condition="!Skin.HasSetting(touchmode)"/>
-      <include content="WinGlyph_3_Touch" condition="Skin.HasSetting(touchmode)"/>
-            <texture colordiffuse="text">wc_close_g.png</texture>
-            <visible>!Control.HasFocus(9903)</visible>
-          </control>
-          <control type="image">
-            <include content="WinBox_3" condition="!Skin.HasSetting(touchmode)"/>
-      <include content="WinGlyph_3_Touch" condition="Skin.HasSetting(touchmode)"/>
-            <texture colordiffuse="titletext">wc_close_g.png</texture>
-            <visible>Control.HasFocus(9903)</visible>
-          </control>
-        </control>
-      </control>
     </control>
   </controls>
 </window>

@@ -14,7 +14,9 @@
         <param name="boxes" value="dialog" />
       </include>
       <control type="label" id="10">
-        <left>29</left><top>3</top><width>400</width><height>26</height>
+        <left>29</left><top>3</top><height>26</height>
+        <include content="Dialog_Heading_Width" condition="!Skin.HasSetting(touchmode)"><param name="width" value="400" /></include>
+        <include content="Dialog_Heading_Touch" condition="Skin.HasSetting(touchmode)" />
         <font>chromebold</font><textcolor>titletext</textcolor>
         <align>left</align><aligny>center</aligny>
       </control>

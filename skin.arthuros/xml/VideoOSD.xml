@@ -82,14 +82,14 @@
           <width>60</width><height>48</height>
           <hitrect x="-3" y="-3" w="66" h="54" />
           <label></label>
-          <textureradioonfocus>icons24/prev.png</textureradioonfocus>
-          <textureradioonnofocus>icons24/prev.png</textureradioonnofocus>
-          <textureradioondisabled>icons24/prev.png</textureradioondisabled>
-          <textureradioofffocus>icons24/prev.png</textureradioofffocus>
-          <textureradiooffnofocus>icons24/prev.png</textureradiooffnofocus>
-          <textureradiooffdisabled>icons24/prev.png</textureradiooffdisabled>
-          <radiowidth>24</radiowidth><radioheight>24</radioheight>
-          <radioposx>18</radioposx><radioposy>12</radioposy>
+          <textureradioonfocus colordiffuse="textinv">icons24/w_prev.png</textureradioonfocus>
+          <textureradioonnofocus colordiffuse="text">icons24/w_prev.png</textureradioonnofocus>
+          <textureradioondisabled colordiffuse="textdisabled">icons24/w_prev.png</textureradioondisabled>
+          <textureradioofffocus colordiffuse="textinv">icons24/w_prev.png</textureradioofffocus>
+          <textureradiooffnofocus colordiffuse="text">icons24/w_prev.png</textureradiooffnofocus>
+          <textureradiooffdisabled colordiffuse="textdisabled">icons24/w_prev.png</textureradiooffdisabled>
+          <radiowidth>32</radiowidth><radioheight>32</radioheight>
+          <radioposx>14</radioposx><radioposy>8</radioposy>
           <onclick>PlayerControl(Previous)</onclick>
           <visible>Player.HasSceneMarkers | Player.ChapterCount | Integer.IsGreater(Playlist.Length(video),1) | [Player.SeekEnabled + VideoPlayer.Content(LiveTV)]</visible>
         </control>
@@ -97,14 +97,14 @@
           <width>60</width><height>48</height>
           <hitrect x="-3" y="-3" w="66" h="54" />
           <label></label>
-          <textureradioonfocus>icons24/rew.png</textureradioonfocus>
-          <textureradioonnofocus>icons24/rew.png</textureradioonnofocus>
-          <textureradioondisabled>icons24/rew.png</textureradioondisabled>
-          <textureradioofffocus>icons24/rew.png</textureradioofffocus>
-          <textureradiooffnofocus>icons24/rew.png</textureradiooffnofocus>
-          <textureradiooffdisabled>icons24/rew.png</textureradiooffdisabled>
-          <radiowidth>24</radiowidth><radioheight>24</radioheight>
-          <radioposx>18</radioposx><radioposy>12</radioposy>
+          <textureradioonfocus colordiffuse="textinv">icons24/w_rew.png</textureradioonfocus>
+          <textureradioonnofocus colordiffuse="text">icons24/w_rew.png</textureradioonnofocus>
+          <textureradioondisabled colordiffuse="textdisabled">icons24/w_rew.png</textureradioondisabled>
+          <textureradioofffocus colordiffuse="textinv">icons24/w_rew.png</textureradioofffocus>
+          <textureradiooffnofocus colordiffuse="text">icons24/w_rew.png</textureradiooffnofocus>
+          <textureradiooffdisabled colordiffuse="textdisabled">icons24/w_rew.png</textureradiooffdisabled>
+          <radiowidth>32</radiowidth><radioheight>32</radioheight>
+          <radioposx>14</radioposx><radioposy>8</radioposy>
           <onclick condition="Player.Paused">PlayerControl(Play)</onclick>
           <onclick condition="!Player.Paused">PlayerControl(Rewind)</onclick>
           <visible>Player.SeekEnabled + !VideoPlayer.Content(LiveTV)</visible>
@@ -113,14 +113,14 @@
           <width>60</width><height>48</height>
           <hitrect x="-3" y="-3" w="66" h="54" />
           <label></label>
-          <textureradioonfocus>icons24/pause.png</textureradioonfocus>
-          <textureradioonnofocus>icons24/pause.png</textureradioonnofocus>
-          <textureradioondisabled>icons24/pause.png</textureradioondisabled>
-          <textureradioofffocus>icons24/play.png</textureradioofffocus>
-          <textureradiooffnofocus>icons24/play.png</textureradiooffnofocus>
-          <textureradiooffdisabled>icons24/play.png</textureradiooffdisabled>
-          <radiowidth>24</radiowidth><radioheight>24</radioheight>
-          <radioposx>18</radioposx><radioposy>12</radioposy>
+          <textureradioonfocus colordiffuse="textinv">icons24/w_pause.png</textureradioonfocus>
+          <textureradioonnofocus colordiffuse="text">icons24/w_pause.png</textureradioonnofocus>
+          <textureradioondisabled colordiffuse="textdisabled">icons24/w_pause.png</textureradioondisabled>
+          <textureradioofffocus colordiffuse="textinv">icons24/w_play.png</textureradioofffocus>
+          <textureradiooffnofocus colordiffuse="text">icons24/w_play.png</textureradiooffnofocus>
+          <textureradiooffdisabled colordiffuse="textdisabled">icons24/w_play.png</textureradiooffdisabled>
+          <radiowidth>32</radiowidth><radioheight>32</radioheight>
+          <radioposx>14</radioposx><radioposy>8</radioposy>
           <selected>!Player.Paused + !Player.Forwarding + !Player.Rewinding</selected>
           <onclick>PlayerControl(Play)</onclick>
         </control>
@@ -128,28 +128,28 @@
           <width>60</width><height>48</height>
           <hitrect x="-3" y="-3" w="66" h="54" />
           <label></label>
-          <textureradioonfocus>icons24/stop.png</textureradioonfocus>
-          <textureradioonnofocus>icons24/stop.png</textureradioonnofocus>
-          <textureradioondisabled>icons24/stop.png</textureradioondisabled>
-          <textureradioofffocus>icons24/stop.png</textureradioofffocus>
-          <textureradiooffnofocus>icons24/stop.png</textureradiooffnofocus>
-          <textureradiooffdisabled>icons24/stop.png</textureradiooffdisabled>
-          <radiowidth>24</radiowidth><radioheight>24</radioheight>
-          <radioposx>18</radioposx><radioposy>12</radioposy>
+          <textureradioonfocus colordiffuse="textinv">icons24/w_stop.png</textureradioonfocus>
+          <textureradioonnofocus colordiffuse="text">icons24/w_stop.png</textureradioonnofocus>
+          <textureradioondisabled colordiffuse="textdisabled">icons24/w_stop.png</textureradioondisabled>
+          <textureradioofffocus colordiffuse="textinv">icons24/w_stop.png</textureradioofffocus>
+          <textureradiooffnofocus colordiffuse="text">icons24/w_stop.png</textureradiooffnofocus>
+          <textureradiooffdisabled colordiffuse="textdisabled">icons24/w_stop.png</textureradiooffdisabled>
+          <radiowidth>32</radiowidth><radioheight>32</radioheight>
+          <radioposx>14</radioposx><radioposy>8</radioposy>
           <onclick>PlayerControl(Stop)</onclick>
         </control>
         <control type="radiobutton" id="606">
           <width>60</width><height>48</height>
           <hitrect x="-3" y="-3" w="66" h="54" />
           <label></label>
-          <textureradioonfocus>icons24/ffwd.png</textureradioonfocus>
-          <textureradioonnofocus>icons24/ffwd.png</textureradioonnofocus>
-          <textureradioondisabled>icons24/ffwd.png</textureradioondisabled>
-          <textureradioofffocus>icons24/ffwd.png</textureradioofffocus>
-          <textureradiooffnofocus>icons24/ffwd.png</textureradiooffnofocus>
-          <textureradiooffdisabled>icons24/ffwd.png</textureradiooffdisabled>
-          <radiowidth>24</radiowidth><radioheight>24</radioheight>
-          <radioposx>18</radioposx><radioposy>12</radioposy>
+          <textureradioonfocus colordiffuse="textinv">icons24/w_ffwd.png</textureradioonfocus>
+          <textureradioonnofocus colordiffuse="text">icons24/w_ffwd.png</textureradioonnofocus>
+          <textureradioondisabled colordiffuse="textdisabled">icons24/w_ffwd.png</textureradioondisabled>
+          <textureradioofffocus colordiffuse="textinv">icons24/w_ffwd.png</textureradioofffocus>
+          <textureradiooffnofocus colordiffuse="text">icons24/w_ffwd.png</textureradiooffnofocus>
+          <textureradiooffdisabled colordiffuse="textdisabled">icons24/w_ffwd.png</textureradiooffdisabled>
+          <radiowidth>32</radiowidth><radioheight>32</radioheight>
+          <radioposx>14</radioposx><radioposy>8</radioposy>
           <onclick condition="Player.Paused">PlayerControl(Play)</onclick>
           <onclick condition="!Player.Paused">PlayerControl(Forward)</onclick>
           <visible>Player.SeekEnabled + !VideoPlayer.Content(LiveTV)</visible>
@@ -158,14 +158,14 @@
           <width>60</width><height>48</height>
           <hitrect x="-3" y="-3" w="66" h="54" />
           <label></label>
-          <textureradioonfocus>icons24/next.png</textureradioonfocus>
-          <textureradioonnofocus>icons24/next.png</textureradioonnofocus>
-          <textureradioondisabled>icons24/next.png</textureradioondisabled>
-          <textureradioofffocus>icons24/next.png</textureradioofffocus>
-          <textureradiooffnofocus>icons24/next.png</textureradiooffnofocus>
-          <textureradiooffdisabled>icons24/next.png</textureradiooffdisabled>
-          <radiowidth>24</radiowidth><radioheight>24</radioheight>
-          <radioposx>18</radioposx><radioposy>12</radioposy>
+          <textureradioonfocus colordiffuse="textinv">icons24/w_next.png</textureradioonfocus>
+          <textureradioonnofocus colordiffuse="text">icons24/w_next.png</textureradioonnofocus>
+          <textureradioondisabled colordiffuse="textdisabled">icons24/w_next.png</textureradioondisabled>
+          <textureradioofffocus colordiffuse="textinv">icons24/w_next.png</textureradioofffocus>
+          <textureradiooffnofocus colordiffuse="text">icons24/w_next.png</textureradiooffnofocus>
+          <textureradiooffdisabled colordiffuse="textdisabled">icons24/w_next.png</textureradiooffdisabled>
+          <radiowidth>32</radiowidth><radioheight>32</radioheight>
+          <radioposx>14</radioposx><radioposy>8</radioposy>
           <onclick>PlayerControl(Next)</onclick>
           <visible>Player.HasSceneMarkers | Player.ChapterCount | Integer.IsGreater(Playlist.Length(video),1) | PVR.IsTimeShift</visible>
         </control>
@@ -174,14 +174,14 @@
         <left>612</left><top>74</top><width>60</width><height>48</height>
         <hitrect x="609" y="71" w="66" h="54" />
         <label></label>
-        <textureradioonfocus>icons24/audio_muted.png</textureradioonfocus>
-        <textureradioonnofocus>icons24/audio_muted.png</textureradioonnofocus>
-        <textureradioondisabled>icons24/audio_muted.png</textureradioondisabled>
-        <textureradioofffocus>icons24/audio.png</textureradioofffocus>
-        <textureradiooffnofocus>icons24/audio.png</textureradiooffnofocus>
-        <textureradiooffdisabled>icons24/audio.png</textureradiooffdisabled>
-        <radiowidth>24</radiowidth><radioheight>24</radioheight>
-        <radioposx>18</radioposx><radioposy>12</radioposy>
+        <textureradioonfocus colordiffuse="textinv">icons24/w_mute.png</textureradioonfocus>
+        <textureradioonnofocus colordiffuse="text">icons24/w_mute.png</textureradioonnofocus>
+        <textureradioondisabled colordiffuse="textdisabled">icons24/w_mute.png</textureradioondisabled>
+        <textureradioofffocus colordiffuse="textinv">icons24/w_volume.png</textureradioofffocus>
+        <textureradiooffnofocus colordiffuse="text">icons24/w_volume.png</textureradiooffnofocus>
+        <textureradiooffdisabled colordiffuse="textdisabled">icons24/w_volume.png</textureradiooffdisabled>
+        <radiowidth>32</radiowidth><radioheight>32</radioheight>
+        <radioposx>14</radioposx><radioposy>8</radioposy>
         <selected>Player.Muted</selected>
         <onclick>Mute</onclick>
         <onup condition="Player.SeekEnabled + !VideoPlayer.Content(LiveTV)">9980</onup>

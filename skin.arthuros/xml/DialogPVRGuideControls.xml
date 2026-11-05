@@ -4,7 +4,9 @@
   <controls>
     <control type="group">
       <centerleft>50%</centerleft><bottom>0</bottom>
-      <width>944</width><height>222</height>
+      <width>944</width>
+      <include content="Size_Height" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="222" /></include>
+      <include content="Size_Height" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="174" /></include>
       <include content="Dialog_Box" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
         <param name="width" value="944" /><param name="height" value="222" />
         <param name="innerwidth" value="938" />
@@ -173,14 +175,6 @@
         <label />
         <onclick>Action(close)</onclick>
         <onup>602</onup><ondown>602</ondown><onleft>602</onleft><onright>602</onright>
-      </control>
-      <control type="button" id="9974">
-        <left>0</left><top>174</top><width>944</width><height>2048</height>
-        <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>
-        <label />
-        <onclick>Action(close)</onclick>
-        <onup>602</onup><ondown>602</ondown><onleft>602</onleft><onright>602</onright>
-        <visible>![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]</visible>
       </control>
     </control>
   </controls>

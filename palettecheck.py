@@ -61,6 +61,16 @@ for p in sorted(glob.glob(os.path.join(C, "*.xml"))):
     # fails 4.5:1 here by design, which is why focused labels must set
     # <selectedcolor>textinv</selectedcolor> - audit.sh checks they do.
     marked_sel = ratio(P["marked"], P["select"])
+    # K-1: the TV guide's "now" line (epg_now.png tinted epgnow) runs over the
+    # programme cells (the white well) and over the focused cell (select). It
+    # is a graphic, so WCAG 1.4.11's 3:1 against the cell, and it must not
+    # be the select or the text colour (the cell rules are drawn in text).
+    now = ratio(P["epgnow"], well)
+    if now < 3.0:
+        failed.append(f"{name}: guide now line on a programme cell is {now:.1f}:1, needs 3:1")
+    for k in ("select", "text"):
+        if P["epgnow"] == P[k]:
+            failed.append(f"{name}: guide now line has the {k} colour")
     want = TARGET.get(name, 4.5)   # every palette meets WCAG AA
     worst = min(pairs, key=pairs.get)
     rows.append((name, pairs[worst], worst, disabled, marked_sel))

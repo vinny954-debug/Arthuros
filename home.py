@@ -904,28 +904,13 @@ def sb_hit(l, t, h):
 
 def touch_back(up="9903"):
     """Touch mode's live Back for a pop-up opened on top of another one
-    (1122, 1123 over 1121): the same group Dialog_Dim draws, without the dim
-    (1121 has dimmed the screen already). While a modal dialog is on top,
-    CGUIWindowManager::HandleAction hands it every tap and stops there, so
-    the Back that 1121 draws underneath shows but is dead. Placed first, at
-    the screen level, like Dialog_Dim's, so tallpass moves it down with the
-    task bar at 768."""
-    return ("    <control type=\"group\">\n"
-            "      <right>4</right><top>568</top><width>116</width><height>32</height>\n"
-            "      <visible>Skin.HasSetting(touchmode)</visible>\n"
-            "      <control type=\"image\">\n"
-            "        <left>0</left><top>0</top><width>116</width><height>32</height>\n"
-            "        <texture border=\"2\" colordiffuse=\"facetint\">panel_chrome.png</texture>\n"
-            "      </control>\n"
-            "      <control type=\"button\" id=\"9108\">\n"
-            "        <left>0</left><top>0</top><width>116</width><height>32</height>\n"
-            "        <hitrect x=\"-2\" y=\"0\" w=\"122\" h=\"32\" />\n"
-            "        <label></label>\n"
-            f"        <onup>{up}</onup><onleft>{up}</onleft>\n"
-            "        <onclick>Action(Back)</onclick>\n"
-            "      </control>\n"
-            "      <include content=\"Chrome_BackFace\"><param name=\"id\" value=\"9108\" /></include>\n"
-            "    </control>\n")
+    (1122, 1123 over 1121): Dialog_TouchBack, the group Dialog_Dim draws,
+    without the dim (1121 has dimmed the screen already). While a modal
+    dialog is on top, CGUIWindowManager::HandleAction hands it every tap and
+    stops there, so the Back that 1121 draws underneath shows but is dead.
+    Placed first, at the screen level, like Dialog_Dim's, so tallpass moves
+    it down with the task bar at 768."""
+    return f'    <include content="Dialog_TouchBack"><param name="up" value="{up}" /></include>\n'
 
 def catalogue_dialog():
     """1122: everything a tile can open."""
@@ -1007,16 +992,15 @@ def catalogue_dialog():
     return custom(x, 1122, "dialog")
 
 # marks drawn on rows and in dialogs, not pictures of anything: never offered
-# as a tile icon (iconset.NON_TILE, plus the select-list tick and any status_
-# or calibration cal_ mark that lands in icons/ later)
-NOT_TILE_ICONS = {"tick"}
+# as a tile icon (iconset.NON_TILE, which has the select-list tick, plus any
+# status_ or calibration cal_ mark that lands in icons/ later)
 NOT_TILE_PREFIX = ("status_", "cal_")
 
 def tile_icon_names():
     import iconset
     names = sorted(os.path.splitext(os.path.basename(p))[0]
                    for p in glob.glob(os.path.join(MEDIA, "icons", "*.png")))
-    skip = set(iconset.NON_TILE) | NOT_TILE_ICONS
+    skip = set(iconset.NON_TILE)
     return [n for n in names if n not in skip and not n.startswith(NOT_TILE_PREFIX)]
 
 def icon_dialog():

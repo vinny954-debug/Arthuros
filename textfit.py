@@ -128,8 +128,8 @@ issues = []
 # new label, a different text, one more of the same - fails the build; one
 # that was fixed is only reported, so trim the list.
 KNOWN_LAYOUT_WRAP = {
-    # Settings hub tile captions (hand-maintained Settings.xml), item + focused layout
-    "Settings": ("$INFO[ListItem.Label]", "$INFO[ListItem.Label]"),
+    # empty: the Settings hub captions became textboxes (Settings_HubLayouts,
+    # home.py) in 0.9.7; keep it so
 }
 known_cut = []
 for p in sorted(glob.glob(os.path.join(XML, "*.xml"))):

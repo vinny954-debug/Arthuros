@@ -255,7 +255,9 @@ for h in sorted(heights):
 # value-carrying includes the textbox/scrollbar pass uses
 inc.append('  <include name="SpinSize_XL"><spinwidth>32</spinwidth><spinheight>32</spinheight></include>\n')
 inc.append('  <include name="SliderSize_XL"><sliderwidth>240</sliderwidth><sliderheight>32</sliderheight></include>\n')
-for tag in ("Left", "Width"):
+# (Size_Height: a bottom-anchored dialog whose box height follows XLC,
+# genwindows.pvr_guide_controls)
+for tag in ("Left", "Width", "Height"):
     inc.append(f'  <include name="Size_{tag}"><param name="v" default="0" />'
                f'<definition><{tag.lower()}>$PARAM[v]</{tag.lower()}></definition></include>\n')
 # Touch mode hit rect for short strip buttons (Kodi resolves $PARAM in

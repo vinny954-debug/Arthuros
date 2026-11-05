@@ -3,7 +3,9 @@
 # hand in a file that genwindows.py regenerates, and was silently undone.
 S="$(dirname "$0")/skin.arthuros"
 fail=0
-chk(){ if eval "$2" >/dev/null 2>&1; then echo "  OK   $1"; else echo "  FAIL $1"; fail=1; fi; }
+# Each check runs in a subshell, so an "exit 1" inside one (a for loop's
+# "|| exit 1") fails that check only instead of ending the whole audit.
+chk(){ if (eval "$2") >/dev/null 2>&1; then echo "  OK   $1"; else echo "  FAIL $1"; fail=1; fi; }
 chk "Pointer has cursor ids 1-4"     'test $(grep -c "type=\"image\" id=\"[1-4]\"" $S/xml/Pointer.xml) -eq 4'
 chk "pointer_click.png exists"       'test -f $S/media/pointer_click.png'
 chk "no Window(Busy)"                '! grep -rq "Window(Busy)" $S/xml/'
@@ -137,7 +139,7 @@ chk "OSD mute + volume slider (V-2)"           'for f in VideoOSD MusicOSD GameO
 chk "seek bar opens by itself, not over the OSD (V-6)" 'grep -q "^  <visible>.*Player.HasPerformedSeek(3)" $S/xml/DialogSeekBar.xml && grep -q "^  <visible>!\[Window.IsVisible(videoosd) | Window.IsVisible(musicosd)" $S/xml/DialogSeekBar.xml && grep -q "type=\"slider\" id=\"401\"" $S/xml768/DialogSeekBar.xml'
 chk "bookmarks: labelled, Clear asks, video visible (V-8)" 'f=$S/xml/VideoOSDBookmarks.xml; grep -q "LOCALIZE\[294\]" $f && grep -q "SendClick(videobookmarks,3)" $f && grep -q "type=\"panel\" id=\"11\"" $f && ! grep -q "Chrome_Desktop\|value=\"VideoOSDBookmarks\"\|>VideoOSDBookmarks<" $f'
 chk "live TV: channels, guide, teletext, RDS, record state (V-9)" 'f=$S/xml/VideoOSD.xml; grep -q "ActivateWindow(PVROSDChannels)" $f && grep -q "ActivateWindow(PVRChannelGuide)" $f && grep -q "ActivateWindow(Teletext)" $f && grep -q "PVR.CanRecordPlayingChannel" $f && grep -q "ActivateWindow(PVRRadioRDSInfo)" $S/xml/MusicOSD.xml && grep -q "PVR.IsRecordingPlayingChannel" $S/xml/Variables.xml'
-chk "Play/Pause shows its state, glyphs never dim (V-12)" 'for f in VideoOSD MusicOSD GameOSD PlayerControls; do grep -A12 "type=\"radiobutton\" id=\"602\"" $S/xml/$f.xml | grep -q "icons24/pause.png" && ! grep -q "colordiffuse=\"textdim\">icons" $S/xml/$f.xml || exit 1; done && grep -q "<selected>Playlist.IsRandom</selected>" $S/xml/PlayerControls.xml'
+chk "Play/Pause shows its state, glyphs never dim (V-12)" 'for f in VideoOSD MusicOSD GameOSD PlayerControls; do grep -A12 "type=\"radiobutton\" id=\"602\"" $S/xml/$f.xml | grep -q "icons24/w_pause.png" && ! grep -q "colordiffuse=\"textdim\">icons" $S/xml/$f.xml || exit 1; done && grep -q "<selected>Playlist.IsRandom</selected>" $S/xml/PlayerControls.xml'
 chk "OSD transport keeps keyboard navigation (no button-in-group)" 'for f in $OSDS PlayerControls; do ! grep -q "type=\"group\" id=\"960[0-7]\"" $S/xml/$f.xml || exit 1; done'
 chk "OSD Playlist opens the play queue (V-13)" '! grep -q "ActivateWindow(PlayerControls)" $S/xml/VideoOSD.xml $S/xml/MusicOSD.xml && grep -q "ActivateWindow(VideoPlaylist)" $S/xml/VideoOSD.xml && grep -q "ActivateWindow(MusicPlaylist)" $S/xml/MusicOSD.xml && grep -q "ActivateWindow(MusicPlaylist)" $S/xml/PlayerControls.xml'
 chk "info dialogs have content and Close (V-14)" 'grep -q "VideoPlayer.Plot" $S/xml/DialogFullScreenInfo.xml && grep -q "Dialog.Close(FullscreenInfo)" $S/xml/DialogFullScreenInfo.xml && grep -q "Player.Process(videodecoder)" $S/xml/DialogPlayerProcessInfo.xml && for i in 10 21 22 70; do grep -q "id=\"$i\"" $S/xml/DialogPVRRadioRDSInfo.xml || exit 1; done && grep -q "ActivateWindow(FullscreenInfo)" $S/xml/VideoOSD.xml'
@@ -149,11 +151,12 @@ chk "OSD add-on settings find the add-on (B-5)" 'test -f $S/scripts/addonsetting
 :
 :
 # ===== P2 other playback =====
-chk "art: transport glyphs: black set for untinted use, white w_ set for colordiffuse" 'python3 -c "
-import sys
+chk "art: transport glyphs exist only white (w_*), for colordiffuse" 'python3 -c "
+import sys,os
 from PIL import Image
 B=\"play pause stop prev next rew ffwd shuffle repeat\".split()
-for n,c in [(n,(0,0,0)) for n in B]+[(\"w_\"+n,(255,255,255)) for n in B+[\"volume\",\"mute\"]]:
+if any(os.path.exists(sys.argv[1]+\"/media/%s/%s.png\"%(d,n)) for d in (\"icons16\",\"icons24\") for n in B): sys.exit(1)
+for n,c in [(\"w_\"+n,(255,255,255)) for n in B+[\"volume\",\"mute\"]]:
   for d,z in ((\"icons16\",16),(\"icons24\",32)):
     im=Image.open(sys.argv[1]+\"/media/%s/%s.png\"%(d,n)).convert(\"RGBA\")
     px=[p for p in im.getdata() if p[3]]
@@ -178,7 +181,7 @@ chk "art: transport glyphs centred (no high-sitting glyphs)" 'python3 -c "
 import sys
 from PIL import Image
 for n in \"pause stop prev next rew ffwd shuffle repeat play w_volume w_mute\".split():
- for m in ([n,\"w_\"+n] if not n.startswith(\"w_\") else [n]):
+ for m in ([\"w_\"+n] if not n.startswith(\"w_\") else [n]):
   b=Image.open(sys.argv[1]+\"/media/icons16/%s.png\"%m).getbbox()
   if abs((b[1]+b[3])-16)>1 or (n!=\"play\" and abs((b[0]+b[2])-16)>1): sys.exit(1)
 " $S'
@@ -186,7 +189,7 @@ chk "art: ffwd/rew are mirror images, two full 7 px triangles" 'python3 -c "
 import sys
 from PIL import Image, ImageOps
 m=sys.argv[1]+\"/media/icons16/\"
-f=Image.open(m+\"ffwd.png\").convert(\"RGBA\"); r=Image.open(m+\"rew.png\").convert(\"RGBA\")
+f=Image.open(m+\"w_ffwd.png\").convert(\"RGBA\"); r=Image.open(m+\"w_rew.png\").convert(\"RGBA\")
 w=[sum(1 for x in range(16) if f.getpixel((x,y))[3]) for y in range(16)]
 ok=ImageOps.mirror(f.crop(f.getbbox())).tobytes()==r.crop(r.getbbox()).tobytes() and sorted(set(w))==[0,2,6,10,14] and w.count(14)==2
 sys.exit(0 if ok else 1)" $S'
@@ -195,7 +198,7 @@ import sys
 from PIL import Image
 im=Image.open(sys.argv[1]+\"/media/epg_now.png\").convert(\"RGBA\")
 ok=im.size==(24,24) and all(im.getpixel((x,y))==((255,255,255,255) if x>=22 else im.getpixel((x,y))[:3]+(0,)) for x in range(24) for y in range(24))
-sys.exit(0 if ok else 1)" $S && for r in xml xml768; do grep -q "colordiffuse=\"accent1\">epg_now.png</progresstexture>" $S/$r/MyPVRGuide.xml || exit 1; done'
+sys.exit(0 if ok else 1)" $S && for r in xml xml768; do grep -q "colordiffuse=\"epgnow\">epg_now.png</progresstexture>" $S/$r/MyPVRGuide.xml || exit 1; done'
 chk "V-1 picture viewer has no full-screen cover" '! grep -q "bar_dgrey" $S/xml/SlideShow.xml $S/xml768/SlideShow.xml'
 chk "V-11 picture viewer touch strip + timer" '(for r in xml xml768; do grep -q "Skin.TimerStart(arthur_slidebar)" $S/$r/SlideShow.xml && grep -q "Action(Stop)" $S/$r/SlideShow.xml && grep -q "Action(NextPicture)" $S/$r/SlideShow.xml && grep -q "<name>arthur_slidebar</name>" $S/$r/Timers.xml || exit 1; done)'
 chk "V-11 picture viewer error label id 10" '(for r in xml xml768; do grep -q "type=\"label\" id=\"10\"" $S/$r/SlideShow.xml || exit 1; done)'
@@ -286,28 +289,29 @@ assert len(ls) == 4
 for l in ls:
     assert l.xpath(\"control[@type=\\\"label\\\"][@id=\\\"1\\\"]\"), l.get(\"condition\")
 " $S/$d/MyPVRGuide.xml || exit 1; done'
-chk "guide controls: on the bottom edge, compact in normal mode, tap catchers reach every screen edge" 'for d in xml xml768; do python3 -c "
+chk "guide controls: on the bottom edge in both sizes, tap catchers reach every screen edge" 'for d in xml xml768; do python3 -c "
 import sys; from lxml import etree
 r = etree.parse(sys.argv[1]).getroot()
 H = 768 if sys.argv[1].endswith(\"xml768/DialogPVRGuideControls.xml\") else 600
 box = r.find(\"controls\").find(\"control\")
-assert box.findtext(\"bottom\") == \"0\" and box.findtext(\"top\") is None
-bh, bw = int(box.findtext(\"height\")), int(box.findtext(\"width\"))
-bx, by = (1024 - bw) // 2, H - bh
+assert box.findtext(\"bottom\") == \"0\" and box.findtext(\"top\") is None and box.find(\"height\") is None
+bw = int(box.findtext(\"width\"))
+gh = {i.get(\"condition\"): int(i.xpath(\"param[@name=\\\"v\\\"]/@value\")[0]) for i in box.xpath(\"include[@content=\\\"Size_Height\\\"]\")}
+fh = {i.get(\"condition\"): int(i.xpath(\"param[@name=\\\"height\\\"]/@value\")[0]) for i in box.xpath(\"include[@content=\\\"Dialog_Box\\\"]\")}
+assert len(gh) == 2 and gh == fh, (gh, fh)
 cs = {c.get(\"id\"): c for c in box.xpath(\"control[@type=\\\"button\\\"]\") if c.get(\"id\", \"\").startswith(\"997\") and c.get(\"id\") != \"9970\"}
-assert sorted(cs) == [\"9971\", \"9972\", \"9973\", \"9974\"], sorted(cs)
-def rect(c):
-    l, t, w, h = (int(c.findtext(k)) for k in (\"left\", \"top\", \"width\", \"height\"))
-    return bx + l, by + t, bx + l + w, by + t + h
-L, R, T, B = (rect(cs[i]) for i in (\"9971\", \"9972\", \"9973\", \"9974\"))
-assert L[0] <= 0 and L[1] <= 0 and L[3] >= H and L[2] == bx
-assert R[2] >= 1024 and R[1] <= 0 and R[3] >= H and R[0] == bx + bw
-assert T[1] <= 0 and T[3] == by
+assert sorted(cs) == [\"9971\", \"9972\", \"9973\"], sorted(cs)
 assert all(c.findtext(\"onclick\") == \"Action(close)\" for c in cs.values())
-boxes = box.xpath(\"include[@content=\\\"Dialog_Box\\\"]\")
-hs = sorted(int(i.xpath(\"param[@name=\\\"height\\\"]/@value\")[0]) for i in boxes)
-assert len(boxes) == 2 and hs[1] == bh and hs[0] < bh - 30, hs
-assert B[1] == by + hs[0] and B[3] >= H and \"!\" in cs[\"9974\"].findtext(\"visible\")
+bx = (1024 - bw) // 2
+for bh in gh.values():
+    by = H - bh
+    def rect(c):
+        l, t, w, h = (int(c.findtext(k)) for k in (\"left\", \"top\", \"width\", \"height\"))
+        return bx + l, by + t, bx + l + w, by + t + h
+    L, R, T = (rect(cs[i]) for i in (\"9971\", \"9972\", \"9973\"))
+    assert L[0] <= 0 and L[1] <= 0 and L[3] >= H and L[2] == bx
+    assert R[2] >= 1024 and R[1] <= 0 and R[3] >= H and R[0] == bx + bw
+    assert T[1] <= 0 and T[3] == by
 " $S/$d/DialogPVRGuideControls.xml || exit 1; done'
 chk "guide controls: 12 jumps, every button labelled" 'for d in xml xml768; do python3 -c "
 import sys; from lxml import etree
@@ -345,7 +349,7 @@ chk "X-7 pointer obeys touch.pointer.show/hide at once" 'test $(grep -c "<value 
 chk "V-2 sliders lie flat by default (Kodi defaults to vertical)" 'grep -A8 "<default type=\"slider\">" $S/xml/Defaults.xml | grep -q "<orientation>horizontal</orientation>" && grep -A8 "<default type=\"slider\">" $S/xml768/Defaults.xml | grep -q "<orientation>horizontal</orientation>"'
 chk "T-8 heading comment names the keyboard (311) and slider (10) ids" 'grep -q "label 311" $S/xml/Includes_Dialogs.xml && grep -q "label 10 (CONTROL_HEADING" $S/xml/Includes_Dialogs.xml'
 chk "T-2 now playing picks game/video/music once" 'B=$(grep -A8 "id=\"9101\"" $S/xml/Includes_Chrome.xml); echo "$B" | grep -q "condition=\"Player.HasGame\">ActivateWindow(FullscreenGame)" && echo "$B" | grep -q "condition=\"Player.HasVideo + !Player.HasGame\">ActivateWindow(FullscreenVideo)" && ! echo "$B" | grep -q "<onclick>ActivateWindow"'
-chk "T-3 dialogs carry a touch Back at the task bar" 'grep -A30 "<include name=\"Dialog_Dim\">" $S/xml/Includes_Dialogs.xml | grep -q "id=\"9108\"" && (for f in $(grep -l "<include>Dialog_Dim</include>" $S/xml/*.xml); do grep -q "id=\"9108\"" $S/xml768/$(basename $f) || exit 1; done) && grep -B12 "id=\"9108\"" $S/xml768/DialogConfirm.xml | grep -q "<top>736</top>"'
+chk "T-3 dialogs carry a touch Back at the task bar" 'grep -A12 "<include name=\"Dialog_Dim\">" $S/xml/Includes_Dialogs.xml | grep -q "<include content=\"Dialog_TouchBack\"><param name=\"up\" value=\"\$PARAM\[up\]\" /></include>" && grep -A30 "<include name=\"Dialog_TouchBack\">" $S/xml/Includes_Dialogs.xml | grep -q "id=\"9108\"" && (for f in $(grep -l "<include>Dialog_Dim</include>" $S/xml/*.xml); do grep -q "id=\"9108\"" $S/xml768/$(basename $f) || exit 1; done) && grep -B12 "id=\"9108\"" $S/xml768/DialogConfirm.xml | grep -q "<top>736</top>"'
 chk "T-4 text viewer scrolls (pagecontrol 60, default 60)" 'grep -q "<pagecontrol>60</pagecontrol>" $S/xml/DialogTextViewer.xml && grep -q "<defaultcontrol>60</defaultcontrol>" $S/xml/DialogTextViewer.xml && grep -q "<pagecontrol>60</pagecontrol>" $S/xml768/DialogTextViewer.xml'
 chk "T-5 confirm text scrolls and has a scrollbar" 'grep -q "<pagecontrol>61</pagecontrol>" $S/xml/DialogConfirm.xml && grep -q "type=\"scrollbar\" id=\"61\"" $S/xml/DialogConfirm.xml && grep -q "<autoscroll [^>]*>!Control.HasFocus(61)</autoscroll>" $S/xml/DialogConfirm.xml'
 chk "T-5 textbox scrollbars widen in touch mode" 'grep -A3 "type=\"scrollbar\" id=\"60\"" $S/xml/DialogTextViewer.xml | grep -q "content=\"Size_Width\" condition=\"\[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)\]\"><param name=\"v\" value=\"30\""'
@@ -371,7 +375,7 @@ chk "D-1 Power sits next to Start, the player buttons after it" 'grep -B2 "id=\"
 :
 :
 # ===== P6 desktop & skin settings =====
-chk "w2 T-3 desktop editor pop-ups have their own live touch Back" 'for f in Custom_1121_DesktopTile Custom_1122_DesktopChoose Custom_1123_DesktopIcon; do for d in xml xml768; do grep -q "id=\"9108\"\|<include>Dialog_Dim</include>" $S/$d/$f.xml || exit 1; done; done && for f in Custom_1122_DesktopChoose Custom_1123_DesktopIcon; do grep -B8 "id=\"9108\"" $S/xml768/$f.xml | grep -q "<top>736</top>" && grep -B8 "id=\"9108\"" $S/xml/$f.xml | grep -q "<top>568</top>" || exit 1; done'
+chk "w2 T-3 desktop editor pop-ups have their own live touch Back" '(for f in Custom_1121_DesktopTile Custom_1122_DesktopChoose Custom_1123_DesktopIcon; do for d in xml xml768; do grep -q "id=\"9108\"\|<include>Dialog_Dim</include>\|<include content=\"Dialog_TouchBack\">" $S/$d/$f.xml || exit 1; done; done) && (for f in Custom_1122_DesktopChoose Custom_1123_DesktopIcon; do grep -B8 "id=\"9108\"" $S/xml768/$f.xml | grep -q "<top>736</top>" && grep -q "<include content=\"Dialog_TouchBack\">" $S/xml/$f.xml || exit 1; done)'
 chk "w2 icon picker offers no marks (tick, status_, cal_)" '! grep -qE "icons/(tick|status_|cal_)" $S/xml/Custom_1123_DesktopIcon.xml $S/xml768/Custom_1123_DesktopIcon.xml && grep -q "NOT_TILE_PREFIX = (\"status_\", \"cal_\")" $S/../home.py'
 chk "w2 L-3 icon picker is taller at 768"     'grep -q "<width>800</width><height>520</height>" $S/xml/Custom_1123_DesktopIcon.xml && grep -q "<width>800</width><height>656</height>" $S/xml768/Custom_1123_DesktopIcon.xml && grep -q "<height>544</height>" $S/xml768/Custom_1123_DesktopIcon.xml && grep -q "<height>556</height>" $S/xml768/Custom_1123_DesktopIcon.xml'
 chk "w2 L-3 Settings hub rows fill 600 and 768" 'grep -q "<include>Settings_HubLayouts</include>" $S/xml/Settings.xml && grep -A1 "<include name=\"Settings_HubLayouts\">" $S/xml/Includes_Home.xml | grep -q "<itemlayout width=\"198\" height=\"162\">" && grep -q "<itemlayout width=\"198\" height=\"218\">" $S/xml768/Settings.xml && grep -q "<height>654</height>" $S/xml768/Settings.xml && grep -q "icons64/\$INFO\[ListItem.Property(ico)\]" $S/xml768/Settings.xml && grep -q "<texture>icons/\$INFO\[ListItem.Property(ico)\]" $S/xml/Includes_Home.xml'
@@ -484,7 +488,7 @@ chk "S-1 textfit and preview show what Kodi shows for a bare-number label" 'grep
 chk "K-9 validate: Kodi id table (needed ids, Kodi-captioned ids) incl. VideoFullScreen" 'grep -q "^KODI_IDS = {" $D/validate.py && grep -q "\"VideoFullScreen\": ({\"10\",\"11\",\"12\"}" $D/validate.py && grep -q "elif cid not in fills and cid not in KODI_HIDDEN.get(wname, ()):" $D/validate.py && ! grep -q "^REQUIRED = {" $D/validate.py'
 chk "validate: unknown info labels and missing Kodi ids are errors, not warnings" '! grep -q "warns.append(f\"{where}: {name} is not" $D/validate.py && grep -q "errors.append(f\"{wname}: missing Kodi control id" $D/validate.py && ! grep -q "missing Kodi control id(s) \[" $D/validate.py'
 chk "PVR recordings/timers need their own filters (5/7, 8), not Estuary's hidden 28" 'grep -q "\"MyPVRRecordings\": ({\"5\",\"7\"}" $D/validate.py && grep -q "\"MyPVRTimers\": ({\"8\"}" $D/validate.py'
-chk "B-7 textfit flags wrapmultiline labels in list layouts (includes expanded); exemption lists exact labels" 'grep -q "^KNOWN_LAYOUT_WRAP = {" $D/textfit.py && grep -q "\"Settings\": (\"\$INFO\[ListItem.Label\]\", \"\$INFO\[ListItem.Label\]\")," $D/textfit.py && grep -q "for lab in sorted((have - want).elements()):" $D/textfit.py && grep -q "never wraps: use a textbox" $D/textfit.py && grep -q "if lc.get(\"type\") == \"label\":$" $D/textfit.py'
+chk "B-7 textfit flags wrapmultiline labels in list layouts (includes expanded); no exemptions left" 'grep -q "^KNOWN_LAYOUT_WRAP = {" $D/textfit.py && python3 -c "import re,sys; s=open(sys.argv[1]).read(); b=s[s.index(\"KNOWN_LAYOUT_WRAP = {\"):]; b=b[:b.index(\"}\")]; sys.exit(1 if re.search(r\"^ *\\\"\", b, re.M) else 0)" $D/textfit.py && grep -q "for lab in sorted((have - want).elements()):" $D/textfit.py && grep -q "never wraps: use a textbox" $D/textfit.py && grep -q "if lc.get(\"type\") == \"label\":$" $D/textfit.py'
 chk "textfit names every fontset it measures and any it can't" 'grep -q "fontsets measured:" $D/textfit.py && grep -q "fontset NOT measured" $D/textfit.py'
 chk "preview: Kodi geometry (bottom/right/centre), nested \$PARAM, grouplist align + clip, button label2" '(cd "$D" && python3 preview.py --selftest) && grep -q "halign=\"right\"," $D/preview.py'
 chk "logincheck also covers DialogConfirm and DialogSelect" 'grep -q "\"DialogConfirm\", \"DialogSelect\"\]" $D/logincheck.py && (cd "$D" && python3 logincheck.py)'
@@ -500,7 +504,7 @@ chk "netbt: denied fix names Kodi's user, polkit rule" 'grep -q "pwd.getpwuid(os
 chk "mousewatch skips touch controllers' mouse nodes" 'grep -q "ABS_MT_POSITION_X = 0x35" $S/scripts/mousewatch.py && grep -q "INPUT_PROP_DIRECT" $S/scripts/mousewatch.py'
 chk "mousewatch honours the touch.pointer.show/hide settings, logs why" 'grep -q "Skin.HasSetting(touch.pointer.show)" $S/scripts/mousewatch.py && grep -q "Skin.HasSetting(touch.pointer.hide)" $S/scripts/mousewatch.py && grep -q "xbmc.LOGINFO" $S/scripts/mousewatch.py'
 chk "skin XML uses only the pointer settings mousewatch reads" '! grep -rhoE "touch\.pointer[A-Za-z0-9_.]*" $S/xml/ | grep -vxE "touch\.pointer\.(show|hide)"'
-chk "mousewatch header doesn't claim a Startup start that isn't there" 'grep -q "mousewatch.py" $S/xml/Startup.xml || ! grep -q "Started from Startup" $S/scripts/mousewatch.py'
+chk "mousewatch header names its three starters (Startup, Home, Skin settings), none pending" 'grep -q "mousewatch.py" $S/xml/Startup.xml && grep -q "mousewatch.py" $S/xml/Home.xml && grep -q "mousewatch.py" $S/xml/SkinSettings.xml && grep -q "^# Started from Startup" $S/scripts/mousewatch.py && ! grep -q "pending in genwindows" $S/scripts/mousewatch.py'
 chk "installer probes Kodi's home as Kodi's user (0700 homes)" 'grep -q "if as_kodi test -d \"\$ADDONS/skin.arthuros\"" $D/install-arthuros.sh && grep -q "as_kodi sh -c .ls \"\$1\"/Addons" $D/install-arthuros.sh && grep -q "! as_kodi test -e \"\$ADDONS/skin.arthuros\" && as_kodi test -d \"\$BK\"" $D/install-arthuros.sh && ! grep -qE "^[[:space:]]*(if|elif) \[ !? ?-[de] \"\$(ADDONS|DB|KHOME)" $D/install-arthuros.sh'
 chk "installer never moves the new skin into an old folder" 'grep -B4 "^as_kodi mv \"\$STAGE\" \"\$ADDONS/skin.arthuros\"" $D/install-arthuros.sh | grep -q "if as_kodi test -e \"\$ADDONS/skin.arthuros\""'
 chk "installer looks for the polkit rule with sudo (rules.d is 0700)" 'grep -q "! \$SUDO test -e \"\$RULE\"" $D/install-arthuros.sh && ! grep -q "\[ ! -e \"\$RULE\" \]" $D/install-arthuros.sh'
@@ -520,6 +524,56 @@ chk "Tamzen faces draw ’ ‘ “ ” – — … • (C-5)"   'python3 -c "imp
 chk "Unicode line height <= Tamzen's at 1x and 2x" 'python3 -c "import re,sys;d=dict(re.findall(r\"<name>(\w+)</name><filename>Tamzen[^<]*</filename><size>(\d+)\",open(\"'"$S"'/xml/Font.xml\").read().split(\"</fontset>\")[0]));u=re.findall(r\"<name>(\w+)</name><filename>arial.ttf</filename><size>(\d+)</size>(?:<style>[^<]*</style>)?(?:<linespacing>([\d.]+)</linespacing>)?\",open(\"'"$S"'/fonts/Unicode.xml\").read());sys.exit(len(u)!=len(d) or any(float(l or 1)*int(2384*int(z)*k/2048+.5)/k>int(d[n]) for n,z,l in u for k in (1,2)))"'
 chk "textfit measures fonts/*.xml (arial table)"  'grep -q "\"fonts\", \"\*.xml\"" $S/../textfit.py && python3 -c "import json;assert json.load(open(\"'"$S"'/../vendor/kodi/arial-advances.json\"))[\"adv\"][\"87\"]>0"'
 chk "fonts help string 31896 names the fontset"  'grep -A1 "^msgctxt \"#31896\"" $S/language/resource.language.en_gb/strings.po | grep -q "Unicode (all alphabets)"'
+:
+:
+# ===== P11 integration =====
+chk "P11 transport glyphs are white and tinted: text, textinv when focused, textdisabled; 32 px" '(for d in xml xml768; do python3 -c "
+import sys,re
+from lxml import etree
+T={\"focus\":\"textinv\",\"nofocus\":\"text\",\"disabled\":\"textdisabled\"}
+n=0
+for f in sys.argv[2:]:
+  r=etree.parse(sys.argv[1]+\"/\"+f+\".xml\").getroot()
+  for e in r.iter():
+    if not isinstance(e.tag,str): continue
+    tx=(e.text or \"\").strip()
+    if re.search(r\"icons(16|24)/(play|pause|stop|prev|next|rew|ffwd|shuffle|repeat|volume|mute|audio|audio_muted)[.]png\",tx): sys.exit(\"black/registry glyph: \"+f)
+    if not re.search(r\"icons(16|24)/w_[a-z]+[.]png\",tx): continue
+    n+=1
+    if e.tag.startswith(\"textureradio\"):
+      st=e.tag[len(\"textureradio\"):].replace(\"on\",\"\",1).replace(\"off\",\"\",1)
+      assert e.get(\"colordiffuse\")==T[st],(f,e.tag)
+      c=e.getparent(); assert c.findtext(\"radiowidth\")==\"32\" and c.findtext(\"radioheight\")==\"32\",f
+    else:
+      assert e.tag==\"texture\",(f,e.tag)
+      img=e.getparent(); vis=img.findtext(\"visible\") or \"\"
+      m=re.search(r\"(!?)Control.HasFocus\((\d+)\)\",vis); assert m,(f,vis)
+      assert e.get(\"colordiffuse\")==(\"text\" if m.group(1) else \"textinv\"),(f,vis)
+      assert img.findtext(\"width\")==\"32\",f
+assert n>=60,n
+" $S/$d VideoOSD MusicOSD GameOSD PlayerControls SlideShow DialogPVRChannelsOSD || exit 1; done)'
+chk "P11 Mute 9982 shows the speaker / crossed-speaker glyphs" '(for d in xml xml768; do for f in VideoOSD MusicOSD GameOSD PlayerControls; do grep -A8 "type=\"radiobutton\" id=\"9982\"" $S/$d/$f.xml | grep -q "colordiffuse=\"text\">icons24/w_mute.png</textureradioonnofocus>" && grep -A10 "type=\"radiobutton\" id=\"9982\"" $S/$d/$f.xml | grep -q "colordiffuse=\"text\">icons24/w_volume.png</textureradiooffnofocus>" || exit 1; done; done)'
+chk "P11 glyph tint lives in genwindows (glyph_tex / tinted_glyph), white set only in mkmedia" 'grep -q "^def tinted_glyph" $D/genwindows.py && grep -q "^GLYPH_TINT = {\"focus\": \"textinv\", \"nofocus\": \"text\", \"disabled\": \"textdisabled\"}" $D/genwindows.py && ! grep -q "BLACK_TRANSPORT" $D/mkmedia.py'
+chk "P11 guide now line: epgnow in every palette, 3:1 on a cell, not select/text (palettecheck)" '(for f in $S/colors/*.xml; do grep -q "<color name=\"epgnow\">FF[0-9A-F]\{6\}</color>" $f || exit 1; done) && grep -q "guide now line on a programme cell" $D/palettecheck.py && python3 $D/palettecheck.py && ! grep -q "accent1\">epg_now" $S/xml/MyPVRGuide.xml'
+chk "P11 login: the dialogs use Win_Boxes_dialog as is (no doubled guards), logincheck knows no holes" '! grep -q "login_safe_boxes" $D/genwindows.py && grep -q "^KNOWN = set()" $D/logincheck.py && ! grep -q "Not covered here\|until that include guards it" $D/logincheck.py && N=$(sed -n "/<include name=\"Win_Boxes_dialog\">/,/<\/definition>/p" $S/xml/Includes_Chrome.xml | grep -c "loginscreen") && (for f in DialogButtonMenu DialogKeyboard DialogNumeric; do test "$(grep -c "loginscreen" $S/xml/$f.xml)" -eq 0 && grep -q "<param name=\"boxes\" value=\"dialog\" />" $S/xml/$f.xml && test "$(grep -c "loginscreen" $S/xml768/$f.xml)" -eq "$N" || exit 1; done)'
+chk "P11 DialogSlider heading stops short of the Touch-mode boxes" '(for d in xml xml768; do grep -A4 "type=\"label\" id=\"10\"" $S/$d/DialogSlider.xml | grep -q "<include content=\"Dialog_Heading_Touch\" condition=\"Skin.HasSetting(touchmode)\"" || exit 1; done)'
+chk "P11 OSD text rows fit 1008 px in every state (live, file, add-on; genwindows asserts it)" 'grep -q "assert max(worst.values()) <= OSD_W - 16" $D/genwindows.py && (cd "$D" && python3 -c "
+import genwindows as g
+for k in (\"video\", \"music\", \"game\"):
+    w = g.osd_row_worst(k); assert max(w.values()) <= 1008, (k, w)
+assert g._cond_eval(\"!a + [b | c]\", {\"a\": False, \"b\": False, \"c\": True}.__getitem__)
+assert not g._cond_eval(\"a | b + c\", {\"a\": False, \"b\": True, \"c\": False}.__getitem__)
+")'
+chk "P11 context menu and channel OSD: a tap outside closes them" '(for d in xml xml768; do for f in DialogContextMenu DialogPVRChannelsOSD; do test "$(grep -c "type=\"button\" id=\"997[1-4]\"" $S/$d/$f.xml)" -eq 4 && test "$(grep -c "<onclick>Action(close)</onclick>" $S/$d/$f.xml)" -ge 4 || exit 1; done; done) && python3 -c "
+import sys; from lxml import etree
+r = etree.parse(sys.argv[1]).getroot(); cs = list(r.find(\"controls\"))
+ids = [c.get(\"id\") for c in cs]
+assert ids[:4] == [\"9971\", \"9972\", \"9973\", \"9974\"] and ids[4] == \"999\", ids
+" $S/xml/DialogContextMenu.xml'
+chk "P11 stacked desktop pop-ups take Dialog_TouchBack, home.py keeps no copy" '! grep -q "9108" $D/home.py && grep -q "<include name=\"Dialog_TouchBack\">" $S/xml/Includes_Dialogs.xml'
+chk "P11 ItemCountVar gone, tick is a NON_TILE mark" '! grep -rq "ItemCountVar" $S/xml $S/xml768 && grep -q "^NON_TILE = {.*\"tick\"" $D/iconset.py && ! grep -q "NOT_TILE_ICONS" $D/home.py && ! grep -q "icons/tick.png" $S/xml/Custom_1123_DesktopIcon.xml'
+chk "P11 genwindows context-menu comment matches tallpass" 'grep -q "tallpass.context_menu() makes 999/996/997 168 px taller at 768" $D/genwindows.py && ! grep -q "tallpass leaves <coordinates> windows alone" $D/genwindows.py'
+chk "P11 audit runs every check in a subshell" 'grep -q "^chk(){ if (eval \"\$2\") >/dev/null 2>&1; then" "$0"'
 :
 :
 [ $fail -eq 0 ] && echo "all good" || echo "AUDIT FAILED"

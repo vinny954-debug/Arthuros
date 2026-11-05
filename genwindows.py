@@ -5,7 +5,7 @@ Every window Kodi can open gets a real file carrying the control ids Kodi
 requires (taken from inventory.json), so nothing errors out or opens blank.
 The layout is ours; only the id/type contract is borrowed.
 """
-import json, os, textwrap
+import json, os, re, textwrap
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "skin.arthuros", "xml")
 INV = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "inventory.json")))
@@ -90,60 +90,13 @@ BOXES = {"LoginScreen": "none", "SmartPlaylistEditor": "dialog",
 # Dialogs Kodi can open on top of the login screen: the power menu (its
 # Shutdown button), and the keyboard / numeric pad that ask for a locked
 # profile's password or the master code. Their title bar must not offer a
-# way past the login: Win_Boxes_dialog's _ box runs ActivateWindow(Home),
-# and CGUIWindowManager::ActivateWindow_Internal only checks CheckMenuLock,
-# which does not cover Home. These get Win_Boxes_none from Dialog_Box and
-# their own copy of the dialog boxes (login_safe_boxes) instead.
+# way past the login: CGUIWindowManager::ActivateWindow_Internal only checks
+# CheckMenuLock, which does not cover Home. Win_Boxes_dialog
+# (Includes_Chrome.xml) guards that itself - its _ box (9901) hides, a greyed
+# _ takes its place and ActivateWindow(Home) is conditional while the login
+# screen is visible - so these take the ordinary dialog boxes; logincheck.py
+# proves it with the includes expanded.
 LOGIN_SAFE = {"DialogButtonMenu", "DialogKeyboard", "DialogNumeric"}
-NOT_AT_LOGIN = "!Window.IsVisible(loginscreen)"
-
-def login_safe_boxes(wd, down):
-    """Win_Boxes_dialog, read from Includes_Chrome.xml so it keeps whatever
-    look that file gives it, with _ (9901) hidden while the login screen is
-    up - a greyed _ is drawn in its place, as on the desktop's own panel -
-    and every ActivateWindow in it conditional as well. Placed where
-    Dialog_Box puts the title bar (3,3, width wd-6)."""
-    from lxml import etree
-    import copy, re
-    src = os.path.join(OUT, "Includes_Chrome.xml")
-    root = etree.parse(src).getroot()
-    inc = root.xpath("include[@name='Win_Boxes_dialog']")[0]
-    group = copy.deepcopy(inc.find("definition").find("control"))
-    for el in group.iter():
-        if el.text and "$PARAM[down]" in el.text:
-            el.text = el.text.replace("$PARAM[down]", down)
-    for oc in group.iter("onclick"):
-        if "ActivateWindow" in (oc.text or ""):
-            c = oc.get("condition")
-            oc.set("condition", f"{NOT_AT_LOGIN} + [{c}]" if c else NOT_AT_LOGIN)
-    for c in group.iter("control"):
-        if c.get("id") == "9901":
-            v = etree.SubElement(c, "visible"); v.text = NOT_AT_LOGIN
-        elif c.get("type") == "image" and "9901" in (c.findtext("visible") or ""):
-            v = c.find("visible"); v.text = f"{v.text} + {NOT_AT_LOGIN}"
-    b9901 = [c for c in group.iter("control") if c.get("id") == "9901"][0]
-    # geometry: plain right/top/width/height, or the WinBox include that
-    # gives the boxes their Touch-mode size (Includes_Chrome.xml)
-    pos = "".join(etree.tostring(e, with_tail=False).decode().strip() for e in b9901
-                  if e.tag in ("left", "right", "top", "width", "height")
-                  or (e.tag == "include" and (e.get("content") or "").startswith("WinBox")))
-    assert pos, "login_safe_boxes: no geometry found on 9901"
-    grey = (f'<control type="image">{pos}<texture colordiffuse="facetint">wc_face.png</texture>'
-            f'<visible>Window.IsVisible(loginscreen)</visible></control>'
-            f'<control type="image">{pos}<texture colordiffuse="textdim">wc_min_dg.png</texture>'
-            f'<visible>Window.IsVisible(loginscreen)</visible></control>')
-    for el in reversed(etree.fromstring(f"<x>{grey}</x>")):
-        group.insert(0, el)
-    for el in group.iter():
-        el.tail = None
-        if el.text is not None and not el.text.strip():
-            el.text = None
-    body = etree.tostring(group, pretty_print=True).decode()
-    body = re.sub(r"(?<=[^\s])/>", " />", body)
-    return ("      <!-- the dialog boxes, login-safe (LOGIN_SAFE) -->\n"
-            "      <control type=\"group\">\n"
-            f"        <left>3</left><top>3</top><width>{wd - 6}</width><height>26</height>\n"
-            + textwrap.indent(body, "        ") + "      </control>\n")
 
 def fullwindow(name, body, default="", views="", colour="accent2",
                icon="icons24/folder.png", title=None):
@@ -199,7 +152,7 @@ def dialog(name, wd, ht, body, default="", icon="icons24/file.png",
     s += f'        <param name="innerwidth" value="{inner}" />\n'
     s += f'        <param name="icon" value="{icon}" /><param name="colour" value="{colour}" />\n'
     s += f'        <param name="down" value="{default}" />\n'
-    boxes = "none" if name in LOGIN_SAFE else BOXES.get(name, "dialog")
+    boxes = BOXES.get(name, "dialog")
     s += f'        <param name="boxes" value="{boxes}" />\n'
     if title:
         s += f'        <param name="title" value="{title}" />\n'
@@ -207,8 +160,6 @@ def dialog(name, wd, ht, body, default="", icon="icons24/file.png",
     if heading:
         s += f'      <include content="Dialog_Heading"><param name="width" value="{inner-100}" /></include>\n'
     s += body
-    if name in LOGIN_SAFE:
-        s += login_safe_boxes(wd, default)
     s += "    </control>\n  </controls>\n</window>\n"
     return s
 
@@ -486,8 +437,43 @@ def navs(sp, **dirs):
             out += f"{sp}<on{d}{c}>{tgt}</on{d}>\n"
     return out
 
+# The OSD's transport glyphs (mkmedia.TRANSPORT) exist only WHITE
+# (icons16/w_<name>.png, icons24/w_<name>.png, the latter 32x32 = the 16 grid
+# at 2x). White multiplies to exactly the palette colour, so every use is
+# tinted: text on the button face, textinv on the focused select face,
+# textdisabled when disabled. GUIControlFactory::GetTexture reads the
+# colordiffuse attribute of any texture tag (radio textures included).
+TRANSPORT_GLYPHS = ("play", "pause", "stop", "prev", "next", "rew", "ffwd",
+                    "shuffle", "repeat", "volume", "mute")
+GLYPH_TINT = {"focus": "textinv", "nofocus": "text", "disabled": "textdisabled"}
+
 def glyph_tex(glyph, size):
+    if glyph in TRANSPORT_GLYPHS:
+        return f"icons{size}/w_{glyph}.png"
     return glyph if ("/" in glyph or "$" in glyph) else f"icons{size}/{glyph}.png"
+
+def is_white_glyph(tex):
+    return re.search(r"icons(16|24)/w_[a-z]+[.]png", tex) is not None
+
+def glyph_size(glyph, size):
+    """Drawn size: the icons24 transport files are 32 px (the 16 px grid at
+    2x); drawing them at 24 would be a ragged 0.75x scale."""
+    return 32 if (size == 24 and glyph in TRANSPORT_GLYPHS) else size
+
+def tinted_glyph(sp, left, top, size, tex, focus_id, visible=None):
+    """A white glyph image over button `focus_id`. An image cannot follow its
+    button's focus, so there are two copies: text while the button is not
+    focused, textinv (on the select face) while it is."""
+    out = ""
+    for cond, col in ((f"!Control.HasFocus({focus_id})", "text"),
+                      (f"Control.HasFocus({focus_id})", "textinv")):
+        vis = f"[{visible}] + {cond}" if visible else cond
+        out += (f'{sp}<control type="image">\n'
+                f"{sp}  <left>{left}</left><top>{top}</top><width>{size}</width><height>{size}</height>\n"
+                f'{sp}  <texture colordiffuse="{col}">{tex}</texture>\n'
+                f"{sp}  <visible>{vis}</visible>\n"
+                f"{sp}</control>\n")
+    return out
 
 def hitrect(sp, x, y, w, h, pad, pady=None):
     """T-6: a <hitrect> `pad` px larger than the control on every side, so a
@@ -513,9 +499,10 @@ def icon_radio(cid, glyph, w, h, clicks, indent=8, size=16, selected=None,
     its look. With it, the state follows the condition (m_toggleSelect):
     `glyph_on` while it holds, `glyph` otherwise (Play/Pause, Mute)."""
     sp = " " * indent
-    x, y = (w - size) // 2, (h - size) // 2
     off = glyph_tex(glyph, size)
     on = glyph_tex(glyph_on, size) if glyph_on else off
+    size = glyph_size(glyph, size)
+    x, y = (w - size) // 2, (h - size) // 2
     s = f'{sp}<control type="radiobutton" id="{cid}">\n'
     if pos:
         s += f"{sp}  <left>{pos[0]}</left><top>{pos[1]}</top>"
@@ -526,7 +513,8 @@ def icon_radio(cid, glyph, w, h, clicks, indent=8, size=16, selected=None,
     s += f"{sp}  <label></label>\n"
     for state, tex in (("on", on), ("off", off)):
         for f in ("focus", "nofocus", "disabled"):
-            s += f"{sp}  <textureradio{state}{f}>{tex}</textureradio{state}{f}>\n"
+            tint = f' colordiffuse="{GLYPH_TINT[f]}"' if is_white_glyph(tex) else ""
+            s += f"{sp}  <textureradio{state}{f}{tint}>{tex}</textureradio{state}{f}>\n"
     s += f"{sp}  <radiowidth>{size}</radiowidth><radioheight>{size}</radioheight>\n"
     s += f"{sp}  <radioposx>{x}</radioposx><radioposy>{y}</radioposy>\n"
     if selected:
@@ -543,18 +531,24 @@ def icon_button(cid, glyph, w, h, clicks, indent=8, size=16):
     (Kept for callers outside the OSD; inside a grouplist prefer icon_radio,
     whose single control keeps keyboard navigation.)"""
     sp = " " * indent
+    tex = glyph_tex(glyph, size)
+    size = glyph_size(glyph, size)
     ons = "".join(f"\n{sp}    <onclick>{c}</onclick>" for c in clicks)
-    return (f'{sp}<control type="group" id="{9000 + int(cid)}">\n'
-            f'{sp}  <width>{w}</width><height>{h}</height>\n'
-            f'{sp}  <control type="button" id="{cid}">\n'
-            f'{sp}    <left>0</left><top>0</top><width>{w}</width><height>{h}</height>\n'
-            f'{sp}    <label></label>{ons}\n'
-            f'{sp}  </control>\n'
-            f'{sp}  <control type="image">\n'
-            f'{sp}    <left>{(w-size)//2}</left><top>{(h-size)//2}</top><width>{size}</width><height>{size}</height>\n'
-            f'{sp}    <texture>{glyph_tex(glyph, size)}</texture>\n'
-            f'{sp}  </control>\n'
-            f'{sp}</control>\n')
+    s = (f'{sp}<control type="group" id="{9000 + int(cid)}">\n'
+         f'{sp}  <width>{w}</width><height>{h}</height>\n'
+         f'{sp}  <control type="button" id="{cid}">\n'
+         f'{sp}    <left>0</left><top>0</top><width>{w}</width><height>{h}</height>\n'
+         f'{sp}    <label></label>{ons}\n'
+         f'{sp}  </control>\n')
+    l, t = (w - size) // 2, (h - size) // 2
+    if is_white_glyph(tex):
+        s += tinted_glyph(sp + "  ", l, t, size, tex, cid)
+    else:
+        s += (f'{sp}  <control type="image">\n'
+              f'{sp}    <left>{l}</left><top>{t}</top><width>{size}</width><height>{size}</height>\n'
+              f'{sp}    <texture>{tex}</texture>\n'
+              f'{sp}  </control>\n')
+    return s + f'{sp}</control>\n'
 
 def slider(cid, l, t, wd, ht, action, info, visible=None, enable=None, nav=None, indent=6):
     """A touch slider: a tap jumps, a drag follows the finger
@@ -759,6 +753,57 @@ def osd_rows(name, kind):
             record_button(L),
             addon_button(L)]
 
+# The text row must never run past the bar: CGUIControlGroupList clips a
+# child that does not fit whole, and hands it no taps. Its guards keep the
+# widest set of buttons that can be visible at once inside the row; this
+# proves it for every state (live TV/radio, a file, an add-on stream) by
+# trying every combination of the other conditions.
+def _cond_tokens(c):
+    return re.findall(r"\[|\]|!|\+|\||[^\[\]!+|\s][^\[\]+|]*[^\[\]+|\s]|[^\[\]!+|\s]", c)
+
+def _cond_eval(c, val):
+    """A Kodi boolean (! before +, + before |, [ ] groups) with atoms from val."""
+    t, i = _cond_tokens(c), [0]
+    def orx():
+        v = andx()
+        while i[0] < len(t) and t[i[0]] == "|":
+            i[0] += 1; v = andx() or v
+        return v
+    def andx():
+        v = notx()
+        while i[0] < len(t) and t[i[0]] == "+":
+            i[0] += 1; v = notx() and v
+        return v
+    def notx():
+        i[0] += 1
+        if t[i[0] - 1] == "!":
+            return not notx()
+        if t[i[0] - 1] == "[":
+            v = orx(); i[0] += 1; return v
+        return val(t[i[0] - 1].strip())
+    return orx()
+
+def osd_row_worst(kind):
+    """{state: widest visible row in px} for the OSD text row."""
+    import itertools
+    rows = osd_rows("X", kind)
+    atoms = sorted({a.strip() for b in rows if b[4] for a in _cond_tokens(b[4]) if a not in "[]!+|"})
+    pins = {"live": {}, "file": {}, "addon": {}}
+    if kind != "game":
+        for st in pins:
+            pins[st] = {OSD_LIVE[kind]: st == "live",
+                        "String.StartsWith(Player.FilenameAndPath,plugin://)": st == "addon"}
+    worst = {}
+    for st, pin in pins.items():
+        free = [a for a in atoms if a not in pin]
+        best = 0
+        for combo in itertools.product((False, True), repeat=len(free)):
+            v = dict(pin, **dict(zip(free, combo)))
+            vis = [b for b in rows if not b[4] or _cond_eval(b[4], v.__getitem__)]
+            best = max(best, sum(b[1] for b in vis) + 6 * (len(vis) - 1))
+        worst[st] = best
+    return worst
+
 def osd_window(name, kind="video"):
     up = seek_targets(kind) + [(None, "202")]
     T, H_ = SEEK_T, SEEK_H
@@ -831,8 +876,8 @@ def osd_window(name, kind="video"):
     # V-2: mute and volume, by touch. Tap or drag the slider (fireOnDrag:
     # the volume follows the finger); not while the receiver decodes.
     left = [(VIS_IF, "203"), (None, "201")] if kind == "music" else "201"
-    body += icon_radio(9982, "audio", TR_W, TR_H, ["Mute"], indent=6, size=24,
-                       selected="Player.Muted", glyph_on="audio_muted", pos=(MUTE_L, TR_T),
+    body += icon_radio(9982, "volume", TR_W, TR_H, ["Mute"], indent=6, size=24,
+                       selected="Player.Muted", glyph_on="mute", pos=(MUTE_L, TR_T),
                        nav={"up": up, "down": "202", "left": left, "right": "9983"},
                        hit=OSD_HIT)
     body += slider(9983, VOL_L, TR_T + 6, VOL_W, TR_H - 12, "volume", "Player.Volume",
@@ -847,6 +892,8 @@ def osd_window(name, kind="video"):
              f"        <onclick>Dialog.Close({name})</onclick>\n"
              + navs("        ", up=up, down="202", left="9983", right="201")
              + "      </control>\n")
+    worst = osd_row_worst(kind)
+    assert max(worst.values()) <= OSD_W - 16, f"{name}: OSD text row can overflow: {worst}"
     body += osd_buttons(202, TX_T, osd_rows(name, kind), "201",
                         seek_targets(kind) + [(None, "201")], onright="9951")
     title = "$INFO[Player.Title]" if kind == "game" else "$VAR[NowPlayingVar]"
@@ -867,6 +914,24 @@ def tap_close(name, above, cid=9990, focus="9012"):
             f"      <onclick>Dialog.Close({name})</onclick>\n"
             + navs("      ", up=focus, down=focus, left=focus, right=focus)
             + "    </control>\n")
+
+def outside_taps(wd, ht, focus, first=9971):
+    """T-3 for a centred pop-up without Dialog_Dim: four empty buttons around
+    a wd x ht box (inside its group), 2048 px each way, so a tap anywhere
+    outside it closes it in both layouts (CGUIControlGroup passes mouse
+    events to children without clipping). Not one button behind the box: a
+    tap on the box's own background would fall through to it."""
+    F = 2048
+    out = ""
+    for i, (l, t, w_, h_) in enumerate(((-F, -F, F, 2 * F), (wd, -F, F, 2 * F),
+                                        (0, -F, wd, F), (0, ht, wd, F))):
+        out += (f'      <control type="button" id="{first + i}">\n'
+                f"        <left>{l}</left><top>{t}</top><width>{w_}</width><height>{h_}</height>\n"
+                "        <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>\n"
+                "        <label></label>\n        <onclick>Action(close)</onclick>\n"
+                + navs("        ", up=focus, down=focus, left=focus, right=focus)
+                + "      </control>\n")
+    return out
 
 def kv_rows(l, t, rows, keyw=156, valw=300, rowh=26, indent=6):
     """label: value lines, the key dimmed. rows: (key label, value label)."""
@@ -1607,8 +1672,8 @@ def small_dialogs():
     # screen allows and short menus still come out short. A long menu
     # scrolls (drag, wheel or keys) and scrollbar 997 shows that there is
     # more; it hides itself when everything fits (showonepage false).
-    # tallpass leaves <coordinates> windows alone, so the 768 layout keeps
-    # these heights.
+    # tallpass.context_menu() makes 999/996/997 168 px taller at 768 (999
+    # stays at 0,0).
     W, GL = 380, 520
     XLC = "[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"
     def xl_pair(inc, normal, xl, ind):
@@ -1620,8 +1685,29 @@ def small_dialogs():
     # first (CGUIControlGroup::SendMouseEvent runs last-rendered first).
     # Taller rows (XLC) give the 30 px bar a column of its own.
     BW, BWX, SBL = W - 20, W - 54, W - 28   # rows 10..370 / 10..336, bar 352..370 / 340..370
+    # T-3: a tap outside the menu closes it (Estuary's full-screen close
+    # button; a modal dialog gets every tap, CGUIWindowManager::HandleAction).
+    # The window moves with the focus, so no fixed-place Back (9108) can work
+    # here; instead empty buttons hang off the window origin 2048 px each way
+    # - left, right and above the menu, and one behind the list from the
+    # title bar down (Kodi shrinks only 999 to fit the entries, so where the
+    # menu ends is unknown; a tap that misses every entry falls through to
+    # it). Only the title bar, whose boxes are live, is left alone. They come
+    # first, so everything else gets a tap before them
+    # (CGUIControlGroup::SendMouseEvent tries the last-rendered first).
+    F = 2048
+    catchers = ""
+    for cid, (l, t, w_, h_) in ((9971, (-F, -F, F, 2 * F)), (9972, (W, -F, F, 2 * F)),
+                                (9973, (0, -F, W, F)), (9974, (0, 38, W, F))):
+        catchers += (f'    <control type="button" id="{cid}">\n'
+                     f"      <left>{l}</left><top>{t}</top><width>{w_}</width><height>{h_}</height>\n"
+                     "      <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>\n"
+                     "      <label></label>\n      <onclick>Action(close)</onclick>\n"
+                     "      <onup>996</onup><ondown>996</ondown><onleft>996</onleft><onright>996</onright>\n"
+                     "    </control>\n")
     out["DialogContextMenu"] = (H + "<window>\n  <defaultcontrol>996</defaultcontrol>\n"
       "  <coordinates><left>0</left><top>0</top></coordinates>\n  <controls>\n"
+      + catchers +
       f"    <control type=\"image\" id=\"999\">\n"
       f"      <left>0</left><top>0</top><width>{W}</width><height>{38 + GL + 10}</height>\n"
       "      <texture border=\"2\">panel_raised.png</texture>\n"
@@ -1790,8 +1876,12 @@ def small_dialogs():
     # The heading goes on the title bar (Kodi never writes id 1 here). 13/14
     # are skin buttons - Estuary's touch minus/plus: focus the slider, step
     # it, and keep focus on the button so it can be tapped again.
+    # Width as Dialog_Heading's: clear of the boxes, which are wider in
+    # Touch mode (Dialog_Heading_Touch stops 138 px from the right edge).
     body = ("      <control type=\"label\" id=\"10\">\n"
-            "        <left>29</left><top>3</top><width>400</width><height>26</height>\n"
+            "        <left>29</left><top>3</top><height>26</height>\n"
+            "        <include content=\"Dialog_Heading_Width\" condition=\"!Skin.HasSetting(touchmode)\"><param name=\"width\" value=\"400\" /></include>\n"
+            "        <include content=\"Dialog_Heading_Touch\" condition=\"Skin.HasSetting(touchmode)\" />\n"
             "        <font>chromebold</font><textcolor>titletext</textcolor>\n"
             "        <align>left</align><aligny>center</aligny>\n      </control>\n"
             "      <control type=\"label\" id=\"12\">\n"
@@ -2503,8 +2593,13 @@ def _slide_button(cid, left, glyphs, clicks, onleft, onright, w=72, h=52):
     s += "".join(f"          <onclick>{c}</onclick>\n" for c in clicks)
     s += "        </control>\n"
     for tex, vis in glyphs:
+        tex = glyph_tex(tex, 24)
+        l, t = left + (w - 32) // 2, 8 + (h - 32) // 2
+        if is_white_glyph(tex):
+            s += tinted_glyph("        ", l, t, 32, tex, cid, vis)
+            continue
         s += (f'        <control type="image">\n'
-              f"          <left>{left + (w - 32) // 2}</left><top>{8 + (h - 32) // 2}</top><width>32</width><height>32</height>\n"
+              f"          <left>{l}</left><top>{t}</top><width>32</width><height>32</height>\n"
               f"          <texture>{tex}</texture>\n")
         if vis:
             s += f"          <visible>{vis}</visible>\n"
@@ -2533,12 +2628,12 @@ def slideshow():
     paused = "[Slideshow.IsActive + Slideshow.IsPaused]"
     W = 8 + 72 * 5 + 6 * 2 + 18 * 2 + 8     # prev play next | info | close
     x = [8, 86, 164, 254, 344]
-    strip = (_slide_button(9801, x[0], [("icons24/prev.png", None)],
+    strip = (_slide_button(9801, x[0], [("prev", None)],
                            ["Action(PreviousPicture)", restart], 9805, 9802)
-           + _slide_button(9802, x[1], [("icons24/pause.png", playing),
-                                        ("icons24/play.png", f"![{playing}]")],
+           + _slide_button(9802, x[1], [("pause", playing),
+                                        ("play", f"![{playing}]")],
                            ["Action(Pause)", restart], 9801, 9803)
-           + _slide_button(9803, x[2], [("icons24/next.png", None)],
+           + _slide_button(9803, x[2], [("next", None)],
                            ["Action(NextPicture)", restart], 9802, 9804)
            + _slide_button(9804, x[3], [("icons24/pictures_info.png", None)],
                            [stop, "Action(Info)"], 9803, 9805)
@@ -2701,8 +2796,8 @@ def player_controls():
     body += icon_radio(603, "stop", 60, 48, ["PlayerControl(Stop)"], size=24, hit=OSD_HIT)
     body += icon_radio(605, "next", 60, 48, ["PlayerControl(Next)"], size=24, hit=OSD_HIT)
     body += "      </control>\n"
-    body += icon_radio(9982, "audio", 60, 48, ["Mute"], indent=6, size=24,
-                       selected="Player.Muted", glyph_on="audio_muted", pos=(290, 146),
+    body += icon_radio(9982, "volume", 60, 48, ["Mute"], indent=6, size=24,
+                       selected="Player.Muted", glyph_on="mute", pos=(290, 146),
                        nav={"up": seek, "down": "202", "left": "201", "right": "9983"},
                        hit=OSD_HIT)
     body += slider(9983, 356, 152, 290, 36, "volume", "Player.Volume",
@@ -3289,7 +3384,7 @@ def login_screen():
     log off, master mode). The power button is an ordinary ROWH (40 px)
     dialog row inside the frame, so it is a real touch target in every
     mode; the dialogs it can lead to (power menu, keyboard, numeric pad)
-    get login-safe title-bar boxes (LOGIN_SAFE)."""
+    are login-safe (LOGIN_SAFE, logincheck.py)."""
     name = "LoginScreen"
     ids = kodi_ids(name, INV[name])
     body  = caplabel(16, 38, 980, None, cid=2, h=26, font="bigbold", col="text")
@@ -3528,6 +3623,9 @@ def pvr_channels_osd():
     # The footer lines are sized for Extra large (bold 28, small 24 px) so
     # they never touch; at the normal sizes they simply sit a little apart.
     b += well(10, 394, 880, 96, "panel_sunken_grey.png")
+    # group buttons: white glyphs, tinted to follow the button's focus
+    grp_prev = tinted_glyph("      ", 688, 438, 32, glyph_tex("prev", 24), 9811)
+    grp_next = tinted_glyph("      ", 830, 438, 32, glyph_tex("next", 24), 9812)
     b += f"""      <control type="label" id="2">
         <left>20</left><top>397</top><width>640</width><height>30</height>
         <font>bold</font><aligny>center</aligny><label>$INFO[{C}.Title]</label>
@@ -3553,11 +3651,7 @@ def pvr_channels_osd():
         <label></label><onclick>Action(PreviousChannelGroup)</onclick>
         <onleft>60</onleft><onright>9812</onright><onup>11</onup><ondown>11</ondown>
       </control>
-      <control type="image">
-        <left>688</left><top>438</top><width>32</width><height>32</height>
-        <texture>icons24/prev.png</texture>
-      </control>
-      <control type="label">
+{grp_prev}      <control type="label">
         <left>730</left><top>430</top><width>90</width><height>48</height>
         <font>small</font><align>center</align><aligny>center</aligny><label>$LOCALIZE[19141]</label>
       </control>
@@ -3566,11 +3660,10 @@ def pvr_channels_osd():
         <label></label><onclick>Action(NextChannelGroup)</onclick>
         <onleft>9811</onleft><onright>11</onright><onup>11</onup><ondown>11</ondown>
       </control>
-      <control type="image">
-        <left>830</left><top>438</top><width>32</width><height>32</height>
-        <texture>icons24/next.png</texture>
-      </control>
-"""
+{grp_next}"""
+    # no dim (the picture stays in view), so no Dialog_Dim touch Back: a tap
+    # outside the box closes it instead
+    b += outside_taps(900, 500, "11")
     return dialog("DialogPVRChannelsOSD", 900, 500, b, default="11", dim=False,
                   icon="icons24/pvr_channels.png",
                   title="$LOCALIZE[19019]$INFO[VideoPlayer.ChannelGroup, - ,]")
@@ -3706,7 +3799,7 @@ def guide_window():
         <onleft>9480</onleft><onright>60</onright><onup>9480</onup><ondown>9100</ondown>
 """
     if os.path.exists(GUIDE_NOW_TEX):   # "now" line, once mkmedia draws it
-        b += '        <progresstexture border="0,0,4,0" colordiffuse="accent1">epg_now.png</progresstexture>\n'
+        b += '        <progresstexture border="0,0,4,0" colordiffuse="epgnow">epg_now.png</progresstexture>\n'
     # XL set first: Kodi takes the first layout whose condition passes.
     b += _guide_layouts(50, CHW, 50, 40, XLC)
     b += _guide_layouts(50, CHW, 34, 24, None)
@@ -3820,8 +3913,7 @@ def pvr_guide_controls():
     for cond, row in ((XLC, 46), ("!" + XLC, 30)):
         rows = 3 * row + 2 * 3
         sizes[cond] = (TOP + rows + 16, TOP + rows + 8 - 34)
-    HT = max(h for h, _ in sizes.values())    # the group: XL size, on the bottom edge
-    HN = sizes["!" + XLC][0]
+    HT = max(h for h, _ in sizes.values())    # placeholder; the group gets both heights below
     b = ""
     for cond, (_, wh) in sizes.items():
         b += (f"      <control type=\"image\">\n"
@@ -3864,19 +3956,18 @@ def pvr_guide_controls():
         <onup>602</onup><ondown>602</ondown><onleft>{cols[-1][0]}</onleft><onright>{cols[0][0]}</onright>
       </control>
 """
-    # A tap outside the box closes it, as in Kodi's own skin: four empty
+    # A tap outside the box closes it, as in Kodi's own skin: three empty
     # buttons around the box (not one under it - a tap on the box's own
     # background would fall through to it and close the dialog). They hang
     # off the box itself, 2048 px each way, so they reach the screen edges in
     # both layouts; CGUIControlGroup passes mouse events to its children
-    # without clipping to the group. The bottom one only matters in normal
-    # mode, where the frame ends above the screen's bottom edge.
+    # without clipping to the group. The box itself sits on the bottom edge
+    # in both sizes, so nothing is below it.
     F = 2048
     for cid, geo, vis in (
             (9971, f"<left>{-F}</left><top>{-F}</top><width>{F}</width><height>{2*F}</height>", None),
             (9972, f"<left>{WD}</left><top>{-F}</top><width>{F}</width><height>{2*F}</height>", None),
-            (9973, f"<left>0</left><top>{-F}</top><width>{WD}</width><height>{F}</height>", None),
-            (9974, f"<left>0</left><top>{HN}</top><width>{WD}</width><height>{F}</height>", "!" + XLC)):
+            (9973, f"<left>0</left><top>{-F}</top><width>{WD}</width><height>{F}</height>", None)):
         b += (f'      <control type="button" id="{cid}">\n        {geo}\n'
               '        <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>\n'
               '        <label></label>\n        <onclick>Action(close)</onclick>\n'
@@ -3888,7 +3979,14 @@ def pvr_guide_controls():
                anchor="bottom")
     # the frame in two heights; Kodi keeps only the include whose condition
     # holds when the window loads (CGUIIncludes), and a font or Touch mode
-    # change reloads the skin
+    # change reloads the skin. The group (hung from the bottom edge) takes
+    # the same two heights, so the box sits on the screen's bottom edge in
+    # normal mode too instead of floating 48 px above it.
+    grp = f"      <width>{WD}</width><height>{HT}</height>\n"
+    assert s.count(grp) == 1
+    s = s.replace(grp, f"      <width>{WD}</width>\n" + "".join(
+        f'      <include content="Size_Height" condition="{cond}"><param name="v" value="{h}" /></include>\n'
+        for cond, (h, _) in sizes.items()))
     i = s.index('      <include content="Dialog_Box">\n')
     j = s.index("      </include>\n", i) + len("      </include>\n")
     box = s[i:j]

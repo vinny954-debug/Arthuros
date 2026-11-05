@@ -13,5 +13,6 @@
   <include name="SliderSize_XL"><sliderwidth>240</sliderwidth><sliderheight>32</sliderheight></include>
   <include name="Size_Left"><param name="v" default="0" /><definition><left>$PARAM[v]</left></definition></include>
   <include name="Size_Width"><param name="v" default="0" /><definition><width>$PARAM[v]</width></definition></include>
+  <include name="Size_Height"><param name="v" default="0" /><definition><height>$PARAM[v]</height></definition></include>
   <include name="Size_Hit"><param name="x" default="0" /><param name="y" default="0" /><param name="w" default="0" /><param name="h" default="0" /><definition><hitrect x="$PARAM[x]" y="$PARAM[y]" w="$PARAM[w]" h="$PARAM[h]" /></definition></include>
 </includes>
