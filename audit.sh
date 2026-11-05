@@ -99,6 +99,36 @@ chk "OSD add-on settings find the add-on (B-5)" 'test -f $S/scripts/addonsetting
 :
 :
 # ===== P2 other playback =====
+chk "V-1 picture viewer has no full-screen cover" '! grep -q "bar_dgrey" $S/xml/SlideShow.xml $S/xml768/SlideShow.xml'
+chk "V-11 picture viewer touch strip + timer" '(for r in xml xml768; do grep -q "Skin.TimerStart(arthur_slidebar)" $S/$r/SlideShow.xml && grep -q "Action(Stop)" $S/$r/SlideShow.xml && grep -q "Action(NextPicture)" $S/$r/SlideShow.xml && grep -q "<name>arthur_slidebar</name>" $S/$r/Timers.xml || exit 1; done)'
+chk "V-11 picture viewer error label id 10" '(for r in xml xml768; do grep -q "type=\"label\" id=\"10\"" $S/$r/SlideShow.xml || exit 1; done)'
+chk "V-11 strip backstop: near-miss taps keep the strip" '(for r in xml xml768; do grep -q "type=\"button\" id=\"9806\"" $S/$r/SlideShow.xml || exit 1; done)'
+chk "V-11 Paused only for a running slideshow" '(for r in xml xml768; do ! grep -q "<visible>Slideshow.IsPaused</visible>\|| Slideshow.IsPaused</visible>" $S/$r/SlideShow.xml && test $(grep -c "\[Slideshow.IsActive + Slideshow.IsPaused\]" $S/$r/SlideShow.xml) -eq 2 || exit 1; done)'
+chk "V-16 channel OSD rows show number/programme" '(for r in xml xml768; do f=$S/$r/DialogPVRChannelsOSD.xml; grep -q "ListItem.ChannelNumberLabel" $f && grep -q "<info>ListItem.Progress</info>" $f && grep -q "Action(NextChannelGroup)" $f && ! grep -q "Dialog_Heading" $f || exit 1; done)'
+chk "V-16 channel OSD fits Extra large (number column, footer)" '(for r in xml xml768; do f=$S/$r/DialogPVRChannelsOSD.xml; grep -q "<width>76</width><height>64</height>" $f && grep -A1 "type=\"label\" id=\"2\"" $f | grep -q "<height>30</height>" || exit 1; done)'
+chk "V-18 background progress: corner, no dim" '(for r in xml xml768; do f=$S/$r/DialogExtendedProgressBar.xml; ! grep -q "Dialog_Dim\|centertop" $f && grep -q "Window.IsVisible(fullscreenvideo)" $f || exit 1; done)'
+chk "V-19 visualisation has a no-add-on screen" 'grep -q "!Visualisation.Enabled" $S/xml/MusicVisualisation.xml && grep -q "Player.Art(fanart)" $S/xml/MusicVisualisation.xml'
+chk "S-8 visualisation: no bare artist dash" '! grep -qF "] - \$INFO[MusicPlayer" $S/xml/MusicVisualisation.xml $S/xml768/MusicVisualisation.xml'
+chk "K-6 visualisation control is id 2" 'grep -q "type=\"visualisation\" id=\"2\"" $S/xml/MusicVisualisation.xml && grep -q "type=\"visualisation\" id=\"2\"" $S/xml768/MusicVisualisation.xml'
+chk "V-25 busy dialog: Cancel, no dead progress" '(for r in xml xml768; do f=$S/$r/DialogBusy.xml; ! grep -q "Busy.Progress" $f && grep -q "<onclick>Action(Back)</onclick>" $f || exit 1; done)'
+chk "V-25 busy Cancel: per instance, never focused by default" '(for r in xml xml768; do f=$S/$r/DialogBusy.xml; ! grep -q "defaultcontrol\|Window.IsActive(busydialog)" $f && grep -q "<visible>Window.Is(busydialog)</visible>" $f && grep -q "<visible>!Window.Is(busydialog)</visible>" $f || exit 1; done)'
+chk "V-26 game pictures: title, description, Label2" '(for r in xml xml768; do f=$S/$r/DialogSelect.xml; grep -q "Control.GetLabel(10810)" $f && grep -q "game.videofilterdescription)\]</label>" $f && test $(sed -n "/<control type=\"panel\" id=\"10811\">/,/<control type=\"textbox\" id=\"10812\">/p" $f | grep -c "<label>\$INFO\[ListItem.Label2\]</label>") -eq 4 || exit 1; done)'
+chk "C-1 select tick follows the palette" '(for r in xml xml768; do f=$S/$r/DialogSelect.xml; ! grep -q "check_on.png" $f && test $(grep -c "<texture colordiffuse=\"text\(inv\)\?\">icons24/tick.png</texture>" $f) -eq 8 || exit 1; done) && test -f $S/media/icons24/tick.png'
+chk "C-1 select: focused labels keep textinv when selected" 'python3 -c "
+import re,sys
+s=open(sys.argv[1]).read()
+bad=[l for fl in re.findall(r\"<focusedlayout.*?</focusedlayout>\",s,re.S) for l in re.findall(r\"<control type=.label.>.*?</control>\",fl,re.S) if \"textinv\" in l and \"<selectedcolor>textinv\" not in l]
+sys.exit(1 if bad or s.count(\"<visible>ListItem.IsSelected</visible>\")<8 else 0)" $S/xml/DialogSelect.xml'
+chk "C-1 palettecheck reports marked on select" 'python3 $(dirname $S)/palettecheck.py | grep -q "marked on select"'
+chk "C-4 unfocused selected rows stay readable" 'python3 -c "
+import re,sys
+bad=0
+for f in sys.argv[1:]:
+  for fl in re.findall(r\"<focusedlayout.*?</focusedlayout>\",open(f).read(),re.S):
+    if re.search(r\"fill.png</texture><visible>Control.HasFocus\",fl):
+      for l in re.findall(r\"<control type=.label.>.*?</control>\",fl,re.S):
+        if \"textinv\" in l and \"Control.HasFocus\" not in l: bad=1
+sys.exit(bad)" $S/xml/DialogSubtitles.xml $S/xml/Includes_Games.xml $S/xml/DialogPVRChannelsOSD.xml'
 :
 :
 # ===== P3 generic windows & text =====

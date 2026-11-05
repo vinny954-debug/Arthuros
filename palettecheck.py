@@ -55,9 +55,15 @@ for p in sorted(glob.glob(os.path.join(C, "*.xml"))):
         "pointed-at title box": ratio(P["titletext"], P["select"]),
     }
     disabled = ratio(P["textdisabled"], face)
+    # For information only, never a target: an item that is both selected
+    # (Kodi's "current value" in a settings list, a ticked row, the playing
+    # item) and focused would draw in marked on the select bar. Every palette
+    # fails 4.5:1 here by design, which is why focused labels must set
+    # <selectedcolor>textinv</selectedcolor> - audit.sh checks they do.
+    marked_sel = ratio(P["marked"], P["select"])
     want = TARGET.get(name, 4.5)   # every palette meets WCAG AA
     worst = min(pairs, key=pairs.get)
-    rows.append((name, pairs[worst], worst, disabled))
+    rows.append((name, pairs[worst], worst, disabled, marked_sel))
     if want:
         for k, v in pairs.items():
             if v < want:
@@ -66,9 +72,9 @@ for p in sorted(glob.glob(os.path.join(C, "*.xml"))):
                                                  # accessibility palettes keep it legible anyway
             failed.append(f"{name}: disabled text is {disabled:.1f}:1, needs 3:1")
 
-for name, v, worst, dis in rows:
+for name, v, worst, dis, ms in rows:
     tag = f"  (target {TARGET.get(name, 4.5)}:1)"
-    print(f"  {name:22s} lowest {v:4.1f}:1 ({worst}); disabled {dis:.1f}:1{tag}")
+    print(f"  {name:22s} lowest {v:4.1f}:1 ({worst}); disabled {dis:.1f}:1; marked on select {ms:.2f}:1{tag}")
 if failed:
     print("palettecheck: FAILED")
     for f in failed:

@@ -36,8 +36,10 @@
         </itemlayout>
         <focusedlayout height="44" width="264" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image"><left>0</left><top>0</top><width>264</width><height>44</height><texture colordiffuse="select">fill.png</texture><visible>Control.HasFocus(150)</visible></control>
+          <control type="image"><left>0</left><top>0</top><width>264</width><height>44</height><texture border="4" colordiffuse="select">select_ring.png</texture><visible>!Control.HasFocus(150)</visible></control>
           <control type="image"><left>2</left><top>10</top><width>24</width><height>24</height><texture>$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>
-          <control type="label"><left>32</left><top>0</top><width>228</width><height>44</height><aligny>center</aligny><textcolor>textinv</textcolor><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>32</left><top>0</top><width>228</width><height>44</height><aligny>center</aligny><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><label>$INFO[ListItem.Label]</label><visible>Control.HasFocus(150)</visible></control>
+          <control type="label"><left>32</left><top>0</top><width>228</width><height>44</height><aligny>center</aligny><textcolor>text</textcolor><label>$INFO[ListItem.Label]</label><visible>!Control.HasFocus(150)</visible></control>
         </focusedlayout>
       <itemlayout height="28" width="264">
           <control type="image"><left>2</left><top>2</top><width>24</width><height>24</height><texture>$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>
@@ -45,8 +47,10 @@
         </itemlayout>
         <focusedlayout height="28" width="264">
           <control type="image"><left>0</left><top>0</top><width>264</width><height>28</height><texture colordiffuse="select">fill.png</texture><visible>Control.HasFocus(150)</visible></control>
+          <control type="image"><left>0</left><top>0</top><width>264</width><height>28</height><texture border="4" colordiffuse="select">select_ring.png</texture><visible>!Control.HasFocus(150)</visible></control>
           <control type="image"><left>2</left><top>2</top><width>24</width><height>24</height><texture>$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>
-          <control type="label"><left>32</left><top>0</top><width>228</width><height>28</height><aligny>center</aligny><textcolor>textinv</textcolor><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>32</left><top>0</top><width>228</width><height>28</height><aligny>center</aligny><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><label>$INFO[ListItem.Label]</label><visible>Control.HasFocus(150)</visible></control>
+          <control type="label"><left>32</left><top>0</top><width>228</width><height>28</height><aligny>center</aligny><textcolor>text</textcolor><label>$INFO[ListItem.Label]</label><visible>!Control.HasFocus(150)</visible></control>
         </focusedlayout>
       </control>
       <control type="button" id="160">
@@ -76,8 +80,11 @@
         </itemlayout>
         <focusedlayout height="44" width="556" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image"><left>0</left><top>0</top><width>556</width><height>44</height><texture colordiffuse="select">fill.png</texture><visible>Control.HasFocus(120)</visible></control>
-          <control type="label"><left>6</left><top>0</top><width>400</width><height>44</height><aligny>center</aligny><textcolor>textinv</textcolor><label>$INFO[ListItem.Label2]</label></control>
-          <control type="label"><left>410</left><top>0</top><width>140</width><height>44</height><aligny>center</aligny><align>right</align><font>small</font><textcolor>textinv</textcolor><label>$INFO[ListItem.Label]</label></control>
+          <control type="image"><left>0</left><top>0</top><width>556</width><height>44</height><texture border="4" colordiffuse="select">select_ring.png</texture><visible>!Control.HasFocus(120)</visible></control>
+          <control type="label"><left>6</left><top>0</top><width>400</width><height>44</height><aligny>center</aligny><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><label>$INFO[ListItem.Label2]</label><visible>Control.HasFocus(120)</visible></control>
+          <control type="label"><left>6</left><top>0</top><width>400</width><height>44</height><aligny>center</aligny><textcolor>text</textcolor><label>$INFO[ListItem.Label2]</label><visible>!Control.HasFocus(120)</visible></control>
+          <control type="label"><left>410</left><top>0</top><width>140</width><height>44</height><aligny>center</aligny><align>right</align><font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><label>$INFO[ListItem.Label]</label><visible>Control.HasFocus(120)</visible></control>
+          <control type="label"><left>410</left><top>0</top><width>140</width><height>44</height><aligny>center</aligny><align>right</align><font>small</font><textcolor>textdim</textcolor><label>$INFO[ListItem.Label]</label><visible>!Control.HasFocus(120)</visible></control>
         </focusedlayout>
       <itemlayout height="28" width="556">
           <control type="label"><left>6</left><top>0</top><width>400</width><height>28</height><aligny>center</aligny><label>$INFO[ListItem.Label2]</label></control>
@@ -85,8 +92,11 @@
         </itemlayout>
         <focusedlayout height="28" width="556">
           <control type="image"><left>0</left><top>0</top><width>556</width><height>28</height><texture colordiffuse="select">fill.png</texture><visible>Control.HasFocus(120)</visible></control>
-          <control type="label"><left>6</left><top>0</top><width>400</width><height>28</height><aligny>center</aligny><textcolor>textinv</textcolor><label>$INFO[ListItem.Label2]</label></control>
-          <control type="label"><left>410</left><top>0</top><width>140</width><height>28</height><aligny>center</aligny><align>right</align><font>small</font><textcolor>textinv</textcolor><label>$INFO[ListItem.Label]</label></control>
+          <control type="image"><left>0</left><top>0</top><width>556</width><height>28</height><texture border="4" colordiffuse="select">select_ring.png</texture><visible>!Control.HasFocus(120)</visible></control>
+          <control type="label"><left>6</left><top>0</top><width>400</width><height>28</height><aligny>center</aligny><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><label>$INFO[ListItem.Label2]</label><visible>Control.HasFocus(120)</visible></control>
+          <control type="label"><left>6</left><top>0</top><width>400</width><height>28</height><aligny>center</aligny><textcolor>text</textcolor><label>$INFO[ListItem.Label2]</label><visible>!Control.HasFocus(120)</visible></control>
+          <control type="label"><left>410</left><top>0</top><width>140</width><height>28</height><aligny>center</aligny><align>right</align><font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><label>$INFO[ListItem.Label]</label><visible>Control.HasFocus(120)</visible></control>
+          <control type="label"><left>410</left><top>0</top><width>140</width><height>28</height><aligny>center</aligny><align>right</align><font>small</font><textcolor>textdim</textcolor><label>$INFO[ListItem.Label]</label><visible>!Control.HasFocus(120)</visible></control>
         </focusedlayout>
       </control>
       <control type="scrollbar" id="73">

@@ -1,25 +1,60 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <window>
   <controls>
-    <control type="visualisation">
+    <control type="group">
+      <left>0</left><top>0</top><width>1024</width><height>768</height>
+      <visible>!Visualisation.Enabled</visible>
+      <control type="image">
+      <left>0</left><top>0</top><width>1024</width><height>768</height>
+      <texture colordiffuse="desktop">fill.png</texture>
+    </control>
+      <control type="image">
+        <left>0</left><top>0</top><width>1024</width><height>768</height>
+        <texture background="true">$INFO[Player.Art(fanart)]</texture>
+        <aspectratio>scale</aspectratio>
+      </control>
+    </control>
+    <!-- no fanart either: the cover, large, in an Arthur frame. Centred by
+         percentage, so the 4:3 layout centres it as well. -->
+    <control type="group">
+      <centerleft>50%</centerleft><centertop>45%</centertop><width>312</width><height>312</height>
+      <visible>!Visualisation.Enabled + String.IsEmpty(Player.Art(fanart))</visible>
+      <control type="image">
+        <left>0</left><top>0</top>
+        <width>312</width><height>312</height>
+        <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+      </control>
+      <control type="image">
+        <left>6</left><top>6</top><width>300</width><height>300</height>
+        <texture fallback="DefaultAudio.png" background="true">$INFO[Player.Art(thumb)]</texture>
+        <aspectratio>keep</aspectratio>
+      </control>
+    </control>
+    <control type="visualisation" id="2">
       <left>0</left><top>0</top><width>1024</width><height>768</height>
     </control>
     <control type="group">
-      <left>6</left><top>648</top><width>1012</width><height>84</height>
-      <visible>Player.ShowInfo</visible>
+      <left>6</left><top>640</top><width>1012</width><height>92</height>
+      <visible>Player.ShowInfo | !Visualisation.Enabled</visible>
       <control type="image">
         <left>0</left><top>0</top>
-        <width>1012</width><height>84</height>
+        <width>1012</width><height>92</height>
         <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
       </control>
-      <control type="image"><left>6</left><top>6</top><width>72</width><height>72</height>
+      <control type="image"><left>6</left><top>6</top><width>80</width><height>80</height>
         <texture fallback="DefaultAudio.png">$INFO[Player.Art(thumb)]</texture>
         <aspectratio>keep</aspectratio></control>
-      <control type="label"><left>90</left><top>6</top><width>910</width><height>26</height>
+      <control type="label"><left>98</left><top>6</top><width>902</width><height>32</height>
         <font>bigbold</font><label>$INFO[MusicPlayer.Title]</label></control>
-      <control type="label"><left>90</left><top>34</top><width>910</width><height>22</height>
-        <font>small</font><label>$INFO[MusicPlayer.Artist] - $INFO[MusicPlayer.Album]</label></control>
-      <control type="progress"><left>90</left><top>58</top><width>910</width><height>18</height>
+      <!-- artist and album only when there are some: radio and many
+           streams have neither, and a bare ' - ' is all that showed -->
+      <control type="label"><left>98</left><top>40</top><width>902</width><height>26</height>
+        <font>small</font><label>$INFO[MusicPlayer.Artist]$INFO[MusicPlayer.Album, - ]</label>
+        <visible>!String.IsEmpty(MusicPlayer.Artist)</visible></control>
+      <control type="label"><left>98</left><top>40</top><width>902</width><height>26</height>
+        <font>small</font><label>$INFO[MusicPlayer.Album]</label>
+        <visible>String.IsEmpty(MusicPlayer.Artist)</visible></control>
+      <control type="progress"><left>98</left><top>70</top><width>902</width><height>16</height>
         <info>Player.Progress</info></control>
     </control>
   </controls>

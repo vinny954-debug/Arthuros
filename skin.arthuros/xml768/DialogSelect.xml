@@ -138,6 +138,14 @@
       <control type="image">
         <left>10</left><top>60</top><width>640</width><height>346</height>
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+        <visible>![Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
+      </control>
+      <!-- the game dialogs have no heading row or buttons: one taller well
+           holds the previews and the description -->
+      <control type="image">
+        <left>10</left><top>36</top><width>640</width><height>434</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+        <visible>[Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
       </control>
 
       <control type="list" id="3">
@@ -160,10 +168,15 @@
             <label>$INFO[ListItem.Label]</label>
           </control>
           <control type="label">
-            <left>26</left><top>0</top><width>578</width><height>44</height>
+            <left>26</left><top>0</top><width>556</width><height>44</height>
             <font>small</font><textcolor>textdim</textcolor>
             <align>right</align><aligny>center</aligny>
             <label>$INFO[ListItem.Label2]</label>
+          </control>
+          <control type="image">
+            <left>591</left><top>14</top><width>16</width><height>16</height>
+            <texture colordiffuse="text">icons24/tick.png</texture>
+            <visible>ListItem.IsSelected</visible>
           </control>
         </itemlayout>
         <focusedlayout height="44" width="612" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
@@ -178,15 +191,20 @@
           </control>
           <control type="label">
             <left>26</left><top>0</top><width>500</width><height>44</height>
-            <font>bold</font><textcolor>textinv</textcolor>
+            <font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
             <align>left</align><aligny>center</aligny>
             <label>$INFO[ListItem.Label]</label>
           </control>
           <control type="label">
-            <left>26</left><top>0</top><width>578</width><height>44</height>
-            <font>small</font><textcolor>textinv</textcolor>
+            <left>26</left><top>0</top><width>556</width><height>44</height>
+            <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
             <align>right</align><aligny>center</aligny>
             <label>$INFO[ListItem.Label2]</label>
+          </control>
+          <control type="image">
+            <left>591</left><top>14</top><width>16</width><height>16</height>
+            <texture colordiffuse="textinv">icons24/tick.png</texture>
+            <visible>ListItem.IsSelected</visible>
           </control>
         </focusedlayout>
       <itemlayout height="28" width="612">
@@ -202,10 +220,15 @@
             <label>$INFO[ListItem.Label]</label>
           </control>
           <control type="label">
-            <left>26</left><top>0</top><width>578</width><height>28</height>
+            <left>26</left><top>0</top><width>556</width><height>28</height>
             <font>small</font><textcolor>textdim</textcolor>
             <align>right</align><aligny>center</aligny>
             <label>$INFO[ListItem.Label2]</label>
+          </control>
+          <control type="image">
+            <left>591</left><top>6</top><width>16</width><height>16</height>
+            <texture colordiffuse="text">icons24/tick.png</texture>
+            <visible>ListItem.IsSelected</visible>
           </control>
         </itemlayout>
         <focusedlayout height="28" width="612">
@@ -220,15 +243,20 @@
           </control>
           <control type="label">
             <left>26</left><top>0</top><width>500</width><height>28</height>
-            <font>bold</font><textcolor>textinv</textcolor>
+            <font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
             <align>left</align><aligny>center</aligny>
             <label>$INFO[ListItem.Label]</label>
           </control>
           <control type="label">
-            <left>26</left><top>0</top><width>578</width><height>28</height>
-            <font>small</font><textcolor>textinv</textcolor>
+            <left>26</left><top>0</top><width>556</width><height>28</height>
+            <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
             <align>right</align><aligny>center</aligny>
             <label>$INFO[ListItem.Label2]</label>
+          </control>
+          <control type="image">
+            <left>591</left><top>6</top><width>16</width><height>16</height>
+            <texture colordiffuse="textinv">icons24/tick.png</texture>
+            <visible>ListItem.IsSelected</visible>
           </control>
         </focusedlayout>
       </control>
@@ -244,13 +272,18 @@
             <texture fallback="DefaultFile.png">$INFO[ListItem.Icon]</texture>
           </control>
           <control type="label">
-            <left>52</left><top>10</top><width>556</width><height>24</height>
+            <left>52</left><top>10</top><width>530</width><height>24</height>
             <label>$INFO[ListItem.Label]</label>
           </control>
           <control type="label">
-            <left>52</left><top>32</top><width>556</width><height>22</height>
+            <left>52</left><top>32</top><width>530</width><height>22</height>
             <font>small</font><textcolor>textdim</textcolor>
             <label>$INFO[ListItem.Label2]</label>
+          </control>
+          <control type="image">
+            <left>591</left><top>24</top><width>16</width><height>16</height>
+            <texture colordiffuse="text">icons24/tick.png</texture>
+            <visible>ListItem.IsSelected</visible>
           </control>
         </itemlayout>
         <focusedlayout height="64" width="612" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
@@ -263,14 +296,19 @@
             <texture fallback="DefaultFile.png">$INFO[ListItem.Icon]</texture>
           </control>
           <control type="label">
-            <left>52</left><top>10</top><width>556</width><height>24</height>
-            <font>bold</font><textcolor>textinv</textcolor>
+            <left>52</left><top>10</top><width>530</width><height>24</height>
+            <font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
             <label>$INFO[ListItem.Label]</label>
           </control>
           <control type="label">
-            <left>52</left><top>32</top><width>556</width><height>22</height>
-            <font>small</font><textcolor>textinv</textcolor>
+            <left>52</left><top>32</top><width>530</width><height>22</height>
+            <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
             <label>$INFO[ListItem.Label2]</label>
+          </control>
+          <control type="image">
+            <left>591</left><top>24</top><width>16</width><height>16</height>
+            <texture colordiffuse="textinv">icons24/tick.png</texture>
+            <visible>ListItem.IsSelected</visible>
           </control>
         </focusedlayout>
       <itemlayout height="48" width="612">
@@ -279,13 +317,18 @@
             <texture fallback="DefaultFile.png">$INFO[ListItem.Icon]</texture>
           </control>
           <control type="label">
-            <left>52</left><top>2</top><width>556</width><height>24</height>
+            <left>52</left><top>2</top><width>530</width><height>24</height>
             <label>$INFO[ListItem.Label]</label>
           </control>
           <control type="label">
-            <left>52</left><top>24</top><width>556</width><height>22</height>
+            <left>52</left><top>24</top><width>530</width><height>22</height>
             <font>small</font><textcolor>textdim</textcolor>
             <label>$INFO[ListItem.Label2]</label>
+          </control>
+          <control type="image">
+            <left>591</left><top>16</top><width>16</width><height>16</height>
+            <texture colordiffuse="text">icons24/tick.png</texture>
+            <visible>ListItem.IsSelected</visible>
           </control>
         </itemlayout>
         <focusedlayout height="48" width="612">
@@ -298,14 +341,19 @@
             <texture fallback="DefaultFile.png">$INFO[ListItem.Icon]</texture>
           </control>
           <control type="label">
-            <left>52</left><top>2</top><width>556</width><height>24</height>
-            <font>bold</font><textcolor>textinv</textcolor>
+            <left>52</left><top>2</top><width>530</width><height>24</height>
+            <font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
             <label>$INFO[ListItem.Label]</label>
           </control>
           <control type="label">
-            <left>52</left><top>24</top><width>556</width><height>22</height>
-            <font>small</font><textcolor>textinv</textcolor>
+            <left>52</left><top>24</top><width>530</width><height>22</height>
+            <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
             <label>$INFO[ListItem.Label2]</label>
+          </control>
+          <control type="image">
+            <left>591</left><top>16</top><width>16</width><height>16</height>
+            <texture colordiffuse="textinv">icons24/tick.png</texture>
+            <visible>ListItem.IsSelected</visible>
           </control>
         </focusedlayout>
       </control>
@@ -313,43 +361,131 @@
       <!-- Game dialogs (video filter, stretch mode, rotation, in-game saves)
            borrow this window but use their own ids (DialogGameDefines.h):
            10810 heading, 10811 a panel of live previews, 10812 description. -->
+      <!-- Kodi writes the heading into 10810 (DialogGameVideoSelect
+           OnInitWindow) and nothing into id 1: keep 10810 off screen and show
+           its text on the title bar. -->
       <control type="label" id="10810">
-        <left>10</left><top>36</top><width>640</width><height>22</height>
-        <font>bold</font><textcolor>text</textcolor>
+        <left>-3000</left><top>0</top><width>500</width><height>22</height>
+      </control>
+      <control type="label">
+        <left>29</left><top>3</top><width>520</width><height>26</height>
+        <font>chromebold</font><textcolor>titletext</textcolor>
+        <align>left</align><aligny>center</aligny>
+        <label>$INFO[Control.GetLabel(10810)]</label>
         <visible>[Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
       </control>
       <control type="panel" id="10811">
-        <left>16</left><top>64</top><width>612</width><height>300</height>
+        <left>16</left><top>40</top><width>612</width><height>328</height>
         <onup>10811</onup><ondown>10811</ondown><onright>10861</onright>
         <pagecontrol>10861</pagecontrol>
         <orientation>vertical</orientation>
         <visible>[Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
-        <itemlayout width="204" height="150">
+        <!-- the Extra large fonts get a shorter preview and taller text lines -->
+        <itemlayout width="204" height="164" condition="String.StartsWith(Skin.Font,ExtraLarge)">
             <control type="image">
-              <left>4</left><top>4</top><width>196</width><height>112</height>
+              <left>4</left><top>4</top><width>196</width><height>96</height>
               <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
             </control>
             <control type="image">
-              <left>6</left><top>6</top><width>192</width><height>108</height>
+              <left>6</left><top>6</top><width>192</width><height>92</height>
               <aspectratio>keep</aspectratio>
               <texture>$INFO[ListItem.Art(screenshot)]</texture>
               <visible>!String.IsEmpty(ListItem.Art(screenshot))</visible>
             </control>
             <control type="gamewindow">
-              <left>6</left><top>6</top><width>192</width><height>108</height>
+              <left>6</left><top>6</top><width>192</width><height>92</height>
               <videofilter>$INFO[ListItem.Property(game.videofilter)]</videofilter>
               <stretchmode>$INFO[ListItem.Property(game.stretchmode)]</stretchmode>
               <rotation>$INFO[ListItem.Property(game.videorotation)]</rotation>
               <visible>String.IsEmpty(ListItem.Art(screenshot))</visible>
             </control>
             <control type="label">
-              <left>8</left><top>118</top><width>188</width><height>28</height>
+              <left>8</left><top>102</top><width>188</width><height>30</height>
               <font>small</font><textcolor>text</textcolor>
               <align>center</align><aligny>center</aligny>
               <label>$INFO[ListItem.Label]</label>
             </control>
+            <!-- filter category (DialogGameVideoFilter sets Label2) -->
+            <control type="label">
+              <left>8</left><top>132</top><width>188</width><height>28</height>
+              <font>tiny</font><textcolor>textdim</textcolor>
+              <align>center</align><aligny>center</aligny>
+              <label>$INFO[ListItem.Label2]</label>
+            </control>
         </itemlayout>
-        <focusedlayout width="204" height="150">
+        <focusedlayout width="204" height="164" condition="String.StartsWith(Skin.Font,ExtraLarge)">
+            <control type="image">
+              <left>4</left><top>4</top><width>196</width><height>96</height>
+              <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+            </control>
+            <control type="image">
+              <left>6</left><top>6</top><width>192</width><height>92</height>
+              <aspectratio>keep</aspectratio>
+              <texture>$INFO[ListItem.Art(screenshot)]</texture>
+              <visible>!String.IsEmpty(ListItem.Art(screenshot))</visible>
+            </control>
+            <control type="gamewindow">
+              <left>6</left><top>6</top><width>192</width><height>92</height>
+              <videofilter>$INFO[ListItem.Property(game.videofilter)]</videofilter>
+              <stretchmode>$INFO[ListItem.Property(game.stretchmode)]</stretchmode>
+              <rotation>$INFO[ListItem.Property(game.videorotation)]</rotation>
+              <visible>String.IsEmpty(ListItem.Art(screenshot))</visible>
+            </control>
+            <control type="image">
+              <left>4</left><top>100</top><width>196</width><height>62</height>
+              <texture colordiffuse="select">fill.png</texture>
+            </control>
+            <control type="label">
+              <left>8</left><top>102</top><width>188</width><height>30</height>
+              <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
+              <align>center</align><aligny>center</aligny>
+              <label>$INFO[ListItem.Label]</label>
+            </control>
+            <!-- filter category (DialogGameVideoFilter sets Label2) -->
+            <control type="label">
+              <left>8</left><top>132</top><width>188</width><height>28</height>
+              <font>tiny</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
+              <align>center</align><aligny>center</aligny>
+              <label>$INFO[ListItem.Label2]</label>
+            </control>
+            <control type="image">
+              <left>0</left><top>0</top><width>204</width><height>164</height>
+              <texture border="4" colordiffuse="select">select_ring.png</texture>
+            </control>
+        </focusedlayout>
+        <itemlayout width="204" height="164">
+            <control type="image">
+              <left>4</left><top>4</top><width>196</width><height>112</height>
+              <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+            </control>
+            <control type="image">
+              <left>6</left><top>6</top><width>192</width><height>108</height>
+              <aspectratio>keep</aspectratio>
+              <texture>$INFO[ListItem.Art(screenshot)]</texture>
+              <visible>!String.IsEmpty(ListItem.Art(screenshot))</visible>
+            </control>
+            <control type="gamewindow">
+              <left>6</left><top>6</top><width>192</width><height>108</height>
+              <videofilter>$INFO[ListItem.Property(game.videofilter)]</videofilter>
+              <stretchmode>$INFO[ListItem.Property(game.stretchmode)]</stretchmode>
+              <rotation>$INFO[ListItem.Property(game.videorotation)]</rotation>
+              <visible>String.IsEmpty(ListItem.Art(screenshot))</visible>
+            </control>
+            <control type="label">
+              <left>8</left><top>118</top><width>188</width><height>22</height>
+              <font>small</font><textcolor>text</textcolor>
+              <align>center</align><aligny>center</aligny>
+              <label>$INFO[ListItem.Label]</label>
+            </control>
+            <!-- filter category (DialogGameVideoFilter sets Label2) -->
+            <control type="label">
+              <left>8</left><top>140</top><width>188</width><height>20</height>
+              <font>tiny</font><textcolor>textdim</textcolor>
+              <align>center</align><aligny>center</aligny>
+              <label>$INFO[ListItem.Label2]</label>
+            </control>
+        </itemlayout>
+        <focusedlayout width="204" height="164">
             <control type="image">
               <left>4</left><top>4</top><width>196</width><height>112</height>
               <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
@@ -368,35 +504,45 @@
               <visible>String.IsEmpty(ListItem.Art(screenshot))</visible>
             </control>
             <control type="image">
-              <left>4</left><top>118</top><width>196</width><height>28</height>
+              <left>4</left><top>116</top><width>196</width><height>46</height>
               <texture colordiffuse="select">fill.png</texture>
             </control>
             <control type="label">
-              <left>8</left><top>118</top><width>188</width><height>28</height>
-              <font>small</font><textcolor>textinv</textcolor>
+              <left>8</left><top>118</top><width>188</width><height>22</height>
+              <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
               <align>center</align><aligny>center</aligny>
               <label>$INFO[ListItem.Label]</label>
             </control>
+            <!-- filter category (DialogGameVideoFilter sets Label2) -->
+            <control type="label">
+              <left>8</left><top>140</top><width>188</width><height>20</height>
+              <font>tiny</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
+              <align>center</align><aligny>center</aligny>
+              <label>$INFO[ListItem.Label2]</label>
+            </control>
             <control type="image">
-              <left>0</left><top>0</top><width>204</width><height>150</height>
+              <left>0</left><top>0</top><width>204</width><height>164</height>
               <texture border="4" colordiffuse="select">select_ring.png</texture>
             </control>
         </focusedlayout>
       </control>
       <control type="scrollbar" id="10861">
-        <left>629</left><top>63</top><width>18</width><height>300</height>
+        <left>629</left><top>40</top><width>18</width><height>328</height>
         <onleft>10811</onleft>
         <visible>[Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
       </control>
       <control type="image">
-        <left>13</left><top>366</top><width>634</width><height>1</height>
+        <left>13</left><top>372</top><width>634</width><height>1</height>
         <texture>fill_black.png</texture>
         <visible>[Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
       </control>
+      <!-- Kodi sends the filter description to 10811, not here
+           (DialogGameVideoSelect::OnDescriptionChange), so read it from the
+           item; only one of the two properties is ever set. -->
       <control type="textbox" id="10812">
-        <left>18</left><top>370</top><width>624</width><height>34</height>
+        <left>18</left><top>378</top><width>624</width><height>88</height>
         <font>small</font><textcolor>textdim</textcolor>
-        <label>$INFO[Container(10811).ListItem.Property(savestate.caption)]</label>
+        <label>$INFO[Container(10811).ListItem.Property(savestate.caption)]$INFO[Container(10811).ListItem.Property(game.videofilterdescription)]</label>
         <visible>[Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
       </control>
 

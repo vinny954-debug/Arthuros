@@ -1,21 +1,118 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <window>
   <controls>
-    <control type="image">
+    <!-- Tap anywhere on the picture: show the strip, or hide it again. -->
+    <control type="button" id="9800">
       <left>0</left><top>0</top><width>1024</width><height>768</height>
-      <texture>bar_dgrey.png</texture>
+      <label/><texturefocus/><texturenofocus/>
+      <onclick condition="!Skin.TimerIsRunning(arthur_slidebar)">Skin.TimerStart(arthur_slidebar)</onclick>
+      <onclick condition="Skin.TimerIsRunning(arthur_slidebar)">Skin.TimerStop(arthur_slidebar)</onclick>
     </control>
-    <!-- Kodi renders the picture itself; the skin only adds the caption. -->
+    <!-- Kodi draws its 'unable to load' text in this label's font
+         (CGUIWindowSlideShow::RenderErrorMessage, LABEL_ROW1). -->
+    <control type="label" id="10">
+      <left>-3000</left><top>0</top><width>10</width><height>10</height>
+      <font>chromebold</font><label/>
+    </control>
+    <!-- caption: with the strip, and whenever the slideshow is paused -->
     <control type="group">
-      <left>6</left><top>736</top><width>1012</width><height>26</height>
-      <visible>!Slideshow.IsPaused + Player.ShowInfo</visible>
+      <left>4</left><top>4</top><width>1016</width><height>30</height>
+      <visible>Skin.TimerIsRunning(arthur_slidebar) | [Slideshow.IsActive + Slideshow.IsPaused]</visible>
       <control type="image">
         <left>0</left><top>0</top>
-        <width>1012</width><height>26</height>
+        <width>1016</width><height>30</height>
         <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
       </control>
-      <control type="label"><left>10</left><top>0</top><width>990</width><height>26</height>
-        <font>small</font><label>$INFO[Slideshow.Filename]</label></control>
+      <control type="label">
+        <left>10</left><top>2</top><width>600</width><height>26</height>
+        <font>chrome</font><aligny>center</aligny><label>$INFO[Slideshow.Filename]</label>
+      </control>
+      <control type="label">
+        <left>816</left><top>2</top><width>190</width><height>26</height>
+        <font>chrome</font><align>right</align><aligny>center</aligny>
+        <label>$INFO[Slideshow.SlideIndex]</label>
+      </control>
+      <control type="label">
+        <left>620</left><top>2</top><width>190</width><height>26</height>
+        <font>chromebold</font><textcolor>marked</textcolor><align>right</align><aligny>center</aligny>
+        <label>$LOCALIZE[112]</label><visible>[Slideshow.IsActive + Slideshow.IsPaused]</visible>
+      </control>
+    </control>
+    <!-- the strip: previous, play/pause, next | information | close -->
+    <control type="group">
+      <left>300</left><bottom>8</bottom><width>424</width><height>68</height>
+      <visible>Skin.TimerIsRunning(arthur_slidebar)</visible>
+      <control type="image">
+        <left>0</left><top>0</top>
+        <width>424</width><height>68</height>
+        <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+      </control>
+      <!-- the strip's frame and the gaps between its buttons: a tap that
+           just misses a button keeps the strip up instead of falling
+           through to 9800 and hiding it. Mouse hits go to the last
+           control first (CGUIControlGroup::SendMouseEvent), so the
+           buttons below still win. -->
+      <control type="button" id="9806">
+        <left>0</left><top>0</top><width>424</width><height>68</height>
+        <label/><texturefocus/><texturenofocus/>
+        <onclick>Skin.TimerStart(arthur_slidebar)</onclick>
+      </control>
+        <control type="button" id="9801">
+          <left>8</left><top>8</top><width>72</width><height>52</height>
+          <label/><onleft>9805</onleft><onright>9802</onright>
+          <onclick>Action(PreviousPicture)</onclick>
+          <onclick>Skin.TimerStart(arthur_slidebar)</onclick>
+        </control>
+        <control type="image">
+          <left>28</left><top>18</top><width>32</width><height>32</height>
+          <texture>icons24/prev.png</texture>
+        </control>
+        <control type="button" id="9802">
+          <left>86</left><top>8</top><width>72</width><height>52</height>
+          <label/><onleft>9801</onleft><onright>9803</onright>
+          <onclick>Action(Pause)</onclick>
+          <onclick>Skin.TimerStart(arthur_slidebar)</onclick>
+        </control>
+        <control type="image">
+          <left>106</left><top>18</top><width>32</width><height>32</height>
+          <texture>icons24/pause.png</texture>
+          <visible>Slideshow.IsActive + !Slideshow.IsPaused</visible>
+        </control>
+        <control type="image">
+          <left>106</left><top>18</top><width>32</width><height>32</height>
+          <texture>icons24/play.png</texture>
+          <visible>![Slideshow.IsActive + !Slideshow.IsPaused]</visible>
+        </control>
+        <control type="button" id="9803">
+          <left>164</left><top>8</top><width>72</width><height>52</height>
+          <label/><onleft>9802</onleft><onright>9804</onright>
+          <onclick>Action(NextPicture)</onclick>
+          <onclick>Skin.TimerStart(arthur_slidebar)</onclick>
+        </control>
+        <control type="image">
+          <left>184</left><top>18</top><width>32</width><height>32</height>
+          <texture>icons24/next.png</texture>
+        </control>
+        <control type="button" id="9804">
+          <left>254</left><top>8</top><width>72</width><height>52</height>
+          <label/><onleft>9803</onleft><onright>9805</onright>
+          <onclick>Skin.TimerStop(arthur_slidebar)</onclick>
+          <onclick>Action(Info)</onclick>
+        </control>
+        <control type="image">
+          <left>274</left><top>18</top><width>32</width><height>32</height>
+          <texture>icons24/pictures_info.png</texture>
+        </control>
+        <control type="button" id="9805">
+          <left>344</left><top>8</top><width>72</width><height>52</height>
+          <label/><onleft>9804</onleft><onright>9801</onright>
+          <onclick>Skin.TimerStop(arthur_slidebar)</onclick>
+          <onclick>Action(Stop)</onclick>
+        </control>
+        <control type="image">
+          <left>364</left><top>18</top><width>32</width><height>32</height>
+          <texture>icons24/exit.png</texture>
+        </control>
     </control>
   </controls>
 </window>
