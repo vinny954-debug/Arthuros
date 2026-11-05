@@ -1,87 +1,33 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <window>
-  <defaultcontrol always="false">10</defaultcontrol>
-  <backgroundcolor>desktop</backgroundcolor>
+  <defaultcontrol>22</defaultcontrol>
   <controls>
     <control type="image">
       <left>0</left><top>0</top><width>1024</width><height>768</height>
-      <texture colordiffuse="desktop">fill.png</texture>
+      <texture>dim.png</texture>
     </control>
     <control type="group">
-      <left>0</left><top>0</top><width>1024</width><height>26</height>
-      <visible>!Skin.HasSetting(hidemenubar)</visible>
-
-      <control type="image">
-        <left>0</left><top>0</top><width>1024</width><height>26</height>
-        <texture border="2" colordiffuse="facetint">panel_chrome.png</texture>
-      </control>
-
-      <control type="image">
-        <left>5</left><top>5</top><width>16</width><height>16</height>
-        <texture>logo.png</texture>
-      </control>
-
-      <control type="label">
-        <left>27</left><top>0</top><width>520</width><height>26</height>
-        <font>chromebold</font><textcolor>text</textcolor>
-        <align>left</align><aligny>center</aligny>
-        <label>Kodi $INFO[System.BuildVersionShort] - ArthurOS 1.2 (v0.9.6)</label>
-      </control>
-
-      <!-- right-hand status cluster, anchored to the right edge -->
-      <control type="image">
-        <right>6</right><top>5</top><width>16</width><height>16</height>
-        <texture>icons24/network.png</texture>
-        <visible>System.InternetState</visible>
-      </control>
-
-      <control type="image">
-        <right>100</right><top>5</top><width>16</width><height>16</height>
-        <texture>$VAR[VolumeIconVar]</texture>
-      </control>
-      <!-- a small volume gauge instead of Kodi's decibel figure -->
-      <control type="progress">
-        <right>28</right><top>8</top><width>66</width><height>10</height>
-        <info>Player.Volume</info>
-        <visible>!Player.Muted</visible>
-      </control>
-      <control type="label">
-        <right>28</right><top>0</top><width>66</width><height>26</height>
-        <font>chromesmall</font><textcolor>marked</textcolor>
-        <align>center</align><aligny>center</aligny>
-        <label>$LOCALIZE[31949]</label>
-        <visible>Player.Muted</visible>
-      </control>
-
-      <control type="label">
-        <right>124</right><top>0</top><width>300</width><height>26</height>
-        <font>chromebold</font><textcolor>text</textcolor>
-        <align>right</align><aligny>center</aligny>
-        <label>$INFO[System.Date(ddd mmm d)]  $INFO[System.Time]</label>
-        <visible>!Skin.HasSetting(hideclock)</visible>
-      </control>
-    </control>
-    <control type="group">
-      <left>6</left><top>30</top><width>1012</width><height>702</height>
+      <centerleft>50%</centerleft><centertop>50%</centertop>
+      <width>900</width><height>484</height>
       <control type="image">
         <left>0</left><top>0</top>
-        <width>1012</width><height>702</height>
+        <width>900</width><height>484</height>
         <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
       </control>
       <control type="group">
         <left>3</left><top>3</top>
         <control type="group">
-        <width>1006</width><height>26</height>
+        <width>894</width><height>26</height>
 
         <control type="image">
           <left>0</left><top>0</top>
-          <width>1006</width><height>26</height>
+          <width>894</width><height>26</height>
           <texture colordiffuse="accent2">fill.png</texture>
         </control>
         <!-- hard 1px rule under the bar, the way Arthur draws it -->
         <control type="image">
           <left>0</left><bottom>0</bottom>
-          <width>1006</width><height>1</height>
+          <width>894</width><height>1</height>
           <texture>fill_black.png</texture>
         </control>
 
@@ -96,7 +42,7 @@
           <left>26</left><right>100</right><top>0</top><height>26</height>
           <align>left</align><aligny>center</aligny>
           <font>chromebold</font><textcolor>titletext</textcolor>
-          <label>$LOCALIZE[136]</label>
+          <label></label>
         </control>
 
         <control type="label">
@@ -117,7 +63,7 @@
         <onclick>Dialog.Close(all,true)</onclick>
         <onclick>ActivateWindow(Home)</onclick>
         <onright>9902</onright>
-        <ondown>10</ondown>
+        <ondown>22</ondown>
       </control>
       <control type="image">
         <right>70</right><top>2</top><width>22</width><height>22</height>
@@ -138,7 +84,7 @@
         <onclick>Action(FullScreen)</onclick>
         <onleft>9901</onleft>
         <onright>9903</onright>
-        <ondown>10</ondown>
+        <ondown>22</ondown>
       </control>
       <control type="image">
         <right>46</right><top>2</top><width>22</width><height>22</height>
@@ -162,7 +108,7 @@
         <label/>
         <onclick>Action(Back)</onclick>
         <onleft>9902</onleft>
-        <ondown>10</ondown>
+        <ondown>22</ondown>
       </control>
       <control type="image">
         <right>22</right><top>2</top><width>22</width><height>22</height>
@@ -177,98 +123,105 @@
     </control>
       </control>
       </control>
+      <control type="label" id="2">
+        <left>29</left><top>3</top><width>770</width><height>26</height>
+        <font>chromebold</font><textcolor>titletext</textcolor>
+        <align>left</align><aligny>center</aligny>
+      </control>
       <control type="image">
-        <left>6</left><top>34</top><width>300</width><height>662</height>
+        <left>10</left><top>36</top><width>440</width><height>388</height>
         <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
       </control>
-      <control type="grouplist">
-        <left>14</left><top>40</top><width>284</width><height>650</height>
+      <control type="grouplist" id="500">
+        <left>16</left><top>42</top><width>406</width><height>376</height>
         <orientation>vertical</orientation><itemgap>3</itemgap>
-        <onup>9100</onup><ondown>9100</ondown>
-        <control type="button" id="12">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+        <onup>9903</onup><ondown>9000</ondown><onleft>10</onleft><onright>10</onright>
+        <pagecontrol>501</pagecontrol>
+        <control type="button" id="22">
+          <width>400</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[467]</label>
+        </control>
+        <control type="button" id="12">
+          <width>400</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[21433]</label>
         </control>
         <control type="button" id="16">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <width>400</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[21424]</label>
         </control>
         <control type="button" id="17">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <width>400</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[21427]</label>
         </control>
         <control type="button" id="18">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <width>400</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[21429]</label>
         </control>
         <control type="button" id="19">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <width>400</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="button" id="20">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="button" id="21">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="button" id="22">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
-          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[580]</label>
         </control>
         <control type="button" id="23">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <width>400</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[21458]</label>
         </control>
         <control type="radiobutton" id="24">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <width>400</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[21458]: $LOCALIZE[21459]</label>
         </control>
       </control>
+      <control type="scrollbar" id="501">
+        <left>426</left><top>42</top><width>18</width><height>376</height>
+        <onleft>500</onleft><onright>10</onright>
+      </control>
       <control type="image">
-        <left>312</left><top>34</top><width>694</width><height>562</height>
+        <left>458</left><top>36</top><width>432</width><height>340</height>
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
       <control type="list" id="10">
-        <left>315</left><top>37</top><width>670</width><height>556</height>
-        <onleft>12</onleft><onright>9600</onright>
-        <onup>10</onup><ondown>9100</ondown>
-        <pagecontrol>9600</pagecontrol>
-        <itemlayout height="44" width="670" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+        <left>461</left><top>39</top><width>408</width><height>334</height>
+        <onup>9903</onup><ondown>9010</ondown><onleft>500</onleft><onright>60</onright>
+        <pagecontrol>60</pagecontrol>
+        <itemlayout height="44" width="408" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image">
         <left>4</left><top>12</top><width>16</width><height>16</height>
         <texture>$INFO[ListItem.Icon]</texture>
       </control>
       <control type="label">
         <left>26</left><top>0</top>
-        <width>662</width><height>40</height>
+        <width>400</width><height>40</height>
         <font>normal</font><textcolor>text</textcolor>
         <align>left</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label]</label>
       </control>
       <control type="label">
         <left>0</left><top>0</top>
-        <width>662</width><height>40</height>
+        <width>400</width><height>40</height>
         <font>small</font><textcolor>textdim</textcolor>
         <align>right</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label2]</label>
       </control>
         </itemlayout>
-        <focusedlayout height="44" width="670" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+        <focusedlayout height="44" width="408" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image">
         <left>0</left><top>0</top>
-        <width>670</width><height>40</height>
+        <width>408</width><height>40</height>
         <texture colordiffuse="select">fill.png</texture>
       </control>
       <control type="image">
@@ -277,43 +230,43 @@
       </control>
       <control type="label">
         <left>26</left><top>0</top>
-        <width>670</width><height>40</height>
+        <width>408</width><height>40</height>
         <font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
         <align>left</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label]</label>
       </control>
       <control type="label">
         <left>0</left><top>0</top>
-        <width>670</width><height>40</height>
+        <width>408</width><height>40</height>
         <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
         <align>right</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label2]</label>
       </control>
         </focusedlayout>
-      <itemlayout height="28" width="670">
+      <itemlayout height="28" width="408">
           <control type="image">
         <left>4</left><top>4</top><width>16</width><height>16</height>
         <texture>$INFO[ListItem.Icon]</texture>
       </control>
       <control type="label">
         <left>26</left><top>0</top>
-        <width>662</width><height>24</height>
+        <width>400</width><height>24</height>
         <font>normal</font><textcolor>text</textcolor>
         <align>left</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label]</label>
       </control>
       <control type="label">
         <left>0</left><top>0</top>
-        <width>662</width><height>24</height>
+        <width>400</width><height>24</height>
         <font>small</font><textcolor>textdim</textcolor>
         <align>right</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label2]</label>
       </control>
         </itemlayout>
-        <focusedlayout height="28" width="670">
+        <focusedlayout height="28" width="408">
           <control type="image">
         <left>0</left><top>0</top>
-        <width>670</width><height>24</height>
+        <width>408</width><height>24</height>
         <texture colordiffuse="select">fill.png</texture>
       </control>
       <control type="image">
@@ -322,241 +275,53 @@
       </control>
       <control type="label">
         <left>26</left><top>0</top>
-        <width>670</width><height>24</height>
+        <width>408</width><height>24</height>
         <font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
         <align>left</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label]</label>
       </control>
       <control type="label">
         <left>0</left><top>0</top>
-        <width>670</width><height>24</height>
+        <width>408</width><height>24</height>
         <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
         <align>right</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label2]</label>
       </control>
         </focusedlayout>
       </control>
-      <control type="scrollbar" id="9600">
-        <left>985</left><top>37</top><width>18</width><height>556</height>
-        <onleft>10</onleft><onright>12</onright>
+      <control type="scrollbar" id="60">
+        <left>869</left><top>39</top><width>18</width><height>334</height>
+        <onleft>10</onleft><onright>500</onright>
       </control>
-      <control type="image">
-        <left>312</left><top>602</top><width>694</width><height>94</height>
-        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
-      </control>
-      <control type="label" id="2">
-        <left>322</left><top>608</top><width>674</width><height>24</height>
-        <font>small</font>
-      </control>
-      <control type="grouplist" id="500">
-        <left>-3000</left><top>0</top><width>200</width><height>24</height>
-      </control>
-    </control>
-    <control type="group">
-      <left>0</left><top>736</top><width>1024</width><height>32</height>
-      <visible>!Skin.HasSetting(hidetaskbar)</visible>
-
-      <control type="image">
-        <left>0</left><top>0</top><width>1024</width><height>32</height>
-        <texture border="2" colordiffuse="facetint">panel_chrome.png</texture>
-      </control>
-
-      <!-- Kodi pads button text by textoffsetx on BOTH sides, so an icon inset
-           used to be charged twice and "Start" truncated under larger fonts.
-           The label is a separate control now, sized to the space it really has. -->
-      <control type="group">
-        <left>4</left><top>4</top><width>104</width><height>24</height>
-        <control type="button" id="9100">
-          <left>0</left><top>0</top><width>104</width><height>24</height>
-          <label/>
-          <onup>10</onup>
-          <onright>9101</onright>
-          <onclick>ActivateWindow(Home)</onclick>
+      <control type="grouplist" id="9010">
+        <left>458</left><top>384</top><width>432</width><height>40</height>
+        <orientation>horizontal</orientation><align>center</align><itemgap>8</itemgap>
+        <onup>10</onup><ondown>9000</ondown>
+        <control type="button" id="13">
+          <width>200</width><height>40</height>
+          <align>center</align>
+          <label>$LOCALIZE[15019]</label>
         </control>
-        <control type="image">
-          <left>6</left><top>4</top><width>16</width><height>16</height>
-          <texture>logo.png</texture>
-        </control>
-        <control type="label">
-          <left>26</left><top>0</top><width>72</width><height>24</height>
-          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
-          <label>Start</label>
-          <visible>!Control.HasFocus(9100)</visible>
-        </control>
-        <control type="label">
-          <left>26</left><top>0</top><width>72</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
-          <label>Start</label>
-          <visible>Control.HasFocus(9100)</visible>
+        <control type="button" id="14">
+          <width>200</width><height>40</height>
+          <align>center</align>
+          <label>$LOCALIZE[1210]</label>
         </control>
       </control>
-      <!-- Kodi pads button text by textoffsetx on BOTH sides, so an icon inset
-           used to be charged twice and "Start" truncated under larger fonts.
-           The label is a separate control now, sized to the space it really has. -->
-      <control type="group">
-        <left>112</left><top>4</top><width>200</width><height>24</height>
-        <visible>Player.HasMedia</visible>
-        <control type="button" id="9101">
-          <left>0</left><top>0</top><width>200</width><height>24</height>
-          <label/>
-          <onup>10</onup>
-          <onleft>9100</onleft><onright>9102</onright>
-          <onclick>ActivateWindow(FullscreenVideo)</onclick>
-          <onclick>ActivateWindow(Visualisation)</onclick>
+      <control type="grouplist" id="9000">
+        <left>10</left><top>432</top><width>880</width><height>40</height>
+        <orientation>horizontal</orientation><align>center</align><itemgap>8</itemgap>
+        <onup>500</onup>
+        <control type="button" id="20">
+          <width>240</width><height>40</height>
+          <align>center</align>
+          <label>$LOCALIZE[186]</label>
         </control>
-        <control type="image">
-          <left>6</left><top>4</top><width>16</width><height>16</height>
-          <texture>icons24/audio.png</texture>
+        <control type="button" id="21">
+          <width>240</width><height>40</height>
+          <align>center</align>
+          <label>$LOCALIZE[222]</label>
         </control>
-        <control type="label">
-          <left>26</left><top>0</top><width>168</width><height>24</height>
-          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
-          <label>$VAR[NowPlayingVar]</label>
-          <visible>!Control.HasFocus(9101)</visible>
-        </control>
-        <control type="label">
-          <left>26</left><top>0</top><width>168</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
-          <label>$VAR[NowPlayingVar]</label>
-          <visible>Control.HasFocus(9101)</visible>
-        </control>
-      </control>
-      <!-- Kodi pads button text by textoffsetx on BOTH sides, so an icon inset
-           used to be charged twice and "Start" truncated under larger fonts.
-           The label is a separate control now, sized to the space it really has. -->
-      <control type="group">
-        <left>316</left><top>4</top><width>150</width><height>24</height>
-        <visible>Player.HasMedia</visible>
-        <control type="button" id="9102">
-          <left>0</left><top>0</top><width>150</width><height>24</height>
-          <label/>
-          <onup>10</onup>
-          <onleft>9101</onleft><onright>9104</onright>
-          <onclick>ActivateWindow(PlayerControls)</onclick>
-        </control>
-        <control type="image">
-          <left>6</left><top>4</top><width>16</width><height>16</height>
-          <texture>icons24/playlist.png</texture>
-        </control>
-        <control type="label">
-          <left>26</left><top>0</top><width>118</width><height>24</height>
-          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
-          <label>$LOCALIZE[136]</label>
-          <visible>!Control.HasFocus(9102)</visible>
-        </control>
-        <control type="label">
-          <left>26</left><top>0</top><width>118</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
-          <label>$LOCALIZE[136]</label>
-          <visible>Control.HasFocus(9102)</visible>
-        </control>
-      </control>
-      <!-- Kodi pads button text by textoffsetx on BOTH sides, so an icon inset
-           used to be charged twice and "Start" truncated under larger fonts.
-           The label is a separate control now, sized to the space it really has. -->
-      <!-- A window parked by its title-bar "_" box. Click to bring it back
-           to the folder it was showing; the button then goes away. -->
-      <control type="group">
-        <right>268</right><top>4</top><width>182</width><height>24</height>
-        <visible>!String.IsEmpty(Skin.String(arthur.minwin)) + !String.IsEqual(Skin.String(arthur.minwin),home)</visible>
-        <control type="button" id="9104">
-          <left>0</left><top>0</top><width>182</width><height>24</height>
-          <label/>
-          <onup>10</onup>
-          <onleft>9102</onleft><onright>9103</onright>
-          <onclick condition="String.IsEmpty(Skin.String(arthur.minpath))">ActivateWindow($INFO[Skin.String(arthur.minwin)])</onclick>
-          <onclick condition="!String.IsEmpty(Skin.String(arthur.minpath))">ActivateWindow($INFO[Skin.String(arthur.minwin)],$ESCINFO[Skin.String(arthur.minpath)])</onclick>
-          <onclick>Skin.Reset(arthur.minwin)</onclick>
-          <onclick>Skin.Reset(arthur.minpath)</onclick>
-        </control>
-        <control type="image">
-          <left>6</left><top>4</top><width>16</width><height>16</height>
-          <texture>$INFO[Skin.String(arthur.minicon)]</texture>
-        </control>
-        <control type="label">
-          <left>26</left><top>0</top><width>150</width><height>24</height>
-          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
-          <label>$INFO[Skin.String(arthur.mintitle)]</label>
-          <visible>!Control.HasFocus(9104)</visible>
-        </control>
-        <control type="label">
-          <left>26</left><top>0</top><width>150</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
-          <label>$INFO[Skin.String(arthur.mintitle)]</label>
-          <visible>Control.HasFocus(9104)</visible>
-        </control>
-      </control>
-
-      <control type="group">
-        <right>124</right><top>4</top><width>140</width><height>24</height>
-        <control type="button" id="9103">
-          <left>0</left><top>0</top><width>140</width><height>24</height>
-          <label/>
-          <onup>10</onup>
-          <onleft>9104</onleft><onright>9105</onright>
-          <onclick>ActivateWindow(Settings)</onclick>
-        </control>
-        <control type="image">
-          <left>6</left><top>4</top><width>16</width><height>16</height>
-          <texture>icons24/settings.png</texture>
-        </control>
-        <control type="label">
-          <left>26</left><top>0</top><width>108</width><height>24</height>
-          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
-          <label>$LOCALIZE[5]</label>
-          <visible>!Control.HasFocus(9103)</visible>
-        </control>
-        <control type="label">
-          <left>26</left><top>0</top><width>108</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
-          <label>$LOCALIZE[5]</label>
-          <visible>Control.HasFocus(9103)</visible>
-        </control>
-      </control>
-
-      <!-- Touch mode: a Back button where the clock sits (the menu bar keeps
-           the time). It fills the full height of the task bar so a finger
-           can find it. -->
-      <control type="group">
-        <right>4</right><top>0</top><width>116</width><height>32</height>
-        <visible>Skin.HasSetting(touchmode)</visible>
-        <control type="button" id="9105">
-          <left>0</left><top>0</top><width>116</width><height>32</height>
-          <label/>
-          <onup>10</onup>
-          <onleft>9103</onleft>
-          <onclick>Action(Back)</onclick>
-        </control>
-        <control type="image">
-          <left>8</left><top>8</top><width>16</width><height>16</height>
-          <texture>icons24/parent.png</texture>
-        </control>
-        <control type="label">
-          <left>30</left><top>0</top><width>80</width><height>32</height>
-          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
-          <label>$LOCALIZE[31994]</label>
-          <visible>!Control.HasFocus(9105)</visible>
-        </control>
-        <control type="label">
-          <left>30</left><top>0</top><width>80</width><height>32</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
-          <label>$LOCALIZE[31994]</label>
-          <visible>Control.HasFocus(9105)</visible>
-        </control>
-      </control>
-
-      <!-- tray -->
-      <control type="image">
-        <right>4</right><top>4</top><width>116</width><height>24</height>
-        <texture border="2" colordiffuse="facetint">panel_sunken_chrome.png</texture>
-        <visible>!Skin.HasSetting(touchmode)</visible>
-      </control>
-      <control type="label">
-        <visible>!Skin.HasSetting(touchmode)</visible>
-        <right>10</right><top>4</top><width>104</width><height>24</height>
-        <font>chromebold</font><textcolor>text</textcolor>
-        <align>center</align><aligny>center</aligny>
-        <label>$INFO[System.Time]</label>
       </control>
     </control>
   </controls>

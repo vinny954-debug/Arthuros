@@ -28,21 +28,20 @@
       <control type="grouplist">
         <left>14</left><top>40</top><width>284</width><height>482</height>
         <orientation>vertical</orientation><itemgap>3</itemgap>
-        <onup>9100</onup><ondown>9100</ondown>
+        <onup>9100</onup><ondown>9100</ondown><onright>2</onright>
         <control type="radiobutton" id="4">
           <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[20096]</label>
         </control>
         <control type="button" id="5">
           <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="radiobutton" id="799">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[33084]</label>
+          <label2>$INFO[System.ProfileAutoLogin]</label2>
+          <enable>!System.HasLoginScreen</enable>
         </control>
       </control>
       <control type="image">
@@ -51,9 +50,9 @@
       </control>
       <control type="list" id="2">
         <left>315</left><top>37</top><width>670</width><height>488</height>
-        <onleft>4</onleft><onright>9600</onright>
+        <onleft>4</onleft><onright>9602</onright>
         <onup>2</onup><ondown>9100</ondown>
-        <pagecontrol>9600</pagecontrol>
+        <pagecontrol>9602</pagecontrol>
         <itemlayout height="44" width="670" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <include content="Arthur_ItemLayout_XL"><param name="width" value="662" /></include>
         </itemlayout>
@@ -67,7 +66,7 @@
           <include content="Arthur_FocusedLayout"><param name="width" value="670" /></include>
         </focusedlayout>
       </control>
-      <control type="scrollbar" id="9600">
+      <control type="scrollbar" id="9602">
         <left>985</left><top>37</top><width>18</width><height>488</height>
         <onleft>2</onleft><onright>4</onright>
       </control>

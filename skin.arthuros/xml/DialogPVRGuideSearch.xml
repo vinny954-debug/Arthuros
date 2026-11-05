@@ -5,135 +5,187 @@
     <include>Dialog_Dim</include>
     <control type="group">
       <centerleft>50%</centerleft><centertop>50%</centertop>
-      <width>900</width><height>500</height>
+      <width>960</width><height>492</height>
       <include content="Dialog_Box">
-        <param name="width" value="900" /><param name="height" value="500" />
-        <param name="innerwidth" value="894" />
+        <param name="width" value="960" /><param name="height" value="492" />
+        <param name="innerwidth" value="954" />
         <param name="icon" value="icons24/pvr_search.png" /><param name="colour" value="accent2" />
         <param name="down" value="9" />
         <param name="boxes" value="dialog" />
+        <param name="title" value="$LOCALIZE[19142]" />
       </include>
-      <include content="Dialog_Heading"><param name="width" value="794" /></include>
+      <control type="edit" id="9">
+        <left>10</left><top>36</top><width>940</width><height>36</height>
+        <label>$LOCALIZE[19133]</label>
+        <onup>9903</onup><ondown>5000</ondown>
+      </control>
+      <control type="label">
+        <left>14</left><top>74</top><width>932</width><height>22</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><align>left</align><aligny>center</aligny>
+        <label>$LOCALIZE[19001]</label>
+      </control>
       <control type="image">
-        <left>10</left><top>36</top><width>880</width><height>420</height>
+        <left>10</left><top>100</top><width>466</width><height>330</height>
         <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
       </control>
-      <control type="grouplist">
-        <left>18</left><top>42</top><width>864</width><height>408</height>
+      <control type="grouplist" id="5000">
+        <left>16</left><top>106</top><width>432</width><height>318</height>
         <orientation>vertical</orientation><itemgap>3</itemgap>
-        <onup>9100</onup><ondown>9100</ondown>
-        <control type="edit" id="9">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
+        <onup>9</onup><ondown>9000</ondown><onleft>6000</onleft><onright>6000</onright>
+        <pagecontrol>5001</pagecontrol>
         <control type="radiobutton" id="10">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <width>432</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[19134]</label>
         </control>
         <control type="radiobutton" id="11">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <width>432</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="spincontrolex" id="12">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="spincontrolex" id="13">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[19135]</label>
         </control>
         <control type="edit" id="14">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <width>432</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[19128]</label>
         </control>
         <control type="edit" id="15">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <width>432</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[19129]</label>
         </control>
-        <control type="edit" id="16">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <control type="radiobutton" id="30">
+          <width>432</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="edit" id="17">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[19339]</label>
         </control>
         <control type="spincontrolex" id="18">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <width>432</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="radiobutton" id="19">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[515]</label>
         </control>
         <control type="radiobutton" id="20">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <width>432</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="spincontrolex" id="21">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[19132]</label>
         </control>
         <control type="radiobutton" id="22">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <width>432</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="spincontrolex" id="23">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[19123]</label>
         </control>
         <control type="radiobutton" id="24">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <width>432</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[19124]</label>
         </control>
-        <control type="button" id="25">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="button" id="26">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
+      </control>
+      <control type="scrollbar" id="5001">
+        <left>452</left><top>106</top><width>18</width><height>318</height>
+        <onleft>5000</onleft><onright>6000</onright>
       </control>
       <control type="image">
-        <left>896</left><top>36</top><width>-6</width><height>420</height>
+        <left>484</left><top>100</top><width>466</width><height>330</height>
         <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
       </control>
+      <control type="grouplist" id="6000">
+        <left>490</left><top>106</top><width>432</width><height>318</height>
+        <orientation>vertical</orientation><itemgap>3</itemgap>
+        <onup>9</onup><ondown>9000</ondown><onleft>5000</onleft><onright>5000</onright>
+        <pagecontrol>6001</pagecontrol>
+        <control type="spincontrolex" id="12">
+          <width>432</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[19130]</label>
+        </control>
+        <control type="spincontrolex" id="13">
+          <width>432</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[19131]</label>
+        </control>
+        <control type="edit" id="16">
+          <width>432</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[19126]</label>
+        </control>
+        <control type="edit" id="17">
+          <width>432</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[19127]</label>
+        </control>
+        <control type="radiobutton" id="31">
+          <width>432</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[19340]</label>
+        </control>
+        <control type="radiobutton" id="19">
+          <width>432</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[19121]</label>
+        </control>
+        <control type="spincontrolex" id="21">
+          <width>432</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[19141]</label>
+        </control>
+        <control type="spincontrolex" id="23">
+          <width>432</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[19148]</label>
+        </control>
+        <control type="radiobutton" id="27">
+          <width>432</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[19125]</label>
+        </control>
+      </control>
+      <control type="scrollbar" id="6001">
+        <left>926</left><top>106</top><width>18</width><height>318</height>
+        <onleft>6000</onleft><onright>5000</onright>
+      </control>
+      <control type="grouplist" id="9000">
+        <left>10</left><top>440</top><width>940</width><height>40</height>
+        <orientation>horizontal</orientation><align>center</align><itemgap>8</itemgap>
+        <onup>5000</onup><ondown>9</ondown>
+        <control type="button" id="26">
+          <width>226</width><height>40</height>
+          <align>center</align>
+          <label>$LOCALIZE[137]</label>
+        </control>
+        <control type="button" id="29">
+          <width>226</width><height>40</height>
+          <align>center</align>
+          <label>$LOCALIZE[190]</label>
+        </control>
+        <control type="button" id="28">
+          <width>226</width><height>40</height>
+          <align>center</align>
+          <label>$LOCALIZE[13007]</label>
+        </control>
+        <control type="button" id="25">
+          <width>226</width><height>40</height>
+          <align>center</align>
+          <label>$LOCALIZE[222]</label>
+        </control>
+      </control>
       <control type="label" id="2">
-        <left>906</left><top>42</top><width>-26</width><height>24</height>
-        <font>small</font>
-      </control>
-      <control type="radiobutton" id="27">
-        <left>-3000</left><top>0</top><width>200</width><height>24</height>
-      </control>
-      <control type="button" id="28">
-        <left>-3000</left><top>0</top><width>200</width><height>24</height>
-      </control>
-      <control type="button" id="29">
-        <left>-3000</left><top>0</top><width>200</width><height>24</height>
-      </control>
-      <control type="radiobutton" id="30">
-        <left>-3000</left><top>0</top><width>200</width><height>24</height>
-      </control>
-      <control type="radiobutton" id="31">
         <left>-3000</left><top>0</top><width>200</width><height>24</height>
       </control>
     </control>

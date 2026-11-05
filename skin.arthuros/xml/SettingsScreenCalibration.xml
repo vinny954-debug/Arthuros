@@ -1,57 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
+  <defaultcontrol>8</defaultcontrol>
   <backgroundcolor>desktop</backgroundcolor>
   <controls>
-    <include>Chrome_Desktop</include>
-    <include>Chrome_Menubar</include>
-    <control type="group">
-      <left>6</left><top>30</top><width>1012</width><height>534</height>
-      <include content="Win_Frame">
-        <param name="width" value="1012" /><param name="height" value="534" />
-      </include>
-      <control type="group">
-        <left>3</left><top>3</top>
-        <include content="Win_Title">
-          <param name="width" value="1006" />
-          <param name="colour" value="accent2" />
-          <param name="icon" value="icons24/calibration.png" />
-          <param name="label" value="$LOCALIZE[214]" />
-          <param name="down" value="" />
-          <param name="boxes" value="window" />
-        </include>
-      </control>
-      <control type="image">
-        <left>6</left><top>34</top><width>1000</width><height>494</height>
-        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
-      </control>
-      <control type="label" id="2">
-        <left>16</left><top>40</top><width>980</width><height>24</height>
-        <font>small</font>
-      </control>
-      <control type="label" id="3">
-        <left>16</left><top>66</top><width>980</width><height>24</height>
-        <font>small</font>
-      </control>
-      <control type="label" id="4">
-        <left>16</left><top>92</top><width>980</width><height>24</height>
-        <font>small</font>
-      </control>
-      <control type="mover" id="8">
-        <left>-3000</left><top>0</top><width>200</width><height>24</height>
-      </control>
-      <control type="mover" id="9">
-        <left>-3000</left><top>0</top><width>200</width><height>24</height>
-      </control>
-      <control type="mover" id="10">
-        <left>-3000</left><top>0</top><width>200</width><height>24</height>
-      </control>
-      <control type="resize" id="11">
-        <left>-3000</left><top>0</top><width>200</width><height>24</height>
-      </control>
-      <control type="mover" id="12">
-        <left>-3000</left><top>0</top><width>200</width><height>24</height>
-      </control>
+    <control type="image">
+      <left>0</left><top>0</top><width>100%</width><height>100%</height>
+      <texture colordiffuse="desktop">fill.png</texture>
     </control>
-    <include content="Chrome_Taskbar"><param name="up" value="9100" /></include>
+    <control type="mover" id="8">
+      <left>0</left><top>0</top><width>96</width><height>96</height>
+      <texturefocus colordiffuse="select">calibrate/cal_tl.png</texturefocus>
+      <texturenofocus>calibrate/cal_tl.png</texturenofocus>
+      <movingspeed acceleration="180" maxvelocity="300" resettimeout="200" delta="1"><eventconfig type="up" /><eventconfig type="down" /><eventconfig type="left" /><eventconfig type="right" /></movingspeed>
+    </control>
+    <control type="mover" id="9">
+      <left>0</left><top>0</top><width>96</width><height>96</height>
+      <texturefocus colordiffuse="select">calibrate/cal_br.png</texturefocus>
+      <texturenofocus>calibrate/cal_br.png</texturenofocus>
+      <movingspeed acceleration="180" maxvelocity="300" resettimeout="200" delta="1"><eventconfig type="up" /><eventconfig type="down" /><eventconfig type="left" /><eventconfig type="right" /></movingspeed>
+    </control>
+    <control type="resize" id="11">
+      <left>0</left><top>0</top><width>500</width><height>500</height>
+      <texturefocus colordiffuse="select">calibrate/cal_ratio.png</texturefocus>
+      <texturenofocus>calibrate/cal_ratio.png</texturenofocus>
+      <movingspeed acceleration="140" maxvelocity="300" resettimeout="180" delta="1"><eventconfig type="left" /><eventconfig type="right" /></movingspeed>
+    </control>
+    <control type="mover" id="10">
+      <left>0</left><top>0</top><width>380</width><height>90</height>
+      <texturefocus colordiffuse="select">calibrate/cal_sub.png</texturefocus>
+      <texturenofocus>calibrate/cal_sub.png</texturenofocus>
+      <movingspeed acceleration="180" maxvelocity="300" resettimeout="200" delta="1"><eventconfig type="up" /><eventconfig type="down" /></movingspeed>
+    </control>
+    <control type="mover" id="12">
+      <left>0</left><top>0</top><width>100</width><height>100</height>
+      <texturefocus colordiffuse="select">calibrate/cal_reset.png</texturefocus>
+      <texturenofocus>calibrate/cal_reset.png</texturenofocus>
+    </control>
+    <control type="label">
+      <left>0</left><top>40</top><width>100%</width><height>26</height>
+      <font>bigbold</font><textcolor>text</textcolor><align>center</align><aligny>center</aligny>
+      <label>$LOCALIZE[214]</label>
+    </control>
+    <control type="label" id="2">
+      <left>0</left><top>68</top><width>100%</width><height>26</height>
+      <font>normal</font><textcolor>text</textcolor><align>center</align><aligny>center</aligny>
+    </control>
+    <control type="label" id="3">
+      <left>0</left><top>96</top><width>100%</width><height>26</height>
+      <font>bold</font><textcolor>text</textcolor><align>center</align><aligny>center</aligny>
+    </control>
+    <control type="label" id="4">
+      <left>0</left><top>124</top><width>100%</width><height>26</height>
+      <font>normal</font><textcolor>text</textcolor><align>center</align><aligny>center</aligny>
+    </control>
+    <control type="label">
+      <left>0</left><top>152</top><width>100%</width><height>48</height>
+      <font>small</font><textcolor>text</textcolor><align>center</align><aligny>center</aligny>
+      <wrapmultiline>true</wrapmultiline>
+      <label>$LOCALIZE[31834]</label>
+    </control>
   </controls>
 </window>

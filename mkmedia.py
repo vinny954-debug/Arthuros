@@ -792,6 +792,59 @@ for nm, rows in TRANSPORT.items():
     grid(rows, scale=1, name="icons16/%s.png" % nm)
 
 
+# ------------------------------------------- P3 screen calibration markers
+# The movers of SettingsScreenCalibration.xml. Kept out of the icon registry
+# (media/icons*) on purpose: home.py offers every registry icon as a desktop
+# tile picture, and these are not pictures of anything. Drawn at 6x (96 px).
+CAL = {}
+CAL["cal_tl"] = [
+"KKKKKKKKKK......",
+"KWWWWWWWK.......",
+"KWWWWWWK........",
+"KWWWWWK.........",
+"KWWWWWWK........",
+"KWWWWWWWK.......",
+"KWWWKWWWWK......",
+"KWWK.KWWWWK.....",
+"KWK...KWWWWK....",
+"KK.....KWWWWK...",
+"K.......KWWWWK..",
+".........KWWWWK.",
+"..........KWWK..",
+"...........KK...",
+"................",
+"................",
+]
+# bottom-right: the same arrow turned round
+CAL["cal_br"] = [r[::-1] for r in CAL["cal_tl"][::-1]]
+# subtitle position: a bar across the middle, with the transparent space
+# above and below that Kodi expects (CONTROL_SUBTITLES_SPACE, 80 of 90 px)
+CAL["cal_sub"] = ["." * 16] * 7 + ["WWWWWWWWWWWWWWWW", "KKKKKKKKKKKKKKKK"] + ["." * 16] * 7
+# pixel ratio: a ring that is round when the ratio is right
+CAL["cal_ratio"] = [
+"................",
+".....KKKKKK.....",
+"...KKWWWWWWKK...",
+"..KWWKKKKKKWWK..",
+".KWKK......KKWK.",
+".KWK........KWK.",
+"KWK..........KWK",
+"KWK..........KWK",
+"KWK..........KWK",
+"KWK..........KWK",
+".KWK........KWK.",
+".KWKK......KKWK.",
+"..KWWKKKKKKWWK..",
+"...KKWWWWWWKK...",
+".....KKKKKK.....",
+"................",
+]
+
+CAL["cal_reset"] = iconset.badge(CAL["cal_ratio"], "refresh")
+shutil.rmtree(os.path.join(OUT, "calibrate"), ignore_errors=True)
+for nm, rows in CAL.items():
+    grid(rows, scale=6, name="calibrate/%s.png" % nm)
+
 # ---------------------------------------------------------------- themeable
 # Neutral textures that colors/*.xml tint at render time via colordiffuse.
 # White multiplies to exactly the palette colour; the grey shadow row keeps a

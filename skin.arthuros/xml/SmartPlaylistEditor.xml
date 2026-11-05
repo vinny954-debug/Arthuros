@@ -1,123 +1,140 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
-  <defaultcontrol always="false">10</defaultcontrol>
-  <backgroundcolor>desktop</backgroundcolor>
+  <defaultcontrol>22</defaultcontrol>
   <controls>
-    <include>Chrome_Desktop</include>
-    <include>Chrome_Menubar</include>
+    <include>Dialog_Dim</include>
     <control type="group">
-      <left>6</left><top>30</top><width>1012</width><height>534</height>
-      <include content="Win_Frame">
-        <param name="width" value="1012" /><param name="height" value="534" />
+      <centerleft>50%</centerleft><centertop>50%</centertop>
+      <width>900</width><height>484</height>
+      <include content="Dialog_Box">
+        <param name="width" value="900" /><param name="height" value="484" />
+        <param name="innerwidth" value="894" />
+        <param name="icon" value="icons24/smartplaylist.png" /><param name="colour" value="accent2" />
+        <param name="down" value="22" />
+        <param name="boxes" value="dialog" />
       </include>
-      <control type="group">
-        <left>3</left><top>3</top>
-        <include content="Win_Title">
-          <param name="width" value="1006" />
-          <param name="colour" value="accent2" />
-          <param name="icon" value="icons24/smartplaylist.png" />
-          <param name="label" value="$LOCALIZE[136]" />
-          <param name="down" value="10" />
-          <param name="boxes" value="dialog" />
-        </include>
+      <control type="label" id="2">
+        <left>29</left><top>3</top><width>770</width><height>26</height>
+        <font>chromebold</font><textcolor>titletext</textcolor>
+        <align>left</align><aligny>center</aligny>
       </control>
       <control type="image">
-        <left>6</left><top>34</top><width>300</width><height>494</height>
+        <left>10</left><top>36</top><width>440</width><height>388</height>
         <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
       </control>
-      <control type="grouplist">
-        <left>14</left><top>40</top><width>284</width><height>482</height>
+      <control type="grouplist" id="500">
+        <left>16</left><top>42</top><width>406</width><height>376</height>
         <orientation>vertical</orientation><itemgap>3</itemgap>
-        <onup>9100</onup><ondown>9100</ondown>
-        <control type="button" id="12">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <onup>9903</onup><ondown>9000</ondown><onleft>10</onleft><onright>10</onright>
+        <pagecontrol>501</pagecontrol>
+        <control type="button" id="22">
+          <width>400</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[467]</label>
+        </control>
+        <control type="button" id="12">
+          <width>400</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[21433]</label>
         </control>
         <control type="button" id="16">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <width>400</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[21424]</label>
         </control>
         <control type="button" id="17">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <width>400</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[21427]</label>
         </control>
         <control type="button" id="18">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <width>400</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[21429]</label>
         </control>
         <control type="button" id="19">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <width>400</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="button" id="20">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="button" id="21">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="button" id="22">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[580]</label>
         </control>
         <control type="button" id="23">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <width>400</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[21458]</label>
         </control>
         <control type="radiobutton" id="24">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <width>400</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[21458]: $LOCALIZE[21459]</label>
         </control>
       </control>
+      <control type="scrollbar" id="501">
+        <left>426</left><top>42</top><width>18</width><height>376</height>
+        <onleft>500</onleft><onright>10</onright>
+      </control>
       <control type="image">
-        <left>312</left><top>34</top><width>694</width><height>394</height>
+        <left>458</left><top>36</top><width>432</width><height>340</height>
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
       <control type="list" id="10">
-        <left>315</left><top>37</top><width>670</width><height>388</height>
-        <onleft>12</onleft><onright>9600</onright>
-        <onup>10</onup><ondown>9100</ondown>
-        <pagecontrol>9600</pagecontrol>
-        <itemlayout height="44" width="670" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <include content="Arthur_ItemLayout_XL"><param name="width" value="662" /></include>
+        <left>461</left><top>39</top><width>408</width><height>334</height>
+        <onup>9903</onup><ondown>9010</ondown><onleft>500</onleft><onright>60</onright>
+        <pagecontrol>60</pagecontrol>
+        <itemlayout height="44" width="408" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_ItemLayout_XL"><param name="width" value="400" /></include>
         </itemlayout>
-        <focusedlayout height="44" width="670" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <include content="Arthur_FocusedLayout_XL"><param name="width" value="670" /></include>
+        <focusedlayout height="44" width="408" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_FocusedLayout_XL"><param name="width" value="408" /></include>
         </focusedlayout>
-      <itemlayout height="28" width="670">
-          <include content="Arthur_ItemLayout"><param name="width" value="662" /></include>
+      <itemlayout height="28" width="408">
+          <include content="Arthur_ItemLayout"><param name="width" value="400" /></include>
         </itemlayout>
-        <focusedlayout height="28" width="670">
-          <include content="Arthur_FocusedLayout"><param name="width" value="670" /></include>
+        <focusedlayout height="28" width="408">
+          <include content="Arthur_FocusedLayout"><param name="width" value="408" /></include>
         </focusedlayout>
       </control>
-      <control type="scrollbar" id="9600">
-        <left>985</left><top>37</top><width>18</width><height>388</height>
-        <onleft>10</onleft><onright>12</onright>
+      <control type="scrollbar" id="60">
+        <left>869</left><top>39</top><width>18</width><height>334</height>
+        <onleft>10</onleft><onright>500</onright>
       </control>
-      <control type="image">
-        <left>312</left><top>434</top><width>694</width><height>94</height>
-        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      <control type="grouplist" id="9010">
+        <left>458</left><top>384</top><width>432</width><height>40</height>
+        <orientation>horizontal</orientation><align>center</align><itemgap>8</itemgap>
+        <onup>10</onup><ondown>9000</ondown>
+        <control type="button" id="13">
+          <width>200</width><height>40</height>
+          <align>center</align>
+          <label>$LOCALIZE[15019]</label>
+        </control>
+        <control type="button" id="14">
+          <width>200</width><height>40</height>
+          <align>center</align>
+          <label>$LOCALIZE[1210]</label>
+        </control>
       </control>
-      <control type="label" id="2">
-        <left>322</left><top>440</top><width>674</width><height>24</height>
-        <font>small</font>
-      </control>
-      <control type="grouplist" id="500">
-        <left>-3000</left><top>0</top><width>200</width><height>24</height>
+      <control type="grouplist" id="9000">
+        <left>10</left><top>432</top><width>880</width><height>40</height>
+        <orientation>horizontal</orientation><align>center</align><itemgap>8</itemgap>
+        <onup>500</onup>
+        <control type="button" id="20">
+          <width>240</width><height>40</height>
+          <align>center</align>
+          <label>$LOCALIZE[186]</label>
+        </control>
+        <control type="button" id="21">
+          <width>240</width><height>40</height>
+          <align>center</align>
+          <label>$LOCALIZE[222]</label>
+        </control>
       </control>
     </control>
-    <include content="Chrome_Taskbar"><param name="up" value="10" /></include>
   </controls>
 </window>

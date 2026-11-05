@@ -9,10 +9,6 @@ msgstr ""
 "Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgctxt "#31900"
-msgid "Current library"
-msgstr ""
-
 msgctxt "#31901"
 msgid "Up"
 msgstr ""
@@ -29,10 +25,6 @@ msgctxt "#31904"
 msgid "Order"
 msgstr ""
 
-msgctxt "#31905"
-msgid "Search"
-msgstr ""
-
 msgctxt "#31906"
 msgid "Options"
 msgstr ""
@@ -41,20 +33,8 @@ msgctxt "#31907"
 msgid "Now playing"
 msgstr ""
 
-msgctxt "#31908"
-msgid "Desktop"
-msgstr ""
-
-msgctxt "#31909"
-msgid "Nothing selected"
-msgstr ""
-
 msgctxt "#31910"
 msgid "Scroll list labels"
-msgstr ""
-
-msgctxt "#31911"
-msgid "Close"
 msgstr ""
 
 msgctxt "#31912"
@@ -305,10 +285,6 @@ msgctxt "#31973"
 msgid "An add-on..."
 msgstr ""
 
-msgctxt "#31974"
-msgid "Shortcuts"
-msgstr ""
-
 msgctxt "#31975"
 msgid "Choose an icon"
 msgstr ""
@@ -438,6 +414,26 @@ msgstr ""
 # ===== P2 strings: 31820-31829 =====
 
 # ===== P3 strings: 31830-31844, 31720-31739 =====
+
+msgctxt "#31830"
+msgid "New group"
+msgstr ""
+
+msgctxt "#31831"
+msgid "Rename group"
+msgstr ""
+
+msgctxt "#31832"
+msgid "Delete group"
+msgstr ""
+
+msgctxt "#31833"
+msgid "Long-press a song on the left to add it. Long-press a song in the playlist to move or remove it."
+msgstr ""
+
+msgctxt "#31834"
+msgid "Drag each marker until it sits on the edge of the picture. To finish, tap and hold an empty spot, or press Back."
+msgstr ""
 
 # ===== P4 strings: 31845-31854 =====
 

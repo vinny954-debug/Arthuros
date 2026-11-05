@@ -132,6 +132,29 @@ sys.exit(bad)" $S/xml/DialogSubtitles.xml $S/xml/Includes_Games.xml $S/xml/Dialo
 :
 :
 # ===== P3 generic windows & text =====
+chk "Kodi-driven windows have captions and titles (labelcheck)" 'python3 "$(dirname "$0")/labelcheck.py"'
+chk "numeric keypad shows digits, not string ids" 'grep -q "<label>\$LOCALIZE\[12317\]</label>" $S/xml/DialogNumeric.xml && ! grep -qE "<label>(OK|[0-9]+)</label>" $S/xml/DialogNumeric.xml'
+chk "media source Browse/Add/Remove captioned"  'grep -q "id=\"11\"><width>210</width>.*LOCALIZE\[1024\]" $S/xml/DialogMediaSource.xml && grep -q "LOCALIZE\[15019\]" $S/xml/DialogMediaSource.xml && grep -q "LOCALIZE\[1210\]" $S/xml/DialogMediaSource.xml'
+chk "keyboard heading 311 on the title bar"      'grep -A1 "type=\"label\" id=\"311\"" $S/xml/DialogKeyboard.xml | grep -q "<left>29</left>" && ! grep -q "content=\"Dialog_Heading\"" $S/xml/DialogKeyboard.xml'
+chk "slider dialog has working - and + buttons"  'grep -q "Action(Left)</onclick><onclick>SetFocus(13)" $S/xml/DialogSlider.xml && grep -q "Action(Right)</onclick><onclick>SetFocus(14)" $S/xml/DialogSlider.xml'
+chk "power menu master mode says Enter/Leave"    '! grep -q "LOCALIZE\[20043\]" $S/xml/DialogButtonMenu.xml && grep -q "LOCALIZE\[20045\]" $S/xml/DialogButtonMenu.xml && grep -q "LOCALIZE\[20046\]" $S/xml/DialogButtonMenu.xml'
+chk "settings level buttons send SettingsLevelChange" 'grep -q SettingsLevelChange $S/xml/SettingsCategory.xml && grep -q SettingsLevelChange $S/xml/DialogAddonSettings.xml'
+chk "music playlist editor shows the playlist (100)" 'grep -A1 "type=\"list\" id=\"100\"" $S/xml/MyMusicPlaylistEditor.xml | grep -vq "<left>-"'
+chk "calibration markers have textures, no chrome" 'test $(grep -c "<texturenofocus>calibrate/cal_" $S/xml/SettingsScreenCalibration.xml) -eq 5 && ! grep -q "Chrome_" $S/xml/SettingsScreenCalibration.xml'
+chk "calibration: no skin button (drawn scaled, hit unscaled)" 'for d in xml xml768; do ! grep -qE "type=\"(button|togglebutton|radiobutton)\"" $S/$d/SettingsScreenCalibration.xml || exit 1; done && grep -q "31834" $S/xml/SettingsScreenCalibration.xml'
+chk "calibration markers are not desktop tile icons" '! ls $S/media/icons*/cal_* >/dev/null 2>&1 && test -f $S/media/calibrate/cal_reset.png'
+chk "colour picker rows show the colour"          'grep -q "<colordiffuse>\$INFO\[ListItem.Label2\]</colordiffuse>" $S/xml/DialogColorPicker.xml'
+chk "generic dialogs navigate to real controls (no 9100)" 'for d in xml xml768; do for f in $(grep -l "Dialog_Box" $S/$d/*.xml); do grep -q Chrome_Taskbar $f && continue; ! grep -q "<on[a-z]*>9100</on[a-z]*>" $f || { echo $f; exit 1; }; done; done'
+chk "generic dialog without a list: Right stays put" 'for f in DialogPVRGuideControls DialogFullScreenInfo; do ! grep -q "<onright>9903</onright>" $S/xml/$f.xml || exit 1; done'
+chk "login screen cannot reach Home or Settings" 'for d in xml xml768; do ! grep -qE "ActivateWindow\((Home|Settings)\)" $S/$d/LoginScreen.xml || exit 1; done && grep -q "ActivateWindow(ShutdownMenu)" $S/xml/LoginScreen.xml'
+chk "nothing reachable from the login screen gets past it (includes expanded)" 'python3 "$(dirname "$0")/logincheck.py"'
+chk "login Shutdown is a 40 px row, not a strip button" 'grep -A1 "type=\"grouplist\" id=\"9000\"" $S/xml/LoginScreen.xml | grep -q "<height>40</height>" && ! grep -q "<top>568</top>" $S/xml/LoginScreen.xml'
+chk "settings dialog buttons 30 px, taller in Touch/XL" 'grep -A1 "type=\"grouplist\" id=\"9001\"" $S/xml/DialogSettings.xml | grep -q "Height_30_XL" && grep -A1 "type=\"grouplist\" id=\"9001\"" $S/xml/DialogAddonSettings.xml | grep -q "Height_30_XL"'
+chk "profiles: Auto login shows the chosen profile" 'grep -q "<label2>\$INFO\[System.ProfileAutoLogin\]</label2>" $S/xml/SettingsProfile.xml'
+chk "channel manager shows hidden, locked, changed"  'for p in ActiveChannel ParentalLocked Changed Icon; do grep -q "ListItem.Property($p)" $S/xml/DialogPVRChannelManager.xml || exit 1; done'
+chk "no Estuary-only blank buttons (799, 501)"   '! grep -lE "id=\"(799|501)\"" $S/xml/EventLog.xml $S/xml/LoginScreen.xml $S/xml/SettingsProfile.xml $S/xml/MyMusicPlaylistEditor.xml'
+chk "TV guide is titled Guide, not Channel"      '! grep -q "LOCALIZE\[19029\]" $S/xml/MyPVRGuide.xml'
+chk "no unused skin strings"                     'for i in $(sed -n "s/^msgctxt \"#\([0-9]*\)\"/\1/p" $S/language/resource.language.en_gb/strings.po); do case $i in 3191[3-6]) continue;; esac; grep -rqs "$i" $S/xml $S/scripts $S/addon.xml || { echo "unused $i"; exit 1; }; done'
 :
 :
 # ===== P4 TV guide =====

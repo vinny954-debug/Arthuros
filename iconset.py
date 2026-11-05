@@ -535,6 +535,8 @@ EMBLEMS = {
  "moon":    ("n", "Y", ["..###..", ".##....", "##.....", "##.....", "##.....", ".##....", "..###.."]),
  "snow":    ("C", "W", ["#..#..#", ".#.#.#.", "..###..", "#######", "..###..", ".#.#.#.", "#..#..#"]),
  "lock":    ("W", "K", ["..###..", ".#...#.", ".#...#.", "#######", "###.###", "###.###", "#######"]),
+ # P3 an open padlock: leave master mode
+ "unlock":  ("W", "K", [".###...", "#...#..", "#......", "#######", "###.###", "###.###", "#######"]),
 }
 
 def badge(base, emblem):
@@ -631,6 +633,8 @@ SPEC = {
  "process_info": ("system", "info"),    "audio_muted": ("audio", "cross"),
  "pvr_radio": ("livetv", "note"),       "desktop_edit": ("interface", "wrench"),
  "addon_server": ("server", "play"),    "addon_config": ("board", "wrench"),    "seek": ("player", "clock"),
+ # P3 power menu: leave master mode (masterlock enters it)
+ "masterlock_off": ("settings", "unlock"),
 }
 
 def build(icons):

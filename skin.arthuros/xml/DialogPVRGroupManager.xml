@@ -1,119 +1,167 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
-  <defaultcontrol>11</defaultcontrol>
+  <defaultcontrol>13</defaultcontrol>
   <controls>
     <include>Dialog_Dim</include>
     <control type="group">
       <centerleft>50%</centerleft><centertop>50%</centertop>
-      <width>900</width><height>500</height>
+      <width>1000</width><height>470</height>
       <include content="Dialog_Box">
-        <param name="width" value="900" /><param name="height" value="500" />
-        <param name="innerwidth" value="894" />
+        <param name="width" value="1000" /><param name="height" value="470" />
+        <param name="innerwidth" value="994" />
         <param name="icon" value="icons24/pvr_groups.png" /><param name="colour" value="accent2" />
-        <param name="down" value="11" />
+        <param name="down" value="13" />
         <param name="boxes" value="dialog" />
+        <param name="title" value="$LOCALIZE[19205]" />
       </include>
-      <include content="Dialog_Heading"><param name="width" value="794" /></include>
-      <control type="image">
-        <left>10</left><top>36</top><width>300</width><height>420</height>
-        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      <control type="label">
+        <left>14</left><top>36</top><width>313</width><height>24</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><align>left</align><aligny>center</aligny>
+        <label>$LOCALIZE[19146]$INFO[Container(13).NumItems, (,)]</label>
       </control>
-      <control type="grouplist">
-        <left>18</left><top>42</top><width>284</width><height>408</height>
-        <orientation>vertical</orientation><itemgap>3</itemgap>
-        <onup>9100</onup><ondown>9100</ondown>
-        <control type="radiobutton" id="25">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="button" id="26">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="button" id="27">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="button" id="28">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="button" id="29">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="togglebutton" id="34">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="button" id="35">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
+      <control type="label" id="21">
+        <left>343</left><top>36</top><width>313</width><height>24</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><align>left</align><aligny>center</aligny>
+      </control>
+      <control type="label" id="22">
+        <left>672</left><top>36</top><width>313</width><height>24</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><align>left</align><aligny>center</aligny>
       </control>
       <control type="image">
-        <left>316</left><top>36</top><width>574</width><height>320</height>
+        <left>10</left><top>62</top><width>321</width><height>300</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+      </control>
+      <control type="list" id="13">
+        <left>13</left><top>65</top><width>297</width><height>294</height>
+        <onup>9903</onup><ondown>9001</ondown><onleft>12</onleft><onright>73</onright>
+        <pagecontrol>73</pagecontrol>
+        <itemlayout height="44" width="297" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image"><left>4</left><top>14</top><width>16</width><height>16</height><texture>$INFO[ListItem.Icon]</texture></control>
+          <control type="label"><left>26</left><top>0</top><width>263</width><height>44</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>0</left><top>0</top><width>289</width><height>44</height><font>small</font><textcolor>textdim</textcolor><align>right</align><aligny>center</aligny><label>$INFO[ListItem.Property(ClientName)]</label></control>
+        </itemlayout>
+        <focusedlayout height="44" width="297" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image"><left>0</left><top>0</top><width>297</width><height>44</height><texture colordiffuse="select">fill.png</texture></control>
+          <control type="image"><left>4</left><top>14</top><width>16</width><height>16</height><texture>$INFO[ListItem.Icon]</texture></control>
+          <control type="label"><left>26</left><top>0</top><width>263</width><height>44</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>0</left><top>0</top><width>289</width><height>44</height><font>small</font><textcolor>textinv</textcolor><align>right</align><aligny>center</aligny><label>$INFO[ListItem.Property(ClientName)]</label></control>
+        </focusedlayout>
+      <itemlayout height="28" width="297">
+          <control type="image"><left>4</left><top>6</top><width>16</width><height>16</height><texture>$INFO[ListItem.Icon]</texture></control>
+          <control type="label"><left>26</left><top>0</top><width>263</width><height>28</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>0</left><top>0</top><width>289</width><height>28</height><font>small</font><textcolor>textdim</textcolor><align>right</align><aligny>center</aligny><label>$INFO[ListItem.Property(ClientName)]</label></control>
+        </itemlayout>
+        <focusedlayout height="28" width="297">
+          <control type="image"><left>0</left><top>0</top><width>297</width><height>28</height><texture colordiffuse="select">fill.png</texture></control>
+          <control type="image"><left>4</left><top>6</top><width>16</width><height>16</height><texture>$INFO[ListItem.Icon]</texture></control>
+          <control type="label"><left>26</left><top>0</top><width>263</width><height>28</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>0</left><top>0</top><width>289</width><height>28</height><font>small</font><textcolor>textinv</textcolor><align>right</align><aligny>center</aligny><label>$INFO[ListItem.Property(ClientName)]</label></control>
+        </focusedlayout>
+      </control>
+      <control type="scrollbar" id="73">
+        <left>310</left><top>65</top><width>18</width><height>294</height>
+        <onleft>13</onleft><onright>11</onright>
+      </control>
+      <control type="image">
+        <left>339</left><top>62</top><width>321</width><height>300</height>
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
       <control type="list" id="11">
-        <left>319</left><top>39</top><width>550</width><height>314</height>
-        <onleft>25</onleft><onright>71</onright>
-        <onup>11</onup><ondown>11</ondown>
+        <left>342</left><top>65</top><width>297</width><height>294</height>
+        <onup>9903</onup><ondown>9001</ondown><onleft>13</onleft><onright>71</onright>
         <pagecontrol>71</pagecontrol>
-        <itemlayout height="44" width="550" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <include content="Arthur_ItemLayout_XL"><param name="width" value="542" /></include>
+        <itemlayout height="44" width="297" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_ItemLayout_XL"><param name="width" value="289" /></include>
         </itemlayout>
-        <focusedlayout height="44" width="550" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <include content="Arthur_FocusedLayout_XL"><param name="width" value="550" /></include>
+        <focusedlayout height="44" width="297" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_FocusedLayout_XL"><param name="width" value="297" /></include>
         </focusedlayout>
-      <itemlayout height="28" width="550">
-          <include content="Arthur_ItemLayout"><param name="width" value="542" /></include>
+      <itemlayout height="28" width="297">
+          <include content="Arthur_ItemLayout"><param name="width" value="289" /></include>
         </itemlayout>
-        <focusedlayout height="28" width="550">
-          <include content="Arthur_FocusedLayout"><param name="width" value="550" /></include>
+        <focusedlayout height="28" width="297">
+          <include content="Arthur_FocusedLayout"><param name="width" value="297" /></include>
         </focusedlayout>
       </control>
       <control type="scrollbar" id="71">
-        <left>869</left><top>39</top><width>18</width><height>314</height>
-        <onleft>11</onleft><onright>25</onright>
+        <left>639</left><top>65</top><width>18</width><height>294</height>
+        <onleft>11</onleft><onright>12</onright>
       </control>
       <control type="image">
-        <left>316</left><top>362</top><width>574</width><height>94</height>
-        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
-      </control>
-      <control type="label" id="20">
-        <left>326</left><top>368</top><width>554</width><height>24</height>
-        <font>small</font>
-      </control>
-      <control type="label" id="21">
-        <left>326</left><top>394</top><width>554</width><height>24</height>
-        <font>small</font>
-      </control>
-      <control type="label" id="22">
-        <left>326</left><top>420</top><width>554</width><height>24</height>
-        <font>small</font>
+        <left>668</left><top>62</top><width>321</width><height>300</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
       <control type="list" id="12">
-        <left>-3000</left><top>0</top><width>200</width><height>24</height>
-        <itemlayout height="36" width="100" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><focusedlayout height="36" width="100" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-      <itemlayout height="20" width="100" /><focusedlayout height="20" width="100" />
-      </control>
-      <control type="list" id="13">
-        <left>-3000</left><top>0</top><width>200</width><height>24</height>
-        <itemlayout height="36" width="100" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><focusedlayout height="36" width="100" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-      <itemlayout height="20" width="100" /><focusedlayout height="20" width="100" />
+        <left>671</left><top>65</top><width>297</width><height>294</height>
+        <onup>9903</onup><ondown>9001</ondown><onleft>11</onleft><onright>72</onright>
+        <pagecontrol>72</pagecontrol>
+        <itemlayout height="44" width="297" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_ItemLayout_XL"><param name="width" value="289" /></include>
+        </itemlayout>
+        <focusedlayout height="44" width="297" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_FocusedLayout_XL"><param name="width" value="297" /></include>
+        </focusedlayout>
+      <itemlayout height="28" width="297">
+          <include content="Arthur_ItemLayout"><param name="width" value="289" /></include>
+        </itemlayout>
+        <focusedlayout height="28" width="297">
+          <include content="Arthur_FocusedLayout"><param name="width" value="297" /></include>
+        </focusedlayout>
       </control>
       <control type="scrollbar" id="72">
+        <left>968</left><top>65</top><width>18</width><height>294</height>
+        <onleft>12</onleft><onright>13</onright>
+      </control>
+      <control type="grouplist" id="9001">
+        <left>10</left><top>370</top><width>980</width><height>40</height>
+        <orientation>horizontal</orientation><align>center</align><itemgap>8</itemgap>
+        <onup>13</onup><ondown>9002</ondown>
+        <control type="button" id="26">
+          <width>239</width><height>40</height>
+          <align>center</align>
+          <label>$LOCALIZE[31830]</label>
+        </control>
+        <control type="button" id="27">
+          <width>239</width><height>40</height>
+          <align>center</align>
+          <label>$LOCALIZE[31831]</label>
+        </control>
+        <control type="button" id="28">
+          <width>239</width><height>40</height>
+          <align>center</align>
+          <label>$LOCALIZE[31832]</label>
+        </control>
+        <control type="radiobutton" id="25">
+          <width>239</width><height>40</height>
+          <align>center</align>
+          <label>$LOCALIZE[19289]</label>
+        </control>
+      </control>
+      <control type="grouplist" id="9002">
+        <left>10</left><top>418</top><width>980</width><height>40</height>
+        <orientation>horizontal</orientation><align>center</align><itemgap>8</itemgap>
+        <onup>9001</onup>
+        <control type="button" id="35">
+          <width>321</width><height>40</height>
+          <align>center</align>
+          <label>$LOCALIZE[13315]</label>
+        </control>
+        <control type="togglebutton" id="34">
+          <width>321</width><height>40</height>
+          <align>center</align>
+          <label>$LOCALIZE[19174]</label><altlabel>$LOCALIZE[19173]</altlabel>
+          <usealttexture>String.IsEqual(Window(pvrgroupmanager).Property(IsRadio),true)</usealttexture>
+        </control>
+        <control type="button" id="29">
+          <width>321</width><height>40</height>
+          <align>center</align>
+          <label>$LOCALIZE[186]</label>
+        </control>
+      </control>
+      <control type="label" id="1">
         <left>-3000</left><top>0</top><width>200</width><height>24</height>
       </control>
-      <control type="scrollbar" id="73">
+      <control type="label" id="20">
         <left>-3000</left><top>0</top><width>200</width><height>24</height>
       </control>
     </control>

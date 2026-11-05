@@ -11,15 +11,16 @@
         <param name="innerwidth" value="894" />
         <param name="icon" value="icons24/file_font.png" /><param name="colour" value="accent2" />
         <param name="down" value="300" />
-        <param name="boxes" value="dialog" />
+        <param name="boxes" value="none" />
       </include>
-      <include content="Dialog_Heading"><param name="width" value="794" /></include>
       <control type="image">
         <left>10</left><top>36</top><width>880</width><height>46</height>
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
       <control type="label" id="311">
-        <left>-3000</left><top>0</top><width>200</width><height>24</height>
+        <left>29</left><top>3</top><width>770</width><height>26</height>
+        <font>chromebold</font><textcolor>titletext</textcolor>
+        <align>left</align><aligny>center</aligny>
       </control>
       <control type="edit" id="312">
         <left>16</left><top>42</top><width>868</width><height>34</height>
@@ -272,6 +273,124 @@
         <control type="button" id="310"><width>120</width><height>34</height><label>$LOCALIZE[31918]</label></control>
       </control>
       <control type="button" id="307"><left>-3000</left><top>0</top><width>100</width><height>30</height></control>
+      <!-- the dialog boxes, login-safe (LOGIN_SAFE) -->
+      <control type="group">
+        <left>3</left><top>3</top><width>894</width><height>26</height>
+        <control type="group">
+          <control type="image">
+            <right>70</right>
+            <top>2</top>
+            <width>22</width>
+            <height>22</height>
+            <texture colordiffuse="facetint">wc_face.png</texture>
+            <visible>Window.IsVisible(loginscreen)</visible>
+          </control>
+          <control type="image">
+            <right>70</right>
+            <top>2</top>
+            <width>22</width>
+            <height>22</height>
+            <texture colordiffuse="textdim">wc_min_dg.png</texture>
+            <visible>Window.IsVisible(loginscreen)</visible>
+          </control>
+          <control type="button" id="9901">
+            <right>70</right>
+            <top>2</top>
+            <width>22</width>
+            <height>22</height>
+            <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+            <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+            <label />
+            <onclick>Dialog.Close(all,true)</onclick>
+            <onclick condition="!Window.IsVisible(loginscreen)">ActivateWindow(Home)</onclick>
+            <onright>9902</onright>
+            <ondown>300</ondown>
+            <visible>!Window.IsVisible(loginscreen)</visible>
+          </control>
+          <control type="image">
+            <right>70</right>
+            <top>2</top>
+            <width>22</width>
+            <height>22</height>
+            <texture colordiffuse="text">wc_min_g.png</texture>
+            <visible>!Control.HasFocus(9901) + !Window.IsVisible(loginscreen)</visible>
+          </control>
+          <control type="image">
+            <right>70</right>
+            <top>2</top>
+            <width>22</width>
+            <height>22</height>
+            <texture colordiffuse="titletext">wc_min_g.png</texture>
+            <visible>Control.HasFocus(9901) + !Window.IsVisible(loginscreen)</visible>
+          </control>
+          <control type="button" id="9902">
+            <right>46</right>
+            <top>2</top>
+            <width>22</width>
+            <height>22</height>
+            <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+            <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+            <label />
+            <enable>Player.HasMedia</enable>
+            <onclick>Action(FullScreen)</onclick>
+            <onleft>9901</onleft>
+            <onright>9903</onright>
+            <ondown>300</ondown>
+          </control>
+          <control type="image">
+            <right>46</right>
+            <top>2</top>
+            <width>22</width>
+            <height>22</height>
+            <texture colordiffuse="text">wc_max_g.png</texture>
+            <visible>!Control.HasFocus(9902) + Player.HasMedia</visible>
+          </control>
+          <control type="image">
+            <right>46</right>
+            <top>2</top>
+            <width>22</width>
+            <height>22</height>
+            <texture colordiffuse="titletext">wc_max_g.png</texture>
+            <visible>Control.HasFocus(9902)</visible>
+          </control>
+          <control type="image">
+            <right>46</right>
+            <top>2</top>
+            <width>22</width>
+            <height>22</height>
+            <texture colordiffuse="textdim">wc_max_dg.png</texture>
+            <visible>!Player.HasMedia</visible>
+          </control>
+          <control type="button" id="9903">
+            <right>22</right>
+            <top>2</top>
+            <width>22</width>
+            <height>22</height>
+            <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+            <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+            <label />
+            <onclick>Action(Back)</onclick>
+            <onleft>9902</onleft>
+            <ondown>300</ondown>
+          </control>
+          <control type="image">
+            <right>22</right>
+            <top>2</top>
+            <width>22</width>
+            <height>22</height>
+            <texture colordiffuse="text">wc_close_g.png</texture>
+            <visible>!Control.HasFocus(9903)</visible>
+          </control>
+          <control type="image">
+            <right>22</right>
+            <top>2</top>
+            <width>22</width>
+            <height>22</height>
+            <texture colordiffuse="titletext">wc_close_g.png</texture>
+            <visible>Control.HasFocus(9903)</visible>
+          </control>
+        </control>
+      </control>
     </control>
   </controls>
 </window>
