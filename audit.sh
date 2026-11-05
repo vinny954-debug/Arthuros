@@ -311,7 +311,7 @@ chk "4:3: bottom-edge dialogs (OSDs, seek bar, bookmarks) stay on the bottom edg
 chk "T-9 4:3: context menu 996/997/999 use the extra height, 999 at 0,0" "$T contextmenu"
 chk "L-3 4:3: on-screen keyboard drawn for 768 (56 px keys, same ids)" "$T keyboard"
 chk "L-3 4:3: keyboard_window takes the layout height" 'grep -q "^def keyboard_window(h=600):" $(dirname "$0")/genwindows.py && grep -q "\"DialogKeyboard\": \"keyboard_window\"" $(dirname "$0")/tallpass.py'
-chk "L-3 4:3: Settings hub rows fill the panel, icons at 64 px" "$T cells"' && grep -q "<width>64</width><height>64</height>" $S/xml768/Settings.xml && ! grep -q "<icon>icons/" $S/xml768/Settings.xml'
+chk "L-3 4:3: Settings hub rows fill the panel, icons at 64 px" "$T cells"
 :
 :
 # ===== P9 scripts & tooling =====

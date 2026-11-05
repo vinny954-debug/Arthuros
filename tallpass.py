@@ -292,7 +292,9 @@ def taller_cells(root, pid):
     """Grow the cells of panel pid so its rows fill its 768 height. Above the
     icon nothing moves; the icon becomes ICON px (the 600 hub draws a 64 px
     picture at 48); what sits under the icon (the name, its focus fill) is
-    spread over the space left under it; full-cell frames grow."""
+    spread over the space left under it; full-cell frames grow. The items
+    already name icons64 pictures in xml (the 600 hub scales them to 48);
+    the <icon> pass below only makes sure each has an icons{ICON} file."""
     panel = root.find(f".//control[@id='{pid}']")
     ph = geti(panel, "height")
     lays = [l for l in panel if l.tag in ("itemlayout", "focusedlayout")]
@@ -405,19 +407,26 @@ def _expanded(name):
     return root
 
 def check_lines():
-    """L-1: no single-line control is taller in xml768 than any of its kind
-    is in xml, unless it covers the whole screen (a tap catcher)."""
-    seen, bad = set(), []
-    for _, root in _windows("xml"):
-        for c in root.iter("control"):
-            seen.add((c.get("type"), c.get("id"), geti(c, "height")))
-    for name, root in _windows("xml768"):
-        for c in root.iter("control"):
-            h = geti(c, "height")
-            if (c.get("type") in ONE_LINE and isinstance(h, int) and h > 60 and h != H1
-                    and (c.findtext("wrapmultiline") or "").strip() != "true"
-                    and (c.get("type"), c.get("id"), h) not in seen):
-                bad.append(f"{name}: {c.get('type')} id={c.get('id')} height {h}")
+    """L-1: no single-line control is taller in xml768 than the same control
+    is in the same window's expanded xml, unless it covers the whole screen
+    (a tap catcher). Controls are paired in document order, so anonymous
+    labels (the Weather '/' labels) are checked one by one, not against a
+    pool of heights seen anywhere."""
+    bad = []
+    for name, b in _windows("xml768"):
+        if not os.path.exists(os.path.join(SRC, name)):
+            bad.append(f"{name}: in xml768 but not in xml")
+            continue
+        ca, cb = list(_expanded(name).iter("control")), list(b.iter("control"))
+        if [(c.get("type"), c.get("id")) for c in ca] != [(c.get("type"), c.get("id")) for c in cb]:
+            bad.append(f"{name}: controls differ from xml, cannot pair them")
+            continue
+        for x, y in zip(ca, cb):
+            h0, h = geti(x, "height"), geti(y, "height")
+            if (y.get("type") in ONE_LINE and isinstance(h, int) and h > 60 and h != H1
+                    and (y.findtext("wrapmultiline") or "").strip() != "true"
+                    and h != h0):
+                bad.append(f"{name}: {y.get('type')} id={y.get('id')} height {h0} -> {h}")
     return bad
 
 def check_stack():
@@ -486,6 +495,16 @@ def check_cells():
         ia, ib = int(a.find("itemlayout").get("height")), int(b.find("itemlayout").get("height"))
         if ha // ia != hb // ib or hb - (hb // ib) * ib >= 12:
             bad.append(f"{name} {pid}: {ha}/{ia} -> {hb}/{ib}")
+        for lay in (l for l in b if l.tag in ("itemlayout", "focusedlayout")):
+            for c in lay.iter("control"):
+                if (c.findtext("texture") or "").strip() == "$INFO[ListItem.Icon]" and \
+                        (geti(c, "width"), geti(c, "height")) != (ICON, ICON):
+                    bad.append(f"{name} {pid}: icon {geti(c, 'width')}x{geti(c, 'height')}, not {ICON}x{ICON}")
+        media = os.path.join(SKIN, "media", f"icons{ICON}")
+        for icon in b.iter("icon"):
+            m = re.fullmatch(rf"icons{ICON}/([a-z0-9_]+\.png)", (icon.text or "").strip())
+            if not m or not os.path.exists(os.path.join(media, m.group(1))):
+                bad.append(f"{name} {pid}: item icon {icon.text} is not an icons{ICON} picture")
     return bad
 
 CHECKS = {"lines": check_lines, "stack": check_stack, "bottom": check_bottom, "contextmenu": check_contextmenu,
