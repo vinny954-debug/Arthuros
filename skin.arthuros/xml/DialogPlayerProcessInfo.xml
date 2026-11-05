@@ -11,8 +11,8 @@
         <param name="icon" value="icons24/process_info.png" /><param name="colour" value="accent2" />
         <param name="down" value="" />
         <param name="boxes" value="dialog" />
+        <param name="title" value="$LOCALIZE[14116]" />
       </include>
-      <include content="Dialog_Heading"><param name="width" value="794" /></include>
     </control>
   </controls>
 </window>

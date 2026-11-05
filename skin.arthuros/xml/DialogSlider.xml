@@ -5,31 +5,40 @@
     <include>Dialog_Dim</include>
     <control type="group">
       <centerleft>50%</centerleft><centertop>50%</centertop>
-      <width>532</width><height>158</height>
+      <width>532</width><height>128</height>
       <include content="Dialog_Box">
-        <param name="width" value="532" /><param name="height" value="158" />
+        <param name="width" value="532" /><param name="height" value="128" />
         <param name="innerwidth" value="526" />
         <param name="icon" value="icons24/player.png" /><param name="colour" value="accent2" />
         <param name="down" value="11" />
         <param name="boxes" value="dialog" />
       </include>
-      <include content="Dialog_Heading"><param name="width" value="426" /></include>
       <control type="label" id="10">
-        <left>16</left><top>40</top><width>500</width><height>26</height>
-        <font>bold</font>
+        <left>29</left><top>3</top><width>400</width><height>26</height>
+        <font>chromebold</font><textcolor>titletext</textcolor>
+        <align>left</align><aligny>center</aligny>
       </control>
       <control type="label" id="12">
-        <left>16</left><top>40</top><width>500</width><height>26</height>
-        <align>right</align>
+        <left>16</left><top>38</top><width>500</width><height>26</height>
+        <font>bold</font><align>center</align><aligny>center</aligny>
+      </control>
+      <control type="button" id="13">
+        <left>16</left><top>70</top><width>64</width><height>44</height>
+        <font>bigbold</font><align>center</align><aligny>center</aligny><textoffsetx>0</textoffsetx>
+        <label>-</label>
+        <onclick>SetFocus(11)</onclick><onclick>Action(Left)</onclick><onclick>SetFocus(13)</onclick>
+        <onup>11</onup><onright>14</onright><onleft>14</onleft>
       </control>
       <control type="slider" id="11">
-        <left>16</left><top>74</top><width>500</width><height>28</height>
+        <left>88</left><top>78</top><width>356</width><height>28</height>
+        <ondown>13</ondown><onup>13</onup>
       </control>
-      <control type="grouplist">
-        <left>13</left><top>112</top><width>506</width><height>30</height>
-        <orientation>horizontal</orientation><align>center</align><itemgap>8</itemgap>
-        <control type="button" id="13"><width>200</width><height>30</height></control>
-        <control type="button" id="14"><width>200</width><height>30</height></control>
+      <control type="button" id="14">
+        <left>452</left><top>70</top><width>64</width><height>44</height>
+        <font>bigbold</font><align>center</align><aligny>center</aligny><textoffsetx>0</textoffsetx>
+        <label>+</label>
+        <onclick>SetFocus(11)</onclick><onclick>Action(Right)</onclick><onclick>SetFocus(14)</onclick>
+        <onup>11</onup><onleft>13</onleft><onright>13</onright>
       </control>
     </control>
   </controls>

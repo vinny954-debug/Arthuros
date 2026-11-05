@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <window>
-  <defaultcontrol>799</defaultcontrol>
   <controls>
     <control type="image">
       <left>0</left><top>0</top><width>1024</width><height>768</height>
@@ -42,7 +41,7 @@
           <left>26</left><right>100</right><top>0</top><height>26</height>
           <align>left</align><aligny>center</aligny>
           <font>chromebold</font><textcolor>titletext</textcolor>
-          <label></label>
+          <label>$LOCALIZE[29900]</label>
         </control>
 
         <control type="label">
@@ -63,7 +62,7 @@
         <onclick>Dialog.Close(all,true)</onclick>
         <onclick>ActivateWindow(Home)</onclick>
         <onright>9902</onright>
-        <ondown>799</ondown>
+        <ondown></ondown>
       </control>
       <control type="image">
         <right>70</right><top>2</top><width>22</width><height>22</height>
@@ -84,7 +83,7 @@
         <onclick>Action(FullScreen)</onclick>
         <onleft>9901</onleft>
         <onright>9903</onright>
-        <ondown>799</ondown>
+        <ondown></ondown>
       </control>
       <control type="image">
         <right>46</right><top>2</top><width>22</width><height>22</height>
@@ -108,7 +107,7 @@
         <label/>
         <onclick>Action(Back)</onclick>
         <onleft>9902</onleft>
-        <ondown>799</ondown>
+        <ondown></ondown>
       </control>
       <control type="image">
         <right>22</right><top>2</top><width>22</width><height>22</height>
@@ -122,25 +121,6 @@
       </control>
     </control>
       </control>
-      </control>
-      <control type="label" id="1">
-        <left>29</left><top>3</top><width>794</width><height>26</height>
-        <font>chromebold</font><textcolor>titletext</textcolor>
-        <align>left</align><aligny>center</aligny>
-      </control>
-      <control type="image">
-        <left>10</left><top>36</top><width>880</width><height>420</height>
-        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
-      </control>
-      <control type="grouplist">
-        <left>18</left><top>42</top><width>864</width><height>408</height>
-        <orientation>vertical</orientation><itemgap>3</itemgap>
-        <onup>9100</onup><ondown>9100</ondown>
-        <control type="radiobutton" id="799">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
       </control>
     </control>
   </controls>

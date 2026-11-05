@@ -12,8 +12,8 @@
         <param name="icon" value="icons24/pvr_guide.png" /><param name="colour" value="accent2" />
         <param name="down" value="11" />
         <param name="boxes" value="dialog" />
+        <param name="title" value="$LOCALIZE[19019]" />
       </include>
-      <include content="Dialog_Heading"><param name="width" value="794" /></include>
       <control type="image">
         <left>10</left><top>36</top><width>880</width><height>320</height>
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>

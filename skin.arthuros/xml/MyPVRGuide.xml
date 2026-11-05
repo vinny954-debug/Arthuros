@@ -28,7 +28,7 @@
       <control type="grouplist">
         <left>14</left><top>40</top><width>284</width><height>482</height>
         <orientation>vertical</orientation><itemgap>3</itemgap>
-        <onup>9100</onup><ondown>9100</ondown>
+        <onup>9100</onup><ondown>9100</ondown><onright>11</onright>
         <control type="button" id="3">
           <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
@@ -39,77 +39,7 @@
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
         </control>
-        <control type="radiobutton" id="5">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="radiobutton" id="6">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="radiobutton" id="7">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="radiobutton" id="8">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="button" id="10">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
         <control type="button" id="28">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="radiobutton" id="31">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="radiobutton" id="100">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="radiobutton" id="101">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="radiobutton" id="102">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="radiobutton" id="103">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="radiobutton" id="104">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="radiobutton" id="105">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="button" id="302">
-          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-        <control type="radiobutton" id="799">
           <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>

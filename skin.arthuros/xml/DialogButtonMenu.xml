@@ -137,10 +137,16 @@
             <visible>System.HasLoginScreen</visible>
           </item>
           <item>
-            <label>$LOCALIZE[20043]</label>
+            <label>$LOCALIZE[20045]</label>
             <icon>icons24/masterlock.png</icon>
             <onclick>mastermode</onclick>
-            <visible>System.HasLocks</visible>
+            <visible>System.HasLocks + !System.IsMaster</visible>
+          </item>
+          <item>
+            <label>$LOCALIZE[20046]</label>
+            <icon>icons24/masterlock_off.png</icon>
+            <onclick>mastermode</onclick>
+            <visible>System.HasLocks + System.IsMaster</visible>
           </item>
         </content>
       </control>

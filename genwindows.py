@@ -23,8 +23,9 @@ TITLES = {
  "SettingsCategory":"$LOCALIZE[5]", "SkinSettings":"$LOCALIZE[20077]",
  "SettingsSystemInfo":"$LOCALIZE[10007]", "SettingsProfile":"$LOCALIZE[13200]",
  "SettingsScreenCalibration":"$LOCALIZE[214]", "EventLog":"$LOCALIZE[14111]",
- "LoginScreen":"$LOCALIZE[20096]", "MyMusicPlaylistEditor":"$LOCALIZE[136]",
- "SmartPlaylistEditor":"$LOCALIZE[136]", "SmartPlaylistRule":"$LOCALIZE[136]",
+ "LoginScreen":"$LOCALIZE[20096]", "MyMusicPlaylistEditor":"$LOCALIZE[10503]",
+ # SmartPlaylistEditor: Kodi writes its heading into label 2 (21432)
+ "SmartPlaylistRule":"$LOCALIZE[21422]",
  "MyPVRGuide":"$LOCALIZE[19029]", "Timers":"$LOCALIZE[19040]",
  "PlayerControls":"$LOCALIZE[31907]", "VideoOSD":"$LOCALIZE[31907]",
  "MusicOSD":"$LOCALIZE[31907]", "MusicVisualisation":"$LOCALIZE[31907]",
@@ -33,7 +34,8 @@ TITLES = {
  # dialogs Kodi gives no heading (no id 1 written by their C++ class)
  "DialogButtonMenu":"$LOCALIZE[31976]", "DialogSeekBar":"$LOCALIZE[31907]",
  "VideoOSDBookmarks":"$LOCALIZE[298]",
- "DialogPVRChannelManager":"$LOCALIZE[19199]", "DialogPVRGroupManager":"$LOCALIZE[19205]",
+ "DialogPVRChannelManager":"$LOCALIZE[19199]$INFO[Container(20).NumItems, (,)]",
+ "DialogPVRGroupManager":"$LOCALIZE[19205]",
  "DialogPVRGuideSearch":"$LOCALIZE[19142]", "DialogPVRGuideControls":"$LOCALIZE[19222]",
  "DialogPVRChannelsOSD":"$LOCALIZE[19019]", "DialogPVRChannelGuide":"$LOCALIZE[19019]",
  "DialogPictureInfo":"$LOCALIZE[13406]", "DialogPlayerProcessInfo":"$LOCALIZE[14116]",
@@ -233,8 +235,9 @@ def settings_window(name, categories=True):
         <onup>20</onup><ondown>20</ondown>
       </control>
       <!-- Settings level: Kodi's own button 20 (GUIWindowSettingsCategory.cpp).
-           Kodi writes Basic / Standard / Advanced / Expert on it and cycles
-           the level when it is clicked. -->
+           Kodi only writes Basic / Standard / Advanced / Expert on it; the
+           onclick sends ACTION_SETTINGS_LEVEL_CHANGE, which OnAction handles
+           (a click on 20 itself is ignored by Kodi). -->
       <!-- hung from the bottom, so the taller Touch mode / Extra large button
            (50 px, sizepass.py) still ends inside the panel -->
       <control type="label">
@@ -252,6 +255,7 @@ def settings_window(name, categories=True):
       <control type="button" id="20">
         <left>12</left><bottom>12</bottom><width>288</width><height>34</height>
         <align>center</align>
+        <onclick>SettingsLevelChange</onclick>
         <onup>3</onup><ondown>9100</ondown><onright>5</onright>
       </control>
 """
@@ -347,13 +351,15 @@ def settings_dialog(name):
 """
     body += SETTING_TEMPLATES.replace("<width>600</width>", f"<width>{sw}</width>")
     body += f"""      <control type="grouplist" id="9001">
-        <left>13</left><top>444</top><width>874</width><height>30</height>
+        <left>13</left><top>444</top><width>874</width><height>36</height>
         <orientation>horizontal</orientation><align>center</align><itemgap>8</itemgap>
         <onup>5</onup><ondown>{3 if cats else 5}</ondown>
-        <control type="button" id="28"><width>180</width><height>30</height><align>center</align></control>
-        <control type="button" id="29"><width>180</width><height>30</height><align>center</align></control>
-        <control type="button" id="30"><width>180</width><height>30</height><align>center</align></control>
-      </control>
+        <control type="button" id="28"><width>180</width><height>36</height><align>center</align></control>
+        <control type="button" id="29"><width>180</width><height>36</height><align>center</align></control>
+        <control type="button" id="30"><width>180</width><height>36</height><align>center</align></control>
+""" + ("""        <!-- settings level: Kodi labels it (GUIDialogAddonSettings.cpp CONTROL_BTN_LEVELS) -->
+        <control type="button" id="20"><width>180</width><height>36</height><align>center</align><onclick>SettingsLevelChange</onclick></control>
+""" if cats else "") + """      </control>
 """
     return dialog(name, 900, 486, body, default="3" if cats else "5",
                   icon="icons24/settings.png", colour="accent1", heading=False)
@@ -733,6 +739,14 @@ STUB_EXTRA = {
  "panel":  "<itemlayout height=\"20\" width=\"100\"/><focusedlayout height=\"20\" width=\"100\"/>",
  "fixedlist": "<itemlayout height=\"20\" width=\"100\"/><focusedlayout height=\"20\" width=\"100\"/>",
  "wraplist":  "<itemlayout height=\"20\" width=\"100\"/><focusedlayout height=\"20\" width=\"100\"/>",
+ # CGUIMoverControl / CGUIResizeControl draw nothing but these two textures
+ "mover":  ("<texturefocus colordiffuse=\"select\">fill.png</texturefocus><texturenofocus>fill.png</texturenofocus>"
+            "<movingspeed acceleration=\"180\" maxvelocity=\"300\" resettimeout=\"200\" delta=\"1\">"
+            "<eventconfig type=\"up\" /><eventconfig type=\"down\" /><eventconfig type=\"left\" />"
+            "<eventconfig type=\"right\" /></movingspeed>"),
+ "resize": ("<texturefocus colordiffuse=\"select\">fill.png</texturefocus><texturenofocus>fill.png</texturenofocus>"
+            "<movingspeed acceleration=\"140\" maxvelocity=\"300\" resettimeout=\"180\" delta=\"1\">"
+            "<eventconfig type=\"left\" /><eventconfig type=\"right\" /></movingspeed>"),
 }
 def stubs(ids, placed):
     ids = {int(k): v for k, v in ids.items()}
@@ -756,8 +770,12 @@ def stubs(ids, placed):
 def keyboard_window():
     rows = [range(100,113), range(120,133), range(140,153), range(160,173)]
     body  = well(10, 36, 880, 46, "panel_sunken.png")
+    # Kodi writes the heading into label 311 (GUIDialogKeyboardGeneric.cpp
+    # CTL_LABEL_HEADING), never into id 1, so 311 sits on the title bar.
     body += """      <control type="label" id="311">
-        <left>-3000</left><top>0</top><width>200</width><height>24</height>
+        <left>29</left><top>3</top><width>770</width><height>26</height>
+        <font>chromebold</font><textcolor>titletext</textcolor>
+        <align>left</align><aligny>center</aligny>
       </control>
       <control type="edit" id="312">
         <left>16</left><top>42</top><width>868</width><height>34</height>
@@ -803,7 +821,7 @@ def keyboard_window():
       <control type="button" id="307"><left>-3000</left><top>0</top><width>100</width><height>30</height></control>
 """
     return dialog("DialogKeyboard", 900, modrow + 86, body, default="300",
-                  icon="icons24/file.png")
+                  icon="icons24/file.png", heading=False)
 
 def numeric_window():
     body  = well(10, 36, 340, 44, "panel_sunken.png")
@@ -814,8 +832,11 @@ def numeric_window():
 """
     keys = [(10+i) for i in range(10)]
     grid = [[17,18,19],[14,15,16],[11,12,13],[23,10,21]]
-    labels = {10:"0",11:"1",12:"2",13:"3",14:"4",15:"5",16:"6",17:"7",18:"8",19:"9",
-              21:"OK",23:"&lt;-"}
+    # Kodi reads a bare-number <label> as a string id (GUIControlFactory:
+    # IsNaturalNumber -> g_localizeStrings.Get), so <label>7</label> showed
+    # string #7, "File manager". 12310-12319 are Kodi's own "0".."9".
+    labels = {10 + n: f"$LOCALIZE[{12310 + n}]" for n in range(10)}
+    labels.update({21: "$LOCALIZE[186]", 23: "&lt;-"})
     top = 92
     for r, row in enumerate(grid):
         body += f"""      <control type="grouplist">
@@ -974,22 +995,34 @@ def small_dialogs():
     out["DialogTextViewer"] = dialog("DialogTextViewer", 860, 430, body, default="5",
                                      icon="icons24/file.png")
 
+    # GUIDialogSlider.cpp uses only 10 (heading), 11 (slider) and 12 (value).
+    # The heading goes on the title bar (Kodi never writes id 1 here). 13/14
+    # are skin buttons - Estuary's touch minus/plus: focus the slider, step
+    # it, and keep focus on the button so it can be tapped again.
     body = ("      <control type=\"label\" id=\"10\">\n"
-            "        <left>16</left><top>40</top><width>500</width><height>26</height>\n"
-            "        <font>bold</font>\n      </control>\n"
+            "        <left>29</left><top>3</top><width>400</width><height>26</height>\n"
+            "        <font>chromebold</font><textcolor>titletext</textcolor>\n"
+            "        <align>left</align><aligny>center</aligny>\n      </control>\n"
             "      <control type=\"label\" id=\"12\">\n"
-            "        <left>16</left><top>40</top><width>500</width><height>26</height>\n"
-            "        <align>right</align>\n      </control>\n"
+            "        <left>16</left><top>38</top><width>500</width><height>26</height>\n"
+            "        <font>bold</font><align>center</align><aligny>center</aligny>\n      </control>\n"
+            "      <control type=\"button\" id=\"13\">\n"
+            "        <left>16</left><top>70</top><width>64</width><height>44</height>\n"
+            "        <font>bigbold</font><align>center</align><aligny>center</aligny><textoffsetx>0</textoffsetx>\n"
+            "        <label>-</label>\n"
+            "        <onclick>SetFocus(11)</onclick><onclick>Action(Left)</onclick><onclick>SetFocus(13)</onclick>\n"
+            "        <onup>11</onup><onright>14</onright><onleft>14</onleft>\n      </control>\n"
             "      <control type=\"slider\" id=\"11\">\n"
-            "        <left>16</left><top>74</top><width>500</width><height>28</height>\n      </control>\n"
-            "      <control type=\"grouplist\">\n"
-            "        <left>13</left><top>112</top><width>506</width><height>30</height>\n"
-            "        <orientation>horizontal</orientation><align>center</align><itemgap>8</itemgap>\n"
-            "        <control type=\"button\" id=\"13\"><width>200</width><height>30</height></control>\n"
-            "        <control type=\"button\" id=\"14\"><width>200</width><height>30</height></control>\n"
-            "      </control>\n")
-    out["DialogSlider"] = dialog("DialogSlider", 532, 158, body, default="11",
-                                 icon="icons24/settings.png")
+            "        <left>88</left><top>78</top><width>356</width><height>28</height>\n"
+            "        <ondown>13</ondown><onup>13</onup>\n      </control>\n"
+            "      <control type=\"button\" id=\"14\">\n"
+            "        <left>452</left><top>70</top><width>64</width><height>44</height>\n"
+            "        <font>bigbold</font><align>center</align><aligny>center</aligny><textoffsetx>0</textoffsetx>\n"
+            "        <label>+</label>\n"
+            "        <onclick>SetFocus(11)</onclick><onclick>Action(Right)</onclick><onclick>SetFocus(14)</onclick>\n"
+            "        <onup>11</onup><onleft>13</onleft><onright>13</onright>\n      </control>\n")
+    out["DialogSlider"] = dialog("DialogSlider", 532, 128, body, default="11",
+                                 icon="icons24/settings.png", heading=False)
 
     body = ("      <control type=\"label\" id=\"30\">\n"
             "        <left>16</left><top>40</top><width>540</width><height>26</height>\n"
@@ -1056,7 +1089,9 @@ def button_menu():
       ("$LOCALIZE[13017]", "power_inhibit",   "InhibitIdleShutdown(true)",         "System.HasShutdown + !System.IdleShutdownInhibited"),
       ("$LOCALIZE[13018]", "power_allow",     "InhibitIdleShutdown(false)",        "System.HasShutdown + System.IdleShutdownInhibited"),
       ("$LOCALIZE[20126]", "logoff",          "Dialog.Close(all,true)</onclick><onclick>System.LogOff", "System.HasLoginScreen"),
-      ("$LOCALIZE[20043]", "masterlock",      "mastermode",                        "System.HasLocks"),
+      # "mastermode" toggles master mode: say which way it goes (20043 is "Lock settings")
+      ("$LOCALIZE[20045]", "masterlock",      "mastermode",                        "System.HasLocks + !System.IsMaster"),
+      ("$LOCALIZE[20046]", "masterlock_off",  "mastermode",                        "System.HasLocks + System.IsMaster"),
     ]
     rows = "".join(f"""          <item>
             <label>{lab}</label>
@@ -1196,9 +1231,17 @@ def media_source():
         <font>bold</font><textcolor>titletext</textcolor><aligny>center</aligny>
       </control>
 """
-    body += well(10, 36, 660, 200, "panel_sunken.png")
+    # Kodi writes no caption on 11/13/14 and only the value (label2) on 12
+    # (GUIDialogMediaSource.cpp), so the skin supplies Estuary's captions.
+    body += """      <control type="label">
+        <left>13</left><top>36</top><width>654</width><height>22</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[1021]</label>
+      </control>
+"""
+    body += well(10, 60, 660, 180, "panel_sunken.png")
     body += """      <control type="list" id="10">
-        <left>16</left><top>42</top><width>648</width><height>188</height>
+        <left>16</left><top>66</top><width>648</width><height>168</height>
         <onleft>11</onleft><onright>11</onright>
         <onup>10</onup><ondown>12</ondown>
         <scrolltime tween="linear">0</scrolltime>
@@ -1221,32 +1264,32 @@ def media_source():
         </focusedlayout>
       </control>
       <control type="grouplist">
-        <left>13</left><top>244</top><width>654</width><height>32</height>
+        <left>13</left><top>248</top><width>654</width><height>36</height>
         <orientation>horizontal</orientation><align>center</align><itemgap>6</itemgap>
         <onup>10</onup><ondown>12</ondown>
-        <control type="button" id="11"><width>210</width><height>32</height></control>
-        <control type="button" id="13"><width>210</width><height>32</height></control>
-        <control type="button" id="14"><width>210</width><height>32</height></control>
+        <control type="button" id="11"><width>210</width><height>36</height><label>$LOCALIZE[1024]</label></control>
+        <control type="button" id="13"><width>210</width><height>36</height><label>$LOCALIZE[15019]</label></control>
+        <control type="button" id="14"><width>210</width><height>36</height><label>$LOCALIZE[1210]</label></control>
       </control>
       <control type="edit" id="12">
-        <left>13</left><top>286</top><width>654</width><height>32</height>
-        <onup>11</onup><ondown>20</ondown>
+        <left>13</left><top>292</top><width>654</width><height>36</height>
+        <label>$LOCALIZE[551]</label>
+        <onup>11</onup><ondown>18</ondown>
       </control>
+      <!-- 20 (set content) is always hidden by Kodi (UpdateButtons) -->
       <control type="button" id="20">
-        <left>13</left><top>324</top><width>654</width><height>32</height>
-        <align>left</align><textoffsetx>12</textoffsetx>
-        <onup>12</onup><ondown>18</ondown>
+        <left>-3000</left><top>0</top><width>200</width><height>30</height>
       </control>
       <control type="grouplist">
-        <left>13</left><top>366</top><width>654</width><height>32</height>
+        <left>13</left><top>338</top><width>654</width><height>36</height>
         <orientation>horizontal</orientation><align>center</align><itemgap>8</itemgap>
-        <onup>20</onup>
-        <control type="button" id="18"><width>280</width><height>32</height><label>$LOCALIZE[186]</label></control>
-        <control type="button" id="19"><width>280</width><height>32</height><label>$LOCALIZE[222]</label></control>
+        <onup>12</onup>
+        <control type="button" id="18"><width>280</width><height>36</height><label>$LOCALIZE[186]</label></control>
+        <control type="button" id="19"><width>280</width><height>36</height><label>$LOCALIZE[222]</label></control>
       </control>
       <control type="scrollbar" id="60"><left>-3000</left><top>0</top><width>18</width><height>100</height></control>
 """
-    return dialog("DialogMediaSource", 680, 414, body, default="10",
+    return dialog("DialogMediaSource", 680, 386, body, default="10",
                   icon="icons24/harddisk.png", heading=False)
 
 
@@ -1506,12 +1549,195 @@ def player_controls():
 LISTY   = {"list","panel","fixedlist","wraplist"}
 PRESSY  = {"button","togglebutton","radiobutton","spincontrolex","sliderex","edit","colorbutton"}
 
+# Estuary's own controls that inventory.py copied as if Kodi used them: no
+# Kodi C++ window drives these ids, so a generic window drew them as dead
+# blank buttons. 799 is Estuary's TouchBackButton, LoginScreen 20 its power
+# button, EventLog 501 its Settings shortcut, MyPVRGuide 100-105/302 its
+# quick-nav and "go to playlist"; the guide class itself uses only 2/3/4,
+# 11 and 28 (5-8/10/31 belong to the channel/recording/timer windows).
+ESTUARY_ONLY = {
+ "*": {799},
+ "LoginScreen": {20},
+ "EventLog": {501},
+ "MyPVRGuide": {5, 6, 7, 8, 10, 31, 100, 101, 102, 103, 104, 105, 302},
+}
+
+def kodi_ids(name, meta):
+    drop = ESTUARY_ONLY["*"] | ESTUARY_ONLY.get(name, set())
+    return {int(k): v for k, v in meta["ids"].items() if int(k) not in drop}
+
+# Captions for Kodi-driven controls Kodi does not label itself (checked in
+# each window's C++: it writes only values / label2 / selected state on
+# these). A tuple is (label, altlabel) for a togglebutton.
+LABELS = {
+ # GUIWindowEventLog.cpp labels 21/22 itself; 4 is CGUIMediaWindow's sort
+ # direction toggle (selected = descending)
+ "EventLog": {4: ("$LOCALIZE[580]: $LOCALIZE[584]", "$LOCALIZE[580]: $LOCALIZE[585]"),
+              20: "$LOCALIZE[192]"},
+ # GUIWindowSettingsProfile.cpp: 4 toggles the login screen, 5 picks the
+ # auto-login profile; neither is labelled by Kodi
+ "SettingsProfile": {4: "$LOCALIZE[20096]", 5: "$LOCALIZE[33084]"},
+}
+# Ids each window's C++ labels by itself (SET_CONTROL_LABEL) - used by
+# labelcheck.py so a blank caption anywhere else fails the build.
+# generic(): width of the button column where its captions need more room
+COLUMN_W = {"EventLog": 400}
+KODI_LABELLED = {
+ "EventLog": {21, 22},
+ "DialogColorPicker": {7},
+ "SmartPlaylistRule": {15, 16, 17},          # 17: the value field (label2)
+ "DialogKeyboard": set(range(100, 173)) | {312},   # the keys, and the text field
+}
+
+def caption(label):
+    if label is None:
+        return ""
+    if isinstance(label, tuple):
+        return f"<label>{label[0]}</label><altlabel>{label[1]}</altlabel>"
+    return f"<label>{label}</label>"
+
+def item(ct, cid, w, h=30, label=None, extra="", align="left", indent=8):
+    """One child of a grouplist (no position: the grouplist places it)."""
+    sp = " " * indent
+    s  = f'{sp}<control type="{ct}" id="{cid}">\n'
+    s += f"{sp}  <width>{w}</width><height>{h}</height>\n"
+    if align == "left":
+        s += f"{sp}  <align>left</align><textoffsetx>12</textoffsetx>\n"
+    else:
+        s += f"{sp}  <align>center</align>\n"
+    if label is not None:
+        s += f"{sp}  {caption(label)}\n"
+    if extra:
+        s += textwrap.indent(extra.rstrip("\n"), sp + "  ") + "\n"
+    s += f"{sp}</control>\n"
+    return s
+
+def vgroup(gid, l, t, wd, ht, children, nav, sb=None, gap=3):
+    """A vertical grouplist. nav: dict of onup/ondown/onleft/onright. With
+    sb, a scrollbar (pagecontrol) on its right edge - Touch mode / Extra
+    large rows (46 px, sizepass.py) can need more room than it has."""
+    gw = wd - (22 if sb else 0)
+    s  = f'      <control type="grouplist"' + (f' id="{gid}"' if gid else "") + ">\n"
+    s += f"        <left>{l}</left><top>{t}</top><width>{gw}</width><height>{ht}</height>\n"
+    s += f"        <orientation>vertical</orientation><itemgap>{gap}</itemgap>\n"
+    s += "        " + "".join(f"<{k}>{v}</{k}>" for k, v in nav.items()) + "\n"
+    if sb:
+        s += f"        <pagecontrol>{sb}</pagecontrol>\n"
+    s += children
+    s += "      </control>\n"
+    if sb:
+        s += (f'      <control type="scrollbar" id="{sb}">\n'
+              f"        <left>{l + wd - 18}</left><top>{t}</top><width>18</width><height>{ht}</height>\n"
+              f"        <onleft>{gid}</onleft><onright>{nav.get('onright', gid)}</onright>\n"
+              "      </control>\n")
+    return s
+
+ROWH = 40   # fixed (horizontal) button rows: horizontal grouplists do not grow
+
+def hrow(gid, l, t, wd, buttons, nav, bw=180, h=ROWH, gap=8):
+    """A centred horizontal row of buttons: (id, label[, extra])."""
+    s  = f'      <control type="grouplist"' + (f' id="{gid}"' if gid else "") + ">\n"
+    s += f"        <left>{l}</left><top>{t}</top><width>{wd}</width><height>{h}</height>\n"
+    s += f"        <orientation>horizontal</orientation><align>center</align><itemgap>{gap}</itemgap>\n"
+    s += "        " + "".join(f"<{k}>{v}</{k}>" for k, v in nav.items()) + "\n"
+    for b in buttons:
+        cid, lab = b[0], b[1]
+        extra = b[2] if len(b) > 2 else ""
+        ct = b[3] if len(b) > 3 else "button"
+        s += item(ct, cid, bw, h, lab, extra, align="center")
+    s += "      </control>\n"
+    return s
+
+def rows(iw, label="$INFO[ListItem.Label]", label2="$INFO[ListItem.Label2]",
+         icon="$INFO[ListItem.Icon]", swatch=False, rowh=28):
+    """item/focused layouts drawn here rather than with Arthur_ItemLayout, for
+    rows that show something else (channel number, a colour swatch). Text
+    controls are rowh tall so sizepass.py stretches them for Extra large."""
+    out = ""
+    for focused in (False, True):
+        tag = "focusedlayout" if focused else "itemlayout"
+        out += f'        <{tag} height="{rowh}" width="{iw}">\n'
+        if focused:
+            out += (f"          <control type=\"image\"><left>0</left><top>0</top><width>{iw}</width>"
+                    f"<height>{rowh}</height><texture colordiffuse=\"select\">fill.png</texture></control>\n")
+        tx = 26
+        if swatch:
+            # GUIDialogColorPicker.cpp puts the ARGB value in Label2; the
+            # <colordiffuse> element resolves per item (Estuary does the same)
+            out += ("          <control type=\"image\"><left>4</left><top>4</top><width>44</width>"
+                    "<height>20</height><texture>fill_black.png</texture></control>\n"
+                    "          <control type=\"image\"><left>5</left><top>5</top><width>42</width>"
+                    "<height>18</height><texture>fill.png</texture>"
+                    "<colordiffuse>$INFO[ListItem.Label2]</colordiffuse></control>\n")
+            tx = 56
+        elif icon:
+            out += ("          <control type=\"image\"><left>4</left><top>6</top><width>16</width>"
+                    f"<height>16</height><texture>{icon}</texture></control>\n")
+        col = "textinv" if focused else "text"
+        font = "bold" if focused else "normal"
+        out += (f"          <control type=\"label\"><left>{tx}</left><top>0</top><width>{iw - tx - 8}</width>"
+                f"<height>{rowh}</height><font>{font}</font><textcolor>{col}</textcolor>"
+                f"<aligny>center</aligny><label>{label}</label></control>\n")
+        if label2:
+            col2 = "textinv" if focused else "textdim"
+            out += (f"          <control type=\"label\"><left>0</left><top>0</top><width>{iw - 8}</width>"
+                    f"<height>{rowh}</height><font>small</font><textcolor>{col2}</textcolor>"
+                    f"<align>right</align><aligny>center</aligny><label>{label2}</label></control>\n")
+        out += f"        </{tag}>\n"
+    return out
+
+def xlist(cid, sb, l, t, wd, ht, nav, layouts=None, kind="list", sbright=None):
+    """A sunken well with a list and its scrollbar. nav: onup/ondown/onleft;
+    the list's onright is its scrollbar, the scrollbar's onright sbright."""
+    iw = wd - 24
+    if layouts is None:
+        layouts = (f'        <itemlayout height="28" width="{iw}">\n'
+                   f'          <include content="Arthur_ItemLayout"><param name="width" value="{iw-8}" /></include>\n'
+                   f'        </itemlayout>\n'
+                   f'        <focusedlayout height="28" width="{iw}">\n'
+                   f'          <include content="Arthur_FocusedLayout"><param name="width" value="{iw}" /></include>\n'
+                   f'        </focusedlayout>\n')
+    elif callable(layouts):
+        layouts = layouts(iw)
+    s  = well(l, t, wd, ht, "panel_sunken.png")
+    s += f'      <control type="{kind}" id="{cid}">\n'
+    s += f"        <left>{l+3}</left><top>{t+3}</top><width>{iw}</width><height>{ht-6}</height>\n"
+    s += "        " + "".join(f"<{k}>{v}</{k}>" for k, v in nav.items()) + f"<onright>{sb}</onright>\n"
+    s += f"        <pagecontrol>{sb}</pagecontrol>\n"
+    s += layouts
+    s += "      </control>\n"
+    s += (f'      <control type="scrollbar" id="{sb}">\n'
+          f"        <left>{l+wd-21}</left><top>{t+3}</top><width>18</width><height>{ht-6}</height>\n"
+          f"        <onleft>{cid}</onleft><onright>{sbright or nav.get('onleft', cid)}</onright>\n"
+          "      </control>\n")
+    return s
+
+def tlabel(cid, wd=560, label=None):
+    """A label Kodi writes the heading into, sitting on the title bar."""
+    return (f'      <control type="label"' + (f' id="{cid}"' if cid else "") + ">\n"
+            f"        <left>29</left><top>3</top><width>{wd}</width><height>26</height>\n"
+            "        <font>chromebold</font><textcolor>titletext</textcolor>\n"
+            "        <align>left</align><aligny>center</aligny>\n"
+            + (f"        <label>{label}</label>\n" if label else "") +
+            "      </control>\n")
+
+def caplabel(l, t, wd, label, cid=None, h=24, font="chromesmall", col="textdim", align="left"):
+    return (f'      <control type="label"' + (f' id="{cid}"' if cid else "") + ">\n"
+            f"        <left>{l}</left><top>{t}</top><width>{wd}</width><height>{h}</height>\n"
+            f"        <font>{font}</font><textcolor>{col}</textcolor><align>{align}</align><aligny>center</aligny>\n"
+            + (f"        <label>{label}</label>\n" if label else "") +
+            "      </control>\n")
+
 def generic(name, meta, as_dialog=False):
-    ids   = {int(k): v for k, v in meta["ids"].items()}
+    ids   = kodi_ids(name, meta)
     views = meta.get("views","")
+    labels = LABELS.get(name, {})
+    title = TITLES.get(name) if as_dialog else None
     placed = set()
     body = ""
-    if as_dialog: placed.add(1)   # Dialog_Heading owns id 1
+    # Dialog_Heading owns id 1 - unless Kodi writes no id 1 here and the
+    # title comes from TITLES (dialog() then emits no Dialog_Heading)
+    if as_dialog and not title: placed.add(1)
 
     if as_dialog:
         WD, HT = 900, 500
@@ -1520,43 +1746,47 @@ def generic(name, meta, as_dialog=False):
         WD, HT = 1012, 534
         ox, oy, aw, ah = 6, 34, 1000, 494
 
-    press = [(i,t) for i,t in ids.items() if t in PRESSY]
-    lists = [(i,t) for i,t in ids.items() if t in LISTY]
-    texts = [(i,t) for i,t in ids.items() if t == "textbox"]
-    labs  = [(i,t) for i,t in ids.items() if t in ("label","fadelabel") and i not in placed]
-    bars  = [(i,t) for i,t in ids.items() if t in ("progress","slider")]
-    sbs   = [i for i,t in ids.items() if t == "scrollbar"]
+    press = sorted((i,t) for i,t in ids.items() if t in PRESSY)
+    lists = sorted((i,t) for i,t in ids.items() if t in LISTY)
+    texts = sorted((i,t) for i,t in ids.items() if t == "textbox")
+    labs  = sorted((i,t) for i,t in ids.items() if t in ("label","fadelabel") and i not in placed)
+    bars  = sorted((i,t) for i,t in ids.items() if t in ("progress","slider"))
+    sbs   = sorted(i for i,t in ids.items() if t == "scrollbar")
 
-    lx, lw = ox, (300 if lists or texts else aw)
+    # Up from the button column: the title-bar close box in a dialog (the
+    # task bar, 9100, exists only in full windows); Down: the list, or wrap.
+    first = str(lists[0][0]) if lists else (str(press[0][0]) if press else "")
+    gl_up   = "9903" if as_dialog else "9100"
+    gl_down = first if as_dialog else "9100"
+
+    lx, lw = ox, (COLUMN_W.get(name, 300) if lists or texts else aw)
     if press:
         body += well(lx, oy, lw, ah, "panel_sunken_grey.png")
-        body += (f"      <control type=\"grouplist\">\n"
-                 f"        <left>{lx+8}</left><top>{oy+6}</top><width>{lw-16}</width><height>{ah-12}</height>\n"
-                 f"        <orientation>vertical</orientation><itemgap>3</itemgap>\n"
-                 f"        <onup>9100</onup><ondown>9100</ondown>\n")
-        for cid, ct in sorted(press)[:18]:
-            body += (f"        <control type=\"{ct}\" id=\"{cid}\">\n"
-                     f"          <width>{lw-16}</width><height>30</height>\n"
-                     f"          <align>left</align><textoffsetx>12</textoffsetx>\n        </control>\n")
-            placed.add(cid)
-        body += "      </control>\n"
+        # every pressable is placed; Touch mode / Extra large rows are 46 px
+        # (sizepass.py), so a long column scrolls instead of being cut off
+        sb = 9601 if len(press) * 49 > ah - 12 else None
+        kids = "".join(item(ct, cid, lw - 16 - (22 if sb else 0), 30, labels.get(cid)) for cid, ct in press)
+        body += vgroup(9600 if sb else None, lx + 8, oy + 6, lw - 16, ah - 12, kids,
+                       {"onup": gl_up, "ondown": gl_down,
+                        "onright": first if lists else gl_up}, sb=sb)
+        placed.update(cid for cid, _ in press)
 
     rx = ox + lw + 6 if press else ox
     rw = (ox + aw) - rx
     ry, rh = oy, ah
 
     if lists:
-        cid, ct = sorted(lists)[0]
-        sb = sbs[0] if sbs else 9600
+        cid, ct = lists[0]
+        sb = sbs[0] if sbs else 9602
         lh = rh if not (texts or labs) else rh - 100
         body += list_block(cid, sb, rx, ry, rw, lh, rowh=28,
-                           onleft=str(sorted(press)[0][0]) if press else str(cid),
+                           onleft=str(press[0][0]) if press else str(cid),
                            ondown=str(cid) if as_dialog else "9100")
         placed.add(cid); placed.add(sb)
         ry += lh + 6; rh -= lh + 6
 
     if texts and rh > 40:
-        cid, _ = sorted(texts)[0]
+        cid, _ = texts[0]
         body += well(rx, ry, rw, rh, "panel_sunken.png")
         body += (f"      <control type=\"textbox\" id=\"{cid}\">\n"
                  f"        <left>{rx+8}</left><top>{ry+6}</top><width>{rw-16}</width><height>{rh-12}</height>\n"
@@ -1566,27 +1796,363 @@ def generic(name, meta, as_dialog=False):
     if labs and rh > 24:
         body += well(rx, ry, rw, rh, "panel_sunken_grey.png")
         y = ry + 6
-        for cid, ct in sorted(labs):
+        for cid, ct in labs:
             if y + 24 > ry + rh: break
             body += (f"      <control type=\"{ct}\" id=\"{cid}\">\n"
                      f"        <left>{rx+10}</left><top>{y}</top><width>{rw-20}</width><height>24</height>\n"
                      f"        <font>small</font>\n      </control>\n")
             placed.add(cid); y += 26
 
-    for cid, ct in sorted(bars):
+    for cid, ct in bars:
         body += (f"      <control type=\"{ct}\" id=\"{cid}\">\n"
                  f"        <left>{ox}</left><top>{oy+ah-24}</top><width>{aw}</width><height>20</height>\n"
                  f"      </control>\n")
         placed.add(cid)
 
     body += stubs(ids, placed)
-    default = ""
-    if lists:  default = str(sorted(lists)[0][0])
-    elif press: default = str(sorted(press)[0][0])
+    default = first
     if as_dialog:
-        return dialog(name, WD, HT, body, default=default)
+        return dialog(name, WD, HT, body, default=default, title=title)
     live = [v.strip() for v in views.split(",") if v.strip() and int(v.strip()) in placed]
     return fullwindow(name, body, default=default, views=",".join(live))
+
+# ====================================================== windows Kodi drives by id
+# Each of these used to be a generic() column of blank buttons. Ids, and
+# which of them Kodi labels, are from the window's C++ (Kodi Omega); the
+# captions are Kodi's own strings, as Estuary uses them.
+
+def pvr_channel_manager():
+    """GUIDialogPVRChannelManager.cpp: 4 OK, 5 Apply, 6 Cancel, 7 Active,
+    8 Name (label2 only), 9 Icon, 12 Use guide, 13 Guide source (values),
+    14 Parental lock, 20 channel list, 30 Group manager, 31 New channel,
+    34 TV/Radio, 35 Refresh logos. Kodi labels none of them."""
+    name = "DialogPVRChannelManager"
+    ids = kodi_ids(name, INV[name])
+    chan = rows  # channel number and the name as edited (Kodi keeps it in properties)
+    body  = xlist(20, 60, 10, 36, 420, 400,
+                  {"onup": "9903", "ondown": "4", "onleft": "9002"},
+                  layouts=lambda iw: chan(iw, label="$INFO[ListItem.Property(Number),, ]$INFO[ListItem.Property(Name)]",
+                                          label2="$INFO[ListItem.Property(ClientName)]"),
+                  sbright="9002")
+    radio = "String.IsEqual(Window(pvrchannelmanager).Property(IsRadio),true)"
+    kids  = item("radiobutton", 7, 420, 30, "$LOCALIZE[19074]")
+    kids += item("edit", 8, 420, 30, "$LOCALIZE[19201]")
+    kids += item("button", 9, 420, 30, "$LOCALIZE[19202]")
+    kids += item("radiobutton", 12, 420, 30, "$LOCALIZE[19206]")
+    kids += item("spincontrolex", 13, 420, 30, "$LOCALIZE[19200]")
+    kids += item("radiobutton", 14, 420, 30, "$LOCALIZE[19267]")
+    kids += item("button", 35, 420, 30, "$LOCALIZE[19041]")
+    kids += item("button", 31, 420, 30, "$LOCALIZE[19204]")
+    kids += item("button", 30, 420, 30, "$LOCALIZE[19205]")
+    # TV/Radio: the toggle shows the list it switches to
+    kids += item("togglebutton", 34, 420, 30, ("$LOCALIZE[19024]", "$LOCALIZE[19023]"),
+                 f"<usealttexture>{radio}</usealttexture>")
+    body += well(438, 36, 452, 400, "panel_sunken_grey.png")
+    body += vgroup(9002, 446, 42, 442, 388, kids,
+                   {"onup": "9903", "ondown": "4", "onleft": "20", "onright": "20"}, sb=9603)
+    body += hrow(9000, 10, 446, 880, [(4, "$LOCALIZE[186]"), (5, "$LOCALIZE[14070]"),
+                                      (6, "$LOCALIZE[222]")],
+                 {"onup": "20"}, bw=280)
+    placed = {4, 5, 6, 7, 8, 9, 12, 13, 14, 20, 30, 31, 34, 35, 60}
+    body += stubs(ids, placed)
+    return dialog(name, 900, 498, body, default="20", icon="icons24/pvr_manager.png",
+                  title=TITLES[name])
+
+def pvr_group_manager():
+    """GUIDialogPVRGroupManager.cpp: 13 the groups, 11 channels not in the
+    group, 12 channels in it - all three must be on screen; 20/21/22 are
+    their headings (Kodi writes them). 25 Hide group, 26 New, 27 Rename,
+    28 Delete, 29 OK, 34 TV/Radio, 35 regenerate thumbnails - unlabelled."""
+    name = "DialogPVRGroupManager"
+    ids = kodi_ids(name, INV[name])
+    W = 1000
+    cw = (W - 20 - 16) // 3          # three columns, 8 px apart
+    xs = [10, 10 + cw + 8, 10 + 2 * (cw + 8)]
+    body  = caplabel(xs[0] + 4, 36, cw - 8, "$LOCALIZE[19146]$INFO[Container(13).NumItems, (,)]")
+    body += caplabel(xs[1] + 4, 36, cw - 8, None, cid=21)
+    body += caplabel(xs[2] + 4, 36, cw - 8, None, cid=22)
+    lt, lh = 62, 300
+    order = [(13, 73), (11, 71), (12, 72)]
+    for k, (cid, sb) in enumerate(order):
+        nxt = order[(k + 1) % 3][0]
+        prv = order[k - 1][0]
+        body += xlist(cid, sb, xs[k], lt, cw, lh,
+                      {"onup": "9903", "ondown": "9001", "onleft": str(prv)},
+                      layouts=(lambda iw: rows(iw, label2="$INFO[ListItem.Property(ClientName)]")) if cid == 13 else None,
+                      sbright=str(nxt))
+    radio = "String.IsEqual(Window(pvrgroupmanager).Property(IsRadio),true)"
+    bw = (W - 20 - 24) // 4
+    body += hrow(9001, 10, 370, W - 20,
+                 [(26, "$LOCALIZE[31830]"), (27, "$LOCALIZE[31831]"), (28, "$LOCALIZE[31832]"),
+                  (25, "$LOCALIZE[19289]", "", "radiobutton")],
+                 {"onup": "13", "ondown": "9002"}, bw=bw)
+    body += hrow(9002, 10, 418, W - 20,
+                 [(35, "$LOCALIZE[13315]"),
+                  (34, ("$LOCALIZE[19174]", "$LOCALIZE[19173]"), f"<usealttexture>{radio}</usealttexture>",
+                   "togglebutton"),
+                  (29, "$LOCALIZE[186]")],
+                 {"onup": "9001"}, bw=(W - 20 - 16) // 3)
+    # 20 = the selected group's name; the groups column already shows it
+    placed = {11, 12, 13, 21, 22, 25, 26, 27, 28, 29, 34, 35, 71, 72, 73}
+    body += stubs(ids, placed)
+    return dialog(name, W, 470, body, default="13", icon="icons24/pvr_groups.png",
+                  title=TITLES[name])
+
+def pvr_guide_search():
+    """GUIDialogPVRGuideSearch.cpp ids 9-31: it only fills values, label2
+    and selected states, so every caption is the skin's (Estuary's)."""
+    name = "DialogPVRGuideSearch"
+    ids = kodi_ids(name, INV[name])
+    body  = """      <control type="edit" id="9">
+        <left>10</left><top>36</top><width>940</width><height>36</height>
+        <label>$LOCALIZE[19133]</label>
+        <onup>9903</onup><ondown>5000</ondown>
+      </control>
+"""
+    body += caplabel(14, 74, 932, "$LOCALIZE[19001]", h=22)
+    left  = [("radiobutton", 10, 19134), ("radiobutton", 11, 19135), ("edit", 14, 19128),
+             ("edit", 15, 19129), ("radiobutton", 30, 19339), ("spincontrolex", 18, 515),
+             ("radiobutton", 20, 19132), ("radiobutton", 22, 19123), ("radiobutton", 24, 19124)]
+    right = [("spincontrolex", 12, 19130), ("spincontrolex", 13, 19131), ("edit", 16, 19126),
+             ("edit", 17, 19127), ("radiobutton", 31, 19340), ("radiobutton", 19, 19121),
+             ("spincontrolex", 21, 19141), ("spincontrolex", 23, 19148), ("radiobutton", 27, 19125)]
+    gt, gh = 100, 330
+    for gid, sb, x, col, other in ((5000, 5001, 10, left, 6000), (6000, 6001, 484, right, 5000)):
+        body += well(x, gt, 466, gh, "panel_sunken_grey.png")
+        kids = "".join(item(ct, cid, 432, 30, f"$LOCALIZE[{sid}]") for ct, cid, sid in col)
+        body += vgroup(gid, x + 6, gt + 6, 454, gh - 12, kids,
+                       {"onup": "9", "ondown": "9000", "onleft": str(other), "onright": str(other)}, sb=sb)
+    body += hrow(9000, 10, 440, 940, [(26, "$LOCALIZE[137]"), (29, "$LOCALIZE[190]"),
+                                      (28, "$LOCALIZE[13007]"), (25, "$LOCALIZE[222]")],
+                 {"onup": "5000", "ondown": "9"}, bw=226)
+    placed = {cid for _, cid, _ in left + right} | {9, 25, 26, 28, 29}
+    body += stubs(ids, placed)
+    return dialog(name, 960, 492, body, default="9", icon="icons24/pvr_search.png",
+                  title=TITLES[name])
+
+def smartplaylist_editor():
+    """GUIDialogSmartPlaylistEditor.cpp (a dialog, despite the file name):
+    2 heading (Kodi writes 21432), 10 rules, 12 name, 13 add rule, 14 remove
+    rule, 16 match, 17 limit, 18 order, 19 direction, 20 OK, 21 Cancel,
+    22 type, 23 group by, 24 mixed groups. Kodi writes only label2/values."""
+    name = "SmartPlaylistEditor"
+    ids = kodi_ids(name, INV[name])
+    body  = tlabel(2, 770)
+    kids  = item("button", 22, 400, 30, "$LOCALIZE[467]")
+    kids += item("button", 12, 400, 30, "$LOCALIZE[21433]")
+    kids += item("button", 16, 400, 30, "$LOCALIZE[21424]")
+    kids += item("button", 17, 400, 30, "$LOCALIZE[21427]")
+    kids += item("button", 18, 400, 30, "$LOCALIZE[21429]")
+    kids += item("button", 19, 400, 30, "$LOCALIZE[580]")
+    kids += item("button", 23, 400, 30, "$LOCALIZE[21458]")
+    kids += item("radiobutton", 24, 400, 30, "$LOCALIZE[21458]: $LOCALIZE[21459]")
+    body += well(10, 36, 440, 388, "panel_sunken_grey.png")
+    body += vgroup(500, 16, 42, 428, 376, kids,
+                   {"onup": "9903", "ondown": "9000", "onleft": "10", "onright": "10"}, sb=501)
+    body += xlist(10, 60, 458, 36, 432, 340,
+                  {"onup": "9903", "ondown": "9010", "onleft": "500"}, sbright="500")
+    body += hrow(9010, 458, 384, 432, [(13, "$LOCALIZE[15019]"), (14, "$LOCALIZE[1210]")],
+                 {"onup": "10", "ondown": "9000"}, bw=200)
+    body += hrow(9000, 10, 432, 880, [(20, "$LOCALIZE[186]"), (21, "$LOCALIZE[222]")],
+                 {"onup": "500"}, bw=240)
+    placed = {2, 10, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 500}
+    body += stubs(ids, placed)
+    return dialog(name, 900, 484, body, default="22", icon="icons24/smartplaylist.png",
+                  heading=False)
+
+def smartplaylist_rule():
+    """GUIDialogSmartPlaylistRule.cpp: 15 field and 16 operator (Kodi labels
+    both), 17 value (label2), 18 OK, 19 Cancel, 20 Browse."""
+    name = "SmartPlaylistRule"
+    ids = kodi_ids(name, INV[name])
+    kids  = item("button", 15, 664, 30)
+    kids += item("button", 16, 664, 30)
+    kids += item("edit", 17, 664, 30)
+    kids += item("button", 20, 664, 30, "$LOCALIZE[1024]")
+    body  = well(10, 36, 680, 212, "panel_sunken_grey.png")
+    body += vgroup(9001, 18, 42, 664, 200, kids, {"onup": "9903", "ondown": "9000"})
+    body += hrow(9000, 10, 256, 680, [(18, "$LOCALIZE[186]"), (19, "$LOCALIZE[222]")],
+                 {"onup": "9001"}, bw=240)
+    placed = {15, 16, 17, 18, 19, 20}
+    body += stubs(ids, placed)
+    return dialog(name, 700, 308, body, default="15", icon="icons24/smartrule.png",
+                  title=TITLES[name])
+
+def music_playlist_editor():
+    """GUIWindowMusicPlaylistEditor.cpp: 6 Load, 7 Save, 8 Clear (unlabelled),
+    50 the source browser, 100 the playlist being built (generic() had
+    parked it off screen), 12 / 101 their item counts. Songs go in and out
+    through the context menu (long-press), so the window says so."""
+    name = "MyMusicPlaylistEditor"
+    ids = kodi_ids(name, INV[name])
+    body  = well(6, 34, 200, 494, "panel_sunken_grey.png")
+    kids  = item("button", 6, 184, 30, "$LOCALIZE[502]")
+    kids += item("button", 7, 184, 30, "$LOCALIZE[190]")
+    kids += item("button", 8, 184, 30, "$LOCALIZE[192]")
+    body += vgroup(9000, 14, 40, 184, 160, kids, {"onup": "9100", "ondown": "9100", "onright": "50"})
+    body += f"""      <control type="textbox">
+        <left>14</left><top>208</top><width>184</width><height>312</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$LOCALIZE[31833]</label>
+      </control>
+"""
+    body += well(212, 34, 392, 26, "panel_sunken_grey.png")
+    body += caplabel(218, 35, 380, None, cid=12)
+    body += xlist(50, 60, 212, 64, 392, 464, {"onup": "50", "ondown": "9100", "onleft": "9000"},
+                  sbright="100")
+    body += well(610, 34, 396, 26, "panel_sunken_grey.png")
+    body += caplabel(616, 35, 384, None, cid=101)
+    body += xlist(100, 61, 610, 64, 396, 464, {"onup": "100", "ondown": "9100", "onleft": "60"},
+                  sbright="9000")
+    placed = {6, 7, 8, 12, 50, 60, 61, 100, 101}
+    body += stubs(ids, placed)
+    return fullwindow(name, body, default="50", views="50", icon="icons24/playlist.png")
+
+def screen_calibration():
+    """GUIWindowSettingsScreenCalibration.cpp: movers 8 (top left), 9 (bottom
+    right), 10 (subtitles), 12 (reset), resize 11 (pixel ratio); Kodi places
+    and sizes them itself, but they draw only their own textures - the
+    stubs had none, so nothing was visible. Labels 2/3/4: resolution, what
+    the marker does, its value. Full screen, no chrome over the edges being
+    calibrated. The window renders in screen pixels (m_needsScaling false),
+    so text is centred across 100% width like Estuary's. Touch: drag a
+    marker; Done (or a two-finger swipe left = Back) leaves."""
+    def mover(cid, kind, w, h, tex, events, speed="acceleration=\"180\" maxvelocity=\"300\" resettimeout=\"200\" delta=\"1\""):
+        ev = "".join(f'<eventconfig type="{e}" />' for e in events)
+        ms = f"\n      <movingspeed {speed}>{ev}</movingspeed>" if events else ""
+        return (f'    <control type="{kind}" id="{cid}">\n'
+                f"      <left>0</left><top>0</top><width>{w}</width><height>{h}</height>\n"
+                f'      <texturefocus colordiffuse="select">{tex}</texturefocus>\n'
+                f"      <texturenofocus>{tex}</texturenofocus>{ms}\n"
+                "    </control>\n")
+    lab = lambda cid, t, font, label="": (
+        f'    <control type="label"' + (f' id="{cid}"' if cid else "") + ">\n"
+        f"      <left>0</left><top>{t}</top><width>100%</width><height>26</height>\n"
+        f"      <font>{font}</font><textcolor>text</textcolor><align>center</align><aligny>center</aligny>\n"
+        + (f"      <label>{label}</label>\n" if label else "") + "    </control>\n")
+    s  = H + "<window>\n  <defaultcontrol>8</defaultcontrol>\n"
+    s += "  <backgroundcolor>desktop</backgroundcolor>\n  <controls>\n"
+    s += ("    <control type=\"image\">\n      <left>0</left><top>0</top><width>100%</width><height>100%</height>\n"
+          "      <texture colordiffuse=\"desktop\">fill.png</texture>\n    </control>\n")
+    # sizes: 8/9 are drawn as given; 10-12 Kodi rescales from a 1920x1080
+    # design (10 must keep 40 px clear above and below the bar)
+    s += mover(8, "mover", 96, 96, "icons96/cal_tl.png", ("up", "down", "left", "right"))
+    s += mover(9, "mover", 96, 96, "icons96/cal_br.png", ("up", "down", "left", "right"))
+    s += mover(11, "resize", 500, 500, "icons96/cal_ratio.png", ("left", "right"),
+               speed="acceleration=\"140\" maxvelocity=\"300\" resettimeout=\"180\" delta=\"1\"")
+    s += mover(10, "mover", 380, 90, "icons96/cal_sub.png", ("up", "down"))
+    s += mover(12, "mover", 100, 100, "icons96/cal_reset.png", ())
+    s += ("    <!-- Done: near the top centre, where it can be hit with or without\n"
+          "         the scaling Kodi applies to this window -->\n"
+          "    <control type=\"button\" id=\"30\">\n"
+          "      <left>362</left><top>4</top><width>300</width><height>56</height>\n"
+          "      <font>bigbold</font><align>center</align><aligny>center</aligny>\n"
+          "      <label>$LOCALIZE[20177]</label>\n"
+          "      <onclick>Action(Back)</onclick>\n"
+          "    </control>\n")
+    s += lab(None, 68, "bigbold", "$LOCALIZE[214]")
+    s += lab(2, 96, "normal")
+    s += lab(3, 124, "bold")
+    s += lab(4, 152, "normal")
+    s += lab(None, 180, "small", "$LOCALIZE[31834]")
+    s += "  </controls>\n</window>\n"
+    return s
+
+def login_screen():
+    """GUIWindowLoginScreen.cpp: 52 the profiles, 2 heading (20115), 3 the
+    selected profile. The login screen runs as the master profile and skin
+    onclicks bypass its OnAction filter, so it must not carry the task bar
+    (Start = Home, Settings) - only a power button (ShutdownMenu: power,
+    log off, master mode)."""
+    name = "LoginScreen"
+    ids = kodi_ids(name, INV[name])
+    body  = caplabel(16, 38, 980, None, cid=2, h=26, font="bigbold", col="text")
+    body += caplabel(16, 66, 980, None, cid=3, h=22, font="small")
+    layouts = lambda iw: (
+        f'        <itemlayout height="56" width="{iw}">\n'
+        f'          <control type="image"><left>6</left><top>4</top><width>48</width><height>48</height>'
+        f'<texture fallback="icons/person.png">$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>\n'
+        f'          <control type="label"><left>66</left><top>4</top><width>{iw-76}</width><height>26</height>'
+        f'<font>bigbold</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>\n'
+        f'          <control type="label"><left>66</left><top>30</top><width>{iw-76}</width><height>22</height>'
+        f'<font>small</font><textcolor>textdim</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label2]</label></control>\n'
+        f'        </itemlayout>\n'
+        f'        <focusedlayout height="56" width="{iw}">\n'
+        f'          <control type="image"><left>0</left><top>0</top><width>{iw}</width><height>56</height>'
+        f'<texture colordiffuse="select">fill.png</texture></control>\n'
+        f'          <control type="image"><left>6</left><top>4</top><width>48</width><height>48</height>'
+        f'<texture fallback="icons/person.png">$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>\n'
+        f'          <control type="label"><left>66</left><top>4</top><width>{iw-76}</width><height>26</height>'
+        f'<font>bigbold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>\n'
+        f'          <control type="label"><left>66</left><top>30</top><width>{iw-76}</width><height>22</height>'
+        f'<font>small</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label2]</label></control>\n'
+        f'        </focusedlayout>\n')
+    body += xlist(52, 60, 6, 94, 1000, 434, {"onup": "52", "ondown": "9100", "onleft": "52"},
+                  layouts=layouts, sbright="52")
+    body += stubs(ids, {2, 3, 52, 60})
+    s  = H + "<window>\n"
+    s += "  <defaultcontrol always=\"false\">52</defaultcontrol>\n"
+    s += "  <backgroundcolor>desktop</backgroundcolor>\n  <controls>\n"
+    s += "    <include>Chrome_Desktop</include>\n    <include>Chrome_Menubar</include>\n"
+    s += FRAME.format(colour="accent2", icon="icons24/person.png", title=TITLES[name], body=body,
+                      down="52", boxes=BOXES.get(name, "none"))
+    s += """    <!-- in place of the task bar: power only -->
+    <control type="group">
+      <left>0</left><top>568</top><width>1024</width><height>32</height>
+      <control type="image">
+        <left>0</left><top>0</top><width>1024</width><height>32</height>
+        <texture border="2" colordiffuse="facetint">panel_chrome.png</texture>
+      </control>
+      <control type="button" id="9100">
+        <left>4</left><top>2</top><width>200</width><height>28</height>
+        <font>chromebold</font><align>center</align><aligny>center</aligny>
+        <label>$LOCALIZE[13005]</label>
+        <onclick>ActivateWindow(ShutdownMenu)</onclick>
+        <onup>52</onup><ondown>52</ondown><onleft>9100</onleft><onright>9100</onright>
+      </control>
+    </control>
+"""
+    s += "  </controls>\n</window>\n"
+    return s
+
+def color_picker():
+    """GUIDialogColorPicker.cpp: 1 heading, 2 item count, 6 the colours
+    (label = name, label2 = ARGB), 7 Cancel - Kodi labels 1, 2 and 7.
+    Each row shows the colour itself."""
+    name = "DialogColorPicker"
+    ids = kodi_ids(name, INV[name])
+    body  = xlist(6, 61, 10, 36, 880, 390, {"onup": "9903", "ondown": "7", "onleft": "7"},
+                  layouts=lambda iw: rows(iw, swatch=True), sbright="7")
+    body += caplabel(16, 434, 400, None, cid=2, h=ROWH)
+    body += hrow(None, 430, 434, 460, [(7, None)], {"onup": "6"}, bw=200)
+    body += stubs(ids, {1, 2, 6, 7, 61})
+    return dialog(name, 900, 486, body, default="6", icon="icons24/skin.png")
+
+def video_manager():
+    """GUIDialogVideoManager*.cpp (versions and extras share this file):
+    2 title (Kodi writes it), 50 the versions / extras, 21 Play, 26 Remove,
+    27 Choose art; versions add 22 Add version, 24 Choose type, 25 Set as
+    default; extras add 23 Add extra, 28 Rename. Kodi labels none."""
+    name = "DialogVideoManager"
+    ids = kodi_ids(name, INV[name])
+    ver = "<visible>Window.IsVisible(managevideoversions)</visible>"
+    ext = "<visible>Window.IsVisible(managevideoextras)</visible>"
+    body  = tlabel(2, 770)
+    body += xlist(50, 60, 10, 36, 580, 392, {"onup": "9903", "ondown": "50", "onleft": "101"},
+                  sbright="101")
+    kids  = item("button", 21, 276, 30, "$LOCALIZE[208]")
+    kids += item("button", 22, 276, 30, "$LOCALIZE[40014]", ver)
+    kids += item("button", 23, 276, 30, "$LOCALIZE[40015]", ext)
+    kids += item("button", 27, 276, 30, "$LOCALIZE[13511]")
+    kids += item("button", 24, 276, 30, "$LOCALIZE[40004]", ver)
+    kids += item("button", 28, 276, 30, "$LOCALIZE[118]", ext)
+    kids += item("button", 26, 276, 30, "$LOCALIZE[15015]")
+    kids += item("button", 25, 276, 30, "$LOCALIZE[40023]", ver)
+    body += well(598, 36, 292, 392, "panel_sunken_grey.png")
+    body += vgroup(101, 606, 42, 276, 380, kids, {"onup": "9903", "ondown": "101", "onleft": "50", "onright": "50"})
+    body += caplabel(14, 434, 872, "$INFO[Container(50).ListItem.FileNameAndPath]", h=22)
+    body += stubs(ids, {2, 50, 60, 101} | set(range(21, 29)))
+    return dialog(name, 900, 466, body, default="50", icon="icons24/movies.png", heading=False)
 
 # ====================================================== subtitle search
 def subtitles_dialog():
@@ -1861,6 +2427,16 @@ def main():
     written["DialogAddonInfo"] = addon_info_dialog()
     written["DialogGameControllers"] = game_controllers()
     written["DialogSubtitles"] = subtitles_dialog()
+    written["DialogPVRChannelManager"] = pvr_channel_manager()
+    written["DialogPVRGroupManager"] = pvr_group_manager()
+    written["DialogPVRGuideSearch"] = pvr_guide_search()
+    written["SmartPlaylistEditor"] = smartplaylist_editor()
+    written["SmartPlaylistRule"] = smartplaylist_rule()
+    written["MyMusicPlaylistEditor"] = music_playlist_editor()
+    written["SettingsScreenCalibration"] = screen_calibration()
+    written["LoginScreen"] = login_screen()
+    written["DialogColorPicker"] = color_picker()
+    written["DialogVideoManager"] = video_manager()
 
     count = 0
     for name, meta in INV.items():

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
-  <defaultcontrol>799</defaultcontrol>
   <controls>
     <include>Dialog_Dim</include>
     <control type="group">
@@ -10,24 +9,10 @@
         <param name="width" value="900" /><param name="height" value="500" />
         <param name="innerwidth" value="894" />
         <param name="icon" value="icons24/rds.png" /><param name="colour" value="accent2" />
-        <param name="down" value="799" />
+        <param name="down" value="" />
         <param name="boxes" value="dialog" />
+        <param name="title" value="$LOCALIZE[29900]" />
       </include>
-      <include content="Dialog_Heading"><param name="width" value="794" /></include>
-      <control type="image">
-        <left>10</left><top>36</top><width>880</width><height>420</height>
-        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
-      </control>
-      <control type="grouplist">
-        <left>18</left><top>42</top><width>864</width><height>408</height>
-        <orientation>vertical</orientation><itemgap>3</itemgap>
-        <onup>9100</onup><ondown>9100</ondown>
-        <control type="radiobutton" id="799">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-          <align>left</align><textoffsetx>12</textoffsetx>
-        </control>
-      </control>
     </control>
   </controls>
 </window>

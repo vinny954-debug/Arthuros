@@ -464,6 +464,51 @@ BASES["addon_radio"] = [
 "................",
 ]
 
+# P3 screen calibration markers (SettingsScreenCalibration movers). White
+# with a black edge, so colordiffuse tints the focused one.
+BASES["cal_tl"] = [
+"KKKKKKKKKK......",
+"KWWWWWWWK.......",
+"KWWWWWWK........",
+"KWWWWWK.........",
+"KWWWWWWK........",
+"KWWWWWWWK.......",
+"KWWWKWWWWK......",
+"KWWK.KWWWWK.....",
+"KWK...KWWWWK....",
+"KK.....KWWWWK...",
+"K.......KWWWWK..",
+".........KWWWWK.",
+"..........KWWK..",
+"...........KK...",
+"................",
+"................",
+]
+# P3 bottom-right: the same arrow turned round
+BASES["cal_br"] = [r[::-1] for r in BASES["cal_tl"][::-1]]
+# P3 subtitle position: a bar across the middle, with the transparent space
+# above and below that Kodi expects (CONTROL_SUBTITLES_SPACE, 80 of 90 px)
+BASES["cal_sub"] = ["." * 16] * 7 + ["WWWWWWWWWWWWWWWW", "KKKKKKKKKKKKKKKK"] + ["." * 16] * 7
+# P3 pixel ratio: a ring that is round when the ratio is right
+BASES["cal_ratio"] = [
+"................",
+".....KKKKKK.....",
+"...KKWWWWWWKK...",
+"..KWWKKKKKKWWK..",
+".KWKK......KKWK.",
+".KWK........KWK.",
+"KWK..........KWK",
+"KWK..........KWK",
+"KWK..........KWK",
+"KWK..........KWK",
+".KWK........KWK.",
+".KWKK......KKWK.",
+"..KWWKKKKKKWWK..",
+"...KKWWWWWWKK...",
+".....KKKKKK.....",
+"................",
+]
+
 EMBLEMS = {
  "star":    ("B", "Y", ["...#...", "..###..", "#######", ".#####.", "..###..", ".##.##.", ".#...#."]),
  "clock":   ("W", "K", [".#####.", "#..#..#", "#..#..#", "#..##.#", "#.....#", "#.....#", ".#####."]),
@@ -511,6 +556,8 @@ EMBLEMS = {
  "moon":    ("n", "Y", ["..###..", ".##....", "##.....", "##.....", "##.....", ".##....", "..###.."]),
  "snow":    ("C", "W", ["#..#..#", ".#.#.#.", "..###..", "#######", "..###..", ".#.#.#.", "#..#..#"]),
  "lock":    ("W", "K", ["..###..", ".#...#.", ".#...#.", "#######", "###.###", "###.###", "#######"]),
+ # P3 an open padlock: leave master mode
+ "unlock":  ("W", "K", [".###...", "#...#..", "#......", "#######", "###.###", "###.###", "#######"]),
 }
 
 def badge(base, emblem):
@@ -607,6 +654,10 @@ SPEC = {
  "process_info": ("system", "info"),    "audio_muted": ("audio", "cross"),
  "pvr_radio": ("livetv", "note"),       "desktop_edit": ("interface", "wrench"),
  "addon_server": ("server", "play"),    "addon_config": ("board", "wrench"),    "seek": ("player", "clock"),
+ # P3 power menu: leave master mode (masterlock enters it)
+ "masterlock_off": ("settings", "unlock"),
+ # P3 screen calibration: reset marker
+ "cal_reset": ("cal_ratio", "refresh"),
 }
 
 def build(icons):

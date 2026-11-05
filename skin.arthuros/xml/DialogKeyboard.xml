@@ -13,13 +13,14 @@
         <param name="down" value="300" />
         <param name="boxes" value="dialog" />
       </include>
-      <include content="Dialog_Heading"><param name="width" value="794" /></include>
       <control type="image">
         <left>10</left><top>36</top><width>880</width><height>46</height>
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
       <control type="label" id="311">
-        <left>-3000</left><top>0</top><width>200</width><height>24</height>
+        <left>29</left><top>3</top><width>770</width><height>26</height>
+        <font>chromebold</font><textcolor>titletext</textcolor>
+        <align>left</align><aligny>center</aligny>
       </control>
       <control type="edit" id="312">
         <left>16</left><top>42</top><width>868</width><height>34</height>
