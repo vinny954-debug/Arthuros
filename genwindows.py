@@ -848,12 +848,25 @@ def small_dialogs():
     # origin (CGUIDialogContextMenu::PositionAtCurrentFocus). So 999 must sit
     # at the window origin and nothing may be offset from it - a centred
     # group or a full-screen dim would be shifted by the same amount and end
-    # up off screen. It also resizes 999 to fit however many entries there are.
-    W = 380
+    # up off screen. It also resizes 999 to fit however many entries there are:
+    # 999 = its XML height - 996's XML height + 996's content height, capped
+    # at 996's XML height (CGUIDialogContextMenu::SetupButtons,
+    # CGUIControlGroupList::GetHeight). So both are drawn as tall as the
+    # screen allows and short menus still come out short. A long menu
+    # scrolls (drag, wheel or keys) and scrollbar 997 shows that there is
+    # more; it hides itself when everything fits (showonepage false).
+    # tallpass leaves <coordinates> windows alone, so the 768 layout keeps
+    # these heights.
+    W, GL = 380, 520
+    XLC = "[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"
+    def xl_pair(inc, normal, xl, ind):
+        return (f"{ind}<include content=\"{inc}\" condition=\"{XLC}\"><param name=\"v\" value=\"{xl}\" /></include>\n"
+                f"{ind}<include content=\"{inc}\" condition=\"!{XLC}\"><param name=\"v\" value=\"{normal}\" /></include>\n")
+    BW, SBL = W - 42, W - 28          # buttons 10..348, scrollbar 352..370
     out["DialogContextMenu"] = (H + "<window>\n  <defaultcontrol>996</defaultcontrol>\n"
       "  <coordinates><left>0</left><top>0</top></coordinates>\n  <controls>\n"
       f"    <control type=\"image\" id=\"999\">\n"
-      f"      <left>0</left><top>0</top><width>{W}</width><height>440</height>\n"
+      f"      <left>0</left><top>0</top><width>{W}</width><height>{38 + GL + 10}</height>\n"
       "      <texture border=\"2\">panel_raised.png</texture>\n"
       "    </control>\n"
       "    <control type=\"group\">\n"
@@ -866,12 +879,23 @@ def small_dialogs():
       "      </include>\n"
       "    </control>\n"
       "    <control type=\"grouplist\" id=\"996\">\n"
-      f"      <left>10</left><top>38</top><width>{W-20}</width><height>392</height>\n"
+      f"      <left>10</left><top>38</top><height>{GL}</height>\n"
+      + xl_pair("Size_Width", BW, BW - 12, "      ") +
       "      <orientation>vertical</orientation><itemgap>2</itemgap>\n"
+      "      <pagecontrol>997</pagecontrol>\n"
+      "      <onright>997</onright>\n"
       "      <control type=\"button\" id=\"1000\">\n"
-      f"        <width>{W-20}</width><height>30</height>\n"
+      f"        <height>30</height>\n"
+      + xl_pair("Size_Width", BW, BW - 12, "        ") +
       "        <align>left</align><textoffsetx>12</textoffsetx>\n"
       "      </control>\n"
+      "    </control>\n"
+      "    <control type=\"scrollbar\" id=\"997\">\n"
+      f"      <top>38</top><height>{GL}</height>\n"
+      + xl_pair("Size_Left", SBL, SBL - 12, "      ")
+      + xl_pair("Size_Width", 18, 30, "      ") +
+      "      <showonepage>false</showonepage>\n"
+      "      <onleft>996</onleft>\n"
       "    </control>\n  </controls>\n</window>\n")
 
     out["DialogNotification"] = (H + "<window>\n  <zorder>6</zorder>\n  <controls>\n"
@@ -965,13 +989,19 @@ def small_dialogs():
     out["DialogSeekBar"] = dialog("DialogSeekBar", 892, 134, body, icon="icons24/movies.png",
                                   dim=False, heading=False, zorder=3)
 
+    # A textbox scrolls only through its page control (CGUITextBox reacts to
+    # GUI_MSG_PAGE_CHANGE from m_pageControl; it has no key, wheel or gesture
+    # handling), and it cannot take focus. So the scrollbar is linked and is
+    # the default control: Up/Down page through the text (GUIScrollBarControl
+    # ::OnAction), and a finger drags it - sizepass widens it in Touch mode.
     body = (well(10, 36, 840, 380, "panel_sunken.png")
             + "      <control type=\"textbox\" id=\"5\">\n"
               "        <left>18</left><top>44</top><width>806</width><height>364</height>\n"
-              "        <font>small</font>\n      </control>\n"
+              "        <font>small</font>\n        <pagecontrol>60</pagecontrol>\n      </control>\n"
               "      <control type=\"scrollbar\" id=\"60\">\n"
-              "        <left>828</left><top>44</top><width>18</width><height>364</height>\n      </control>\n")
-    out["DialogTextViewer"] = dialog("DialogTextViewer", 860, 430, body, default="5",
+              "        <left>828</left><top>44</top><width>18</width><height>364</height>\n"
+              "        <onup>9903</onup>\n      </control>\n")
+    out["DialogTextViewer"] = dialog("DialogTextViewer", 860, 430, body, default="60",
                                      icon="icons24/file.png")
 
     body = ("      <control type=\"label\" id=\"10\">\n"

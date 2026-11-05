@@ -4,7 +4,7 @@
   <coordinates><left>0</left><top>0</top></coordinates>
   <controls>
     <control type="image" id="999">
-      <left>0</left><top>0</top><width>380</width><height>440</height>
+      <left>0</left><top>0</top><width>380</width><height>568</height>
       <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
     </control>
     <control type="group">
@@ -17,13 +17,28 @@
       </include>
     </control>
     <control type="grouplist" id="996">
-      <left>10</left><top>38</top><width>360</width><height>392</height>
+      <left>10</left><top>38</top><height>520</height>
+      <include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="326" /></include>
+      <include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="338" /></include>
       <orientation>vertical</orientation><itemgap>2</itemgap>
+      <pagecontrol>997</pagecontrol>
+      <onright>997</onright>
       <control type="button" id="1000">
-        <width>360</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
         <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="326" /></include>
+        <include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="338" /></include>
         <align>left</align><textoffsetx>12</textoffsetx>
       </control>
+    </control>
+    <control type="scrollbar" id="997">
+      <top>38</top><height>520</height>
+      <include content="Size_Left" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="340" /></include>
+      <include content="Size_Left" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="352" /></include>
+      <include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30" /></include>
+      <include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="18" /></include>
+      <showonepage>false</showonepage>
+      <onleft>996</onleft>
     </control>
   </controls>
 </window>

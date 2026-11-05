@@ -63,6 +63,7 @@
       </control>
       <control type="spincontrolex" id="9">
         <left>-2000</left><top>0</top><width>846</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="SpinSize_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
         <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
         <align>left</align><textoffsetx>12</textoffsetx>
       </control>
@@ -77,6 +78,7 @@
       </control>
       <control type="sliderex" id="13">
         <left>-2000</left><top>0</top><width>846</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="SliderSize_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
         <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
         <align>left</align><textoffsetx>12</textoffsetx>
       </control>

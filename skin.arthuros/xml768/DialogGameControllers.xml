@@ -6,6 +6,36 @@
       <left>0</left><top>0</top><width>1024</width><height>768</height>
       <texture>dim.png</texture>
     </control>
+    <control type="group">
+      <right>4</right><top>736</top><width>116</width><height>32</height>
+      <visible>Skin.HasSetting(touchmode)</visible>
+      <control type="image">
+        <left>0</left><top>0</top><width>116</width><height>32</height>
+        <texture border="2" colordiffuse="facetint">panel_chrome.png</texture>
+      </control>
+      <control type="button" id="9108">
+        <left>0</left><top>0</top><width>116</width><height>32</height>
+        <hitrect x="-2" y="0" w="122" h="32"/>
+        <label/>
+        <onclick>Action(Back)</onclick>
+      </control>
+      <control type="image">
+        <left>8</left><top>8</top><width>16</width><height>16</height>
+        <texture>icons24/parent.png</texture>
+      </control>
+      <control type="label">
+        <left>30</left><top>0</top><width>80</width><height>32</height>
+        <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[31994]</label>
+        <visible>!Control.HasFocus(9108)</visible>
+      </control>
+      <control type="label">
+        <left>30</left><top>0</top><width>80</width><height>32</height>
+        <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[31994]</label>
+        <visible>Control.HasFocus(9108)</visible>
+      </control>
+    </control>
     <include condition="Window.IsDialogTopMost(gamecontrollers)">Arthur_GameControllers</include>
     <include condition="Window.IsDialogTopMost(gameports)">Arthur_GamePorts</include>
     <include condition="Window.IsDialogTopMost(gameagents)">Arthur_GameAgents</include>

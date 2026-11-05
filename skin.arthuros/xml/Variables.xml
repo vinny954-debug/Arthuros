@@ -19,10 +19,15 @@
     <value>$INFO[ListItem.Label]</value>
   </variable>
 
-  <!-- Now playing line for the taskbar and OSDs. -->
+  <!-- Now playing line for the taskbar and OSDs. Games first: RetroPlayer
+       also reports Player.HasVideo. The " - " after the artist is the $INFO
+       postfix, so it only appears when there is an artist (radio and many
+       streams have none). Anything else falls back to Player.Title. -->
   <variable name="NowPlayingVar">
-    <value condition="Player.HasVideo">$INFO[VideoPlayer.Title]</value>
-    <value condition="Player.HasAudio">$INFO[MusicPlayer.Artist] - $INFO[MusicPlayer.Title]</value>
+    <value condition="Player.HasGame">$INFO[Player.Title]</value>
+    <value condition="Player.HasVideo + !String.IsEmpty(VideoPlayer.Title)">$INFO[VideoPlayer.Title]</value>
+    <value condition="Player.HasAudio + !String.IsEmpty(MusicPlayer.Title)">$INFO[MusicPlayer.Artist,, - ]$INFO[MusicPlayer.Title]</value>
+    <value condition="Player.HasMedia">$INFO[Player.Title]</value>
     <value></value>
   </variable>
 
@@ -81,6 +86,8 @@
     <value condition="Window.IsActive(skinsettings)">skinsettings</value>
     <value condition="Window.IsActive(profiles)">profiles</value>
     <value condition="Window.IsActive(eventlog)">eventlog</value>
+    <value condition="Window.IsActive(musicplaylisteditor)">musicplaylisteditor</value>
+    <value condition="Window.IsActive(screencalibration)">screencalibration</value>
     <value>home</value>
   </variable>
   <variable name="ArthurWindowIcon">
@@ -119,6 +126,8 @@
     <value condition="Window.IsActive(skinsettings)">icons24/skin.png</value>
     <value condition="Window.IsActive(profiles)">icons24/person.png</value>
     <value condition="Window.IsActive(eventlog)">icons24/events.png</value>
+    <value condition="Window.IsActive(musicplaylisteditor)">icons24/playlist_music.png</value>
+    <value condition="Window.IsActive(screencalibration)">icons24/calibration.png</value>
     <value>icons24/interface.png</value>
   </variable>
 
@@ -127,4 +136,17 @@
     <value condition="Player.Muted">icons24/audio_muted.png</value>
     <value>icons24/audio.png</value>
   </variable>
+
+  <!-- P5: the task-bar Now playing icon: a joypad, a film or a speaker. -->
+  <variable name="NowPlayingIconVar">
+    <value condition="Player.HasGame">icons24/games.png</value>
+    <value condition="Player.HasVideo">icons24/video.png</value>
+    <value>icons24/audio.png</value>
+  </variable>
+
+  <!-- P5: true in exactly the windows ArthurWindowName names, i.e. those the
+       title-bar "_" box can park on the task bar. Anywhere else "_" just
+       goes to the desktop and leaves an already parked window alone.
+       Keep it in step with ArthurWindowName (audit.sh checks). -->
+  <expression name="ArthurParkable">Window.IsActive(videos) | Window.IsActive(music) | Window.IsActive(pictures) | Window.IsActive(programs) | Window.IsActive(games) | Window.IsActive(addonbrowser) | Window.IsActive(favouritesbrowser) | Window.IsActive(videoplaylist) | Window.IsActive(musicplaylist) | Window.IsActive(tvchannels) | Window.IsActive(radiochannels) | Window.IsActive(tvguide) | Window.IsActive(radioguide) | Window.IsActive(tvrecordings) | Window.IsActive(radiorecordings) | Window.IsActive(tvtimers) | Window.IsActive(radiotimers) | Window.IsActive(tvtimerrules) | Window.IsActive(radiotimerrules) | Window.IsActive(tvsearch) | Window.IsActive(radiosearch) | Window.IsActive(weather) | Window.IsActive(filemanager) | Window.IsActive(systeminfo) | Window.IsActive(settings) | Window.IsActive(systemsettings) | Window.IsActive(playersettings) | Window.IsActive(mediasettings) | Window.IsActive(interfacesettings) | Window.IsActive(servicesettings) | Window.IsActive(pvrsettings) | Window.IsActive(gamesettings) | Window.IsActive(skinsettings) | Window.IsActive(profiles) | Window.IsActive(eventlog) | Window.IsActive(musicplaylisteditor) | Window.IsActive(screencalibration)</expression>
 </includes>

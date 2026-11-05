@@ -61,7 +61,12 @@
     <disabledcolor>textdisabled</disabledcolor>
     <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
     <texturenofocus border="2" colordiffuse="facetint">button_up.png</texturenofocus>
-    <usealttexture>true</usealttexture>
+    <!-- "selected" (SET_CONTROL_SELECTED, or a <selected> condition) shows
+         as a pressed-in face. No <usealttexture> here: it is read as the
+         selected condition (GUIControlFactory), so "true" kept every toggle
+         permanently selected and drew only the alt textures. -->
+    <alttexturefocus border="2" colordiffuse="select">select_bevel.png</alttexturefocus>
+    <alttexturenofocus border="2" colordiffuse="facetint">button_down.png</alttexturenofocus>
     <align>center</align>
     <aligny>center</aligny>
     <textoffsetx>10</textoffsetx>
@@ -136,9 +141,10 @@
     <width>420</width>
     <font>normal</font>
     <textcolor>text</textcolor>
-    <focusedcolor>text</focusedcolor>
+    <focusedcolor>textinv</focusedcolor>
     <disabledcolor>textdisabled</disabledcolor>
-    <texturefocus border="2" colordiffuse="facetint">panel_sunken.png</texturefocus>
+    <!-- focused: the sunken well in the selection colour, so focus can be seen -->
+    <texturefocus border="2" colordiffuse="select">panel_sunken.png</texturefocus>
     <texturenofocus border="2" colordiffuse="facetint">panel_sunken.png</texturenofocus>
     <align>left</align>
     <aligny>center</aligny>
@@ -159,9 +165,20 @@
     <width>420</width>
     <font>normal</font>
     <textcolor>text</textcolor>
+    <focusedcolor>textinv</focusedcolor>
     <disabledcolor>textdisabled</disabledcolor>
     <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
     <texturenofocus border="2" colordiffuse="facetint">button_up.png</texturenofocus>
+    <!-- the bar and knob at the right of the row; without these Kodi draws
+         no slider at all (CGUISettingsSliderControl), only the value. The
+         knob is the bar's height, square (CGUISliderControl::ProcessSelector).
+         Extra large / Touch mode get a bigger one through SliderSize_XL
+         (sizepass.py), which the control's own tags let win over these. -->
+    <sliderwidth>200</sliderwidth>
+    <sliderheight>16</sliderheight>
+    <texturesliderbar border="2" colordiffuse="facetint">progress_back.png</texturesliderbar>
+    <textureslidernib border="2" colordiffuse="facetint">button_up.png</textureslidernib>
+    <textureslidernibfocus border="2" colordiffuse="select">select_bevel.png</textureslidernibfocus>
     <textoffsetx>10</textoffsetx>
     <pulseonselect>false</pulseonselect>
   </default>
