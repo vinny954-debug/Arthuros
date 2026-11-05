@@ -30,7 +30,17 @@ TITLES = {
  "MusicOSD":"$LOCALIZE[31907]", "MusicVisualisation":"$LOCALIZE[31907]",
  "SlideShow":"$LOCALIZE[108]", "GameOSD":"$LOCALIZE[31907]",
  "DialogAddonSettings":"$LOCALIZE[10004]", "DialogSettings":"$LOCALIZE[5]",
+ # dialogs Kodi gives no heading (no id 1 written by their C++ class)
+ "DialogButtonMenu":"$LOCALIZE[31976]", "DialogSeekBar":"$LOCALIZE[31907]",
+ "VideoOSDBookmarks":"$LOCALIZE[298]",
+ "DialogPVRChannelManager":"$LOCALIZE[19199]", "DialogPVRGroupManager":"$LOCALIZE[19205]",
+ "DialogPVRGuideSearch":"$LOCALIZE[19142]", "DialogPVRGuideControls":"$LOCALIZE[19222]",
+ "DialogPVRChannelsOSD":"$LOCALIZE[19019]", "DialogPVRChannelGuide":"$LOCALIZE[19019]",
+ "DialogPictureInfo":"$LOCALIZE[13406]", "DialogPlayerProcessInfo":"$LOCALIZE[14116]",
+ "DialogFullScreenInfo":"$LOCALIZE[14116]", "DialogPVRRadioRDSInfo":"$LOCALIZE[29900]",
 }
+TITLES["MyPVRGuide"] = "$LOCALIZE[19069]"   # 19029 is "Channel"
+TITLES["PlayerControls"] = "$LOCALIZE[16003]"
 
 H = '<?xml version="1.0" encoding="UTF-8"?>\n'
 
@@ -77,7 +87,7 @@ BOXES = {"LoginScreen": "none", "SmartPlaylistEditor": "dialog",
 
 def fullwindow(name, body, default="", views="", colour="accent2",
                icon="icons24/folder.png", title=None):
-    title = title if title is not None else TITLES.get(name, name)
+    title = title if title is not None else TITLES.get(name, "")
     s  = H + "<window>\n"
     if default: s += f"  <defaultcontrol always=\"false\">{default}</defaultcontrol>\n"
     if views:   s += f"  <views>{views}</views>\n"
@@ -90,19 +100,39 @@ def fullwindow(name, body, default="", views="", colour="accent2",
     s += "  </controls>\n</window>\n"
     return s
 
+# dialogs whose heading Kodi writes into their own label (id 2) on the title bar
+KODI_HEADED = {"DialogSettings", "DialogAddonSettings"}
+
 def dialog(name, wd, ht, body, default="", icon="icons24/file.png",
-           colour="accent2", heading=True, dim=True, zorder=None, title=None):
-    """title: a fixed title-bar label, for dialogs Kodi gives no heading (id 1)."""
+           colour="accent2", heading=True, dim=True, zorder=None, title=None,
+           anchor="center", visible=(), default_always=False, pre=""):
+    """title: a fixed title-bar label, for dialogs Kodi gives no heading (id 1).
+    Without one, a dialog with heading=False takes its TITLES entry.
+    anchor: "center" (default) or "bottom" (sits on the bottom edge, centred
+    horizontally - tallpass keeps it on the bottom edge at 768).
+    visible: window-level <visible> conditions (Kodi opens modeless dialogs
+    such as DialogSeekBar only through these, CGUIDialog::UpdateVisibility).
+    pre: controls placed before the dialog box (e.g. a full-screen tap catcher)."""
     inner = wd - 6
+    if title is None and not heading and name not in KODI_HEADED:
+        title = TITLES.get(name)
     if title:
         heading = False
     s  = H + "<window>\n"
+    for v in visible:
+        s += f"  <visible>{v}</visible>\n"
     if zorder: s += f"  <zorder>{zorder}</zorder>\n"
-    if default: s += f"  <defaultcontrol>{default}</defaultcontrol>\n"
+    if default:
+        al = ' always="true"' if default_always else ""
+        s += f"  <defaultcontrol{al}>{default}</defaultcontrol>\n"
     s += "  <controls>\n"
     if dim: s += "    <include>Dialog_Dim</include>\n"
+    s += pre
     s += "    <control type=\"group\">\n"
-    s += "      <centerleft>50%</centerleft><centertop>50%</centertop>\n"
+    if anchor == "bottom":
+        s += "      <centerleft>50%</centerleft><bottom>0</bottom>\n"
+    else:
+        s += "      <centerleft>50%</centerleft><centertop>50%</centertop>\n"
     s += f"      <width>{wd}</width><height>{ht}</height>\n"
     s += f'      <include content="Dialog_Box">\n'
     s += f'        <param name="width" value="{wd}" /><param name="height" value="{ht}" />\n'

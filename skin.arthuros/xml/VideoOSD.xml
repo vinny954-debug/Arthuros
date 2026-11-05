@@ -11,6 +11,7 @@
         <param name="icon" value="icons24/osd_video.png" /><param name="colour" value="accent2" />
         <param name="down" value="602" />
         <param name="boxes" value="dialog" />
+        <param name="title" value="$LOCALIZE[31907]" />
       </include>
       <control type="group" id="200">
         <left>0</left><top>0</top><width>892</width><height>240</height>

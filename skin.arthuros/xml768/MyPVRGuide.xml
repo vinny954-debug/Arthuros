@@ -96,7 +96,7 @@
           <left>26</left><right>100</right><top>0</top><height>26</height>
           <align>left</align><aligny>center</aligny>
           <font>chromebold</font><textcolor>titletext</textcolor>
-          <label>$LOCALIZE[19029]</label>
+          <label>$LOCALIZE[19069]</label>
         </control>
 
         <control type="label">

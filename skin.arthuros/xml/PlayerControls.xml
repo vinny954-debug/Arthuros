@@ -12,6 +12,7 @@
         <param name="icon" value="icons24/player.png" /><param name="colour" value="accent2" />
         <param name="down" value="602" />
         <param name="boxes" value="dialog" />
+        <param name="title" value="$LOCALIZE[16003]" />
       </include>
       <control type="image">
         <left>13</left><top>36</top><width>100</width><height>100</height>

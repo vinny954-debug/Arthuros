@@ -16,7 +16,7 @@
           <param name="width" value="1006" />
           <param name="colour" value="accent2" />
           <param name="icon" value="icons24/pvr_guide.png" />
-          <param name="label" value="$LOCALIZE[19029]" />
+          <param name="label" value="$LOCALIZE[19069]" />
           <param name="down" value="11" />
           <param name="boxes" value="window" />
         </include>

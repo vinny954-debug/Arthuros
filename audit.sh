@@ -70,5 +70,35 @@ chk "xml768 task bar sits at 736"       'grep -q "<top>736</top>" $S/xml768/Home
 chk "xml768 desktop panel is 702 high"  'grep -q "<height>702</height>" $S/xml768/Includes_Home.xml'
 chk "xml768 skin settings say 1024x768" 'grep -q "v$VER  -  1024x768" $S/xml768/SkinSettings.xml'
 chk "xml768 version stamp matches"      'grep -q "(v$VER)" $S/xml768/Home.xml'
+# ===== P1 video/music/game OSD =====
+:
+:
+# ===== P2 other playback =====
+:
+:
+# ===== P3 generic windows & text =====
+:
+:
+# ===== P4 TV guide =====
+:
+:
+# ===== P5 touch chrome & controls =====
+:
+:
+# ===== P6 desktop & skin settings =====
+:
+:
+# ===== P7 browsers & info =====
+:
+:
+# ===== P8 4:3 layout =====
+:
+:
+# ===== P9 scripts & tooling =====
+:
+:
+# ===== P10 fonts =====
+:
+:
 [ $fail -eq 0 ] && echo "all good" || echo "AUDIT FAILED"
 exit $fail

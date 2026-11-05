@@ -11,6 +11,7 @@
         <param name="icon" value="icons24/seek.png" /><param name="colour" value="accent2" />
         <param name="down" value="" />
         <param name="boxes" value="none" />
+        <param name="title" value="$LOCALIZE[31907]" />
       </include>
       <control type="label">
         <left>16</left><top>38</top><width>560</width><height>26</height>

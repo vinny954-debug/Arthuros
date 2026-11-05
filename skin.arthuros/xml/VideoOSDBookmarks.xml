@@ -16,7 +16,7 @@
           <param name="width" value="1006" />
           <param name="colour" value="accent2" />
           <param name="icon" value="icons24/bookmarks.png" />
-          <param name="label" value="VideoOSDBookmarks" />
+          <param name="label" value="$LOCALIZE[298]" />
           <param name="down" value="11" />
           <param name="boxes" value="dialog" />
         </include>

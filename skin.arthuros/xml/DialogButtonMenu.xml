@@ -12,6 +12,7 @@
         <param name="icon" value="icons24/power.png" /><param name="colour" value="accent1" />
         <param name="down" value="9000" />
         <param name="boxes" value="dialog" />
+        <param name="title" value="$LOCALIZE[31976]" />
       </include>
       <control type="image">
         <left>10</left><top>36</top><width>440</width><height>408</height>
