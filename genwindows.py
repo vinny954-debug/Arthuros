@@ -2117,7 +2117,13 @@ def picture_info():
     SetPicture -> CPicturesGUIInfo::SetCurrentSlide), which Slideshow.Path
     (the folder, with a trailing separator) plus Slideshow.Filename name in
     both cases. The dim covers the viewer, so a preview sits beside the
-    list. Names and values get columns of their own, so a long value (a
+    list. Known limit: Slideshow.Path is CURL(dir).GetWithoutUserDetails()
+    (PicturesGUIInfo.cpp), so on a source whose URL carries the login
+    (smb://user:pass@..., ftp://user:pass@...) the rebuilt path has no
+    credentials and the preview may show the DefaultPicture fallback;
+    URL-style paths with options (plugin, http) may be rebuilt wrongly the
+    same way. Local and guest/password-manager shares are unaffected. No
+    infolabel gives the slide's full path with credentials. Names and values get columns of their own, so a long value (a
     path, a camera model) no longer runs over its name."""
     W, Hh = 900, 466
     body  = well(10, 36, 320, 420, "panel_sunken_grey.png")
@@ -2138,12 +2144,16 @@ def picture_info():
                         '<height>28</height><texture colordiffuse="select">fill.png</texture></control>\n')
             kcol = "textinv" if focused else "textdim"
             vcol = "textinv" if focused else "text"
+            # Long tag names ('Supplemental categories' is ~15 cells of
+            # the XL 'small') and long values (the file path, camera
+            # models) scroll on the focused row instead of being cut.
+            scroll = "<scroll>true</scroll>" if focused else ""
             out += (f'          <control type="label"><left>8</left><top>0</top><width>{kw}</width>'
                     f'<height>28</height><font>small</font><textcolor>{kcol}</textcolor>'
-                    '<aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>\n'
+                    f'<aligny>center</aligny>{scroll}<label>$INFO[ListItem.Label]</label></control>\n'
                     f'          <control type="label"><left>{kw + 16}</left><top>0</top><width>{iw - kw - 24}</width>'
                     f'<height>28</height><font>normal</font><textcolor>{vcol}</textcolor>'
-                    '<aligny>center</aligny><label>$INFO[ListItem.Label2]</label></control>\n')
+                    f'<aligny>center</aligny>{scroll}<label>$INFO[ListItem.Label2]</label></control>\n')
             out += f"        </{tag}>\n"
         return out
     body += xlist(5, 60, 336, 36, 554, 420, {"onup": "5", "ondown": "5", "onleft": "5"},
@@ -2166,7 +2176,7 @@ def system_info():
     body += """      <control type="grouplist">
         <left>12</left><top>40</top><width>288</width><height>482</height>
         <orientation>vertical</orientation><itemgap>3</itemgap>
-        <onup>9100</onup><ondown>9100</ondown><onright>60</onright>
+        <onup>9100</onup><ondown>9100</ondown><onright condition="Control.IsVisible(30)">60</onright>
 """
     for cid, sid, ic in sections:
         body += f"""        <control type="button" id="{cid}">
@@ -2198,8 +2208,13 @@ def system_info():
     # control (CGUITextBox has no wheel or gesture handling): scrollbar 60
     # beside it, which a finger can drag (sizepass widens it in Touch mode /
     # Extra large). It scrolls by itself too, except while 60 has the focus.
-    # Right from the section buttons reaches 60 only while the policy shows;
-    # focusing it keeps the section (Kodi switches only on 94-101).
+    # Right from the section buttons reaches 60 only while the policy shows:
+    # the buttons inherit the grouplist's conditional <onright> (AddControl
+    # copies the whole CGUIAction). It must be conditional and 60 must have
+    # no <onright>: CGUIWindow::OnMove walks past a hidden control along its
+    # own onright, so an unconditional 60 -> 100 chain would jump from any
+    # section straight to the Privacy policy. Focusing 60 keeps the section
+    # (Kodi switches only on 94-101).
     body += """      <control type="textbox" id="30">
         <left>324</left><top>76</top><width>640</width><height>390</height>
         <font>small</font>
@@ -2208,7 +2223,7 @@ def system_info():
       </control>
       <control type="scrollbar" id="60">
         <left>976</left><top>76</top><width>18</width><height>390</height>
-        <onleft>100</onleft><onright>100</onright>
+        <onleft>100</onleft>
         <visible>Control.IsVisible(30)</visible>
       </control>
       <control type="group" id="102">

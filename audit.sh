@@ -135,6 +135,8 @@ sys.exit(bad)" $S/xml/DialogSubtitles.xml $S/xml/Includes_Games.xml $S/xml/Dialo
 :
 :
 # ===== P3 generic windows & text =====
+for d in xml xml768; do chk "system info: Right from a section reaches 60 only while the policy shows ($d)" 'grep -q "<onright condition=\"Control.IsVisible(30)\">60</onright>" $S/'$d'/SettingsSystemInfo.xml && ! grep -A3 "type=\"scrollbar\" id=\"60\"" $S/'$d'/SettingsSystemInfo.xml | grep -q "<onright>"'; done
+for d in xml xml768; do chk "picture info: focused name/value labels scroll ($d)" '[ "$(grep -c "<scroll>true</scroll><label>\$INFO\[ListItem.Label2\?\]" $S/'$d'/DialogPictureInfo.xml)" -ge 2 ]'; done
 chk "slider dialog's slider is horizontal (Kodi default is vertical: - and + would do nothing)" '( for d in xml xml768; do grep -A2 "type=\"slider\" id=\"11\"" $S/$d/DialogSlider.xml | grep -q "<orientation>horizontal</orientation>" || exit 1; done )'
 chk "busy dialog: touch Back's Up/Left go to Cancel, not a missing 9903" 'grep -q "<param name=\"up\" value=\"9810\" />" $S/xml/DialogBusy.xml'
 chk "Startup starts mousewatch when Kodi starts outside Home (T-14)" '( for d in xml xml768; do grep "mousewatch.py" $S/$d/Startup.xml | grep -q "!String.IsEqual(System.StartupWindow,10000)" || exit 1; grep -q "<onload>ReplaceWindow(\$INFO\[System.StartupWindow\])</onload>" $S/$d/Startup.xml || exit 1; done )'

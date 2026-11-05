@@ -190,8 +190,8 @@
         </itemlayout>
         <focusedlayout height="44" width="530" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image"><left>0</left><top>0</top><width>530</width><height>44</height><texture colordiffuse="select">fill.png</texture></control>
-          <control type="label"><left>8</left><top>0</top><width>190</width><height>44</height><font>small</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
-          <control type="label"><left>206</left><top>0</top><width>316</width><height>44</height><font>normal</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label2]</label></control>
+          <control type="label"><left>8</left><top>0</top><width>190</width><height>44</height><font>small</font><textcolor>textinv</textcolor><aligny>center</aligny><scroll>true</scroll><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>206</left><top>0</top><width>316</width><height>44</height><font>normal</font><textcolor>textinv</textcolor><aligny>center</aligny><scroll>true</scroll><label>$INFO[ListItem.Label2]</label></control>
         </focusedlayout>
       <itemlayout height="28" width="530">
           <control type="label"><left>8</left><top>0</top><width>190</width><height>28</height><font>small</font><textcolor>textdim</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
@@ -199,8 +199,8 @@
         </itemlayout>
         <focusedlayout height="28" width="530">
           <control type="image"><left>0</left><top>0</top><width>530</width><height>28</height><texture colordiffuse="select">fill.png</texture></control>
-          <control type="label"><left>8</left><top>0</top><width>190</width><height>28</height><font>small</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
-          <control type="label"><left>206</left><top>0</top><width>316</width><height>28</height><font>normal</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label2]</label></control>
+          <control type="label"><left>8</left><top>0</top><width>190</width><height>28</height><font>small</font><textcolor>textinv</textcolor><aligny>center</aligny><scroll>true</scroll><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>206</left><top>0</top><width>316</width><height>28</height><font>normal</font><textcolor>textinv</textcolor><aligny>center</aligny><scroll>true</scroll><label>$INFO[ListItem.Label2]</label></control>
         </focusedlayout>
       </control>
       <control type="scrollbar" id="60">
