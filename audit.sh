@@ -307,6 +307,18 @@ chk "C-1 focused rows keep textinv when marked (file browser, music info)" 'test
 :
 :
 # ===== P9 scripts & tooling =====
+T="$(dirname "$0")"
+chk "S-1 validate: bare-number <label>/<label2>/<altlabel>/<hinttext> is an error, also via \$PARAM" 'grep -q "if el.tag in (\"label\", \"label2\", \"altlabel\", \"hinttext\"):" $T/validate.py && grep -q "is read as string id" $T/validate.py'
+chk "S-1 textfit and preview show what Kodi shows for a bare-number label" 'grep -q "if t.strip().isdigit():" $T/textfit.py && grep -q "^def numlabel" $T/preview.py'
+chk "K-9 validate: Kodi id table (needed ids, Kodi-captioned ids) incl. VideoFullScreen" 'grep -q "^KODI_IDS = {" $T/validate.py && grep -q "\"VideoFullScreen\": ({\"10\",\"11\",\"12\"}" $T/validate.py && grep -q "elif cid not in fills:" $T/validate.py && ! grep -q "^REQUIRED = {" $T/validate.py'
+chk "validate: unknown info labels and missing Kodi ids are errors, not warnings" '! grep -q "warns.append(f\"{where}: {name} is not" $T/validate.py && grep -q "errors.append(f\"{wname}: missing Kodi control id" $T/validate.py && ! grep -q "missing Kodi control id(s) \[" $T/validate.py'
+chk "PVR recordings/timers need their own filters (5/7, 8), not Estuary's hidden 28" 'grep -q "\"MyPVRRecordings\": ({\"5\",\"7\"}" $T/validate.py && grep -q "\"MyPVRTimers\": ({\"8\"}" $T/validate.py'
+chk "B-7 textfit flags wrapmultiline labels in list layouts (includes expanded)" 'grep -q "^KNOWN_LAYOUT_WRAP = {" $T/textfit.py && grep -q "never wraps: use a textbox" $T/textfit.py && grep -q "if lc.get(\"type\") == \"label\":$" $T/textfit.py'
+chk "textfit names every fontset it measures and any it can't" 'grep -q "fontsets measured:" $T/textfit.py && grep -q "fontset NOT measured" $T/textfit.py'
+chk "preview: Kodi geometry (bottom/right/centre), nested \$PARAM, grouplist align + clip" '(cd "$T" && python3 preview.py --selftest)'
+chk "logincheck also covers DialogConfirm and DialogSelect" 'grep -q "\"DialogConfirm\", \"DialogSelect\"\]" $T/logincheck.py && (cd "$T" && python3 logincheck.py)'
+chk "README: first install enables the skin; polkit rule, not netdev + reboot" 'grep -q "My add-ons → Look and feel → Skin →" $T/README.md && grep -q "50-arthuros-nm.rules" $T/README.md && ! grep -q "usermod -aG netdev" $T/README.md && grep -q "install-arthuros.sh" $T/README.md'
+chk "README troubleshooting points at the Unicode fontset" 'grep -q "Unicode (all alphabets)" $T/README.md'
 D="$(dirname "$0")"
 chk "build.sh: one command per line (set -e sees every step)" '! grep -v "^[[:space:]]*#" $D/build.sh | grep -q "&&"'
 chk "build.sh checks both layouts' text fit" 'grep -q "RES=xml768 python3 textfit.py" $D/build.sh'

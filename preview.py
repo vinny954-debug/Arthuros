@@ -191,7 +191,7 @@ def run_onloads(root):
 def make_item(el, item=None):
     it = {"label": "", "icon": "", "props": {}}
     it["props"] = {pr.get("name").lower(): resolve_text(pr.text or "", item) for pr in el.findall("property")}
-    it["label"] = resolve_text(el.findtext("label") or "", it)
+    it["label"] = resolve_text(numlabel(el.findtext("label")), it)
     it["icon"] = resolve_text(el.findtext("icon") or "", it)
     it["vis"] = el.findtext("visible")
     return it
@@ -226,11 +226,16 @@ def expand(el, params=None):
     out = []
     for ch in list(el):
         if ch.tag == "include":
-            if not font_ok(ch.get("condition")):
+            # an include straight inside a <definition> still sees the outer
+            # params: in its name, its condition and its param values (Kodi
+            # substitutes them before it resolves the nested include)
+            def rep(t):
+                for k, v in (params or {}).items():
+                    t = t.replace("$PARAM[%s]" % k, v) if t else t
+                return t
+            if not font_ok(rep(ch.get("condition"))):
                 continue
-            name = ch.get("content") or (ch.text.strip() if ch.text else None)
-            for k, v in (params or {}).items():
-                name = name.replace("$PARAM[%s]" % k, v) if name else name
+            name = rep(ch.get("content") or (ch.text.strip() if ch.text else None))
             inc = INCLUDES.get(name)
             if inc is None:
                 continue
@@ -239,7 +244,7 @@ def expand(el, params=None):
                 if pd.get("default") is not None:
                     p[pd.get("name")] = pd.get("default")
             for pu in ch.findall("param"):
-                p[pu.get("name")] = pu.get("value")
+                p[pu.get("name")] = rep(pu.get("value") or "")
             body = inc.find("definition")
             body = body if body is not None else inc
             out.extend(expand(body, p))
@@ -327,6 +332,14 @@ def tint(im, colour, params=None):
     return ImageChops.multiply(im, solid)
 
 # ---------------------------------------------------------------- text
+def numlabel(t):
+    """GUIControlFactory: a <label> that is a natural number is a string id
+    (<label>7</label> shows "File manager", not 7) - draw what Kodi draws."""
+    t = t or ""
+    if t.strip().isdigit():
+        return STRINGS.get(int(t.strip()), "#" + t.strip())
+    return t
+
 def resolve_text(t, item=None, depth=0):
     if not t: return ""
     t = re.sub(r"\$LOCALIZE\[(\d+)\]", lambda m: STRINGS.get(int(m.group(1)), "#"+m.group(1)), t)
@@ -364,26 +377,64 @@ def pct(el, tag, span):
         return int(float(v[:-1]) * span / 100.0) if v.endswith("%") else int(float(v))
     except ValueError: return None
 
+def parse_pos(v, parent):
+    """CGUIControlFactory::ParsePosition: strtod, then 'r' = from the far
+    edge, '%' = of the parent."""
+    m = re.match(r"\s*([-+]?(?:\d+\.?\d*|\.\d+))(.?)", v or "")
+    if not m: return 0.0
+    val = float(m.group(1))
+    if m.group(2) == "r": return parent - val
+    if m.group(2) == "%": return val * parent / 100.0
+    return val
+
+def dims(c, lt, rt, clt, crt, wt, parent):
+    """CGUIControlFactory::GetDimensions for one axis, plus Create()'s
+    fallback when it can't settle both: (start, size)."""
+    def pos(tag):
+        v = c.findtext(tag)     # an unresolved $PARAM/$INFO counts as absent
+        return (parse_pos(v, parent), True) if v and v.strip() and "$" not in v else (0.0, False)
+    left, has_left = pos(lt)
+    center, has_center = pos(clt)
+    if not has_center:
+        center, has_center = pos(crt)
+        if has_center: center = parent - center
+    right, has_right = pos(rt)
+    if has_right: right = parent - right
+    wv = c.findtext(wt)
+    has_width = bool(wv and wv.strip() and "$" not in wv)
+    width = 0.0
+    if has_width:
+        el = c.find(wt)
+        width = parse_pos(el.get("max"), parent) if wv.strip().lower().startswith("auto") else parse_pos(wv, parent)
+    if not has_left:
+        if has_center:
+            if has_width:
+                left, has_left = center - width / 2, True
+            elif has_right:
+                width = (right - center) * 2; left = right - width; has_left = True
+        elif has_right and has_width:
+            left, has_left = right - width, True
+    if not has_width:
+        if has_right:
+            width = max(0.0, right - left); has_left = has_width = True
+        elif has_center:
+            if has_left:
+                width, has_width = max(0.0, (center - left) * 2), True
+            elif 0 < center < parent:
+                width = max(0.0, min(parent - center, center) * 2)
+                left = center - width / 2; has_left = has_width = True
+        elif has_left:
+            width, has_width = max(0.0, parent - left), True
+    if not (has_left and has_width):     # Create(): left stays 0, fill the parent
+        if not width: width = max(parent - left, 0.0)
+    return int(left), int(width)
+
 def geom(c, px, py, pw, ph):
-    w = num(c, "width"); h = num(c, "height")
-    cl = pct(c, "centerleft", pw); ct_ = pct(c, "centertop", ph)
-    if cl is not None and w: return px + cl - w//2, py + ((ct_ - h//2) if (ct_ is not None and h) else (num(c,"top") or 0)), w, h
-    if ct_ is not None and h:
-        l0 = num(c, "left")
-        if l0 is None:
-            r0 = num(c, "right")
-            l0 = (pw - r0 - w) if (r0 is not None and w) else 0
-        return px + l0, py + ct_ - h//2, w, h
-    l = num(c, "left"); t = num(c, "top")
-    r = num(c, "right"); b = num(c, "bottom")
-    if l is None and r is not None and w is not None: l = pw - r - w
-    elif l is None and r is not None and w is None: l, w = 0, pw - r
-    if l is None: l = 0
-    if t is None and b is not None and h is not None: t = ph - b - h
-    elif t is None and b is not None and h is None: t, h = 0, ph - b
-    if t is None: t = 0
-    if w is None: w = pw - l
-    if h is None: h = ph - t
+    """Position and size inside the parent, as Kodi computes them: left /
+    right / centerleft / centerright / width, and the same for the top axis
+    (so a dialog with <bottom>0</bottom> sits on the bottom edge)."""
+    l, w = dims(c, "left", "right", "centerleft", "centerright", "width", pw)
+    t, h = dims(c, "top", "bottom", "centertop", "centerbottom", "height", ph)
     return px + l, py + t, w, h
 
 def defaulted(c, tag, fallback=None):
@@ -396,7 +447,7 @@ def defaulted(c, tag, fallback=None):
     return fallback
 
 def draw_label(img, c, x, y, w, h, forced=None, item=None):
-    txt = resolve_text(forced if forced is not None else (c.findtext("label") or ""), item)
+    txt = resolve_text(forced if forced is not None else numlabel(c.findtext("label")), item)
     if not txt: return
     fnt = pilfont(defaulted(c, "font", "normal"))
     col = rgb(defaulted(c, "textcolor", "text"))
@@ -421,7 +472,7 @@ def flatten(el, item=None):
 
 def draw_textbox(img, c, x, y, w, h, item=None):
     """Word-wrapped, clipped to whole lines, honouring align and aligny."""
-    txt = resolve_text(c.findtext("label") or "", item).replace("[CR]", "\n")
+    txt = resolve_text(numlabel(c.findtext("label")), item).replace("[CR]", "\n")
     if not txt: return
     fnt = pilfont(defaulted(c, "font", "normal"))
     col = rgb(defaulted(c, "textcolor", "text"))
@@ -456,19 +507,7 @@ def render(img, els, px, py, pw, ph, depth=0, item=None):
             render(img, expand(c), x, y, w, h, depth+1, item)
             continue
         if ct == "grouplist":
-            horiz = (c.findtext("orientation") or "vertical").strip() == "horizontal"
-            gap = int(c.findtext("itemgap") or 0)
-            ox = oy = 0
-            for ch in expand(c):
-                if ch.tag != "control": continue
-                ch = flatten(ch)
-                if not cond_ok(ch.findtext("visible"), item): continue
-                cw = num(ch, "width", 0) or 0
-                chh = num(ch, "height", 0) or 0
-                render(img, [ch], (x+ox) if horiz else x, y if horiz else (y+oy),
-                       cw or w, chh or h, depth+1, item)
-                if horiz: ox += cw + gap
-                else: oy += chh + gap
+            render_grouplist(img, c, x, y, w, h, depth, item)
             continue
         if ct == "image":
             tex = c.find("texture")
@@ -532,6 +571,48 @@ def render(img, els, px, py, pw, ph, depth=0, item=None):
         ImageDraw.Draw(img).rectangle([x,y,x+w-1,y+h-1], outline=(255,140,0))
         ImageDraw.Draw(img).text((x+3,y+3), ct or "?", font=pilfont("tiny"), fill=(200,80,0))
 
+POS_TAGS = ("left", "right", "top", "bottom", "centerleft", "centerright", "centertop",
+            "centerbottom", "posx", "posy", "width", "height")
+
+def render_grouplist(img, c, x, y, w, h, depth, item):
+    """CGUIControlGroupList: children are sized against the grouplist, put
+    at 0,0 unless <usecontrolcoords>, stacked with <itemgap>, shifted by
+    <align> when they don't fill it (GetAlignOffset), and clipped to it."""
+    horiz = (c.findtext("orientation") or "vertical").strip() == "horizontal"
+    try: gap = int(float(c.findtext("itemgap") or 0))
+    except ValueError: gap = 0
+    own = (c.findtext("usecontrolcoords") or "").strip() == "true"
+    kids = []
+    for ch in expand(c):
+        if ch.tag != "control": continue
+        ch = flatten(ch)
+        if not cond_ok(ch.findtext("visible"), item): continue
+        cl, ct_, cw, chh = geom(ch, 0, 0, w, h)
+        if not own: cl = ct_ = 0
+        kids.append((ch, cl, ct_, cw, chh))
+    sizes = [(cl + cw) if horiz else (ct_ + chh) for _, cl, ct_, cw, chh in kids]
+    total = sum(sizes) + gap * max(0, len(kids) - 1)
+    span = w if horiz else h
+    al = (c.findtext("align") or "left").strip()
+    pos = 0
+    if total < span:
+        pos = span - total if al == "right" else ((span - total) // 2 if al in ("center", "justify") else 0)
+    layer = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    for (ch, cl, ct_, cw, chh), size in zip(kids, sizes):
+        placed = ET.Element(ch.tag, ch.attrib)
+        placed.text = ch.text
+        for e in ch:
+            if e.tag not in POS_TAGS: placed.append(e)
+        for tag, v in (("left", cl), ("top", ct_), ("width", cw), ("height", chh)):
+            ET.SubElement(placed, tag).text = str(v)
+        ox, oy = (x + pos, y) if horiz else (x, y + pos)
+        render(layer, [placed], ox, oy, w, h, depth + 1, item)
+        pos += size + gap
+    if w > 0 and h > 0:
+        box = (max(0, x), max(0, y), min(img.width, x + w), min(img.height, y + h))
+        if box[2] > box[0] and box[3] > box[1]:
+            img.alpha_composite(layer.crop(box), (box[0], box[1]))
+
 def render_list(img, c, x, y, w, h):
     kids = expand(c)
     content = next((e for e in kids if e.tag == "content"), None)
@@ -575,5 +656,49 @@ def render_window(path, out):
         print("MISSING TEXTURES:", ", ".join(sorted(MISSING)))
     print("wrote", out)
 
+def selftest():
+    """The Kodi rules this renderer copies (audit.sh runs it)."""
+    E = ET.fromstring
+    bad = []
+    def eq(what, got, want):
+        if got != want: bad.append(f"{what}: got {got}, want {want}")
+    g = lambda xml, pw=1024, ph=600: geom(E(f"<control>{xml}</control>"), 0, 0, pw, ph)
+    eq("bottom anchor", g("<centerleft>50%</centerleft><bottom>0</bottom><width>944</width><height>222</height>"),
+       (40, 378, 944, 222))
+    eq("right anchor", g("<right>10</right><top>5</top><width>100</width><height>20</height>"), (914, 5, 100, 20))
+    eq("left+right", g("<left>10</left><right>20</right><top>0</top><height>9</height>"), (10, 0, 994, 9))
+    eq("centre fill", g("<centerleft>50%</centerleft><top>0</top><height>9</height>"), (0, 0, 1024, 9))
+    eq("'r' and %", g("<left>100r</left><top>50%</top><width>50</width><height>10</height>"), (924, 300, 50, 10))
+    eq("nothing set", g(""), (0, 0, 1024, 600))
+    # an include straight inside a <definition> gets the outer $PARAMs
+    INCLUDES["_T_A"] = E('<include name="_T_A"><param name="w" default="1"/><definition>'
+                         '<include content="_T_B" condition="$PARAM[cond]"><param name="x" value="$PARAM[w]"/>'
+                         '</include></definition></include>')
+    INCLUDES["_T_B"] = E('<include name="_T_B"><definition><control type="image"><width>$PARAM[x]</width>'
+                         '</control></definition></include>')
+    out = expand(E('<c><include content="_T_A"><param name="w" value="77"/><param name="cond" value="true"/>'
+                   '</include></c>'))
+    eq("nested $PARAM", [c.findtext("width") for c in out], ["77"])
+    out = expand(E('<c><include content="_T_A"><param name="cond" value="false"/></include></c>'))
+    eq("nested condition $PARAM", out, [])
+    eq("bare-number label", numlabel("7"), STRINGS.get(7, "#7"))
+    eq("$NUMBER label", resolve_text("$NUMBER[7]"), "7")
+    # grouplist: children at 0,0 (no usecontrolcoords), centred, clipped
+    img = Image.new("RGBA", (200, 100), (0, 0, 0, 255))
+    gl = E('<control type="grouplist"><left>50</left><top>10</top><width>100</width><height>20</height>'
+           '<orientation>horizontal</orientation><align>center</align>'
+           '<control type="image"><left>500</left><width>40</width><height>40</height>'
+           '<texture>fill.png</texture></control></control>')
+    render(img, [gl], 0, 0, 200, 100)
+    box = img.getchannel("R").point(lambda v: 255 if v > 0 else 0).getbbox()
+    eq("grouplist centre + clip", box, (80, 10, 120, 30))
+    for k in ("_T_A", "_T_B"): INCLUDES.pop(k, None)
+    if bad:
+        print("preview selftest FAILED"); print("\n".join("  " + b for b in bad)); sys.exit(1)
+    print("preview selftest: geometry, nested params, labels, grouplists as Kodi does")
+
 if __name__ == "__main__":
-    render_window(sys.argv[1], sys.argv[2])
+    if sys.argv[1:] == ["--selftest"]:
+        load_includes(); selftest()
+    else:
+        render_window(sys.argv[1], sys.argv[2])

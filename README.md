@@ -14,10 +14,26 @@ glance tells you which build is installed.
 
 ## Install
 
-### On the Pi (LibreELEC)
+### The quick way, from your computer
 
-Dropping the folder in is more reliable than Kodi's zip installer, and does
-not need "Unknown sources" turned on.
+`install-arthuros.sh` copies the newest zip to the box over SSH, installs it
+for the user Kodi runs as, and restarts Kodi. It works on LibreELEC (root, no
+sudo) and Raspberry Pi OS, keeps the old version until the new one is in
+place, and starts Kodi again if anything fails.
+
+```sh
+bash install-arthuros.sh root@<pi-address>     # LibreELEC
+bash install-arthuros.sh pi@pi4b.local         # Raspberry Pi OS
+```
+
+On a first install it also switches the skin on in Kodi's add-on database,
+provided Kodi has run on that box before. On Raspberry Pi OS it offers to
+add the polkit rule that Wi-Fi changes need (below).
+
+### On the Pi (LibreELEC), by hand
+
+For **updates**, dropping the folder in is more reliable than Kodi's zip
+installer and does not need "Unknown sources" turned on.
 
 ```sh
 unzip skin.arthuros-0.9.6.zip
@@ -27,17 +43,39 @@ ssh root@<pi-address> systemctl restart kodi
 
 Then **Settings → Interface → Skin → Skin → ArthurOS**.
 
-### On Raspberry Pi OS (Kodi from apt)
+**First install:** Kodi adds a folder it finds on disk as a *disabled*
+add-on, so ArthurOS is not in the skin list yet. Enable it once in
+**Add-ons → My add-ons → Look and feel → Skin → ArthurOS → Enable**, then
+pick it as above. (Kodi's zip installer enables it by itself;
+`install-arthuros.sh` does it for you when Kodi has run before.)
+
+### On Raspberry Pi OS (Kodi from apt), by hand
 
 ```sh
 unzip skin.arthuros-0.9.6.zip
 rm -rf ~/.kodi/addons/skin.arthuros && mv skin.arthuros ~/.kodi/addons/
 ```
 
-Restart Kodi, then pick ArthurOS as above. With no LibreELEC settings
-add-on, **Settings → Network & Bluetooth** handles Wi-Fi, Bluetooth
-pairing and the sound output. If Wi-Fi changes are refused, run
-`sudo usermod -aG netdev $USER` once and reboot.
+Use the `.kodi` of the user Kodi runs as (`install-arthuros.sh` prints it as
+"Kodi runs as '...'"). Restart Kodi, then pick ArthurOS as above. On a first
+install, enable it under **Add-ons → My add-ons → Look and feel → Skin →
+ArthurOS → Enable** first, as for LibreELEC.
+
+With no LibreELEC settings add-on, **Settings → Network & Bluetooth**
+handles Wi-Fi, Bluetooth pairing and the sound output. Kodi run as a
+service has no login session, so NetworkManager refuses its Wi-Fi changes
+unless a polkit rule allows the user Kodi runs as. `install-arthuros.sh`
+offers to write it. By hand, as root, create
+`/etc/polkit-1/rules.d/50-arthuros-nm.rules` (replace `KODIUSER`):
+
+```js
+polkit.addRule(function(action, subject) {
+  if (action.id.indexOf("org.freedesktop.NetworkManager.") == 0 && subject.user == "KODIUSER")
+    return polkit.Result.YES;
+});
+```
+
+polkit reads it at once; no reboot or restart is needed.
 
 ### On a 4:3 screen (iPad 3 panel, 2048×1536)
 
@@ -302,9 +340,21 @@ geometry rules.
 ## When something looks wrong
 
 - **Log:** turn on **Settings → System → Logging → debug logging**, reproduce,
-  then read `/storage/.kodi/temp/kodi.log`. Skin faults name the file. But a
+  then read `/storage/.kodi/temp/kodi.log` (Raspberry Pi OS: `~/.kodi/temp/kodi.log`
+  of the user Kodi runs as). Skin faults name the file. But a
   clean log doesn't mean the skin *looks* right — a valid-but-wrong value never
   gets logged. Screenshots catch those.
+- **ArthurOS isn't in the skin list** after a first install by folder copy:
+  Kodi added it disabled. **Add-ons → My add-ons → Look and feel → Skin →
+  ArthurOS → Enable** (see Install).
+- **Titles with letters missing** (Polish, Greek, Cyrillic, Japanese, or
+  signs such as € and ½ in YouTube, Plex or guide titles): the bitmap font
+  has no such letters, and Kodi never falls back to another font by itself.
+  Pick **Settings → Interface → Skin → Fonts → Unicode (all alphabets)**,
+  which uses Kodi's own Arial for everything.
+- **"Not allowed to manage networks"** from Network & Bluetooth on Raspberry
+  Pi OS: the polkit rule for the user Kodi runs as is missing (see Install).
+  Rerun `install-arthuros.sh` and answer yes, or write the rule by hand.
 - **Screenshots come out black** while video is playing: Kodi on the Pi only
   captures the menu layer. Stop playback first, or photograph the screen.
 - **File manager has no Home folder.** Kodi's file manager only lists your
