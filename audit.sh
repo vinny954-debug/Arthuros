@@ -102,28 +102,53 @@ chk "OSD add-on settings find the add-on (B-5)" 'test -f $S/scripts/addonsetting
 :
 :
 # ===== P2 other playback =====
-chk "art: transport glyphs are white for colordiffuse (dark palettes)" 'python3 -c "
+chk "art: transport glyphs: black set for untinted use, white w_ set for colordiffuse" 'python3 -c "
 import sys
 from PIL import Image
-for n in \"play pause stop prev next rew ffwd shuffle repeat volume mute\".split():
+B=\"play pause stop prev next rew ffwd shuffle repeat\".split()
+for n,c in [(n,(0,0,0)) for n in B]+[(\"w_\"+n,(255,255,255)) for n in B+[\"volume\",\"mute\"]]:
   for d,z in ((\"icons16\",16),(\"icons24\",32)):
     im=Image.open(sys.argv[1]+\"/media/%s/%s.png\"%(d,n)).convert(\"RGBA\")
     px=[p for p in im.getdata() if p[3]]
-    if im.size!=(z,z) or not px or any(p[:3]!=(255,255,255) for p in px): sys.exit(1)
+    if im.size!=(z,z) or not px or any(p[:3]!=c for p in px): sys.exit(1)
+" $S'
+chk "art: no untinted white transport glyph (w_* needs colordiffuse)" 'python3 -c "
+import sys,glob,re
+import xml.etree.ElementTree as ET
+bad=0
+for r in (\"xml\",\"xml768\"):
+  for f in glob.glob(sys.argv[1]+\"/\"+r+\"/*.xml\"):
+    root=ET.parse(f).getroot()
+    par={c:p for p in root.iter() for c in p}
+    for e in root.iter():
+      if re.search(r\"icons(16|24)/w_[a-z]+[.]png\",e.text or \"\"):
+        p=par.get(e)
+        if not (e.get(\"colordiffuse\") or (e.tag==\"texture\" and p is not None and p.find(\"colordiffuse\") is not None)):
+          print(f,e.tag); bad=1
+sys.exit(bad)
 " $S'
 chk "art: transport glyphs centred (no high-sitting glyphs)" 'python3 -c "
 import sys
 from PIL import Image
-for n in \"pause stop prev next rew ffwd shuffle repeat volume mute play\".split():
-  b=Image.open(sys.argv[1]+\"/media/icons16/%s.png\"%n).getbbox()
+for n in \"pause stop prev next rew ffwd shuffle repeat play w_volume w_mute\".split():
+ for m in ([n,\"w_\"+n] if not n.startswith(\"w_\") else [n]):
+  b=Image.open(sys.argv[1]+\"/media/icons16/%s.png\"%m).getbbox()
   if abs((b[1]+b[3])-16)>1 or (n!=\"play\" and abs((b[0]+b[2])-16)>1): sys.exit(1)
 " $S'
+chk "art: ffwd/rew are mirror images, two full 7 px triangles" 'python3 -c "
+import sys
+from PIL import Image, ImageOps
+m=sys.argv[1]+\"/media/icons16/\"
+f=Image.open(m+\"ffwd.png\").convert(\"RGBA\"); r=Image.open(m+\"rew.png\").convert(\"RGBA\")
+w=[sum(1 for x in range(16) if f.getpixel((x,y))[3]) for y in range(16)]
+ok=ImageOps.mirror(f.crop(f.getbbox())).tobytes()==r.crop(r.getbbox()).tobytes() and sorted(set(w))==[0,2,6,10,14] and w.count(14)==2
+sys.exit(0 if ok else 1)" $S'
 chk "art: K-1 guide now-line texture drawn and used" 'python3 -c "
 import sys
 from PIL import Image
 im=Image.open(sys.argv[1]+\"/media/epg_now.png\").convert(\"RGBA\")
 ok=im.size==(24,24) and all(im.getpixel((x,y))==((255,255,255,255) if x>=22 else im.getpixel((x,y))[:3]+(0,)) for x in range(24) for y in range(24))
-sys.exit(0 if ok else 1)" $S && grep -q "colordiffuse=\"accent1\">epg_now.png</progresstexture>" $S/xml/MyPVRGuide.xml $S/xml768/MyPVRGuide.xml'
+sys.exit(0 if ok else 1)" $S && for r in xml xml768; do grep -q "colordiffuse=\"accent1\">epg_now.png</progresstexture>" $S/$r/MyPVRGuide.xml || exit 1; done'
 chk "V-1 picture viewer has no full-screen cover" '! grep -q "bar_dgrey" $S/xml/SlideShow.xml $S/xml768/SlideShow.xml'
 chk "V-11 picture viewer touch strip + timer" '(for r in xml xml768; do grep -q "Skin.TimerStart(arthur_slidebar)" $S/$r/SlideShow.xml && grep -q "Action(Stop)" $S/$r/SlideShow.xml && grep -q "Action(NextPicture)" $S/$r/SlideShow.xml && grep -q "<name>arthur_slidebar</name>" $S/$r/Timers.xml || exit 1; done)'
 chk "V-11 picture viewer error label id 10" '(for r in xml xml768; do grep -q "type=\"label\" id=\"10\"" $S/$r/SlideShow.xml || exit 1; done)'
