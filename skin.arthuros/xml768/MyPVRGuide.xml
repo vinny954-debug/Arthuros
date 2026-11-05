@@ -288,6 +288,7 @@
         <pagecontrol>60</pagecontrol>
         <viewtype label="19298">list</viewtype>
         <onleft>9480</onleft><onright>60</onright><onup>9480</onup><ondown>9100</ondown>
+        <progresstexture border="0,0,4,0" colordiffuse="accent1">epg_now.png</progresstexture>
         <channellayout height="50" width="180" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image"><left>0</left><top>0</top><width>178</width><height>50</height><texture border="2" colordiffuse="facetint">panel_raised.png</texture></control>
           <control type="image"><left>4</left><top>3</top><width>44</width><height>44</height><aspectratio>keep</aspectratio><texture>$INFO[ListItem.Icon]</texture></control>

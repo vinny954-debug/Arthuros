@@ -102,6 +102,28 @@ chk "OSD add-on settings find the add-on (B-5)" 'test -f $S/scripts/addonsetting
 :
 :
 # ===== P2 other playback =====
+chk "art: transport glyphs are white for colordiffuse (dark palettes)" 'python3 -c "
+import sys
+from PIL import Image
+for n in \"play pause stop prev next rew ffwd shuffle repeat volume mute\".split():
+  for d,z in ((\"icons16\",16),(\"icons24\",32)):
+    im=Image.open(sys.argv[1]+\"/media/%s/%s.png\"%(d,n)).convert(\"RGBA\")
+    px=[p for p in im.getdata() if p[3]]
+    if im.size!=(z,z) or not px or any(p[:3]!=(255,255,255) for p in px): sys.exit(1)
+" $S'
+chk "art: transport glyphs centred (no high-sitting glyphs)" 'python3 -c "
+import sys
+from PIL import Image
+for n in \"pause stop prev next rew ffwd shuffle repeat volume mute play\".split():
+  b=Image.open(sys.argv[1]+\"/media/icons16/%s.png\"%n).getbbox()
+  if abs((b[1]+b[3])-16)>1 or (n!=\"play\" and abs((b[0]+b[2])-16)>1): sys.exit(1)
+" $S'
+chk "art: K-1 guide now-line texture drawn and used" 'python3 -c "
+import sys
+from PIL import Image
+im=Image.open(sys.argv[1]+\"/media/epg_now.png\").convert(\"RGBA\")
+ok=im.size==(24,24) and all(im.getpixel((x,y))==((255,255,255,255) if x>=22 else im.getpixel((x,y))[:3]+(0,)) for x in range(24) for y in range(24))
+sys.exit(0 if ok else 1)" $S && grep -q "colordiffuse=\"accent1\">epg_now.png</progresstexture>" $S/xml/MyPVRGuide.xml $S/xml768/MyPVRGuide.xml'
 chk "V-1 picture viewer has no full-screen cover" '! grep -q "bar_dgrey" $S/xml/SlideShow.xml $S/xml768/SlideShow.xml'
 chk "V-11 picture viewer touch strip + timer" '(for r in xml xml768; do grep -q "Skin.TimerStart(arthur_slidebar)" $S/$r/SlideShow.xml && grep -q "Action(Stop)" $S/$r/SlideShow.xml && grep -q "Action(NextPicture)" $S/$r/SlideShow.xml && grep -q "<name>arthur_slidebar</name>" $S/$r/Timers.xml || exit 1; done)'
 chk "V-11 picture viewer error label id 10" '(for r in xml xml768; do grep -q "type=\"label\" id=\"10\"" $S/$r/SlideShow.xml || exit 1; done)'

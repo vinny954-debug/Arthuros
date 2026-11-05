@@ -739,7 +739,14 @@ def ring(n=24, b=4, name=None, c1=K, c2=B):
 ring(name="focus_ring.png")
 ring(name="focus_ring_red.png", c2=R)
 
-# transport glyphs for the OSD
+# transport glyphs for the OSD (P2 art). Drawn below in K for legibility but
+# written WHITE: a black glyph stays black under colordiffuse, so on the dark
+# palettes (High-Contrast-Dark, Midnight, Phosphor, Amber) it vanished into the
+# button face. White multiplies to exactly the palette colour, so the windows
+# tint them like the title-bar boxes (wc_*_g.png): text on a face, textinv on
+# the select bar, textdisabled when disabled. Each glyph is centred in its
+# 16x16 cell (they used to sit 2-3 px high on their buttons); Play keeps its
+# drawn x, a triangle looks centred a pixel right of its box centre.
 TRANSPORT = {
 "play": [
 "................","....KK..........","....KKKK........","....KKKKKK......",
@@ -771,11 +778,6 @@ TRANSPORT = {
 "..KKKKKKK.KKKKKK","..KKKKKKK.KKKKKK","..KKKKK...KKKKK.","..KKK.....KKK...",
 "..K.......K.....","................","................","................",
 "................","................","................","................"],
-"rew": [
-"................",".....K.......K..","...KKK.....KKK..",".KKKKK...KKKKK..",
-"KKKKKKK.KKKKKKK.","KKKKKKK.KKKKKKK.",".KKKKK...KKKKK..","...KKK.....KKK..",
-".....K.......K..","................","................","................",
-"................","................","................","................"],
 "shuffle": [
 "................","..........KKK...","...........KKK..","..KK.....KKKKKK.",
 "..KKKK..KKK.KKK.","....KKKKKK..KKK.","......KKK.......","......KKK.......",
@@ -787,9 +789,86 @@ TRANSPORT = {
 "..KK.......KK...","..KKK......KK...","..KKKKKKKKKKK...","...KKKKKKKKKK...",
 "................","................","................","................"],
 }
+# rewind is fast-forward turned round, so the pair matches pixel for pixel
+TRANSPORT["rew"] = [r[::-1] for r in TRANSPORT["ffwd"]]
+# volume and mute for the OSD / Now playing mute button: the same speaker,
+# with sound waves or with a cross
+SPEAKER = [
+"......K.........",
+".....KK.........",
+"....KKK.........",
+"KKKKKKK.........",
+"KKKKKKK.........",
+"KKKKKKK.........",
+"KKKKKKK.........",
+"KKKKKKK.........",
+"KKKKKKK.........",
+"....KKK.........",
+".....KK.........",
+"......K.........",
+]
+def _over(base, marks):
+    return [''.join('K' if m == 'K' else b for b, m in zip(br, mr))
+            for br, mr in zip(base, marks)]
+TRANSPORT["volume"] = _over(SPEAKER, [
+"................",
+"...........K....",
+"............KK..",
+".........K....KK",
+".........KK...KK",
+"..........KK..KK",
+"..........KK..KK",
+".........KK...KK",
+".........K....KK",
+"............KK..",
+"...........K....",
+"................",
+])
+TRANSPORT["mute"] = _over(SPEAKER, [
+"................",
+"................",
+"................",
+".........KK..KK.",
+"..........KKKK..",
+"...........KK...",
+"...........KK...",
+"..........KKKK..",
+".........KK..KK.",
+"................",
+"................",
+"................",
+])
+
+def transport_cell(nm, rows, n=16):
+    """The glyph in white, centred in an n x n cell (Play: vertically only)."""
+    pts = [(x, y) for y, r in enumerate(rows) for x, ch in enumerate(r) if ch != "."]
+    x0 = min(x for x, _ in pts); x1 = max(x for x, _ in pts)
+    y0 = min(y for _, y in pts); y1 = max(y for _, y in pts)
+    dx = 0 if nm == "play" else (n - (x1 - x0 + 1)) // 2 - x0
+    dy = (n - (y1 - y0 + 1)) // 2 - y0
+    out = [["."] * n for _ in range(n)]
+    for x, y in pts:
+        out[y + dy][x + dx] = "W"
+    return ["".join(r) for r in out]
+
+for nm in list(TRANSPORT):
+    TRANSPORT[nm] = transport_cell(nm, TRANSPORT[nm])
 for nm, rows in TRANSPORT.items():
     grid(rows, scale=2, name="icons24/%s.png" % nm)
     grid(rows, scale=1, name="icons16/%s.png" % nm)
+
+# --------------------------------------------- P2 art: TV guide "now" line
+# MyPVRGuide's epggrid <progresstexture border="0,0,4,0" colordiffuse="accent1">
+# (genwindows.guide_window). CGUIEPGGridContainer::ProcessProgressIndicator
+# stretches it from the ruler's left edge to the current time over ruler +
+# grid height, clipped there (RenderProgressIndicator), so only the right
+# border shows: the two rightmost columns are the 2 px line, white so the
+# palette's accent1 tints it; the rest stays transparent over the programmes.
+now = Image.new("RGBA", (24, 24))
+for y in range(24):
+    for x in (22, 23):
+        now.putpixel((x, y), (255, 255, 255, 255))
+save(now, "epg_now.png")
 
 
 # ------------------------------------------- P3 screen calibration markers
