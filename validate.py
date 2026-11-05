@@ -547,10 +547,12 @@ KNOWN_WARNINGS = {
     "DialogBusy: <onup> points at id 9903 which is not in this window",
     "DialogBusy: <onleft> points at id 9903 which is not in this window",
     # MyPVRRecordings keeps no channel-group button (decided 0.9.7): only
-    # GUIWindowPVRBase handles 28, and the recordings list ignores the
-    # group (GUIWindowPVRRecordings::GetDirectoryPath builds the path from
+    # GUIWindowPVRBase handles 28 (OpenChannelGroupSelectionDialog, label
+    # set in UpdateButtons), and the recordings list ignores the group
+    # (CGUIWindowPVRRecordingsBase::GetDirectoryPath builds the path from
     # deleted/radio only), so the button would change nothing on screen.
-    # Estuary's MyPVRRecordings.xml has no 28 either.
+    # Estuary ships a 28 in Recordings only as a hidden object (PVRSideBar
+    # in Includes_MediaMenu.xml, <include>HiddenObject</include>).
     "MyPVRRecordings: missing Kodi control id(s) ['28'] (GUIWindowPVRBase.h: channel groups, show deleted)",
     # MyPVRTimers keeps no channel-group button: timers are not grouped by
     # channel group in the UI (Estuary has none either)
