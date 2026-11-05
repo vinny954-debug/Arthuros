@@ -352,9 +352,12 @@ geometry rules.
   has no such letters, and Kodi never falls back to another font by itself.
   Pick **Settings → Interface → Skin → Fonts → Unicode (all alphabets)**,
   which uses Kodi's own Arial for everything.
-- **"Not allowed to manage networks"** from Network & Bluetooth on Raspberry
-  Pi OS: the polkit rule for the user Kodi runs as is missing (see Install).
-  Rerun `install-arthuros.sh` and answer yes, or write the rule by hand.
+- **"NetworkManager refused the change: user '…' (Kodi) isn't allowed to
+  manage networks"** from Network & Bluetooth on Raspberry Pi OS: the polkit
+  rule for the user Kodi runs as is missing (see Install). Rerun
+  `install-arthuros.sh` and answer yes, or write the rule by hand. (An empty
+  or short network list right after a scan is not this: NetworkManager
+  refuses back-to-back rescans, so the list shown is the last scan's.)
 - **Screenshots come out black** while video is playing: Kodi on the Pi only
   captures the menu layer. Stop playback first, or photograph the screen.
 - **File manager has no Home folder.** Kodi's file manager only lists your

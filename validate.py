@@ -542,10 +542,15 @@ KODI_IDS = {
  "DialogSlider": ({"10","11","12"}, set(), "GUIDialogSlider.cpp: heading, slider, value"),
  "DialogExtendedProgressBar": ({"30","31","32"}, set(),
    "GUIDialogExtendedProgressBar.cpp: header, title, progress"),
- "DialogContextMenu": ({"996","999","1000"}, {"1000"},
+ # 1000 is only the template: Kodi hides it and captions its clones 1001+
+ # (GUIDialogContextMenu.cpp:124-140), so it is in KODI_HIDDEN, not fills
+ "DialogContextMenu": ({"996","999","1000"}, set(),
    "GUIDialogContextMenu.cpp: group list, background, button template"),
+ # keys: BUTTONS_MAX_ROWS 4 x BUTTONS_PER_ROW 20 + BUTTON_ID_OFFSET 100 = 100-179
+ # (GUIDialogKeyboardGeneric.cpp:549-556); layout 309 (:537), reveal 310 (:219/615).
+ # 307 (IP address) is only handled in OnClick - Kodi never captions it.
  "DialogKeyboard": ({"300","301","302","303","304","305","306","311","312"},
-   {str(i) for i in range(100, 173)} | {"307","309","310","312"},
+   {str(i) for i in range(100, 180)} | {"309","310"},
    "GUIDialogKeyboardGeneric.cpp: done, cancel, shift, caps, symbols, left, right, heading, edit"),
  "DialogSettings": (set(), {"28","29","30"}, "GUIDialogSettingsBase.h: OK, cancel, custom"),
  "DialogAddonSettings": (set(), {"28","29","30"}, "GUIDialogAddonSettings.cpp:428: OK, cancel, defaults"),
@@ -554,6 +559,10 @@ KODI_IDS = {
  "EventLog": (set(), {"21","22"}, "GUIWindowEventLog.cpp:187-192: level buttons"),
  "SmartPlaylistRule": (set(), {"15","16","17"}, "GUIDialogSmartPlaylistRule.cpp:504-514"),
  "MyWeather": (set(), {"2","3"}, "GUIWindowWeather.cpp:163-173: location, refresh"),
+}
+# Buttons Kodi hides itself (SetVisible(false)), so a blank one is never seen.
+KODI_HIDDEN = {
+ "DialogContextMenu": {"1000"},   # GUIDialogContextMenu.cpp:124 pButtonTemplate->SetVisible(false)
 }
 FOCUS_RE = re.compile(r"(?i)\b(?:control\.setfocus|setfocus|control\.move|control\.message|"
                       r"control\.setvisible|control\.sethidden)\((\d+)")
@@ -589,7 +598,7 @@ for wname, root in sorted(windows.items()):
                 continue    # captioned, does something, per item, or a parked template
             if not cid:
                 errors.append(f"{wname}: {el.get('type')} with no id, no label and no onclick - a dead blank box")
-            elif cid not in fills:
+            elif cid not in fills and cid not in KODI_HIDDEN.get(wname, ()):
                 errors.append(f"{wname}: {el.get('type')} {cid} has no label and no onclick, and Kodi does "
                               f"not caption id {cid} in this window - a blank box (else list it in KODI_IDS fills)")
 

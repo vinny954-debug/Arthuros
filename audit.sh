@@ -307,19 +307,20 @@ chk "C-1 focused rows keep textinv when marked (file browser, music info)" 'test
 :
 :
 # ===== P9 scripts & tooling =====
-T="$(dirname "$0")"
-chk "S-1 validate: bare-number <label>/<label2>/<altlabel>/<hinttext> is an error, also via \$PARAM" 'grep -q "if el.tag in (\"label\", \"label2\", \"altlabel\", \"hinttext\"):" $T/validate.py && grep -q "is read as string id" $T/validate.py'
-chk "S-1 textfit and preview show what Kodi shows for a bare-number label" 'grep -q "if t.strip().isdigit():" $T/textfit.py && grep -q "^def numlabel" $T/preview.py'
-chk "K-9 validate: Kodi id table (needed ids, Kodi-captioned ids) incl. VideoFullScreen" 'grep -q "^KODI_IDS = {" $T/validate.py && grep -q "\"VideoFullScreen\": ({\"10\",\"11\",\"12\"}" $T/validate.py && grep -q "elif cid not in fills:" $T/validate.py && ! grep -q "^REQUIRED = {" $T/validate.py'
-chk "validate: unknown info labels and missing Kodi ids are errors, not warnings" '! grep -q "warns.append(f\"{where}: {name} is not" $T/validate.py && grep -q "errors.append(f\"{wname}: missing Kodi control id" $T/validate.py && ! grep -q "missing Kodi control id(s) \[" $T/validate.py'
-chk "PVR recordings/timers need their own filters (5/7, 8), not Estuary's hidden 28" 'grep -q "\"MyPVRRecordings\": ({\"5\",\"7\"}" $T/validate.py && grep -q "\"MyPVRTimers\": ({\"8\"}" $T/validate.py'
-chk "B-7 textfit flags wrapmultiline labels in list layouts (includes expanded)" 'grep -q "^KNOWN_LAYOUT_WRAP = {" $T/textfit.py && grep -q "never wraps: use a textbox" $T/textfit.py && grep -q "if lc.get(\"type\") == \"label\":$" $T/textfit.py'
-chk "textfit names every fontset it measures and any it can't" 'grep -q "fontsets measured:" $T/textfit.py && grep -q "fontset NOT measured" $T/textfit.py'
-chk "preview: Kodi geometry (bottom/right/centre), nested \$PARAM, grouplist align + clip" '(cd "$T" && python3 preview.py --selftest)'
-chk "logincheck also covers DialogConfirm and DialogSelect" 'grep -q "\"DialogConfirm\", \"DialogSelect\"\]" $T/logincheck.py && (cd "$T" && python3 logincheck.py)'
-chk "README: first install enables the skin; polkit rule, not netdev + reboot" 'grep -q "My add-ons → Look and feel → Skin →" $T/README.md && grep -q "50-arthuros-nm.rules" $T/README.md && ! grep -q "usermod -aG netdev" $T/README.md && grep -q "install-arthuros.sh" $T/README.md'
-chk "README troubleshooting points at the Unicode fontset" 'grep -q "Unicode (all alphabets)" $T/README.md'
 D="$(dirname "$0")"
+chk "validate: keyboard keys 100-179 + 309/310 are Kodi-captioned (not 307/312); context-menu template is hidden, not captioned" 'grep -q "{str(i) for i in range(100, 180)} | {\"309\",\"310\"}," $D/validate.py && grep -q "\"DialogContextMenu\": ({\"996\",\"999\",\"1000\"}, set()," $D/validate.py && grep -q "\"DialogContextMenu\": {\"1000\"}," $D/validate.py'
+chk "README quotes the real NetworkManager-refused text from netbt.py" 'grep -q "NetworkManager refused the change: user" $D/skin.arthuros/scripts/netbt.py && grep -q "NetworkManager refused the change: user" $D/README.md && ! grep -q "\"Not allowed to manage networks\"" $D/README.md'
+chk "S-1 validate: bare-number <label>/<label2>/<altlabel>/<hinttext> is an error, also via \$PARAM" 'grep -q "if el.tag in (\"label\", \"label2\", \"altlabel\", \"hinttext\"):" $D/validate.py && grep -q "is read as string id" $D/validate.py'
+chk "S-1 textfit and preview show what Kodi shows for a bare-number label" 'grep -q "if t.strip().isdigit():" $D/textfit.py && grep -q "^def numlabel" $D/preview.py'
+chk "K-9 validate: Kodi id table (needed ids, Kodi-captioned ids) incl. VideoFullScreen" 'grep -q "^KODI_IDS = {" $D/validate.py && grep -q "\"VideoFullScreen\": ({\"10\",\"11\",\"12\"}" $D/validate.py && grep -q "elif cid not in fills and cid not in KODI_HIDDEN.get(wname, ()):" $D/validate.py && ! grep -q "^REQUIRED = {" $D/validate.py'
+chk "validate: unknown info labels and missing Kodi ids are errors, not warnings" '! grep -q "warns.append(f\"{where}: {name} is not" $D/validate.py && grep -q "errors.append(f\"{wname}: missing Kodi control id" $D/validate.py && ! grep -q "missing Kodi control id(s) \[" $D/validate.py'
+chk "PVR recordings/timers need their own filters (5/7, 8), not Estuary's hidden 28" 'grep -q "\"MyPVRRecordings\": ({\"5\",\"7\"}" $D/validate.py && grep -q "\"MyPVRTimers\": ({\"8\"}" $D/validate.py'
+chk "B-7 textfit flags wrapmultiline labels in list layouts (includes expanded); exemption lists exact labels" 'grep -q "^KNOWN_LAYOUT_WRAP = {" $D/textfit.py && grep -q "\"Settings\": (\"\$INFO\[ListItem.Label\]\", \"\$INFO\[ListItem.Label\]\")," $D/textfit.py && grep -q "for lab in sorted((have - want).elements()):" $D/textfit.py && grep -q "never wraps: use a textbox" $D/textfit.py && grep -q "if lc.get(\"type\") == \"label\":$" $D/textfit.py'
+chk "textfit names every fontset it measures and any it can't" 'grep -q "fontsets measured:" $D/textfit.py && grep -q "fontset NOT measured" $D/textfit.py'
+chk "preview: Kodi geometry (bottom/right/centre), nested \$PARAM, grouplist align + clip, button label2" '(cd "$D" && python3 preview.py --selftest) && grep -q "halign=\"right\"," $D/preview.py'
+chk "logincheck also covers DialogConfirm and DialogSelect" 'grep -q "\"DialogConfirm\", \"DialogSelect\"\]" $D/logincheck.py && (cd "$D" && python3 logincheck.py)'
+chk "README: first install enables the skin; polkit rule, not netdev + reboot" 'grep -q "My add-ons → Look and feel → Skin →" $D/README.md && grep -q "50-arthuros-nm.rules" $D/README.md && ! grep -q "usermod -aG netdev" $D/README.md && grep -q "install-arthuros.sh" $D/README.md'
+chk "README troubleshooting points at the Unicode fontset" 'grep -q "Unicode (all alphabets)" $D/README.md'
 chk "build.sh: one command per line (set -e sees every step)" '! grep -v "^[[:space:]]*#" $D/build.sh | grep -q "&&"'
 chk "build.sh checks both layouts' text fit" 'grep -q "RES=xml768 python3 textfit.py" $D/build.sh'
 chk "installer enables a copied skin in Kodi's add-on DB" 'grep -q "UPDATE installed SET enabled=1" $D/install-arthuros.sh && grep -q "My add-ons > Look and feel > Skin" $D/install-arthuros.sh'

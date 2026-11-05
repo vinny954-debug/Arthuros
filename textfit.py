@@ -11,6 +11,7 @@ real size, against the space its control actually leaves for text:
                   (a textbox: every word fits, and the wrapped lines fit
                   its height)
 Labels driven by $INFO/$VAR are runtime text and cannot be checked here."""
+import collections
 import os, re, glob, sys
 import xml.etree.ElementTree as ET
 from PIL import ImageFont
@@ -121,11 +122,14 @@ def resolve_text(t):
     return t.replace("&lt;", "<").replace("&gt;", ">")
 
 issues = []
-# Windows with wrapmultiline labels in a list layout that are still to be
-# turned into textboxes (B-7). Reported, not failed, with what they cut off;
-# the build fails again as soon as such a window is clean and then regresses.
+# Wrapmultiline labels in a list layout that are still to be turned into
+# textboxes (B-7), per window: the exact <label> of each one (repeats count).
+# These are reported, not failed, with what they cut off. Any other one - a
+# new label, a different text, one more of the same - fails the build; one
+# that was fixed is only reported, so trim the list.
 KNOWN_LAYOUT_WRAP = {
-    "Settings",     # Settings hub tile captions (hand-maintained Settings.xml)
+    # Settings hub tile captions (hand-maintained Settings.xml), item + focused layout
+    "Settings": ("$INFO[ListItem.Label]", "$INFO[ListItem.Label]"),
 }
 known_cut = []
 for p in sorted(glob.glob(os.path.join(XML, "*.xml"))):
@@ -225,7 +229,8 @@ for p in sorted(glob.glob(os.path.join(XML, "*.xml"))):
                             need = measure(fsid, font, text)
                             if need > int(w) + 0.5:
                                 hit = (fsid, wname, "item", text, int(need), int(w))
-                                if (get(lc, "wrapmultiline", pp) or "") == "true" and wname in KNOWN_LAYOUT_WRAP:
+                                if (get(lc, "wrapmultiline", pp) or "") == "true" and \
+                                        sub(lc.findtext("label") or "", pp).strip() in KNOWN_LAYOUT_WRAP.get(wname, ()):
                                     known_cut.append(hit)    # fails once the window is fixed
                                 else:
                                     issues.append(hit)
@@ -271,13 +276,16 @@ for p in sorted(glob.glob(os.path.join(XML, "*.xml"))):
     if root.tag != "window": continue
     for c, pp in layout_labels(root, None):
         layout_wrap.setdefault(wname, []).append(sub(c.findtext("label") or "", pp).strip())
-for wname, labs in sorted(layout_wrap.items()):
-    if wname not in KNOWN_LAYOUT_WRAP:
-        for lab in labs:
-            issues.append(("-", wname, "list-layout label with wrapmultiline (never wraps: use a textbox)",
-                           lab, 0, 0))
-known_seen = sorted(KNOWN_LAYOUT_WRAP & set(layout_wrap))
-known_gone = sorted(KNOWN_LAYOUT_WRAP - set(layout_wrap))
+known_seen, known_gone = [], []
+for wname in sorted(set(layout_wrap) | set(KNOWN_LAYOUT_WRAP)):
+    have = collections.Counter(layout_wrap.get(wname, []))
+    want = collections.Counter(KNOWN_LAYOUT_WRAP.get(wname, ()))
+    for lab in sorted((have - want).elements()):   # new: fails
+        issues.append(("-", wname, "list-layout label with wrapmultiline (never wraps: use a textbox)",
+                       lab, 0, 0))
+    if have & want: known_seen.append(wname)
+    for lab in sorted((want - have).elements()):   # fixed: just trim the list
+        known_gone.append((wname, lab))
 
 def footer():
     sets = [f for f in FONTSETS if f not in MEASURED_BY_TABLE]
@@ -286,7 +294,8 @@ def footer():
     for s_ in SKIPPED:
         print(f"  fontset NOT measured: {s_}")
     for w_ in known_seen:
-        print(f"  known: {w_} has {len(layout_wrap[w_])} wrapmultiline label(s) in a list layout "
+        n_ = sum((collections.Counter(layout_wrap[w_]) & collections.Counter(KNOWN_LAYOUT_WRAP[w_])).values())
+        print(f"  known: {w_} has {n_} wrapmultiline label(s) in a list layout "
               "(they never wrap; KNOWN_LAYOUT_WRAP)")
         cut = {}
         for fsid, wn, _, text, need, avail in known_cut:
@@ -294,8 +303,8 @@ def footer():
         for (text, avail), sets in sorted(cut.items()):
             print(f"    cut short on one line: '{text}' has {avail}px - needs "
                   + ", ".join(f"{k} {v}px" for k, v in sorted(sets.items())))
-    for w_ in known_gone:
-        print(f"  {w_}: no wrapmultiline labels in layouts any more - remove it from KNOWN_LAYOUT_WRAP")
+    for w_, lab_ in known_gone:
+        print(f"  {w_}: wrapmultiline layout label '{lab_}' is gone - remove it from KNOWN_LAYOUT_WRAP")
 
 if not issues:
     print(f"textfit: every fixed label fits in every fontset ({n_items} static list items too)")

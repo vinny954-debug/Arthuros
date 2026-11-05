@@ -446,12 +446,12 @@ def defaulted(c, tag, fallback=None):
         if v is not None: return v.strip()
     return fallback
 
-def draw_label(img, c, x, y, w, h, forced=None, item=None):
+def draw_label(img, c, x, y, w, h, forced=None, item=None, halign=None):
     txt = resolve_text(forced if forced is not None else numlabel(c.findtext("label")), item)
     if not txt: return
     fnt = pilfont(defaulted(c, "font", "normal"))
     col = rgb(defaulted(c, "textcolor", "text"))
-    align = (defaulted(c, "align", "left") or "left")
+    align = halign or (defaulted(c, "align", "left") or "left")
     aligny = (defaulted(c, "aligny", "top") or "top")
     d = ImageDraw.Draw(img)
     bb = d.textbbox((0,0), txt, font=fnt)
@@ -555,6 +555,11 @@ def render(img, els, px, py, pw, ph, depth=0, item=None):
             off = int(defaulted(c, "textoffsetx", "10") or 10)
             al = defaulted(c, "align", "center")
             draw_label(img, c, x+off, y, w-2*off, h, item=item)
+            if ct in ("button", "togglebutton") and c.findtext("label2"):
+                # CGUIButtonControl::ProcessText: label2 in the same rect and
+                # font, XBFONT_RIGHT, the label's aligny, the button's text colour
+                draw_label(img, c, x+off, y, w-2*off, h, item=item, halign="right",
+                           forced=numlabel(c.findtext("label2")))
             continue
         if ct == "label":
             draw_label(img, c, x, y, w, h, item=item); continue
@@ -692,10 +697,18 @@ def selftest():
     render(img, [gl], 0, 0, 200, 100)
     box = img.getchannel("R").point(lambda v: 255 if v > 0 else 0).getbbox()
     eq("grouplist centre + clip", box, (80, 10, 120, 30))
+    # button label2: right-aligned inside the button, after textoffsetx
+    img = Image.new("RGBA", (200, 40), (0, 0, 0, 255))
+    bt = E('<control type="button"><left>0</left><top>0</top><width>200</width><height>40</height>'
+           '<texturenofocus>-</texturenofocus><textoffsetx>10</textoffsetx><textcolor>FFFFFFFF</textcolor>'
+           '<label2>XX</label2></control>')
+    render(img, [bt], 0, 0, 200, 40)
+    box = img.getchannel("R").point(lambda v: 255 if v > 0 else 0).getbbox()
+    eq("button label2 right-aligned", bool(box) and 180 <= box[2] <= 190 and box[0] > 100, True)
     for k in ("_T_A", "_T_B"): INCLUDES.pop(k, None)
     if bad:
         print("preview selftest FAILED"); print("\n".join("  " + b for b in bad)); sys.exit(1)
-    print("preview selftest: geometry, nested params, labels, grouplists as Kodi does")
+    print("preview selftest: geometry, nested params, labels, grouplists, button label2 as Kodi does")
 
 if __name__ == "__main__":
     if sys.argv[1:] == ["--selftest"]:
