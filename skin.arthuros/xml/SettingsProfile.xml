@@ -40,6 +40,8 @@
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <align>left</align><textoffsetx>12</textoffsetx>
           <label>$LOCALIZE[33084]</label>
+          <label2>$INFO[System.ProfileAutoLogin]</label2>
+          <enable>!System.HasLoginScreen</enable>
         </control>
       </control>
       <control type="image">

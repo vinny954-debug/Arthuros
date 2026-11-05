@@ -132,26 +132,36 @@
         <onup>9903</onup><ondown>4</ondown><onleft>9002</onleft><onright>60</onright>
         <pagecontrol>60</pagecontrol>
         <itemlayout height="44" width="396" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <control type="image"><left>4</left><top>14</top><width>16</width><height>16</height><texture>$INFO[ListItem.Icon]</texture></control>
-          <control type="label"><left>26</left><top>0</top><width>362</width><height>44</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Property(Number),, ]$INFO[ListItem.Property(Name)]</label></control>
-          <control type="label"><left>0</left><top>0</top><width>388</width><height>44</height><font>small</font><textcolor>textdim</textcolor><align>right</align><aligny>center</aligny><label>$INFO[ListItem.Property(ClientName)]</label></control>
+          <control type="image"><left>0</left><top>0</top><width>4</width><height>44</height><texture colordiffuse="marked">fill.png</texture><visible>ListItem.Property(Changed)</visible></control>
+          <control type="image"><left>8</left><top>14</top><width>16</width><height>16</height><texture fallback="icons24/livetv.png">$INFO[ListItem.Property(Icon)]</texture><aspectratio>keep</aspectratio></control>
+          <control type="image"><left>28</left><top>14</top><width>16</width><height>16</height><texture>icons24/masterlock.png</texture><visible>ListItem.Property(ParentalLocked)</visible></control>
+          <control type="label"><left>48</left><top>0</top><width>246</width><height>44</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Property(Number),, ]$INFO[ListItem.Property(Name)]</label><visible>ListItem.Property(ActiveChannel)</visible></control>
+          <control type="label"><left>48</left><top>0</top><width>246</width><height>44</height><font>normal</font><textcolor>textdim</textcolor><aligny>center</aligny><label>$INFO[ListItem.Property(Number),, ]$INFO[ListItem.Property(Name)]</label><visible>!ListItem.Property(ActiveChannel)</visible></control>
+          <control type="label"><left>298</left><top>0</top><width>90</width><height>44</height><font>small</font><textcolor>textdim</textcolor><align>right</align><aligny>center</aligny><label>$INFO[ListItem.Property(ClientName)]</label></control>
         </itemlayout>
         <focusedlayout height="44" width="396" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image"><left>0</left><top>0</top><width>396</width><height>44</height><texture colordiffuse="select">fill.png</texture></control>
-          <control type="image"><left>4</left><top>14</top><width>16</width><height>16</height><texture>$INFO[ListItem.Icon]</texture></control>
-          <control type="label"><left>26</left><top>0</top><width>362</width><height>44</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Property(Number),, ]$INFO[ListItem.Property(Name)]</label></control>
-          <control type="label"><left>0</left><top>0</top><width>388</width><height>44</height><font>small</font><textcolor>textinv</textcolor><align>right</align><aligny>center</aligny><label>$INFO[ListItem.Property(ClientName)]</label></control>
+          <control type="image"><left>0</left><top>0</top><width>4</width><height>44</height><texture colordiffuse="marked">fill.png</texture><visible>ListItem.Property(Changed)</visible></control>
+          <control type="image"><left>8</left><top>14</top><width>16</width><height>16</height><texture fallback="icons24/livetv.png">$INFO[ListItem.Property(Icon)]</texture><aspectratio>keep</aspectratio></control>
+          <control type="image"><left>28</left><top>14</top><width>16</width><height>16</height><texture>icons24/masterlock.png</texture><visible>ListItem.Property(ParentalLocked)</visible></control>
+          <control type="label"><left>48</left><top>0</top><width>246</width><height>44</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Property(Number),, ]$INFO[ListItem.Property(Name)]</label></control>
+          <control type="label"><left>298</left><top>0</top><width>90</width><height>44</height><font>small</font><textcolor>textinv</textcolor><align>right</align><aligny>center</aligny><label>$INFO[ListItem.Property(ClientName)]</label></control>
         </focusedlayout>
       <itemlayout height="28" width="396">
-          <control type="image"><left>4</left><top>6</top><width>16</width><height>16</height><texture>$INFO[ListItem.Icon]</texture></control>
-          <control type="label"><left>26</left><top>0</top><width>362</width><height>28</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Property(Number),, ]$INFO[ListItem.Property(Name)]</label></control>
-          <control type="label"><left>0</left><top>0</top><width>388</width><height>28</height><font>small</font><textcolor>textdim</textcolor><align>right</align><aligny>center</aligny><label>$INFO[ListItem.Property(ClientName)]</label></control>
+          <control type="image"><left>0</left><top>0</top><width>4</width><height>28</height><texture colordiffuse="marked">fill.png</texture><visible>ListItem.Property(Changed)</visible></control>
+          <control type="image"><left>8</left><top>6</top><width>16</width><height>16</height><texture fallback="icons24/livetv.png">$INFO[ListItem.Property(Icon)]</texture><aspectratio>keep</aspectratio></control>
+          <control type="image"><left>28</left><top>6</top><width>16</width><height>16</height><texture>icons24/masterlock.png</texture><visible>ListItem.Property(ParentalLocked)</visible></control>
+          <control type="label"><left>48</left><top>0</top><width>246</width><height>28</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Property(Number),, ]$INFO[ListItem.Property(Name)]</label><visible>ListItem.Property(ActiveChannel)</visible></control>
+          <control type="label"><left>48</left><top>0</top><width>246</width><height>28</height><font>normal</font><textcolor>textdim</textcolor><aligny>center</aligny><label>$INFO[ListItem.Property(Number),, ]$INFO[ListItem.Property(Name)]</label><visible>!ListItem.Property(ActiveChannel)</visible></control>
+          <control type="label"><left>298</left><top>0</top><width>90</width><height>28</height><font>small</font><textcolor>textdim</textcolor><align>right</align><aligny>center</aligny><label>$INFO[ListItem.Property(ClientName)]</label></control>
         </itemlayout>
         <focusedlayout height="28" width="396">
           <control type="image"><left>0</left><top>0</top><width>396</width><height>28</height><texture colordiffuse="select">fill.png</texture></control>
-          <control type="image"><left>4</left><top>6</top><width>16</width><height>16</height><texture>$INFO[ListItem.Icon]</texture></control>
-          <control type="label"><left>26</left><top>0</top><width>362</width><height>28</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Property(Number),, ]$INFO[ListItem.Property(Name)]</label></control>
-          <control type="label"><left>0</left><top>0</top><width>388</width><height>28</height><font>small</font><textcolor>textinv</textcolor><align>right</align><aligny>center</aligny><label>$INFO[ListItem.Property(ClientName)]</label></control>
+          <control type="image"><left>0</left><top>0</top><width>4</width><height>28</height><texture colordiffuse="marked">fill.png</texture><visible>ListItem.Property(Changed)</visible></control>
+          <control type="image"><left>8</left><top>6</top><width>16</width><height>16</height><texture fallback="icons24/livetv.png">$INFO[ListItem.Property(Icon)]</texture><aspectratio>keep</aspectratio></control>
+          <control type="image"><left>28</left><top>6</top><width>16</width><height>16</height><texture>icons24/masterlock.png</texture><visible>ListItem.Property(ParentalLocked)</visible></control>
+          <control type="label"><left>48</left><top>0</top><width>246</width><height>28</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Property(Number),, ]$INFO[ListItem.Property(Name)]</label></control>
+          <control type="label"><left>298</left><top>0</top><width>90</width><height>28</height><font>small</font><textcolor>textinv</textcolor><align>right</align><aligny>center</aligny><label>$INFO[ListItem.Property(ClientName)]</label></control>
         </focusedlayout>
       </control>
       <control type="scrollbar" id="60">

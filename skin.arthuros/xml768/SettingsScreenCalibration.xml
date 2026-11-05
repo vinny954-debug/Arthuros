@@ -9,61 +9,54 @@
     </control>
     <control type="mover" id="8">
       <left>0</left><top>0</top><width>96</width><height>96</height>
-      <texturefocus colordiffuse="select">icons96/cal_tl.png</texturefocus>
-      <texturenofocus>icons96/cal_tl.png</texturenofocus>
+      <texturefocus colordiffuse="select">calibrate/cal_tl.png</texturefocus>
+      <texturenofocus>calibrate/cal_tl.png</texturenofocus>
       <movingspeed acceleration="180" maxvelocity="300" resettimeout="200" delta="1"><eventconfig type="up"/><eventconfig type="down"/><eventconfig type="left"/><eventconfig type="right"/></movingspeed>
     </control>
     <control type="mover" id="9">
       <left>0</left><top>0</top><width>96</width><height>96</height>
-      <texturefocus colordiffuse="select">icons96/cal_br.png</texturefocus>
-      <texturenofocus>icons96/cal_br.png</texturenofocus>
+      <texturefocus colordiffuse="select">calibrate/cal_br.png</texturefocus>
+      <texturenofocus>calibrate/cal_br.png</texturenofocus>
       <movingspeed acceleration="180" maxvelocity="300" resettimeout="200" delta="1"><eventconfig type="up"/><eventconfig type="down"/><eventconfig type="left"/><eventconfig type="right"/></movingspeed>
     </control>
     <control type="resize" id="11">
       <left>0</left><top>0</top><width>500</width><height>500</height>
-      <texturefocus colordiffuse="select">icons96/cal_ratio.png</texturefocus>
-      <texturenofocus>icons96/cal_ratio.png</texturenofocus>
+      <texturefocus colordiffuse="select">calibrate/cal_ratio.png</texturefocus>
+      <texturenofocus>calibrate/cal_ratio.png</texturenofocus>
       <movingspeed acceleration="140" maxvelocity="300" resettimeout="180" delta="1"><eventconfig type="left"/><eventconfig type="right"/></movingspeed>
     </control>
     <control type="mover" id="10">
       <left>0</left><top>0</top><width>380</width><height>90</height>
-      <texturefocus colordiffuse="select">icons96/cal_sub.png</texturefocus>
-      <texturenofocus>icons96/cal_sub.png</texturenofocus>
+      <texturefocus colordiffuse="select">calibrate/cal_sub.png</texturefocus>
+      <texturenofocus>calibrate/cal_sub.png</texturenofocus>
       <movingspeed acceleration="180" maxvelocity="300" resettimeout="200" delta="1"><eventconfig type="up"/><eventconfig type="down"/></movingspeed>
     </control>
     <control type="mover" id="12">
       <left>0</left><top>0</top><width>100</width><height>100</height>
-      <texturefocus colordiffuse="select">icons96/cal_reset.png</texturefocus>
-      <texturenofocus>icons96/cal_reset.png</texturenofocus>
-    </control>
-    <!-- Done: near the top centre, where it can be hit with or without
-         the scaling Kodi applies to this window -->
-    <control type="button" id="30">
-      <left>362</left><top>4</top><width>300</width><height>56</height>
-      <font>bigbold</font><align>center</align><aligny>center</aligny>
-      <label>$LOCALIZE[20177]</label>
-      <onclick>Action(Back)</onclick>
+      <texturefocus colordiffuse="select">calibrate/cal_reset.png</texturefocus>
+      <texturenofocus>calibrate/cal_reset.png</texturenofocus>
     </control>
     <control type="label">
-      <left>0</left><top>68</top><width>100%</width><height>26</height>
+      <left>0</left><top>40</top><width>100%</width><height>26</height>
       <font>bigbold</font><textcolor>text</textcolor><align>center</align><aligny>center</aligny>
       <label>$LOCALIZE[214]</label>
     </control>
     <control type="label" id="2">
-      <left>0</left><top>96</top><width>100%</width><height>26</height>
+      <left>0</left><top>68</top><width>100%</width><height>26</height>
       <font>normal</font><textcolor>text</textcolor><align>center</align><aligny>center</aligny>
     </control>
     <control type="label" id="3">
-      <left>0</left><top>124</top><width>100%</width><height>26</height>
+      <left>0</left><top>96</top><width>100%</width><height>26</height>
       <font>bold</font><textcolor>text</textcolor><align>center</align><aligny>center</aligny>
     </control>
     <control type="label" id="4">
-      <left>0</left><top>152</top><width>100%</width><height>26</height>
+      <left>0</left><top>124</top><width>100%</width><height>26</height>
       <font>normal</font><textcolor>text</textcolor><align>center</align><aligny>center</aligny>
     </control>
     <control type="label">
-      <left>0</left><top>180</top><width>100%</width><height>26</height>
+      <left>0</left><top>152</top><width>100%</width><height>48</height>
       <font>small</font><textcolor>text</textcolor><align>center</align><aligny>center</aligny>
+      <wrapmultiline>true</wrapmultiline>
       <label>$LOCALIZE[31834]</label>
     </control>
   </controls>

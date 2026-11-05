@@ -404,7 +404,7 @@ msgid "Long-press a song on the left to add it. Long-press a song in the playlis
 msgstr ""
 
 msgctxt "#31834"
-msgid "Drag each marker until it sits on the edge of the picture."
+msgid "Drag each marker until it sits on the edge of the picture. To finish, tap and hold an empty spot, or press Back."
 msgstr ""
 
 # ===== P4 strings: 31845-31854 =====

@@ -87,6 +87,59 @@ BOXES = {"LoginScreen": "none", "SmartPlaylistEditor": "dialog",
          "DialogBusy": "none", "DialogExtendedProgressBar": "none",
          "DialogVolumeBar": "none", "DialogSeekBar": "none"}
 
+# Dialogs Kodi can open on top of the login screen: the power menu (its
+# Shutdown button), and the keyboard / numeric pad that ask for a locked
+# profile's password or the master code. Their title bar must not offer a
+# way past the login: Win_Boxes_dialog's _ box runs ActivateWindow(Home),
+# and CGUIWindowManager::ActivateWindow_Internal only checks CheckMenuLock,
+# which does not cover Home. These get Win_Boxes_none from Dialog_Box and
+# their own copy of the dialog boxes (login_safe_boxes) instead.
+LOGIN_SAFE = {"DialogButtonMenu", "DialogKeyboard", "DialogNumeric"}
+NOT_AT_LOGIN = "!Window.IsVisible(loginscreen)"
+
+def login_safe_boxes(wd, down):
+    """Win_Boxes_dialog, read from Includes_Chrome.xml so it keeps whatever
+    look that file gives it, with _ (9901) hidden while the login screen is
+    up - a greyed _ is drawn in its place, as on the desktop's own panel -
+    and every ActivateWindow in it conditional as well. Placed where
+    Dialog_Box puts the title bar (3,3, width wd-6)."""
+    from lxml import etree
+    import copy, re
+    src = os.path.join(OUT, "Includes_Chrome.xml")
+    root = etree.parse(src).getroot()
+    inc = root.xpath("include[@name='Win_Boxes_dialog']")[0]
+    group = copy.deepcopy(inc.find("definition").find("control"))
+    for el in group.iter():
+        if el.text and "$PARAM[down]" in el.text:
+            el.text = el.text.replace("$PARAM[down]", down)
+    for oc in group.iter("onclick"):
+        if "ActivateWindow" in (oc.text or ""):
+            c = oc.get("condition")
+            oc.set("condition", f"{NOT_AT_LOGIN} + [{c}]" if c else NOT_AT_LOGIN)
+    for c in group.iter("control"):
+        if c.get("id") == "9901":
+            v = etree.SubElement(c, "visible"); v.text = NOT_AT_LOGIN
+        elif c.get("type") == "image" and "9901" in (c.findtext("visible") or ""):
+            v = c.find("visible"); v.text = f"{v.text} + {NOT_AT_LOGIN}"
+    b9901 = [c for c in group.iter("control") if c.get("id") == "9901"][0]
+    pos = "".join(etree.tostring(b9901.find(t)).decode().strip() for t in ("right", "top", "width", "height"))
+    grey = (f'<control type="image">{pos}<texture colordiffuse="facetint">wc_face.png</texture>'
+            f'<visible>Window.IsVisible(loginscreen)</visible></control>'
+            f'<control type="image">{pos}<texture colordiffuse="textdim">wc_min_dg.png</texture>'
+            f'<visible>Window.IsVisible(loginscreen)</visible></control>')
+    for el in reversed(etree.fromstring(f"<x>{grey}</x>")):
+        group.insert(0, el)
+    for el in group.iter():
+        el.tail = None
+        if el.text is not None and not el.text.strip():
+            el.text = None
+    body = etree.tostring(group, pretty_print=True).decode()
+    body = re.sub(r"(?<=[^\s])/>", " />", body)
+    return ("      <!-- the dialog boxes, login-safe (LOGIN_SAFE) -->\n"
+            "      <control type=\"group\">\n"
+            f"        <left>3</left><top>3</top><width>{wd - 6}</width><height>26</height>\n"
+            + textwrap.indent(body, "        ") + "      </control>\n")
+
 def fullwindow(name, body, default="", views="", colour="accent2",
                icon="icons24/folder.png", title=None):
     title = title if title is not None else TITLES.get(name, "")
@@ -141,13 +194,16 @@ def dialog(name, wd, ht, body, default="", icon="icons24/file.png",
     s += f'        <param name="innerwidth" value="{inner}" />\n'
     s += f'        <param name="icon" value="{icon}" /><param name="colour" value="{colour}" />\n'
     s += f'        <param name="down" value="{default}" />\n'
-    s += f'        <param name="boxes" value="{BOXES.get(name, "dialog")}" />\n'
+    boxes = "none" if name in LOGIN_SAFE else BOXES.get(name, "dialog")
+    s += f'        <param name="boxes" value="{boxes}" />\n'
     if title:
         s += f'        <param name="title" value="{title}" />\n'
     s += "      </include>\n"
     if heading:
         s += f'      <include content="Dialog_Heading"><param name="width" value="{inner-100}" /></include>\n'
     s += body
+    if name in LOGIN_SAFE:
+        s += login_safe_boxes(wd, default)
     s += "    </control>\n  </controls>\n</window>\n"
     return s
 
@@ -350,17 +406,22 @@ def settings_dialog(name):
       </control>
 """
     body += SETTING_TEMPLATES.replace("<width>600</width>", f"<width>{sw}</width>")
-    body += f"""      <control type="grouplist" id="9001">
-        <left>13</left><top>444</top><width>874</width><height>36</height>
+    XLC = "[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"
+    # the bottom row: 30 px, 46 in Touch mode / Extra large (Height_30_XL,
+    # sizepass.py). Hung from the bottom edge, so the taller row grows up
+    # into the gap above it instead of out of the dialog.
+    hgt = (f'<include content="Height_30_XL" condition="{XLC}" />'
+           f'<include content="Height_30" condition="!{XLC}" />')
+    btn = lambda cid, extra="": (f'        <control type="button" id="{cid}"><width>180</width>{hgt}'
+                                 f'<align>center</align>{extra}</control>\n')
+    body += (f"""      <control type="grouplist" id="9001">
+        <left>13</left><bottom>6</bottom><width>874</width>{hgt}
         <orientation>horizontal</orientation><align>center</align><itemgap>8</itemgap>
         <onup>5</onup><ondown>{3 if cats else 5}</ondown>
-        <control type="button" id="28"><width>180</width><height>36</height><align>center</align></control>
-        <control type="button" id="29"><width>180</width><height>36</height><align>center</align></control>
-        <control type="button" id="30"><width>180</width><height>36</height><align>center</align></control>
-""" + ("""        <!-- settings level: Kodi labels it (GUIDialogAddonSettings.cpp CONTROL_BTN_LEVELS) -->
-        <control type="button" id="20"><width>180</width><height>36</height><align>center</align><onclick>SettingsLevelChange</onclick></control>
-""" if cats else "") + """      </control>
-"""
+""" + btn(28) + btn(29) + btn(30)
+             + (("        <!-- settings level: Kodi labels it (GUIDialogAddonSettings.cpp CONTROL_BTN_LEVELS) -->\n"
+                 + btn(20, "<onclick>SettingsLevelChange</onclick>")) if cats else "")
+             + "      </control>\n")
     return dialog(name, 900, 486, body, default="3" if cats else "5",
                   icon="icons24/settings.png", colour="accent1", heading=False)
 
@@ -1578,6 +1639,13 @@ LABELS = {
  # auto-login profile; neither is labelled by Kodi
  "SettingsProfile": {4: "$LOCALIZE[20096]", 5: "$LOCALIZE[33084]"},
 }
+# extra markup for those buttons: Kodi writes no label2 on Auto login, so
+# the skin shows the chosen profile (as Estuary does); Kodi only reads the
+# setting while the login screen is off, so the button is too
+EXTRAS = {
+ "SettingsProfile": {5: "<label2>$INFO[System.ProfileAutoLogin]</label2>\n"
+                        "<enable>!System.HasLoginScreen</enable>"},
+}
 # Ids each window's C++ labels by itself (SET_CONTROL_LABEL) - used by
 # labelcheck.py so a blank caption anywhere else fails the build.
 # generic(): width of the button column where its captions need more room
@@ -1765,10 +1833,15 @@ def generic(name, meta, as_dialog=False):
         # every pressable is placed; Touch mode / Extra large rows are 46 px
         # (sizepass.py), so a long column scrolls instead of being cut off
         sb = 9601 if len(press) * 49 > ah - 12 else None
-        kids = "".join(item(ct, cid, lw - 16 - (22 if sb else 0), 30, labels.get(cid)) for cid, ct in press)
-        body += vgroup(9600 if sb else None, lx + 8, oy + 6, lw - 16, ah - 12, kids,
-                       {"onup": gl_up, "ondown": gl_down,
-                        "onright": first if lists else gl_up}, sb=sb)
+        extras = EXTRAS.get(name, {})
+        kids = "".join(item(ct, cid, lw - 16 - (22 if sb else 0), 30, labels.get(cid), extras.get(cid, ""))
+                       for cid, ct in press)
+        # Right: the list; with no list, nowhere (Right used to land on the
+        # close box / Start button, one Select away from leaving)
+        nav = {"onup": gl_up, "ondown": gl_down}
+        if lists:
+            nav["onright"] = first
+        body += vgroup(9600 if sb else None, lx + 8, oy + 6, lw - 16, ah - 12, kids, nav, sb=sb)
         placed.update(cid for cid, _ in press)
 
     rx = ox + lw + 6 if press else ox
@@ -1828,12 +1901,47 @@ def pvr_channel_manager():
     34 TV/Radio, 35 Refresh logos. Kodi labels none of them."""
     name = "DialogPVRChannelManager"
     ids = kodi_ids(name, INV[name])
-    chan = rows  # channel number and the name as edited (Kodi keeps it in properties)
+    def chan(iw, rowh=28):
+        """Number and name as edited, the backend on the right, and the state
+        Kodi keeps per channel (properties, GUIDialogPVRChannelManager.cpp):
+        a hidden channel (!ActiveChannel) in the dim colour, a padlock when
+        ParentalLocked, a bar in the marked colour on the left edge once
+        the channel has unsaved changes (Changed). The picture is the
+        channel's Icon property, as edited."""
+        name = "$INFO[ListItem.Property(Number),, ]$INFO[ListItem.Property(Name)]"
+        out = ""
+        for focused in (False, True):
+            tag = "focusedlayout" if focused else "itemlayout"
+            out += f'        <{tag} height="{rowh}" width="{iw}">\n'
+            if focused:
+                out += (f'          <control type="image"><left>0</left><top>0</top><width>{iw}</width>'
+                        f'<height>{rowh}</height><texture colordiffuse="select">fill.png</texture></control>\n')
+            out += ('          <control type="image"><left>0</left><top>0</top><width>4</width>'
+                    f'<height>{rowh}</height><texture colordiffuse="marked">fill.png</texture>'
+                    '<visible>ListItem.Property(Changed)</visible></control>\n')
+            out += ('          <control type="image"><left>8</left><top>6</top><width>16</width><height>16</height>'
+                    '<texture fallback="icons24/livetv.png">$INFO[ListItem.Property(Icon)]</texture>'
+                    '<aspectratio>keep</aspectratio></control>\n')
+            out += ('          <control type="image"><left>28</left><top>6</top><width>16</width><height>16</height>'
+                    '<texture>icons24/masterlock.png</texture>'
+                    '<visible>ListItem.Property(ParentalLocked)</visible></control>\n')
+            font = "bold" if focused else "normal"
+            for col, vis in ((("textinv", ""),) if focused else
+                             (("text", "<visible>ListItem.Property(ActiveChannel)</visible>"),
+                              ("textdim", "<visible>!ListItem.Property(ActiveChannel)</visible>"))):
+                out += (f'          <control type="label"><left>48</left><top>0</top><width>{iw - 150}</width>'
+                        f'<height>{rowh}</height><font>{font}</font><textcolor>{col}</textcolor>'
+                        f'<aligny>center</aligny><label>{name}</label>{vis}</control>\n')
+            col2 = "textinv" if focused else "textdim"
+            out += (f'          <control type="label"><left>{iw - 98}</left><top>0</top><width>90</width>'
+                    f'<height>{rowh}</height><font>small</font><textcolor>{col2}</textcolor>'
+                    f'<align>right</align><aligny>center</aligny>'
+                    f'<label>$INFO[ListItem.Property(ClientName)]</label></control>\n')
+            out += f"        </{tag}>\n"
+        return out
     body  = xlist(20, 60, 10, 36, 420, 400,
                   {"onup": "9903", "ondown": "4", "onleft": "9002"},
-                  layouts=lambda iw: chan(iw, label="$INFO[ListItem.Property(Number),, ]$INFO[ListItem.Property(Name)]",
-                                          label2="$INFO[ListItem.Property(ClientName)]"),
-                  sbright="9002")
+                  layouts=chan, sbright="9002")
     radio = "String.IsEqual(Window(pvrchannelmanager).Property(IsRadio),true)"
     kids  = item("radiobutton", 7, 420, 30, "$LOCALIZE[19074]")
     kids += item("edit", 8, 420, 30, "$LOCALIZE[19201]")
@@ -2014,9 +2122,18 @@ def screen_calibration():
     and sizes them itself, but they draw only their own textures - the
     stubs had none, so nothing was visible. Labels 2/3/4: resolution, what
     the marker does, its value. Full screen, no chrome over the edges being
-    calibrated. The window renders in screen pixels (m_needsScaling false),
-    so text is centred across 100% width like Estuary's. Touch: drag a
-    marker; Done (or a two-finger swipe left = Back) leaves."""
+    calibrated; text centred across 100% width like Estuary's.
+
+    No skin button here on purpose. The window keeps m_needsScaling false
+    except inside DoProcess/DoRender, so a skin control is DRAWN scaled
+    (skin to screen) but CGUIWindow::OnMouseAction hit-tests it in unscaled
+    screen pixels: on the 2048x1536 panel a button showed at twice its
+    position and answered taps somewhere else. Any click also sends
+    GUI_MSG_CLICKED -> NextControl(), which resets the calibration when the
+    reset marker is current. Leaving is Kodi's own: Back, a right click, or
+    on touch a long press (touchscreen.xml: longpress = RightClick, which
+    CGUIWindow::OnMouseEvent turns into ACTION_PREVIOUS_MENU when no control
+    takes it) or a two-finger swipe left (Back). Label 31834 says so."""
     def mover(cid, kind, w, h, tex, events, speed="acceleration=\"180\" maxvelocity=\"300\" resettimeout=\"200\" delta=\"1\""):
         ev = "".join(f'<eventconfig type="{e}" />' for e in events)
         ms = f"\n      <movingspeed {speed}>{ev}</movingspeed>" if events else ""
@@ -2025,36 +2142,30 @@ def screen_calibration():
                 f'      <texturefocus colordiffuse="select">{tex}</texturefocus>\n'
                 f"      <texturenofocus>{tex}</texturenofocus>{ms}\n"
                 "    </control>\n")
-    lab = lambda cid, t, font, label="": (
+    lab = lambda cid, t, font, label="", h=26, wrap=False: (
         f'    <control type="label"' + (f' id="{cid}"' if cid else "") + ">\n"
-        f"      <left>0</left><top>{t}</top><width>100%</width><height>26</height>\n"
+        f"      <left>0</left><top>{t}</top><width>100%</width><height>{h}</height>\n"
         f"      <font>{font}</font><textcolor>text</textcolor><align>center</align><aligny>center</aligny>\n"
+        + ("      <wrapmultiline>true</wrapmultiline>\n" if wrap else "")
         + (f"      <label>{label}</label>\n" if label else "") + "    </control>\n")
     s  = H + "<window>\n  <defaultcontrol>8</defaultcontrol>\n"
     s += "  <backgroundcolor>desktop</backgroundcolor>\n  <controls>\n"
     s += ("    <control type=\"image\">\n      <left>0</left><top>0</top><width>100%</width><height>100%</height>\n"
           "      <texture colordiffuse=\"desktop\">fill.png</texture>\n    </control>\n")
     # sizes: 8/9 are drawn as given; 10-12 Kodi rescales from a 1920x1080
-    # design (10 must keep 40 px clear above and below the bar)
-    s += mover(8, "mover", 96, 96, "icons96/cal_tl.png", ("up", "down", "left", "right"))
-    s += mover(9, "mover", 96, 96, "icons96/cal_br.png", ("up", "down", "left", "right"))
-    s += mover(11, "resize", 500, 500, "icons96/cal_ratio.png", ("left", "right"),
+    # design (10 must keep 40 px clear above and below the bar). The
+    # textures are media/calibrate/ (mkmedia.py), not registry icons.
+    s += mover(8, "mover", 96, 96, "calibrate/cal_tl.png", ("up", "down", "left", "right"))
+    s += mover(9, "mover", 96, 96, "calibrate/cal_br.png", ("up", "down", "left", "right"))
+    s += mover(11, "resize", 500, 500, "calibrate/cal_ratio.png", ("left", "right"),
                speed="acceleration=\"140\" maxvelocity=\"300\" resettimeout=\"180\" delta=\"1\"")
-    s += mover(10, "mover", 380, 90, "icons96/cal_sub.png", ("up", "down"))
-    s += mover(12, "mover", 100, 100, "icons96/cal_reset.png", ())
-    s += ("    <!-- Done: near the top centre, where it can be hit with or without\n"
-          "         the scaling Kodi applies to this window -->\n"
-          "    <control type=\"button\" id=\"30\">\n"
-          "      <left>362</left><top>4</top><width>300</width><height>56</height>\n"
-          "      <font>bigbold</font><align>center</align><aligny>center</aligny>\n"
-          "      <label>$LOCALIZE[20177]</label>\n"
-          "      <onclick>Action(Back)</onclick>\n"
-          "    </control>\n")
-    s += lab(None, 68, "bigbold", "$LOCALIZE[214]")
-    s += lab(2, 96, "normal")
-    s += lab(3, 124, "bold")
-    s += lab(4, 152, "normal")
-    s += lab(None, 180, "small", "$LOCALIZE[31834]")
+    s += mover(10, "mover", 380, 90, "calibrate/cal_sub.png", ("up", "down"))
+    s += mover(12, "mover", 100, 100, "calibrate/cal_reset.png", ())
+    s += lab(None, 40, "bigbold", "$LOCALIZE[214]")
+    s += lab(2, 68, "normal")
+    s += lab(3, 96, "bold")
+    s += lab(4, 124, "normal")
+    s += lab(None, 152, "small", "$LOCALIZE[31834]", h=48, wrap=True)
     s += "  </controls>\n</window>\n"
     return s
 
@@ -2063,7 +2174,10 @@ def login_screen():
     selected profile. The login screen runs as the master profile and skin
     onclicks bypass its OnAction filter, so it must not carry the task bar
     (Start = Home, Settings) - only a power button (ShutdownMenu: power,
-    log off, master mode)."""
+    log off, master mode). The power button is an ordinary ROWH (40 px)
+    dialog row inside the frame, so it is a real touch target in every
+    mode; the dialogs it can lead to (power menu, keyboard, numeric pad)
+    get login-safe title-bar boxes (LOGIN_SAFE)."""
     name = "LoginScreen"
     ids = kodi_ids(name, INV[name])
     body  = caplabel(16, 38, 980, None, cid=2, h=26, font="bigbold", col="text")
@@ -2087,8 +2201,11 @@ def login_screen():
         f'          <control type="label"><left>66</left><top>30</top><width>{iw-76}</width><height>22</height>'
         f'<font>small</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label2]</label></control>\n'
         f'        </focusedlayout>\n')
-    body += xlist(52, 60, 6, 94, 1000, 434, {"onup": "52", "ondown": "9100", "onleft": "52"},
+    body += xlist(52, 60, 6, 94, 1000, 380, {"onup": "9000", "ondown": "9000", "onleft": "52"},
                   layouts=layouts, sbright="52")
+    body += hrow(9000, 6, 482, 1000, [(9100, "$LOCALIZE[13005]",
+                                       "<onclick>ActivateWindow(ShutdownMenu)</onclick>")],
+                 {"onup": "52", "ondown": "52"}, bw=260)
     body += stubs(ids, {2, 3, 52, 60})
     s  = H + "<window>\n"
     s += "  <defaultcontrol always=\"false\">52</defaultcontrol>\n"
@@ -2096,22 +2213,6 @@ def login_screen():
     s += "    <include>Chrome_Desktop</include>\n    <include>Chrome_Menubar</include>\n"
     s += FRAME.format(colour="accent2", icon="icons24/person.png", title=TITLES[name], body=body,
                       down="52", boxes=BOXES.get(name, "none"))
-    s += """    <!-- in place of the task bar: power only -->
-    <control type="group">
-      <left>0</left><top>568</top><width>1024</width><height>32</height>
-      <control type="image">
-        <left>0</left><top>0</top><width>1024</width><height>32</height>
-        <texture border="2" colordiffuse="facetint">panel_chrome.png</texture>
-      </control>
-      <control type="button" id="9100">
-        <left>4</left><top>2</top><width>200</width><height>28</height>
-        <font>chromebold</font><align>center</align><aligny>center</aligny>
-        <label>$LOCALIZE[13005]</label>
-        <onclick>ActivateWindow(ShutdownMenu)</onclick>
-        <onup>52</onup><ondown>52</ondown><onleft>9100</onleft><onright>9100</onright>
-      </control>
-    </control>
-"""
     s += "  </controls>\n</window>\n"
     return s
 

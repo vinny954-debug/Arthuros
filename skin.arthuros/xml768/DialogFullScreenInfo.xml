@@ -130,7 +130,7 @@
       <control type="grouplist">
         <left>18</left><top>42</top><width>864</width><height>408</height>
         <orientation>vertical</orientation><itemgap>3</itemgap>
-        <onup>9903</onup><ondown>999</ondown><onright>9903</onright>
+        <onup>9903</onup><ondown>999</ondown>
         <control type="button" id="999">
           <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
