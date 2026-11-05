@@ -50,7 +50,7 @@ msgid "Nothing selected"
 msgstr ""
 
 msgctxt "#31910"
-msgid "Scroll list labels"
+msgid "Scroll long descriptions"
 msgstr ""
 
 msgctxt "#31911"
@@ -416,6 +416,30 @@ msgstr ""
 # ===== P5 strings: 31855-31864 =====
 
 # ===== P6 strings: 31865-31874 =====
+
+msgctxt "#31865"
+msgid "Reset skin settings"
+msgstr ""
+
+msgctxt "#31866"
+msgid "Put back the desktop the skin came with and switch every skin option off? Touch mode, colours and fonts are kept."
+msgstr "Put back the desktop the skin came with and switch every skin option off? Touch mode, colors and fonts are kept."
+
+msgctxt "#31867"
+msgid "Back up first"
+msgstr ""
+
+msgctxt "#31868"
+msgid "Pointer in Touch mode"
+msgstr ""
+
+msgctxt "#31869"
+msgid "Backups folder"
+msgstr ""
+
+msgctxt "#31870"
+msgid "Skin settings reset"
+msgstr ""
 
 # ===== P7 strings: 31875-31889, 31740-31759 =====
 

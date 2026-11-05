@@ -13,28 +13,29 @@
         <param name="boxes" value="dialog" />
         <param name="title" value="$LOCALIZE[31970]" />
       </include>
-      <control type="image"><left>16</left><top>44</top><width>246</width><height>440</height><texture border="2" colordiffuse="facetint">panel_sunken.png</texture></control>
+      <control type="image"><left>16</left><top>44</top><width>266</width><height>440</height><texture border="2" colordiffuse="facetint">panel_sunken.png</texture></control>
       <control type="list" id="200">
-        <left>19</left><top>47</top><width>240</width><height>434</height>
+        <left>19</left><top>47</top><width>236</width><height>434</height>
         <onright>210</onright><onleft>200</onleft>
+        <pagecontrol>201</pagecontrol>
         <scrolltime tween="linear">0</scrolltime>
-        <itemlayout width="240" height="44" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+        <itemlayout width="236" height="44" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image"><left>6</left><top>6</top><width>32</width><height>32</height><texture>$INFO[ListItem.Icon]</texture></control>
-          <control type="label"><left>46</left><top>0</top><width>188</width><height>44</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>46</left><top>0</top><width>184</width><height>44</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
         </itemlayout>
-        <focusedlayout width="240" height="44" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <control type="image"><left>0</left><top>0</top><width>240</width><height>44</height><texture colordiffuse="select">fill.png</texture></control>
+        <focusedlayout width="236" height="44" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image"><left>0</left><top>0</top><width>236</width><height>44</height><texture colordiffuse="select">fill.png</texture></control>
           <control type="image"><left>6</left><top>6</top><width>32</width><height>32</height><texture>$INFO[ListItem.Icon]</texture></control>
-          <control type="label"><left>46</left><top>0</top><width>188</width><height>44</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>46</left><top>0</top><width>184</width><height>44</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
         </focusedlayout>
-        <itemlayout width="240" height="28">
+        <itemlayout width="236" height="28">
           <control type="image"><left>6</left><top>6</top><width>16</width><height>16</height><texture>$INFO[ListItem.Icon]</texture></control>
-          <control type="label"><left>30</left><top>0</top><width>204</width><height>28</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>30</left><top>0</top><width>200</width><height>28</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
         </itemlayout>
-        <focusedlayout width="240" height="28">
-          <control type="image"><left>0</left><top>0</top><width>240</width><height>28</height><texture colordiffuse="select">fill.png</texture></control>
+        <focusedlayout width="236" height="28">
+          <control type="image"><left>0</left><top>0</top><width>236</width><height>28</height><texture colordiffuse="select">fill.png</texture></control>
           <control type="image"><left>6</left><top>6</top><width>16</width><height>16</height><texture>$INFO[ListItem.Icon]</texture></control>
-          <control type="label"><left>30</left><top>0</top><width>204</width><height>28</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>30</left><top>0</top><width>200</width><height>28</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
         </focusedlayout>
         <content>
           <item><label>$LOCALIZE[31971]</label><icon>icons24/folder.png</icon>
@@ -101,29 +102,34 @@
           </item>
         </content>
       </control>
-      <control type="image"><left>276</left><top>44</top><width>492</width><height>440</height><texture border="2" colordiffuse="facetint">panel_sunken.png</texture></control>
+      <control type="scrollbar" id="201">
+        <left>258</left><top>47</top><width>18</width><height>434</height>
+        <onleft>200</onleft>
+        <onright>210</onright>
+      </control>
+      <control type="image"><left>296</left><top>44</top><width>472</width><height>440</height><texture border="2" colordiffuse="facetint">panel_sunken.png</texture></control>
       <control type="list" id="210">
-        <left>279</left><top>47</top><width>462</width><height>434</height>
+        <left>299</left><top>47</top><width>442</width><height>434</height>
         <onleft>200</onleft><onright>211</onright>
         <pagecontrol>211</pagecontrol>
         <scrolltime tween="linear">0</scrolltime>
-        <itemlayout width="462" height="44" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+        <itemlayout width="442" height="44" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image"><left>6</left><top>6</top><width>32</width><height>32</height><texture>$INFO[ListItem.Icon]</texture></control>
-          <control type="label"><left>46</left><top>0</top><width>410</width><height>44</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>46</left><top>0</top><width>390</width><height>44</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
         </itemlayout>
-        <focusedlayout width="462" height="44" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <control type="image"><left>0</left><top>0</top><width>462</width><height>44</height><texture colordiffuse="select">fill.png</texture></control>
+        <focusedlayout width="442" height="44" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image"><left>0</left><top>0</top><width>442</width><height>44</height><texture colordiffuse="select">fill.png</texture></control>
           <control type="image"><left>6</left><top>6</top><width>32</width><height>32</height><texture>$INFO[ListItem.Icon]</texture></control>
-          <control type="label"><left>46</left><top>0</top><width>410</width><height>44</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>46</left><top>0</top><width>390</width><height>44</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
         </focusedlayout>
-        <itemlayout width="462" height="28">
+        <itemlayout width="442" height="28">
           <control type="image"><left>6</left><top>6</top><width>16</width><height>16</height><texture>$INFO[ListItem.Icon]</texture></control>
-          <control type="label"><left>30</left><top>0</top><width>426</width><height>28</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>30</left><top>0</top><width>406</width><height>28</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
         </itemlayout>
-        <focusedlayout width="462" height="28">
-          <control type="image"><left>0</left><top>0</top><width>462</width><height>28</height><texture colordiffuse="select">fill.png</texture></control>
+        <focusedlayout width="442" height="28">
+          <control type="image"><left>0</left><top>0</top><width>442</width><height>28</height><texture colordiffuse="select">fill.png</texture></control>
           <control type="image"><left>6</left><top>6</top><width>16</width><height>16</height><texture>$INFO[ListItem.Icon]</texture></control>
-          <control type="label"><left>30</left><top>0</top><width>426</width><height>28</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>30</left><top>0</top><width>406</width><height>28</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
         </focusedlayout>
         <content>
           <item><label>$LOCALIZE[342]</label><icon>icons24/movies.png</icon>
@@ -959,6 +965,17 @@
             <onclick>Skin.SetString(tile.$INFO[Skin.String(edit.slot)].icon,desktop_edit)</onclick>
             <onclick>Skin.Reset(tile.$INFO[Skin.String(edit.slot)].image)</onclick>
             <onclick>Skin.SetString(tile.$INFO[Skin.String(edit.slot)].action,"ActivateWindow(1120)")</onclick>
+            <onclick>Skin.Reset(tile.$INFO[Skin.String(edit.slot)].addon)</onclick>
+            <onclick>Dialog.Close(1122)</onclick>
+            <visible>String.IsEqual(Container(200).ListItem.Property(id),settings)</visible></item>
+          <item><label>$LOCALIZE[31976]</label><icon>icons24/power.png</icon>
+            <onclick>Skin.Reset(tile.$INFO[Skin.String(edit.slot)].id)</onclick>
+            <onclick>Skin.SetString(tile.$INFO[Skin.String(edit.slot)].lid,31976)</onclick>
+            <onclick>Skin.Reset(tile.$INFO[Skin.String(edit.slot)].pre)</onclick>
+            <onclick>Skin.Reset(tile.$INFO[Skin.String(edit.slot)].name)</onclick>
+            <onclick>Skin.SetString(tile.$INFO[Skin.String(edit.slot)].icon,power)</onclick>
+            <onclick>Skin.Reset(tile.$INFO[Skin.String(edit.slot)].image)</onclick>
+            <onclick>Skin.SetString(tile.$INFO[Skin.String(edit.slot)].action,"ActivateWindow(ShutdownMenu)")</onclick>
             <onclick>Skin.Reset(tile.$INFO[Skin.String(edit.slot)].addon)</onclick>
             <onclick>Dialog.Close(1122)</onclick>
             <visible>String.IsEqual(Container(200).ListItem.Property(id),settings)</visible></item>

@@ -3,6 +3,7 @@
 # Run from Skin settings:
 #   RunScript(special://skin/scripts/backup.py,backup)
 #   RunScript(special://skin/scripts/backup.py,restore)
+#   RunScript(special://skin/scripts/backup.py,reset)
 #
 # A backup is one small XML file holding every skin setting (the desktop
 # tiles, grid size, pointer, bars, clock) plus Kodi's look-and-feel choices
@@ -26,8 +27,13 @@ SETTINGS = "special://profile/addon_data/%s/settings.xml" % SKIN
 BACKUPS = "special://profile/addon_data/%s/backups/" % SKIN
 KODI_SETTINGS = ("lookandfeel.skincolors", "lookandfeel.font",
                  "lookandfeel.skintheme", "lookandfeel.skinzoom")
-# working values the skin sets while you use it; never backed up or restored
-TRANSIENT = ("edit.slot", "pick.addon", "home.flip", "swap.", "arthur.min")
+# working values the skin sets while you use it; never backed up or restored:
+# whole names, and name prefixes (swap.<field>; arthur.minwin / minpath /
+# mintitle / minicon, the window parked on the task bar)
+TRANSIENT = ("edit.slot", "pick.addon", "home.flip")
+TRANSIENT_PREFIX = ("swap.", "arthur.min")
+# kept by Reset: a touch-only box would be hard to use without them
+KEEP_ON_RESET = ("touchmode", "touch.pointer.show", "touch.pointer.hide")
 
 
 def L(sid):
@@ -35,7 +41,11 @@ def L(sid):
 
 
 def transient(name):
-    return any(name == t or (t.endswith(".") and name.startswith(t)) for t in TRANSIENT)
+    return name in TRANSIENT or name.startswith(TRANSIENT_PREFIX)
+
+
+def same_path(a, b):
+    return xbmcvfs.translatePath(a).rstrip("/\\") == xbmcvfs.translatePath(b).rstrip("/\\")
 
 
 def read_xml(path):
@@ -48,8 +58,11 @@ def read_xml(path):
 
 
 def current_settings():
-    """{name: (type, value)} as Kodi last saved them."""
-    root = read_xml(SETTINGS)
+    """{name: (type, value)} as Kodi last saved them; None if unreadable."""
+    try:
+        root = read_xml(SETTINGS)
+    except ET.ParseError:
+        return None
     out = {}
     if root is None:
         return out
@@ -66,19 +79,33 @@ def rpc(method, **params):
 
 
 def backup():
+    """True once a backup file is written."""
     # Kodi saves skin settings half a second after the last change
     xbmc.sleep(1000)
     xbmcvfs.mkdirs(BACKUPS)
-    folder = xbmcgui.Dialog().browse(3, L(31981), "files", "", False, False, BACKUPS)
-    if not folder:
-        return
+    # a cancelled folder browser returns its starting folder unchanged
+    # (Dialog::browseSingle), so Cancel and OK on the backups folder look the
+    # same: ask where first, and browse only from the sources (default "")
+    where = xbmcgui.Dialog().select(L(31981), [L(31869), L(657)])
+    if where < 0:
+        return False
+    if where == 0:
+        folder = BACKUPS
+    else:
+        folder = xbmcgui.Dialog().browse(3, L(31981), "files", "", False, False, "")
+        if not folder:
+            return False
+    settings = current_settings()
+    if settings is None:
+        xbmcgui.Dialog().ok(L(31979), L(31989))
+        return False
     root = ET.Element("arthuros_backup", version="1", skin=SKIN,
                       created=time.strftime("%Y-%m-%d %H:%M"))
     for sid in KODI_SETTINGS:
         res = rpc("Settings.GetSettingValue", setting=sid)
         if res is not None and "value" in res:
             ET.SubElement(root, "kodi", id=sid).text = json.dumps(res["value"])
-    for name, (kind, value) in sorted(current_settings().items()):
+    for name, (kind, value) in sorted(settings.items()):
         ET.SubElement(root, "setting", id=name, type=kind).text = value
     name = time.strftime("arthuros-settings-%Y-%m-%d-%H%M.xml")
     path = folder.rstrip("/\\") + "/" + name
@@ -89,8 +116,9 @@ def backup():
         f.close()
     if not ok:
         xbmcgui.Dialog().ok(L(31979), L(31989))
-        return
+        return False
     xbmcgui.Dialog().notification(L(31983), name, xbmcgui.NOTIFICATION_INFO, 4000)
+    return True
 
 
 def esc(v):
@@ -100,7 +128,9 @@ def esc(v):
 def restore():
     xbmcvfs.mkdirs(BACKUPS)
     path = xbmcgui.Dialog().browse(1, L(31982), "files", ".xml", False, False, BACKUPS)
-    if not path:
+    # Cancel hands back the starting folder; a confirmed pick is always a file
+    if not path or path.endswith(("/", "\\")) or same_path(path, BACKUPS) \
+            or not xbmcvfs.exists(path):
         return
     try:
         root = read_xml(path)
@@ -118,6 +148,8 @@ def restore():
         if name and not transient(name):
             want[name] = (s.get("type", "string"), s.text or "")
     have = current_settings()
+    if have is None:   # unreadable settings file: set everything from the backup
+        have = {}
 
     # only touch what differs: Kodi writes its settings file on every change
     cmds = []
@@ -154,9 +186,32 @@ def restore():
     xbmcgui.Dialog().notification(L(31984), "", xbmcgui.NOTIFICATION_INFO, 4000)
 
 
+def reset():
+    """Skin settings -> Reset skin settings: ask, offer a backup, keep Touch mode."""
+    # -1 closed, 0 Cancel, 1 Reset, 2 Back up first; Cancel has the focus
+    choice = xbmcgui.Dialog().yesnocustom(L(31865), L(31866), L(31867), L(222), L(13007),
+                                          0, xbmcgui.DLG_YESNO_NO_BTN)
+    if choice == 2:
+        if not backup():
+            return
+    elif choice != 1:
+        return
+    keep = [n for n in KEEP_ON_RESET if xbmc.getCondVisibility("Skin.HasSetting(%s)" % n)]
+    xbmc.executebuiltin("Skin.ResetSettings", True)
+    for name in keep:
+        xbmc.executebuiltin("Skin.SetBool(%s)" % name, True)
+    # home.init is now off, so the desktop lays out the shipped tiles when it
+    # next loads; there is nothing left for the 0.9.1 tile update to do
+    xbmc.executebuiltin("Skin.SetBool(home.v092)", True)
+    xbmc.executebuiltin("Skin.ToggleSetting(home.flip)", True)   # reload the desktop
+    xbmcgui.Dialog().notification(L(31870), "", xbmcgui.NOTIFICATION_INFO, 4000)
+
+
 if __name__ == "__main__":
     mode = sys.argv[1] if len(sys.argv) > 1 else ""
     if mode == "backup":
         backup()
     elif mode == "restore":
         restore()
+    elif mode == "reset":
+        reset()

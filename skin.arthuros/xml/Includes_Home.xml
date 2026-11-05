@@ -989,11 +989,11 @@
     <value condition="String.IsEqual(ListItem.Property(lid),31993)">$LOCALIZE[31993]</value>
     <value condition="String.IsEqual(ListItem.Property(lid),31996)">$LOCALIZE[31996]</value>
     <value condition="String.IsEqual(ListItem.Property(lid),31953)">$LOCALIZE[31953]</value>
+    <value condition="String.IsEqual(ListItem.Property(lid),31976)">$LOCALIZE[31976]</value>
     <value condition="String.IsEqual(ListItem.Property(lid),31990)">$LOCALIZE[31990]</value>
     <value condition="String.IsEqual(ListItem.Property(lid),20389)">$LOCALIZE[20389]</value>
     <value condition="String.IsEqual(ListItem.Property(lid),14022)">$LOCALIZE[14022]</value>
     <value condition="String.IsEqual(ListItem.Property(lid),8)">$LOCALIZE[8]</value>
-    <value condition="String.IsEqual(ListItem.Property(lid),31976)">$LOCALIZE[31976]</value>
     <value condition="String.IsEqual(ListItem.Property(lid),31954)">$LOCALIZE[31954]</value>
   </variable>
   <variable name="HomeTileNamePre">
@@ -1075,11 +1075,11 @@
     <value condition="String.IsEqual(Container(9000).ListItem.Property(lid),31993)">$LOCALIZE[31993]</value>
     <value condition="String.IsEqual(Container(9000).ListItem.Property(lid),31996)">$LOCALIZE[31996]</value>
     <value condition="String.IsEqual(Container(9000).ListItem.Property(lid),31953)">$LOCALIZE[31953]</value>
+    <value condition="String.IsEqual(Container(9000).ListItem.Property(lid),31976)">$LOCALIZE[31976]</value>
     <value condition="String.IsEqual(Container(9000).ListItem.Property(lid),31990)">$LOCALIZE[31990]</value>
     <value condition="String.IsEqual(Container(9000).ListItem.Property(lid),20389)">$LOCALIZE[20389]</value>
     <value condition="String.IsEqual(Container(9000).ListItem.Property(lid),14022)">$LOCALIZE[14022]</value>
     <value condition="String.IsEqual(Container(9000).ListItem.Property(lid),8)">$LOCALIZE[8]</value>
-    <value condition="String.IsEqual(Container(9000).ListItem.Property(lid),31976)">$LOCALIZE[31976]</value>
     <value condition="String.IsEqual(Container(9000).ListItem.Property(lid),31954)">$LOCALIZE[31954]</value>
   </variable>
   <variable name="HomeFocusNamePre">
@@ -1161,11 +1161,11 @@
     <value condition="String.IsEqual(Container(1150).ListItem.Property(lid),31993)">$LOCALIZE[31993]</value>
     <value condition="String.IsEqual(Container(1150).ListItem.Property(lid),31996)">$LOCALIZE[31996]</value>
     <value condition="String.IsEqual(Container(1150).ListItem.Property(lid),31953)">$LOCALIZE[31953]</value>
+    <value condition="String.IsEqual(Container(1150).ListItem.Property(lid),31976)">$LOCALIZE[31976]</value>
     <value condition="String.IsEqual(Container(1150).ListItem.Property(lid),31990)">$LOCALIZE[31990]</value>
     <value condition="String.IsEqual(Container(1150).ListItem.Property(lid),20389)">$LOCALIZE[20389]</value>
     <value condition="String.IsEqual(Container(1150).ListItem.Property(lid),14022)">$LOCALIZE[14022]</value>
     <value condition="String.IsEqual(Container(1150).ListItem.Property(lid),8)">$LOCALIZE[8]</value>
-    <value condition="String.IsEqual(Container(1150).ListItem.Property(lid),31976)">$LOCALIZE[31976]</value>
     <value condition="String.IsEqual(Container(1150).ListItem.Property(lid),31954)">$LOCALIZE[31954]</value>
   </variable>
   <variable name="EditTileNamePre">
@@ -1209,5 +1209,10 @@
     <value condition="String.IsEqual(Container(9000).ListItem.Property(lid),8)">$LOCALIZE[31940]</value>
     <value condition="String.IsEqual(Container(9000).ListItem.Property(lid),1036)">$LOCALIZE[31939]</value>
     <value>$LOCALIZE[31951]</value>
+  </variable>
+  <variable name="TouchPointerVar">
+    <value condition="Skin.HasSetting(touch.pointer.show)">$LOCALIZE[20422]</value>
+    <value condition="Skin.HasSetting(touch.pointer.hide)">$LOCALIZE[20420]</value>
+    <value>$LOCALIZE[16316]</value>
   </variable>
 </includes>

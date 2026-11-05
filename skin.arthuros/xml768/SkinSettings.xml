@@ -203,13 +203,16 @@
         <texture>fill_black.png</texture>
       </control>
 
-      <control type="grouplist">
-        <left>20</left><top>116</top><width>560</width><height>564</height>
+      <!-- 15 rows: 532 px normally, 772 in Touch mode, against 396; the
+           scrollbar (98) shows there is more and can be dragged by touch -->
+      <control type="grouplist" id="99">
+        <left>20</left><top>116</top><width>530</width><height>564</height>
         <orientation>vertical</orientation><itemgap>4</itemgap>
-        <onup>9100</onup><ondown>9100</ondown>
+        <onup>9100</onup><ondown>9100</ondown><onright>98</onright>
+        <pagecontrol>98</pagecontrol>
 
         <control type="radiobutton" id="100">
-          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <width>530</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <align>left</align><textoffsetx>12</textoffsetx>
           <label>$LOCALIZE[31919]</label>
@@ -217,7 +220,7 @@
           <selected>Skin.HasSetting(hidemenubar)</selected>
         </control>
         <control type="radiobutton" id="101">
-          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <width>530</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <align>left</align><textoffsetx>12</textoffsetx>
           <label>$LOCALIZE[31920]</label>
@@ -225,15 +228,17 @@
           <selected>Skin.HasSetting(hidetaskbar)</selected>
         </control>
         <control type="radiobutton" id="102">
-          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <width>530</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <align>left</align><textoffsetx>12</textoffsetx>
           <label>$LOCALIZE[31921]</label>
           <onclick>Skin.ToggleSetting(hideclock)</onclick>
           <selected>Skin.HasSetting(hideclock)</selected>
         </control>
+        <!-- the only reader of autoscroll is the textbox default in Defaults.xml:
+             long descriptions scroll by themselves (list labels never did) -->
         <control type="radiobutton" id="103">
-          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <width>530</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <align>left</align><textoffsetx>12</textoffsetx>
           <label>$LOCALIZE[31910]</label>
@@ -241,7 +246,7 @@
           <selected>Skin.HasSetting(autoscroll)</selected>
         </control>
         <control type="radiobutton" id="113">
-          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <width>530</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <align>left</align><textoffsetx>12</textoffsetx>
           <label>$LOCALIZE[31995]</label>
@@ -253,12 +258,12 @@
         <!-- a heading, but it still needs an id: the grouplist chains Up/Down
              by id, and an id-less child stops the keyboard here -->
         <control type="label" id="105">
-          <width>560</width><include content="Height_28_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <width>530</width><include content="Height_28_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_28" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <font>bold</font><label>$LOCALIZE[31924]</label>
         </control>
         <control type="radiobutton" id="106">
-          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <width>530</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <align>left</align><textoffsetx>12</textoffsetx>
           <label>$LOCALIZE[31925]</label>
@@ -266,7 +271,7 @@
           <selected>String.IsEmpty(Skin.String(pointer))</selected>
         </control>
         <control type="radiobutton" id="107">
-          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <width>530</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <align>left</align><textoffsetx>12</textoffsetx>
           <label>$LOCALIZE[31926]</label>
@@ -274,58 +279,84 @@
           <selected>String.IsEqual(Skin.String(pointer),classic)</selected>
         </control>
         <control type="radiobutton" id="108">
-          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <width>530</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <align>left</align><textoffsetx>12</textoffsetx>
           <label>$LOCALIZE[31927]</label>
           <onclick>Skin.SetString(pointer,inverse)</onclick>
           <selected>String.IsEqual(Skin.String(pointer),inverse)</selected>
         </control>
+        <!-- Touch mode pointer: Auto (mousewatch.py looks for a mouse), Always,
+             Never. Each tap steps on; all conditions are read before any action -->
+        <control type="button" id="114">
+          <width>530</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[31868]</label>
+          <label2>$VAR[TouchPointerVar]</label2>
+          <onclick condition="!Skin.HasSetting(touch.pointer.show) + !Skin.HasSetting(touch.pointer.hide)">Skin.SetBool(touch.pointer.show)</onclick>
+          <onclick condition="Skin.HasSetting(touch.pointer.show)">Skin.Reset(touch.pointer.show)</onclick>
+          <onclick condition="Skin.HasSetting(touch.pointer.show)">Skin.SetBool(touch.pointer.hide)</onclick>
+          <onclick condition="Skin.HasSetting(touch.pointer.hide)">Skin.Reset(touch.pointer.hide)</onclick>
+        </control>
         <control type="button" id="109">
-          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <width>530</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <align>left</align><textoffsetx>12</textoffsetx>
           <label>$LOCALIZE[31928]</label>
           <onclick>ActivateWindow(InterfaceSettings)</onclick>
         </control>
         <control type="button" id="110">
-          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <width>530</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <align>left</align><textoffsetx>12</textoffsetx>
           <label>$LOCALIZE[31953]</label>
           <onclick>ActivateWindow(1120)</onclick>
         </control>
         <control type="button" id="111">
-          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <width>530</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <align>left</align><textoffsetx>12</textoffsetx>
           <label>$LOCALIZE[31979]</label>
           <onclick>RunScript(special://skin/scripts/backup.py,backup)</onclick>
         </control>
         <control type="button" id="112">
-          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <width>530</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <align>left</align><textoffsetx>12</textoffsetx>
           <label>$LOCALIZE[31980]</label>
           <onclick>RunScript(special://skin/scripts/backup.py,restore)</onclick>
         </control>
+        <!-- asks first (Reset / Back up first / Cancel) and keeps Touch mode -->
         <control type="button" id="104">
-          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <width>530</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <align>left</align><textoffsetx>12</textoffsetx>
-          <label>$LOCALIZE[409]</label>
-          <onclick>Skin.ResetSettings</onclick>
+          <label>$LOCALIZE[31865]...</label>
+          <onclick>RunScript(special://skin/scripts/backup.py,reset)</onclick>
         </control>
+      </control>
+      <control type="scrollbar" id="98">
+        <left>556</left><top>116</top><width>18</width><height>564</height>
+        <onleft>99</onleft><onright>97</onright><onup>9100</onup><ondown>9100</ondown>
       </control>
 
       <control type="image">
         <left>600</left><top>116</top><width>380</width><height>564</height>
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
+      <!-- the help runs past the box with Extra large fonts: drag 97, or it
+           scrolls by itself while its scrollbar is not focused -->
       <control type="textbox">
-        <left>612</left><top>126</top><width>356</width><height>544</height>
+        <left>612</left><top>126</top><width>326</width><height>544</height>
         <font>small</font>
+        <pagecontrol>97</pagecontrol>
+        <autoscroll delay="6000" time="4000" repeat="8000">!Control.HasFocus(97)</autoscroll>
         <label>$LOCALIZE[31922]</label>
+      </control>
+      <control type="scrollbar" id="97">
+        <left>946</left><top>126</top><width>18</width><height>544</height>
+        <onleft>98</onleft><onup>9100</onup><ondown>9100</ondown>
       </control>
     </control>
 

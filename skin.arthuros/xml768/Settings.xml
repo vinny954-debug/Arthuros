@@ -308,6 +308,10 @@
             <property name="bar">accent1</property>
             <onclick>RunScript(special://skin/scripts/netbt.py)</onclick>
             <visible>!System.HasAddon(service.libreelec.settings) + System.Platform.Linux + !System.Platform.Android</visible></item>
+          <!-- Shut down / Reboot: at most 15 items show, which the 5 x 3 panel holds -->
+          <item><label>$LOCALIZE[31976]</label><icon>icons64/power.png</icon>
+            <property name="bar">accent1</property>
+            <onclick>ActivateWindow(ShutdownMenu)</onclick></item>
         </content>
       </control>
     </control>

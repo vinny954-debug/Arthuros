@@ -86,6 +86,20 @@ chk "xml768 version stamp matches"      'grep -q "(v$VER)" $S/xml768/Home.xml'
 :
 :
 # ===== P6 desktop & skin settings =====
+chk "D-1 power menu in the Settings hub"      'grep -q "<onclick>ActivateWindow(ShutdownMenu)</onclick>" $S/xml/Settings.xml'
+chk "D-1 power menu in the desktop Settings"  'grep -A2 "icons24/power.png" $S/xml/Home.xml | grep -q "Property(id),settings)"'
+chk "D-2 skin reset asks first"               '! grep -q "<onclick>Skin.ResetSettings</onclick>" $S/xml/SkinSettings.xml $S/xml768/SkinSettings.xml && grep -q "backup.py,reset" $S/xml/SkinSettings.xml && grep -q "yesnocustom" $S/scripts/backup.py && grep -q "KEEP_ON_RESET" $S/scripts/backup.py'
+chk "D-3 rename never stores (empty)"         'grep -qF "Property(name)) + !String.IsEmpty(Container(1150).ListItem.Property(lid))" $S/xml/Custom_1121_DesktopTile.xml'
+chk "D-3 name-only slots stay off the desktop" 'grep -qF "<visible>[!String.IsEmpty(Skin.String(tile.1.id)) | !String.IsEmpty(Skin.String(tile.1.action))]" $S/xml/Home.xml'
+chk "D-4 tile group list has a scrollbar"     'grep -A4 "type=\"list\" id=\"200\"" $S/xml/Custom_1122_DesktopChoose.xml | grep -q "<pagecontrol>201</pagecontrol>" && grep -q "type=\"scrollbar\" id=\"201\"" $S/xml/Custom_1122_DesktopChoose.xml'
+chk "D-5 autoscroll setting says what it does" 'grep -A1 "\"#31910\"" $S/language/resource.language.en_gb/strings.po | grep -q "Scroll long descriptions"'
+chk "D-6 backup/restore recognise Cancel"     'grep -q "same_path(path, BACKUPS)" $S/scripts/backup.py && grep -q "Dialog().select(L(31981)" $S/scripts/backup.py'
+chk "D-7 parked-window state is transient"    'grep -q "TRANSIENT_PREFIX = (\"swap.\", \"arthur.min\")" $S/scripts/backup.py && grep -q "startswith(TRANSIENT_PREFIX)" $S/scripts/backup.py'
+chk "T-10 skin settings list scrolls"         'for d in xml xml768; do grep -A4 "type=\"grouplist\" id=\"99\"" $S/$d/SkinSettings.xml | grep -q "<pagecontrol>98</pagecontrol>" && grep -q "type=\"scrollbar\" id=\"98\"" $S/$d/SkinSettings.xml || exit 1; done'
+chk "T-5 skin help text scrolls"              'grep -q "<pagecontrol>97</pagecontrol>" $S/xml/SkinSettings.xml && grep -q "type=\"scrollbar\" id=\"97\"" $S/xml/SkinSettings.xml'
+chk "touch pointer choice in skin settings"   'grep -q "Skin.SetBool(touch.pointer.show)" $S/xml/SkinSettings.xml && grep -q "Skin.SetBool(touch.pointer.hide)" $S/xml/SkinSettings.xml && grep -q "name=\"TouchPointerVar\"" $S/xml/Includes_Home.xml'
+chk "L-2 Customise desktop rows fit at XL"    'test $(grep -c "Height_30_XL" $S/xml/Custom_1120_DesktopEditor.xml) -eq 9 && ! grep -q "Height_34" $S/xml/Custom_1120_DesktopEditor.xml'
+chk "L-4 icon picker cells fill the well"     'grep -q "itemlayout width=\"74\" height=\"68\"" $S/xml/Custom_1123_DesktopIcon.xml && grep -q "<left>763</left>" $S/xml/Custom_1123_DesktopIcon.xml'
 :
 :
 # ===== P7 browsers & info =====
