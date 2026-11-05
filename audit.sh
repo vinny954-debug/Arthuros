@@ -350,12 +350,40 @@ chk "L-4 icon picker cells fill the well"     'grep -q "itemlayout width=\"74\" 
 :
 :
 # ===== P7 browsers & info =====
+chk "T-6 media toolbar 9490 / second row 9491: finger-sized hit areas" 'python3 -c "
+import glob,lxml.etree as E,sys
+n=0
+for f in glob.glob(\"$S/xml768/*.xml\"):
+  for g in E.parse(f).xpath(\"//control[@type=\x27grouplist\x27][@id=\x279490\x27 or @id=\x279491\x27]\"):
+    for c in g.xpath(\"control[@type=\x27button\x27 or @type=\x27radiobutton\x27]\"):
+      h=c.find(\"hitrect\"); n+=1
+      if h is None or int(h.get(\"w\"))!=int(c.findtext(\"width\"))+4 or int(h.get(\"h\"))<34: sys.exit(1)
+r=E.parse(\"$S/xml/Includes_Media.xml\")
+inc=r.xpath(\"//include[@name=\x27Media_Toolbar\x27 or starts-with(@name,\x27Media_Extras_\x27)]//control[@type=\x27button\x27 or @type=\x27radiobutton\x27]\")
+sys.exit(0 if n>=100 and inc and all(c.find(\"hitrect\") is not None for c in inc) else 1)"'
+chk "T-6 toolbar hit areas stop at the title bar and the views" 'python3 -c "
+import lxml.etree as E,sys
+r=E.parse(\"$S/xml/Includes_Media.xml\")
+t=r.xpath(\"//control[@id=\x279490\x27]\")[0]; x=r.xpath(\"//control[@id=\x279491\x27]\")[0]
+ty,xy=int(t.findtext(\"top\")),int(x.findtext(\"top\"))
+ok=all(ty+int(h.get(\"y\"))>=30 and ty+int(h.get(\"y\"))+int(h.get(\"h\"))<=xy for h in t.xpath(\"control/hitrect\"))
+ok=ok and all(xy+int(h.get(\"y\"))>=ty+int(t.findtext(\"height\")) and xy+int(h.get(\"y\"))+int(h.get(\"h\"))<=102 for h in r.xpath(\"//include[starts-with(@name,\x27Media_Extras_\x27)]//hitrect\"))
+sys.exit(0 if ok else 1)"'
+chk "C-1 media list/tile focused labels keep textinv when marked" 'python3 -c "
+import re,sys
+bad=0
+for f in sys.argv[1:]:
+  s=open(f).read()
+  for blk in re.findall(r\"<focusedlayout.*?</focusedlayout>\",s,re.S)+re.findall(r\"<include name=.Arthur_FocusedLayout.*?</include>\",s,re.S):
+    bad+=sum(1 for l in re.findall(r\"<control type=.label.>.*?</control>\",blk,re.S) if \"textinv\" in l and \"<selectedcolor>textinv\" not in l)
+sys.exit(1 if bad else 0)" $S/xml/Includes_Lists.xml $S/xml/View_50_List.xml $S/xml/View_51_Poster.xml $S/xml/View_52_IconWall.xml $S/xml/Includes_Media.xml'
+chk "K-3 recordings: no channel-group 28 (Kodi ignores the group there)" '! grep -q "id=\"28\"" $S/xml768/MyPVRRecordings.xml && grep -q "id=\"28\"" $S/xml768/MyPVRChannels.xml && ! grep -q "pending a decision" $(dirname $S)/validate.py'
 chk "C-3 info dialogs focus the button row 9001, not a button Kodi may hide" '(for d in xml xml768; do for f in DialogVideoInfo DialogMusicInfo DialogPVRInfo; do grep -q "<defaultcontrol always=\"true\">9001</defaultcontrol>" $S/$d/$f.xml && grep -q "type=\"grouplist\" id=\"9001\"" $S/$d/$f.xml || exit 1; done; done)'
 chk "B-1 status marks are not offered as desktop tile icons" '! grep -q "status_" $S/xml/Custom_1123_DesktopIcon.xml && ! grep -q "status_" $S/xml768/Custom_1123_DesktopIcon.xml'
 chk "K-3 add-on folders fill the second row (Refresh / start page)" '(for d in xml xml768; do python3 -c "import lxml.etree as E,sys; r=E.parse(\"$S/$d/Includes_Media.xml\"); sys.exit(0 if all(r.xpath(\"//include[@name=\x27%s\x27]/control[@id=\x27%s\x27][contains(visible,\x27Container.PluginName\x27)]\"%(n,i)) for n in (\"Media_Extras_VideoNav\",\"Media_Extras_MusicNav\") for i in (\"9503\",\"9504\")) else 1)" || exit 1; done; grep -q "Container.Update(plugin://\$INFO\[Container.PluginName\]/)" $S/xml/Includes_Media.xml)'
 chk "K-3 PVR channels/recordings show Kodi header 29 (Hidden / Deleted) in the title" '(for d in xml xml768; do python3 -c "import lxml.etree as E,sys; r=E.parse(\"$S/$d/Includes_Media.xml\"); sys.exit(0 if all(r.xpath(\"//include[@name=\x27%s\x27]/control[@id=\x2729\x27][@type=\x27label\x27]\"%n) for n in (\"Media_Extras_PVRChannels\",\"Media_Extras_PVRRecordings\")) else 1)" || exit 1; grep -q "Control.GetLabel(29)" $S/$d/Includes_Media.xml && grep -q "value=\"\$PARAM\[label2\]\"" $S/$d/Includes_Media.xml || exit 1; for w in MyPVRChannels MyPVRRecordings; do grep -q "Media_PVRTitle2Var" $S/$d/$w.xml || exit 1; done; done)'
 chk "T-1 Options focuses the view before ContextMenu" '(for f in $S/xml768/My*.xml $S/xml768/AddonBrowser.xml; do grep -q "id=\"9501\"" $f || continue; grep -A6 "id=\"9501\"" $f | tr -d "\n " | grep -q "SetFocus(50)</onclick><onclick>Action(ContextMenu)" || exit 1; done)'
-chk "S-7 sort order button shows Container.SortOrder" 'grep -A2 "type=\"button\" id=\"4\"" $S/xml/Includes_Media.xml | grep -q "VAR.MediaSortOrderVar" && grep -A1 "name=\"MediaSortOrderVar\"" $S/xml/Includes_Media.xml | grep -q "INFO.Container.SortOrder"'
+chk "S-7 sort order button shows Container.SortOrder" 'grep -A4 "type=\"button\" id=\"4\"" $S/xml/Includes_Media.xml | grep -q "VAR.MediaSortOrderVar" && grep -A1 "name=\"MediaSortOrderVar\"" $S/xml/Includes_Media.xml | grep -q "INFO.Container.SortOrder"'
 chk "S-7 every view names itself (viewtype)" 'grep -q "<viewtype label=\"535\">list" $S/xml/View_50_List.xml && grep -q "<viewtype label=\"20021\">icon" $S/xml/View_51_Poster.xml && grep -q "<viewtype label=\"536\">bigicon" $S/xml/View_52_IconWall.xml'
 chk "S-7 file browser Mirror image (416) is labelled" 'grep -A1 "id=\"416\"" $S/xml/FileBrowser.xml | grep -q "LOCALIZE\[749\]" && grep -A1 "id=\"416\"" $S/xml768/FileBrowser.xml | grep -q "LOCALIZE\[749\]"'
 chk "B-6 item count label has no id 12 (Kodi overwrites it)" '! grep -q "type=\"label\" id=\"12\"" $S/xml/Includes_Media.xml && grep -q "VAR\[MediaCountVar\]" $S/xml/Includes_Media.xml'
