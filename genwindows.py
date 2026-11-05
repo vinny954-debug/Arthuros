@@ -898,26 +898,48 @@ def small_dialogs():
       "      </control>\n"
       "    </control>\n  </controls>\n</window>\n")
 
-    out["DialogBusy"] = (H + "<window>\n  <zorder>5</zorder>\n  <controls>\n"
-      "    <include>Dialog_Dim</include>\n"
+    # GUIDialogBusy.cpp has no label or progress API at all: it opens, runs
+    # the render loop and closes. Its OnBack sets m_cancelled, which
+    # WaitOnEvent(allowCancel) honours - so a Cancel button that sends Back
+    # is all a touch user needs. busydialognocancel loads this same file and
+    # ignores the flag, so it gets the box without the button.
+    def busy_box(cancel):
+        ht = 148 if cancel else 92
+        s  = "    <control type=\"group\">\n"
+        s += f"      <visible>{'' if cancel else '!'}Window.IsActive(busydialog)</visible>\n"
+        s += "      <centerleft>50%</centerleft><centertop>50%</centertop>\n"
+        s += f"      <width>360</width><height>{ht}</height>\n"
+        s += "      <include content=\"Dialog_Box\">\n"
+        s += f"        <param name=\"width\" value=\"360\" /><param name=\"height\" value=\"{ht}\" />\n"
+        s += "        <param name=\"innerwidth\" value=\"354\" /><param name=\"icon\" value=\"icons24/clock.png\" />\n"
+        s += "        <param name=\"title\" value=\"$LOCALIZE[503]\" />\n"
+        s += "        <param name=\"boxes\" value=\"none\" />\n"
+        s += "      </include>\n"
+        s += "      <control type=\"image\">\n"
+        s += "        <left>20</left><top>44</top><width>32</width><height>32</height>\n"
+        s += "        <texture>icons24/clock.png</texture>\n"
+        s += "      </control>\n"
+        s += "      <control type=\"label\">\n"
+        s += "        <left>62</left><top>40</top><width>278</width><height>40</height>\n"
+        s += "        <aligny>center</aligny><font>bold</font><label>$LOCALIZE[20186]</label>\n"
+        s += "      </control>\n"
+        if cancel:
+            s += "      <control type=\"button\" id=\"9810\">\n"
+            s += "        <left>90</left><top>90</top><width>180</width><height>44</height>\n"
+            s += "        <align>center</align><label>$LOCALIZE[222]</label>\n"
+            s += "        <onclick>Action(Back)</onclick>\n"
+            s += "        <onup>9810</onup><ondown>9810</ondown><onleft>9810</onleft><onright>9810</onright>\n"
+            s += "      </control>\n"
+        return s + "    </control>\n"
+    out["DialogBusy"] = (H + "<window>\n  <zorder>5</zorder>\n"
+      "  <defaultcontrol always=\"true\">9810</defaultcontrol>\n  <controls>\n"
+      "    <!-- no dimming over a playing video (Estuary does the same) -->\n"
       "    <control type=\"group\">\n"
-      "      <centerleft>50%</centerleft><centertop>50%</centertop>\n"
-      "      <width>360</width><height>120</height>\n"
-      "      <include content=\"Dialog_Box\">\n"
-      "        <param name=\"width\" value=\"360\" /><param name=\"height\" value=\"120\" />\n"
-      "        <param name=\"innerwidth\" value=\"354\" /><param name=\"icon\" value=\"icons24/program.png\" />\n"
-      "        <param name=\"title\" value=\"$LOCALIZE[503]\" />\n"
-      "        <param name=\"boxes\" value=\"none\" />\n"
-      "      </include>\n"
-      "      <control type=\"label\">\n"
-      "        <left>12</left><top>40</top><width>336</width><height>26</height>\n"
-      "        <align>center</align><font>bold</font><label>$LOCALIZE[20186]</label>\n"
-      "      </control>\n"
-      "      <control type=\"progress\">\n"
-      "        <left>16</left><top>74</top><width>328</width><height>22</height>\n"
-      "        <info>Window(busydialog).Property(Busy.Progress)</info>\n"
-      "      </control>\n"
-      "    </control>\n  </controls>\n</window>\n")
+      "      <visible>!Window.IsVisible(fullscreenvideo) + !Window.IsVisible(fullscreengame)</visible>\n"
+      "      <include>Dialog_Dim</include>\n"
+      "    </control>\n"
+      + busy_box(True) + busy_box(False) +
+      "  </controls>\n</window>\n")
 
     # Kodi reports volume as decibels (Player.Volume as a label is "-31.4 dB"),
     # which reads as a strange negative number and was cut off under the larger
@@ -991,16 +1013,39 @@ def small_dialogs():
     out["DialogSlider"] = dialog("DialogSlider", 532, 158, body, default="11",
                                  icon="icons24/settings.png")
 
-    body = ("      <control type=\"label\" id=\"30\">\n"
-            "        <left>16</left><top>40</top><width>540</width><height>26</height>\n"
-            "        <font>bold</font>\n      </control>\n"
-            "      <control type=\"label\" id=\"31\">\n"
-            "        <left>16</left><top>68</top><width>540</width><height>22</height>\n"
-            "        <font>small</font><textcolor>textdim</textcolor>\n      </control>\n"
-            "      <control type=\"progress\" id=\"32\">\n"
-            "        <left>16</left><top>98</top><width>540</width><height>22</height>\n      </control>\n")
-    out["DialogExtendedProgressBar"] = dialog("DialogExtendedProgressBar", 572, 142, body,
-                                              icon="icons24/program.png", heading=True)
+    # CGUIDialogExtendedProgressBar is MODELESS (input carries on below it)
+    # and opens for any background job - library scans, EPG import, add-on
+    # installs - even during playback. Kodi fills 30 (job), 31 (step) and 32
+    # (progress) only. So no dimming and no centred box: a small window in the
+    # bottom-right corner above the task bar, out of the way of the
+    # notification (top right), and hidden over full-screen video, games,
+    # the visualisation and the picture viewer. Hiding it is harmless: it is
+    # modeless and closes itself.
+    out["DialogExtendedProgressBar"] = (H + "<window>\n  <controls>\n"
+      "    <control type=\"group\">\n"
+      "      <right>10</right><bottom>40</bottom><width>380</width><height>88</height>\n"
+      "      <visible>![Window.IsVisible(fullscreenvideo) | Window.IsVisible(fullscreengame) | Window.IsVisible(visualisation) | Window.IsVisible(slideshow)]</visible>\n"
+      "      <include content=\"Win_Frame\"><param name=\"width\" value=\"380\" /><param name=\"height\" value=\"88\" /></include>\n"
+      "      <control type=\"group\">\n"
+      "        <left>3</left><top>3</top>\n"
+      "        <include content=\"Win_Title\">\n"
+      "          <param name=\"width\" value=\"374\" /><param name=\"colour\" value=\"accent2\" />\n"
+      "          <param name=\"icon\" value=\"icons24/download.png\" />\n"
+      "          <param name=\"boxes\" value=\"none\" />\n"
+      "          <param name=\"label\" value=\"$INFO[Control.GetLabel(30)]\" />\n"
+      "        </include>\n"
+      "      </control>\n"
+      "      <control type=\"label\" id=\"30\">\n"
+      "        <left>-3000</left><top>0</top><width>300</width><height>22</height>\n"
+      "      </control>\n"
+      "      <control type=\"label\" id=\"31\">\n"
+      "        <left>12</left><top>34</top><width>356</width><height>24</height>\n"
+      "        <font>small</font><aligny>center</aligny>\n"
+      "      </control>\n"
+      "      <control type=\"progress\" id=\"32\">\n"
+      "        <left>12</left><top>62</top><width>356</width><height>16</height>\n"
+      "      </control>\n"
+      "    </control>\n  </controls>\n</window>\n")
 
     # Kodi picks the cursor by CONTROL ID, not by order: MOUSE_STATE_NORMAL = 1,
     # FOCUS 2, DRAG 3, CLICK 4 (xbmc/input/mouse/MouseStat.h). OnWindowLoaded
@@ -1431,35 +1476,167 @@ def fullscreen_video():
       "      <control type=\"label\" id=\"12\"><left>10</left><top>54</top><width>600</width><height>24</height><font>small</font></control>\n"
       "    </control>\n  </controls>\n</window>\n")
 
+# Skin timers (Kodi 20+, CSkinTimerManager): Timers.xml is read from the
+# skin's resolution folder (CSkinInfo::LoadTimers -> GetSkinPath), so
+# tallpass copies it into xml768 like any non-window file. A timer whose
+# <start reset="true"> condition never holds is started only by
+# Skin.TimerStart, which then restarts it from zero (CSkinTimer::Start ->
+# StartZero) - exactly a "hide N seconds after the last tap" clock.
+SLIDEBAR = "arthur_slidebar"
+SLIDEBAR_ON = f"Skin.TimerIsRunning({SLIDEBAR})"
+
+def timers():
+    return (H + "<!-- GENERATED by genwindows.py -->\n<timers>\n"
+      "  <timer>\n"
+      f"    <name>{SLIDEBAR}</name>\n"
+      "    <description>Picture viewer: the touch control strip hides itself 5 s after the last tap</description>\n"
+      "    <start reset=\"true\">false</start>\n"
+      f"    <stop>!Window.IsActive(slideshow) | Window.IsVisible(pictureinfo) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs({SLIDEBAR}),5)</stop>\n"
+      "  </timer>\n"
+      "</timers>\n")
+
+def _slide_button(cid, left, glyphs, clicks, onleft, onright, w=72, h=52):
+    """A strip button with a 32 px glyph on it. glyphs: [(texture, visible)].
+    The images come after the button so they draw on top of it; an image
+    never takes the mouse, so taps still reach the button underneath."""
+    s  = f'        <control type="button" id="{cid}">\n'
+    s += f"          <left>{left}</left><top>8</top><width>{w}</width><height>{h}</height>\n"
+    s += f"          <label></label><onleft>{onleft}</onleft><onright>{onright}</onright>\n"
+    s += "".join(f"          <onclick>{c}</onclick>\n" for c in clicks)
+    s += "        </control>\n"
+    for tex, vis in glyphs:
+        s += (f'        <control type="image">\n'
+              f"          <left>{left + (w - 32) // 2}</left><top>{8 + (h - 32) // 2}</top><width>32</width><height>32</height>\n"
+              f"          <texture>{tex}</texture>\n")
+        if vis:
+            s += f"          <visible>{vis}</visible>\n"
+        s += "        </control>\n"
+    return s
+
 def slideshow():
-    return (H + "<window>\n  <controls>\n"
-      "    <control type=\"image\">\n      <left>0</left><top>0</top><width>1024</width><height>600</height>\n"
-      "      <texture>bar_dgrey.png</texture>\n    </control>\n"
-      "    <!-- Kodi renders the picture itself; the skin only adds the caption. -->\n"
+    """CGUIWindowSlideShow (GUIWindowSlideShow.cpp) clears to black, draws the
+    picture, then renders the skin's controls ON TOP - so nothing here may
+    cover the screen. Its OnAction keeps the arrow keys (previous / next /
+    pan) and the keymap turns Select into Rotate, so remote and keyboard never
+    reach a skin button; they keep Kodi's own keys. A one-finger tap is a
+    LeftClick (touchscreen.xml has no SlideShow tap), which reaches skin
+    buttons through CGUIDialog::OnAction -> OnMouseAction; gestures (swipe,
+    pinch, pan) fall through any button (CGUIButtonControl::OnMouseEvent
+    handles only clicks) to the window's own OnMouseEvent.
+    So: an invisible full-screen button shows a small control strip, and the
+    strip hides itself again by the arthur_slidebar skin timer."""
+    w("Timers", timers())
+    restart = f"Skin.TimerStart({SLIDEBAR})"
+    stop = f"Skin.TimerStop({SLIDEBAR})"
+    playing = "Slideshow.IsActive + !Slideshow.IsPaused"
+    W = 8 + 72 * 5 + 6 * 2 + 18 * 2 + 8     # prev play next | info | close
+    x = [8, 86, 164, 254, 344]
+    strip = (_slide_button(9801, x[0], [("icons24/prev.png", None)],
+                           ["Action(PreviousPicture)", restart], 9805, 9802)
+           + _slide_button(9802, x[1], [("icons24/pause.png", playing),
+                                        ("icons24/play.png", f"![{playing}]")],
+                           ["Action(Pause)", restart], 9801, 9803)
+           + _slide_button(9803, x[2], [("icons24/next.png", None)],
+                           ["Action(NextPicture)", restart], 9802, 9804)
+           + _slide_button(9804, x[3], [("icons24/pictures_info.png", None)],
+                           [stop, "Action(Info)"], 9803, 9805)
+           + _slide_button(9805, x[4], [("icons24/exit.png", None)],
+                           [stop, "Action(Stop)"], 9804, 9801))
+    return (H + "<window>\n"
+      "  <controls>\n"
+      "    <!-- Tap anywhere on the picture: show the strip, or hide it again. -->\n"
+      "    <control type=\"button\" id=\"9800\">\n"
+      "      <left>0</left><top>0</top><width>1024</width><height>600</height>\n"
+      "      <label></label><texturefocus /><texturenofocus />\n"
+      f"      <onclick condition=\"!{SLIDEBAR_ON}\">{restart}</onclick>\n"
+      f"      <onclick condition=\"{SLIDEBAR_ON}\">{stop}</onclick>\n"
+      "    </control>\n"
+      "    <!-- Kodi draws its 'unable to load' text in this label's font\n"
+      "         (CGUIWindowSlideShow::RenderErrorMessage, LABEL_ROW1). -->\n"
+      "    <control type=\"label\" id=\"10\">\n"
+      "      <left>-3000</left><top>0</top><width>10</width><height>10</height>\n"
+      "      <font>chromebold</font><label></label>\n"
+      "    </control>\n"
+      "    <!-- caption: with the strip, and whenever the slideshow is paused -->\n"
       "    <control type=\"group\">\n"
-      "      <left>6</left><top>568</top><width>1012</width><height>26</height>\n"
-      "      <visible>!Slideshow.IsPaused + Player.ShowInfo</visible>\n"
-      "      <include content=\"Win_Frame\"><param name=\"width\" value=\"1012\" /><param name=\"height\" value=\"26\" /></include>\n"
-      "      <control type=\"label\"><left>10</left><top>0</top><width>990</width><height>26</height>\n"
-      "        <font>small</font><label>$INFO[Slideshow.Filename]</label></control>\n"
-      "    </control>\n  </controls>\n</window>\n")
+      "      <left>4</left><top>4</top><width>1016</width><height>30</height>\n"
+      f"      <visible>{SLIDEBAR_ON} | Slideshow.IsPaused</visible>\n"
+      "      <include content=\"Win_Frame\"><param name=\"width\" value=\"1016\" /><param name=\"height\" value=\"30\" /></include>\n"
+      "      <control type=\"label\">\n"
+      "        <left>10</left><top>2</top><width>600</width><height>26</height>\n"
+      "        <font>chrome</font><aligny>center</aligny><label>$INFO[Slideshow.Filename]</label>\n"
+      "      </control>\n"
+      "      <control type=\"label\">\n"
+      "        <left>816</left><top>2</top><width>190</width><height>26</height>\n"
+      "        <font>chrome</font><align>right</align><aligny>center</aligny>\n"
+      "        <label>$INFO[Slideshow.SlideIndex]</label>\n"
+      "      </control>\n"
+      "      <control type=\"label\">\n"
+      "        <left>620</left><top>2</top><width>190</width><height>26</height>\n"
+      "        <font>chromebold</font><textcolor>marked</textcolor><align>right</align><aligny>center</aligny>\n"
+      "        <label>$LOCALIZE[112]</label><visible>Slideshow.IsPaused</visible>\n"
+      "      </control>\n"
+      "    </control>\n"
+      "    <!-- the strip: previous, play/pause, next | information | close -->\n"
+      "    <control type=\"group\">\n"
+      f"      <left>{(1024 - W) // 2}</left><bottom>8</bottom><width>{W}</width><height>68</height>\n"
+      f"      <visible>{SLIDEBAR_ON}</visible>\n"
+      f"      <include content=\"Win_Frame\"><param name=\"width\" value=\"{W}\" /><param name=\"height\" value=\"68\" /></include>\n"
+      + strip +
+      "    </control>\n"
+      "  </controls>\n</window>\n")
 
 def music_vis():
+    """CGUIWindowVisualisation passes the preset actions (next/previous/
+    random/lock) to control id 2 (CONTROL_VIS, GUIWindowVisualisation.cpp),
+    so the visualisation must carry that id. With no visualisation add-on
+    chosen (Visualisation.Enabled false) the screen would be black: show the
+    desktop, the fanart or a big cover instead, and keep the now-playing
+    panel up rather than letting Player.ShowInfo time it out."""
+    novis = "!Visualisation.Enabled"
     return (H + "<window>\n  <controls>\n"
-      "    <control type=\"visualisation\">\n"
+      "    <control type=\"group\">\n"
+      "      <left>0</left><top>0</top><width>1024</width><height>600</height>\n"
+      f"      <visible>{novis}</visible>\n"
+      "      <include>Chrome_Desktop</include>\n"
+      "      <control type=\"image\">\n"
+      "        <left>0</left><top>0</top><width>1024</width><height>600</height>\n"
+      "        <texture background=\"true\">$INFO[Player.Art(fanart)]</texture>\n"
+      "        <aspectratio>scale</aspectratio>\n"
+      "      </control>\n"
+      "    </control>\n"
+      "    <!-- no fanart either: the cover, large, in an Arthur frame. Centred by\n"
+      "         percentage, so the 4:3 layout centres it as well. -->\n"
+      "    <control type=\"group\">\n"
+      "      <centerleft>50%</centerleft><centertop>45%</centertop><width>312</width><height>312</height>\n"
+      f"      <visible>{novis} + String.IsEmpty(Player.Art(fanart))</visible>\n"
+      "      <include content=\"Win_Frame\"><param name=\"width\" value=\"312\" /><param name=\"height\" value=\"312\" /></include>\n"
+      "      <control type=\"image\">\n"
+      "        <left>6</left><top>6</top><width>300</width><height>300</height>\n"
+      "        <texture fallback=\"DefaultAudio.png\" background=\"true\">$INFO[Player.Art(thumb)]</texture>\n"
+      "        <aspectratio>keep</aspectratio>\n"
+      "      </control>\n"
+      "    </control>\n"
+      "    <control type=\"visualisation\" id=\"2\">\n"
       "      <left>0</left><top>0</top><width>1024</width><height>600</height>\n    </control>\n"
       "    <control type=\"group\">\n"
-      "      <left>6</left><top>480</top><width>1012</width><height>84</height>\n"
-      "      <visible>Player.ShowInfo</visible>\n"
-      "      <include content=\"Win_Frame\"><param name=\"width\" value=\"1012\" /><param name=\"height\" value=\"84\" /></include>\n"
-      "      <control type=\"image\"><left>6</left><top>6</top><width>72</width><height>72</height>\n"
+      "      <left>6</left><top>472</top><width>1012</width><height>92</height>\n"
+      f"      <visible>Player.ShowInfo | {novis}</visible>\n"
+      "      <include content=\"Win_Frame\"><param name=\"width\" value=\"1012\" /><param name=\"height\" value=\"92\" /></include>\n"
+      "      <control type=\"image\"><left>6</left><top>6</top><width>80</width><height>80</height>\n"
       "        <texture fallback=\"DefaultAudio.png\">$INFO[Player.Art(thumb)]</texture>\n"
       "        <aspectratio>keep</aspectratio></control>\n"
-      "      <control type=\"label\"><left>90</left><top>6</top><width>910</width><height>26</height>\n"
+      "      <control type=\"label\"><left>98</left><top>6</top><width>902</width><height>32</height>\n"
       "        <font>bigbold</font><label>$INFO[MusicPlayer.Title]</label></control>\n"
-      "      <control type=\"label\"><left>90</left><top>34</top><width>910</width><height>22</height>\n"
-      "        <font>small</font><label>$INFO[MusicPlayer.Artist] - $INFO[MusicPlayer.Album]</label></control>\n"
-      "      <control type=\"progress\"><left>90</left><top>58</top><width>910</width><height>18</height>\n"
+      "      <!-- artist and album only when there are some: radio and many\n"
+      "           streams have neither, and a bare ' - ' is all that showed -->\n"
+      "      <control type=\"label\"><left>98</left><top>40</top><width>902</width><height>26</height>\n"
+      "        <font>small</font><label>$INFO[MusicPlayer.Artist]$INFO[MusicPlayer.Album, - ]</label>\n"
+      "        <visible>!String.IsEmpty(MusicPlayer.Artist)</visible></control>\n"
+      "      <control type=\"label\"><left>98</left><top>40</top><width>902</width><height>26</height>\n"
+      "        <font>small</font><label>$INFO[MusicPlayer.Album]</label>\n"
+      "        <visible>String.IsEmpty(MusicPlayer.Artist)</visible></control>\n"
+      "      <control type=\"progress\"><left>98</left><top>70</top><width>902</width><height>16</height>\n"
       "        <info>Player.Progress</info></control>\n"
       "    </control>\n  </controls>\n</window>\n")
 
@@ -1589,6 +1766,28 @@ def generic(name, meta, as_dialog=False):
     return fullwindow(name, body, default=default, views=",".join(live))
 
 # ====================================================== subtitle search
+def _focus_row(cid, wd, ht, labels, extra=""):
+    """Focused-layout body for a list that shares its dialog with other
+    focusable controls. Kodi draws the focusedlayout for the selected item
+    even while the list itself has no focus; a select-coloured fill with
+    textinv labels is right only while it does. Unfocused, the current row
+    gets an outline and normal-coloured text, so it stays readable on the
+    white well (white on white before). labels: (left, width, attrs, label,
+    dim) - attrs are extra tags such as <align>right</align><font>small</font>."""
+    on, off = f"Control.HasFocus({cid})", f"!Control.HasFocus({cid})"
+    s  = (f'<control type="image"><left>0</left><top>0</top><width>{wd}</width><height>{ht}</height>'
+          f'<texture colordiffuse="select">fill.png</texture><visible>{on}</visible></control>\n')
+    s += (f'<control type="image"><left>0</left><top>0</top><width>{wd}</width><height>{ht}</height>'
+          f'<texture border="4" colordiffuse="select">select_ring.png</texture><visible>{off}</visible></control>\n')
+    s += extra
+    for l, w, attrs, lab, dim in labels:
+        base = (f'<control type="label"><left>{l}</left><top>0</top><width>{w}</width><height>{ht}</height>'
+                f'<aligny>center</aligny>{attrs}')
+        s += f'{base}<textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><label>{lab}</label><visible>{on}</visible></control>\n'
+        col = "textdim" if dim else "text"
+        s += f'{base}<textcolor>{col}</textcolor><label>{lab}</label><visible>{off}</visible></control>\n'
+    return textwrap.indent(s, " " * 10)
+
 def subtitles_dialog():
     """GUIDialogSubtitles.cpp: 150 the subtitle services (add-ons), 120 the
     subtitles the chosen service found, 100/110 that service's name and logo,
@@ -1613,10 +1812,9 @@ def subtitles_dialog():
           <control type="label"><left>32</left><top>0</top><width>228</width><height>28</height><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
         </itemlayout>
         <focusedlayout height="28" width="264">
-          <control type="image"><left>0</left><top>0</top><width>264</width><height>28</height><texture colordiffuse="select">fill.png</texture><visible>Control.HasFocus(150)</visible></control>
-          <control type="image"><left>2</left><top>2</top><width>24</width><height>24</height><texture>$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>
-          <control type="label"><left>32</left><top>0</top><width>228</width><height>28</height><aligny>center</aligny><textcolor>textinv</textcolor><label>$INFO[ListItem.Label]</label></control>
-        </focusedlayout>
+""" + _focus_row(150, 264, 28, [(32, 228, "", "$INFO[ListItem.Label]", False)],
+                 extra='<control type="image"><left>2</left><top>2</top><width>24</width><height>24</height>'
+                       '<texture>$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>\n') + """        </focusedlayout>
       </control>
       <control type="button" id="160">
         <left>18</left><top>414</top><width>264</width><height>34</height>
@@ -1642,10 +1840,8 @@ def subtitles_dialog():
           <control type="label"><left>410</left><top>0</top><width>140</width><height>28</height><aligny>center</aligny><align>right</align><font>small</font><textcolor>textdim</textcolor><label>$INFO[ListItem.Label]</label></control>
         </itemlayout>
         <focusedlayout height="28" width="556">
-          <control type="image"><left>0</left><top>0</top><width>556</width><height>28</height><texture colordiffuse="select">fill.png</texture><visible>Control.HasFocus(120)</visible></control>
-          <control type="label"><left>6</left><top>0</top><width>400</width><height>28</height><aligny>center</aligny><textcolor>textinv</textcolor><label>$INFO[ListItem.Label2]</label></control>
-          <control type="label"><left>410</left><top>0</top><width>140</width><height>28</height><aligny>center</aligny><align>right</align><font>small</font><textcolor>textinv</textcolor><label>$INFO[ListItem.Label]</label></control>
-        </focusedlayout>
+""" + _focus_row(120, 556, 28, [(6, 400, "", "$INFO[ListItem.Label2]", False),
+                                (410, 140, "<align>right</align><font>small</font>", "$INFO[ListItem.Label]", True)]) + """        </focusedlayout>
       </control>
       <control type="scrollbar" id="73">
         <left>864</left><top>70</top><width>18</width><height>378</height>
@@ -1654,6 +1850,126 @@ def subtitles_dialog():
 """
     return dialog("DialogSubtitles", 900, 466, b, default="150",
                   icon="icons24/video_subtitles.png", title="$LOCALIZE[24012]")
+
+# ====================================================== live TV channel list
+def _channel_row(ht, num_w, logo, f1, h1, f2, h2, focused):
+    """One row of the channel list: number, logo, name over what is on now,
+    and the programme's progress and times on the right. focused: the
+    selected row, filled while the list has focus and outlined while the
+    group buttons do (see _focus_row)."""
+    on, off = "Control.HasFocus(11)", "!Control.HasFocus(11)"
+    y1 = (ht - h1 - h2) // 2
+    y2 = y1 + h1
+    lx = 8 + num_w + 8
+    tx = lx + logo + 8
+    def labs(vis, inv):
+        c1 = "textinv" if inv else "text"
+        c2 = "textinv" if inv else "textdim"
+        sel = "<selectedcolor>textinv</selectedcolor>" if inv else ""
+        v = f"<visible>{vis}</visible>" if vis else ""
+        return (f'<control type="label"><left>4</left><top>0</top><width>{num_w}</width><height>{ht}</height>'
+                f'<font>{f1}</font><align>right</align><aligny>center</aligny><textcolor>{c1}</textcolor>{sel}'
+                f'<label>$INFO[ListItem.ChannelNumberLabel]</label>{v}</control>\n'
+                f'<control type="label"><left>{tx}</left><top>{y1}</top><width>{580 - tx}</width><height>{h1}</height>'
+                f'<font>{f1}</font><aligny>center</aligny><textcolor>{c1}</textcolor>{sel}'
+                f'<label>$INFO[ListItem.Label]</label>{v}</control>\n'
+                f'<control type="label"><left>{tx}</left><top>{y2}</top><width>{580 - tx}</width><height>{h2}</height>'
+                f'<font>{f2}</font><aligny>center</aligny><textcolor>{c2}</textcolor>{sel}'
+                f'<label>$INFO[ListItem.Title]</label>{v}</control>\n'
+                f'<control type="label"><left>596</left><top>{y2}</top><width>250</width><height>{h2}</height>'
+                f'<font>{f2}</font><align>right</align><aligny>center</aligny><textcolor>{c2}</textcolor>{sel}'
+                f'<label>$INFO[ListItem.StartTime]$INFO[ListItem.EndTime, - ,]</label>{v}</control>\n')
+    s = ""
+    if focused:
+        s += (f'<control type="image"><left>0</left><top>0</top><width>856</width><height>{ht}</height>'
+              f'<texture colordiffuse="select">fill.png</texture><visible>{on}</visible></control>\n'
+              f'<control type="image"><left>0</left><top>0</top><width>856</width><height>{ht}</height>'
+              f'<texture border="4" colordiffuse="select">select_ring.png</texture><visible>{off}</visible></control>\n')
+    s += (f'<control type="image"><left>{lx}</left><top>{(ht - logo) // 2}</top><width>{logo}</width><height>{logo}</height>'
+          f'<texture fallback="DefaultTVShows.png">$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>\n'
+          f'<control type="progress"><left>596</left><top>{y1 + (h1 - 12) // 2}</top><width>250</width><height>12</height>'
+          f'<info>ListItem.Progress</info><visible>!String.IsEmpty(ListItem.Title)</visible></control>\n')
+    if focused:
+        s += labs(on, True) + labs(off, False)
+    else:
+        s += labs(None, False)
+    return textwrap.indent(s, " " * 10)
+
+def pvr_channels_osd():
+    """The channel list over live TV (GUIDialogPVRChannelsOSD.cpp). Kodi binds
+    only list 11 (GUIDialogPVRItemsViewBase CONTROL_LIST) and writes no
+    heading and no label 2, so the title, the footer and every row are the
+    skin's own: channel number, logo, name, what is on now and how far in.
+    ACTION_PREVIOUS/NEXT_CHANNELGROUP switch the group in place (the dialog's
+    OnAction); the two footer buttons send them by touch."""
+    XLC = "[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"
+    C = "Container(11).ListItem"
+    b  = well(10, 36, 880, 352, "panel_sunken.png")
+    b += f"""      <control type="list" id="11">
+        <left>13</left><top>39</top><width>856</width><height>346</height>
+        <onleft>11</onleft><onright>60</onright><onup>11</onup><ondown>11</ondown>
+        <pagecontrol>60</pagecontrol><scrolltime tween="linear">0</scrolltime>
+        <itemlayout height="64" width="856" condition="{XLC}">
+{_channel_row(64, 60, 48, "normal", 30, "small", 28, False)}        </itemlayout>
+        <focusedlayout height="64" width="856" condition="{XLC}">
+{_channel_row(64, 60, 48, "bold", 30, "small", 28, True)}        </focusedlayout>
+        <itemlayout height="44" width="856">
+{_channel_row(44, 46, 36, "normal", 20, "small", 20, False)}        </itemlayout>
+        <focusedlayout height="44" width="856">
+{_channel_row(44, 46, 36, "bold", 20, "small", 20, True)}        </focusedlayout>
+      </control>
+      <control type="scrollbar" id="60">
+        <left>869</left><top>39</top><width>18</width><height>346</height>
+        <onleft>11</onleft><onright>9811</onright>
+      </control>
+"""
+    b += well(10, 394, 880, 96, "panel_sunken_grey.png")
+    b += f"""      <control type="label" id="2">
+        <left>20</left><top>400</top><width>640</width><height>26</height>
+        <font>bold</font><aligny>center</aligny><label>$INFO[{C}.Title]</label>
+      </control>
+      <control type="label">
+        <left>20</left><top>428</top><width>640</width><height>24</height>
+        <font>small</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$INFO[{C}.StartTime]$INFO[{C}.EndTime, - ,]$INFO[{C}.Label,  -  ,]</label>
+      </control>
+      <control type="label">
+        <left>20</left><top>456</top><width>640</width><height>24</height>
+        <font>small</font><aligny>center</aligny>
+        <label>$INFO[{C}.NextTitle,$LOCALIZE[19031]: ,]</label>
+      </control>
+      <control type="progress">
+        <left>680</left><top>404</top><width>190</width><height>14</height>
+        <info>{C}.Progress</info><visible>!String.IsEmpty({C}.Title)</visible>
+      </control>
+      <!-- channel group: previous / next (Kodi's own PreviousChannelGroup
+           and NextChannelGroup actions) -->
+      <control type="button" id="9811">
+        <left>680</left><top>430</top><width>48</width><height>48</height>
+        <label></label><onclick>Action(PreviousChannelGroup)</onclick>
+        <onleft>60</onleft><onright>9812</onright><onup>11</onup><ondown>11</ondown>
+      </control>
+      <control type="image">
+        <left>688</left><top>438</top><width>32</width><height>32</height>
+        <texture>icons24/prev.png</texture>
+      </control>
+      <control type="label">
+        <left>730</left><top>430</top><width>90</width><height>48</height>
+        <font>small</font><align>center</align><aligny>center</aligny><label>$LOCALIZE[19141]</label>
+      </control>
+      <control type="button" id="9812">
+        <left>822</left><top>430</top><width>48</width><height>48</height>
+        <label></label><onclick>Action(NextChannelGroup)</onclick>
+        <onleft>9811</onleft><onright>11</onright><onup>11</onup><ondown>11</ondown>
+      </control>
+      <control type="image">
+        <left>830</left><top>438</top><width>32</width><height>32</height>
+        <texture>icons24/next.png</texture>
+      </control>
+"""
+    return dialog("DialogPVRChannelsOSD", 900, 500, b, default="11", dim=False,
+                  icon="icons24/pvr_channels.png",
+                  title="$LOCALIZE[19019]$INFO[VideoPlayer.ChannelGroup, - ,]")
 
 # ====================================================== game controllers
 def _game_box(wd, ht, title, body, heading_id=None, boxes="dialog", down="3"):
@@ -1769,10 +2085,8 @@ def game_controllers():
           <control type="label"><left>420</left><top>0</top><width>410</width><height>34</height><aligny>center</aligny><align>right</align><font>small</font><textcolor>textdim</textcolor><label>$INFO[ListItem.Label2]</label></control>
         </itemlayout>
         <focusedlayout height="34" width="840">
-          <control type="image"><left>0</left><top>0</top><width>840</width><height>34</height><texture colordiffuse="select">fill.png</texture><visible>Control.HasFocus(3)</visible></control>
-          <control type="label"><left>10</left><top>0</top><width>400</width><height>34</height><aligny>center</aligny><textcolor>textinv</textcolor><label>$INFO[ListItem.Label]</label></control>
-          <control type="label"><left>420</left><top>0</top><width>410</width><height>34</height><aligny>center</aligny><align>right</align><font>small</font><textcolor>textinv</textcolor><label>$INFO[ListItem.Label2]</label></control>
-        </focusedlayout>
+{_focus_row(3, 840, 34, [(10, 400, "", "$INFO[ListItem.Label]", False),
+                         (420, 410, "<align>right</align><font>small</font>", "$INFO[ListItem.Label2]", True)])}        </focusedlayout>
       </control>
       <control type="scrollbar" id="62">
         <left>866</left><top>42</top><width>18</width><height>318</height>
@@ -1806,9 +2120,7 @@ def game_controllers():
           <control type="label"><left>10</left><top>0</top><width>820</width><height>34</height><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
         </itemlayout>
         <focusedlayout height="34" width="840">
-          <control type="image"><left>0</left><top>0</top><width>840</width><height>34</height><texture colordiffuse="select">fill.png</texture><visible>Control.HasFocus(7)</visible></control>
-          <control type="label"><left>10</left><top>0</top><width>820</width><height>34</height><aligny>center</aligny><textcolor>textinv</textcolor><label>$INFO[ListItem.Label]</label></control>
-        </focusedlayout>
+{_focus_row(7, 840, 34, [(10, 820, "", "$INFO[ListItem.Label]", False)])}        </focusedlayout>
       </control>
       <control type="scrollbar" id="61">
         <left>866</left><top>82</top><width>18</width><height>278</height>
@@ -1823,7 +2135,7 @@ def game_controllers():
     inc  = H + "<!-- GENERATED by genwindows.py: the three layouts DialogGameControllers.xml picks from -->\n<includes>\n"
     inc += "  <include name=\"Arthur_GameControllers\">\n" + _game_box(1000, 566, "$LOCALIZE[35058]", ctl) + "  </include>\n"
     inc += "  <include name=\"Arthur_GamePorts\">\n" + _game_box(900, 420, None, ports, heading_id=2) + "  </include>\n"
-    inc += "  <include name=\"Arthur_GameAgents\">\n" + _game_box(900, 420, "$LOCALIZE[35110]", agents) + "  </include>\n"
+    inc += "  <include name=\"Arthur_GameAgents\">\n" + _game_box(900, 420, "$LOCALIZE[35172]", agents) + "  </include>\n"
     inc += "</includes>\n"
     win  = (H + "<window>\n  <defaultcontrol always=\"true\">3</defaultcontrol>\n  <controls>\n"
             "    <include>Dialog_Dim</include>\n"
@@ -1861,6 +2173,7 @@ def main():
     written["DialogAddonInfo"] = addon_info_dialog()
     written["DialogGameControllers"] = game_controllers()
     written["DialogSubtitles"] = subtitles_dialog()
+    written["DialogPVRChannelsOSD"] = pvr_channels_osd()
 
     count = 0
     for name, meta in INV.items():

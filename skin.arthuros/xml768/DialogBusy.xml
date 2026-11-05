@@ -1,17 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <window>
   <zorder>5</zorder>
+  <defaultcontrol always="true">9810</defaultcontrol>
   <controls>
-    <control type="image">
+    <!-- no dimming over a playing video (Estuary does the same) -->
+    <control type="group">
+      <visible>!Window.IsVisible(fullscreenvideo) + !Window.IsVisible(fullscreengame)</visible>
+      <control type="image">
       <left>0</left><top>0</top><width>1024</width><height>768</height>
       <texture>dim.png</texture>
     </control>
+    </control>
     <control type="group">
+      <visible>Window.IsActive(busydialog)</visible>
       <centerleft>50%</centerleft><centertop>50%</centertop>
-      <width>360</width><height>120</height>
+      <width>360</width><height>148</height>
       <control type="image">
         <left>0</left><top>0</top>
-        <width>360</width><height>120</height>
+        <width>360</width><height>148</height>
         <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
       </control>
       <control type="group">
@@ -57,13 +63,80 @@
         <control type="group"/>
       </control>
       </control>
-      <control type="label">
-        <left>12</left><top>40</top><width>336</width><height>26</height>
-        <align>center</align><font>bold</font><label>$LOCALIZE[20186]</label>
+      <control type="image">
+        <left>20</left><top>44</top><width>32</width><height>32</height>
+        <texture>icons24/clock.png</texture>
       </control>
-      <control type="progress">
-        <left>16</left><top>74</top><width>328</width><height>22</height>
-        <info>Window(busydialog).Property(Busy.Progress)</info>
+      <control type="label">
+        <left>62</left><top>40</top><width>278</width><height>40</height>
+        <aligny>center</aligny><font>bold</font><label>$LOCALIZE[20186]</label>
+      </control>
+      <control type="button" id="9810">
+        <left>90</left><top>90</top><width>180</width><height>44</height>
+        <align>center</align><label>$LOCALIZE[222]</label>
+        <onclick>Action(Back)</onclick>
+        <onup>9810</onup><ondown>9810</ondown><onleft>9810</onleft><onright>9810</onright>
+      </control>
+    </control>
+    <control type="group">
+      <visible>!Window.IsActive(busydialog)</visible>
+      <centerleft>50%</centerleft><centertop>50%</centertop>
+      <width>360</width><height>92</height>
+      <control type="image">
+        <left>0</left><top>0</top>
+        <width>360</width><height>92</height>
+        <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+      </control>
+      <control type="group">
+        <left>3</left><top>3</top>
+        <control type="group">
+        <width>354</width><height>26</height>
+
+        <control type="image">
+          <left>0</left><top>0</top>
+          <width>354</width><height>26</height>
+          <texture colordiffuse="accent2">fill.png</texture>
+        </control>
+        <!-- hard 1px rule under the bar, the way Arthur draws it -->
+        <control type="image">
+          <left>0</left><bottom>0</bottom>
+          <width>354</width><height>1</height>
+          <texture>fill_black.png</texture>
+        </control>
+
+        <control type="image">
+          <left>4</left><top>5</top><width>16</width><height>16</height>
+          <texture>icons24/clock.png</texture>
+        </control>
+
+        <!-- left + right with no width: Kodi derives the width, so the title
+             stops before the window boxes instead of running underneath them -->
+        <control type="label">
+          <left>26</left><right>100</right><top>0</top><height>26</height>
+          <align>left</align><aligny>center</aligny>
+          <font>chromebold</font><textcolor>titletext</textcolor>
+          <label>$LOCALIZE[503]</label>
+        </control>
+
+        <control type="label">
+          <right>100</right><top>0</top><width>460</width><height>26</height>
+          <align>right</align><aligny>center</aligny>
+          <font>chromesmall</font><textcolor>titletext</textcolor>
+          <label></label>
+        </control>
+
+        <!-- The window boxes. Which set a title bar gets is chosen by the
+             "boxes" parameter: window, dialog, home or none. -->
+        <control type="group"/>
+      </control>
+      </control>
+      <control type="image">
+        <left>20</left><top>44</top><width>32</width><height>32</height>
+        <texture>icons24/clock.png</texture>
+      </control>
+      <control type="label">
+        <left>62</left><top>40</top><width>278</width><height>40</height>
+        <aligny>center</aligny><font>bold</font><label>$LOCALIZE[20186]</label>
       </control>
     </control>
   </controls>

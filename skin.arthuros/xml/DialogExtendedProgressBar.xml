@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
   <controls>
-    <include>Dialog_Dim</include>
     <control type="group">
-      <centerleft>50%</centerleft><centertop>50%</centertop>
-      <width>572</width><height>142</height>
-      <include content="Dialog_Box">
-        <param name="width" value="572" /><param name="height" value="142" />
-        <param name="innerwidth" value="566" />
-        <param name="icon" value="icons24/download.png" /><param name="colour" value="accent2" />
-        <param name="down" value="" />
-        <param name="boxes" value="none" />
-      </include>
-      <include content="Dialog_Heading"><param name="width" value="466" /></include>
+      <right>10</right><bottom>40</bottom><width>380</width><height>88</height>
+      <visible>![Window.IsVisible(fullscreenvideo) | Window.IsVisible(fullscreengame) | Window.IsVisible(visualisation) | Window.IsVisible(slideshow)]</visible>
+      <include content="Win_Frame"><param name="width" value="380" /><param name="height" value="88" /></include>
+      <control type="group">
+        <left>3</left><top>3</top>
+        <include content="Win_Title">
+          <param name="width" value="374" /><param name="colour" value="accent2" />
+          <param name="icon" value="icons24/download.png" />
+          <param name="boxes" value="none" />
+          <param name="label" value="$INFO[Control.GetLabel(30)]" />
+        </include>
+      </control>
       <control type="label" id="30">
-        <left>16</left><top>40</top><width>540</width><height>26</height>
-        <font>bold</font>
+        <left>-3000</left><top>0</top><width>300</width><height>22</height>
       </control>
       <control type="label" id="31">
-        <left>16</left><top>68</top><width>540</width><height>22</height>
-        <font>small</font><textcolor>textdim</textcolor>
+        <left>12</left><top>34</top><width>356</width><height>24</height>
+        <font>small</font><aligny>center</aligny>
       </control>
       <control type="progress" id="32">
-        <left>16</left><top>98</top><width>540</width><height>22</height>
+        <left>12</left><top>62</top><width>356</width><height>16</height>
       </control>
     </control>
   </controls>

@@ -1,32 +1,28 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <window>
   <controls>
-    <control type="image">
-      <left>0</left><top>0</top><width>1024</width><height>768</height>
-      <texture>dim.png</texture>
-    </control>
     <control type="group">
-      <centerleft>50%</centerleft><centertop>50%</centertop>
-      <width>572</width><height>142</height>
+      <right>10</right><bottom>40</bottom><width>380</width><height>88</height>
+      <visible>![Window.IsVisible(fullscreenvideo) | Window.IsVisible(fullscreengame) | Window.IsVisible(visualisation) | Window.IsVisible(slideshow)]</visible>
       <control type="image">
         <left>0</left><top>0</top>
-        <width>572</width><height>142</height>
+        <width>380</width><height>88</height>
         <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
       </control>
       <control type="group">
         <left>3</left><top>3</top>
         <control type="group">
-        <width>566</width><height>26</height>
+        <width>374</width><height>26</height>
 
         <control type="image">
           <left>0</left><top>0</top>
-          <width>566</width><height>26</height>
+          <width>374</width><height>26</height>
           <texture colordiffuse="accent2">fill.png</texture>
         </control>
         <!-- hard 1px rule under the bar, the way Arthur draws it -->
         <control type="image">
           <left>0</left><bottom>0</bottom>
-          <width>566</width><height>1</height>
+          <width>374</width><height>1</height>
           <texture>fill_black.png</texture>
         </control>
 
@@ -41,7 +37,7 @@
           <left>26</left><right>100</right><top>0</top><height>26</height>
           <align>left</align><aligny>center</aligny>
           <font>chromebold</font><textcolor>titletext</textcolor>
-          <label></label>
+          <label>$INFO[Control.GetLabel(30)]</label>
         </control>
 
         <control type="label">
@@ -56,21 +52,15 @@
         <control type="group"/>
       </control>
       </control>
-      <control type="label" id="1">
-        <left>29</left><top>3</top><width>466</width><height>26</height>
-        <font>chromebold</font><textcolor>titletext</textcolor>
-        <align>left</align><aligny>center</aligny>
-      </control>
       <control type="label" id="30">
-        <left>16</left><top>40</top><width>540</width><height>26</height>
-        <font>bold</font>
+        <left>-3000</left><top>0</top><width>300</width><height>22</height>
       </control>
       <control type="label" id="31">
-        <left>16</left><top>68</top><width>540</width><height>22</height>
-        <font>small</font><textcolor>textdim</textcolor>
+        <left>12</left><top>34</top><width>356</width><height>24</height>
+        <font>small</font><aligny>center</aligny>
       </control>
       <control type="progress" id="32">
-        <left>16</left><top>98</top><width>540</width><height>22</height>
+        <left>12</left><top>62</top><width>356</width><height>16</height>
       </control>
     </control>
   </controls>
