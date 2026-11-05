@@ -106,6 +106,7 @@
         <left>258</left><top>47</top><width>18</width><height>434</height>
         <onleft>200</onleft>
         <onright>210</onright>
+        <hitrect x="254" y="47" w="28" h="434" />
       </control>
       <control type="image"><left>296</left><top>44</top><width>472</width><height>440</height><texture border="2" colordiffuse="facetint">panel_sunken.png</texture></control>
       <control type="list" id="210">
@@ -1326,6 +1327,7 @@
         <left>744</left><top>47</top><width>18</width><height>434</height>
         <onleft>210</onleft>
         <onright>200</onright>
+        <hitrect x="740" y="47" w="28" h="434" />
       </control>
     </control>
   </controls>

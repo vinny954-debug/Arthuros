@@ -38,15 +38,16 @@
       <control type="label">
         <left>20</left><top>72</top><width>960</width><height>22</height>
         <font>small</font><textcolor>textdim</textcolor>
-        <label>v0.9.6  -  1024x600  -  Tamzen 8x16  -  $LOCALIZE[31948]</label>
+        <label>v0.9.6  -  1024x600  -  $VAR[SkinFontVar]  -  $LOCALIZE[31948]</label>
       </control>
       <control type="image">
         <left>20</left><top>102</top><width>960</width><height>1</height>
         <texture>fill_black.png</texture>
       </control>
 
-      <!-- 15 rows: 532 px normally, 772 in Touch mode, against 396; the
-           scrollbar (98) shows there is more and can be dragged by touch -->
+      <!-- 15 rows: 532 px normally, 820 in Touch mode (with the task-bar
+           hint 115), against 396; the scrollbar (98) shows there is more
+           and can be dragged by touch (30 px wide with taller rows) -->
       <control type="grouplist" id="99">
         <left>20</left><top>116</top><width>530</width><height>396</height>
         <orientation>vertical</orientation><itemgap>4</itemgap>
@@ -68,6 +69,17 @@
           <label>$LOCALIZE[31920]</label>
           <onclick>Skin.ToggleSetting(hidetaskbar)</onclick>
           <selected>Skin.HasSetting(hidetaskbar)</selected>
+        </control>
+        <!-- Touch mode: a hidden task bar still leaves a Back button at the
+             bottom right (Chrome_Taskbar 9107). Not focusable, but it needs
+             an id so the grouplist's Up/Down chain passes over it -->
+        <control type="label" id="115">
+          <width>530</width><include content="Height_28_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_28" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <font>small</font><textcolor>textdim</textcolor><textoffsetx>24</textoffsetx>
+          <aligny>center</aligny>
+          <label>$LOCALIZE[31872]</label>
+          <visible>Skin.HasSetting(touchmode)</visible>
         </control>
         <control type="radiobutton" id="102">
           <width>530</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
@@ -179,7 +191,7 @@
         </control>
       </control>
       <control type="scrollbar" id="98">
-        <left>556</left><top>116</top><width>18</width><height>396</height>
+        <left>556</left><top>116</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="18" /></include><height>396</height>
         <onleft>99</onleft><onright>97</onright><onup>9100</onup><ondown>9100</ondown>
       </control>
 

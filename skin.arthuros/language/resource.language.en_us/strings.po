@@ -78,8 +78,8 @@ msgid "Hide the date and clock"
 msgstr ""
 
 msgctxt "#31922"
-msgid "ArthurOS draws Kodi as a 16-colour desktop: a menu bar at the top, a task bar at the bottom, and every screen as a bevelled window with a coloured title bar.[CR][CR]Everything is reachable with a remote. Up and Down move through a list, Left steps out to the toolbar, and Down past the last row drops onto the task bar.[CR][CR]The bitmap font is only crisp at 12, 14, 16 and 20 pixels, or exactly twice those. The Extra large fonts use the doubled sizes and switch lists to taller rows.[CR][CR]Touch mode makes every list and menu row taller for fingers, puts a Back button on the task bar where the clock was, and hides the pointer unless a mouse is plugged in."
-msgstr "ArthurOS draws Kodi as a 16-color desktop: a menu bar at the top, a task bar at the bottom, and every screen as a beveled window with a colored title bar.[CR][CR]Everything is reachable with a remote. Up and Down move through a list, Left steps out to the toolbar, and Down past the last row drops onto the task bar.[CR][CR]The bitmap font is only crisp at 12, 14, 16 and 20 pixels, or exactly twice those. The Extra large fonts use the doubled sizes and switch lists to taller rows.[CR][CR]Touch mode makes every list and menu row taller for fingers, puts a Back button on the task bar where the clock was, and hides the pointer unless a mouse is plugged in."
+msgid "ArthurOS draws Kodi as a 16-colour desktop: a menu bar at the top, a task bar at the bottom, and every screen as a bevelled window with a coloured title bar.[CR][CR]Everything is reachable with a remote. Up and Down move through a list, Left steps out to the toolbar, and Down past the last row drops onto the task bar.[CR][CR]The bitmap font is only crisp at 12, 14, 16 and 20 pixels, or exactly twice those. The Extra large fonts use the doubled sizes and switch lists to taller rows.[CR][CR]Touch mode makes every list and menu row taller for fingers and hides the pointer unless a mouse is plugged in (Pointer in Touch mode can keep it shown or hidden). It puts a Back button at the bottom right: on the task bar where the clock was, in every pop-up, and on its own when the task bar is hidden.[CR][CR]In a pop-up, a long press or a two-finger tap on an empty spot also works as Back, and a two-finger swipe to the left goes Back anywhere."
+msgstr "ArthurOS draws Kodi as a 16-color desktop: a menu bar at the top, a task bar at the bottom, and every screen as a beveled window with a colored title bar.[CR][CR]Everything is reachable with a remote. Up and Down move through a list, Left steps out to the toolbar, and Down past the last row drops onto the task bar.[CR][CR]The bitmap font is only crisp at 12, 14, 16 and 20 pixels, or exactly twice those. The Extra large fonts use the doubled sizes and switch lists to taller rows.[CR][CR]Touch mode makes every list and menu row taller for fingers and hides the pointer unless a mouse is plugged in (Pointer in Touch mode can keep it shown or hidden). It puts a Back button at the bottom right: on the task bar where the clock was, in every pop-up, and on its own when the task bar is hidden.[CR][CR]In a pop-up, a long press or a two-finger tap on an empty spot also works as Back, and a two-finger swipe to the left goes Back anywhere."
 
 msgctxt "#31923"
 msgid "Large"
@@ -455,6 +455,11 @@ msgstr ""
 # ===== P5 strings: 31855-31864 =====
 
 # ===== P6 strings: 31865-31874 =====
+
+#. Skin settings, under "Hide the task bar" (shown in Touch mode only)
+msgctxt "#31872"
+msgid "Touch mode keeps a Back button"
+msgstr ""
 
 msgctxt "#31865"
 msgid "Reset skin settings"

@@ -925,6 +925,24 @@
   <include name="Home_Refresh">
     <control type="image"><left>0</left><top>0</top><width>1</width><height>1</height><texture>fill.png</texture><visible>false</visible></control>
   </include>
+  <include name="Settings_HubLayouts">
+    <itemlayout width="198" height="218">
+      <control type="image"><left>3</left><top>3</top><width>192</width><height>212</height><texture border="2" colordiffuse="facetint">panel_raised.png</texture></control>
+      <control type="image"><left>6</left><top>6</top><width>186</width><height>14</height><texture colordiffuse="accent1">fill.png</texture><visible>String.IsEqual(ListItem.Property(bar),accent1)</visible></control>
+      <control type="image"><left>6</left><top>6</top><width>186</width><height>14</height><texture colordiffuse="accent2">fill.png</texture><visible>String.IsEqual(ListItem.Property(bar),accent2)</visible></control>
+      <control type="image"><left>67</left><top>38</top><width>64</width><height>64</height><texture>icons64/$INFO[ListItem.Property(ico)].png</texture></control>
+      <control type="textbox"><left>10</left><top>112</top><width>178</width><height>94</height><font>bold</font><textcolor>text</textcolor><align>center</align><aligny>center</aligny><autoscroll>false</autoscroll><label>$INFO[ListItem.Label]</label></control>
+    </itemlayout>
+    <focusedlayout width="198" height="218">
+      <control type="image"><left>3</left><top>3</top><width>192</width><height>212</height><texture border="2" colordiffuse="facetint">panel_raised.png</texture></control>
+      <control type="image"><left>6</left><top>6</top><width>186</width><height>14</height><texture colordiffuse="accent1">fill.png</texture><visible>String.IsEqual(ListItem.Property(bar),accent1)</visible></control>
+      <control type="image"><left>6</left><top>6</top><width>186</width><height>14</height><texture colordiffuse="accent2">fill.png</texture><visible>String.IsEqual(ListItem.Property(bar),accent2)</visible></control>
+      <control type="image"><left>67</left><top>38</top><width>64</width><height>64</height><texture>icons64/$INFO[ListItem.Property(ico)].png</texture></control>
+      <control type="image"><left>8</left><top>110</top><width>182</width><height>98</height><texture colordiffuse="accent1">fill.png</texture></control>
+      <control type="textbox"><left>10</left><top>112</top><width>178</width><height>94</height><font>bold</font><textcolor>textinv</textcolor><align>center</align><aligny>center</aligny><autoscroll>false</autoscroll><label>$INFO[ListItem.Label]</label></control>
+      <control type="image"><left>3</left><top>3</top><width>192</width><height>212</height><texture border="4" colordiffuse="accent1">select_ring.png</texture></control>
+    </focusedlayout>
+  </include>
   <variable name="HomeTileName">
     <value condition="!String.IsEmpty(ListItem.Property(name))">$INFO[ListItem.Property(name)]</value>
     <value condition="String.IsEmpty(ListItem.Property(lid))">$LOCALIZE[31961]</value>
@@ -1214,5 +1232,15 @@
     <value condition="Skin.HasSetting(touch.pointer.show)">$LOCALIZE[20422]</value>
     <value condition="Skin.HasSetting(touch.pointer.hide)">$LOCALIZE[20420]</value>
     <value>$LOCALIZE[16316]</value>
+  </variable>
+  <variable name="SkinFontVar">
+    <value condition="String.IsEqual(Skin.Font,Unicode)">$LOCALIZE[31895]</value>
+    <value condition="String.IsEqual(Skin.Font,Large)">Tamzen 10x20</value>
+    <value condition="String.IsEqual(Skin.Font,LargeBold)">Tamzen 10x20 bold</value>
+    <value condition="String.IsEqual(Skin.Font,ExtraLarge)">Tamzen 14x28</value>
+    <value condition="String.IsEqual(Skin.Font,ExtraLargeBold)">Tamzen 14x28 bold</value>
+    <value condition="String.IsEqual(Skin.Font,Compact)">Tamzen 7x14</value>
+    <value condition="String.IsEqual(Skin.Font,Bold)">Tamzen 8x16 bold</value>
+    <value>Tamzen 8x16</value>
   </variable>
 </includes>
