@@ -11,6 +11,7 @@ real size, against the space its control actually leaves for text:
                   (a textbox: every word fits, and the wrapped lines fit
                   its height)
 Labels driven by $INFO/$VAR are runtime text and cannot be checked here."""
+import collections
 import os, re, glob, sys
 import xml.etree.ElementTree as ET
 from PIL import ImageFont
@@ -35,11 +36,22 @@ for fs in ET.parse(os.path.join(XML, "Font.xml")).getroot().findall("fontset"):
 # GetTextWidthInternal); style bold widens each by size/24 (SetGlyphStrength).
 # vendor/kodi/arial-advances.json holds arial.ttf's advance widths.
 import json, math
+ADV_JSON = os.path.join(os.path.dirname(KODI_PO), "arial-advances.json")
+_ADV = json.load(open(ADV_JSON)) if os.path.exists(ADV_JSON) else None
+SKIPPED, MEASURED_BY_TABLE = [], []
 for p in sorted(glob.glob(os.path.join(SKIN, "fonts", "*.xml"))):
     for fs in ET.parse(p).getroot().findall("fontset"):
-        FONTSETS[fs.get("id")] = {f.findtext("name"): (f.findtext("filename"), int(f.findtext("size")),
-                                                      (f.findtext("style") or "")) for f in fs.findall("font")}
-_ADV = json.load(open(os.path.join(os.path.dirname(KODI_PO), "arial-advances.json")))
+        fonts = {f.findtext("name"): (f.findtext("filename"), int(f.findtext("size")),
+                                      (f.findtext("style") or "")) for f in fs.findall("font")}
+        files = {fn for fn, _, _ in fonts.values()}
+        shipped = all(os.path.exists(os.path.join(SKIN, "fonts", fn)) for fn in files)
+        if shipped:
+            FONTSETS[fs.get("id")] = fonts
+        elif files == {"arial.ttf"} and _ADV:
+            FONTSETS[fs.get("id")] = fonts
+            MEASURED_BY_TABLE.append(fs.get("id"))
+        else:   # a face neither shipped nor tabulated: say so rather than guess
+            SKIPPED.append(f"{fs.get('id')} ({', '.join(sorted(files))}: no font file or advance table)")
 def measure_kodi(text, size, bold):
     adv, upem = _ADV["adv"], _ADV["upem"]
     worst = 0
@@ -101,10 +113,25 @@ def get(c, tag, params, fallback=None):
     return v.strip() if v else fallback
 
 def resolve_text(t):
+    # GUIControlFactory: a label that is a natural number is a string id
+    # (<label>7</label> shows "File manager"), so measure what Kodi shows
+    if t.strip().isdigit():
+        return STR.get(int(t.strip()), "?" * 8)
     t = re.sub(r"\$LOCALIZE\[(\d+)\]", lambda m: STR.get(int(m.group(1)), "?" * 8), t)
+    t = re.sub(r"\$NUMBER\[(\d+)\]", r"\1", t)
     return t.replace("&lt;", "<").replace("&gt;", ">")
 
 issues = []
+# Wrapmultiline labels in a list layout that are still to be turned into
+# textboxes (B-7), per window: the exact <label> of each one (repeats count).
+# These are reported, not failed, with what they cut off. Any other one - a
+# new label, a different text, one more of the same - fails the build; one
+# that was fixed is only reported, so trim the list.
+KNOWN_LAYOUT_WRAP = {
+    # Settings hub tile captions (hand-maintained Settings.xml), item + focused layout
+    "Settings": ("$INFO[ListItem.Label]", "$INFO[ListItem.Label]"),
+}
+known_cut = []
 for p in sorted(glob.glob(os.path.join(XML, "*.xml"))):
     wname = os.path.basename(p)[:-4]
     try: root = ET.parse(p).getroot()
@@ -196,10 +223,17 @@ for p in sorted(glob.glob(os.path.join(XML, "*.xml"))):
                     if not w or not re.fullmatch(r"\d+", w): continue
                     font = get(lc, "font", pp, "font13")
                     for fsid in fontsets_for(l.get("condition"), conds):
-                        if lc.get("type") == "label" and (get(lc, "wrapmultiline", pp) or "") != "true":
+                        # a label in a layout is a CGUIListLabel: one line,
+                        # wrapmultiline or not
+                        if lc.get("type") == "label":
                             need = measure(fsid, font, text)
                             if need > int(w) + 0.5:
-                                issues.append((fsid, wname, "item", text, int(need), int(w)))
+                                hit = (fsid, wname, "item", text, int(need), int(w))
+                                if (get(lc, "wrapmultiline", pp) or "") == "true" and \
+                                        sub(lc.findtext("label") or "", pp).strip() in KNOWN_LAYOUT_WRAP.get(wname, ()):
+                                    known_cut.append(hit)    # fails once the window is fixed
+                                else:
+                                    issues.append(hit)
                         else:   # textbox: each word must fit, and the wrapped lines the height
                             words = text.split()
                             wide = [x for x in words if measure(fsid, font, x) > int(w) + 0.5]
@@ -218,8 +252,63 @@ for p in sorted(glob.glob(os.path.join(XML, "*.xml"))):
                             elif h and h.isdigit() and lines * lh > int(h):
                                 issues.append((fsid, wname, "item height", text, lines * lh, int(h)))
 
+# B-7: a label inside a container layout is created as a CGUIListLabel
+# (GUIControlFactory: GUICONTROL_LABEL becomes GUICONTROL_LISTLABEL inside a
+# container), which never wraps - <wrapmultiline> there is a promise Kodi
+# doesn't keep and the second line stays empty. Use a textbox. Includes
+# are expanded, so a label pulled into a layout by an include counts too.
+LAYOUTS = ("itemlayout", "focusedlayout", "channellayout", "focusedchannellayout",
+           "rulerlayout", "rulerunit")
+layout_wrap = {}
+def layout_labels(el, params, depth=0, inside=False):
+    if depth > 14: return
+    for ch, pp in kids(el, params):
+        lay = inside or ch.tag in LAYOUTS
+        if lay and ch.tag == "control" and ch.get("type") == "label" \
+                and (get(ch, "wrapmultiline", pp) or "") == "true":
+            yield ch, pp
+        yield from layout_labels(ch, pp, depth + 1, lay)
+
+for p in sorted(glob.glob(os.path.join(XML, "*.xml"))):
+    wname = os.path.basename(p)[:-4]
+    try: root = ET.parse(p).getroot()
+    except ET.ParseError: continue
+    if root.tag != "window": continue
+    for c, pp in layout_labels(root, None):
+        layout_wrap.setdefault(wname, []).append(sub(c.findtext("label") or "", pp).strip())
+known_seen, known_gone = [], []
+for wname in sorted(set(layout_wrap) | set(KNOWN_LAYOUT_WRAP)):
+    have = collections.Counter(layout_wrap.get(wname, []))
+    want = collections.Counter(KNOWN_LAYOUT_WRAP.get(wname, ()))
+    for lab in sorted((have - want).elements()):   # new: fails
+        issues.append(("-", wname, "list-layout label with wrapmultiline (never wraps: use a textbox)",
+                       lab, 0, 0))
+    if have & want: known_seen.append(wname)
+    for lab in sorted((want - have).elements()):   # fixed: just trim the list
+        known_gone.append((wname, lab))
+
+def footer():
+    sets = [f for f in FONTSETS if f not in MEASURED_BY_TABLE]
+    print(f"  fontsets measured: {', '.join(sets)}"
+          + (f"; {', '.join(MEASURED_BY_TABLE)} from Kodi's arial.ttf advance table" if MEASURED_BY_TABLE else ""))
+    for s_ in SKIPPED:
+        print(f"  fontset NOT measured: {s_}")
+    for w_ in known_seen:
+        n_ = sum((collections.Counter(layout_wrap[w_]) & collections.Counter(KNOWN_LAYOUT_WRAP[w_])).values())
+        print(f"  known: {w_} has {n_} wrapmultiline label(s) in a list layout "
+              "(they never wrap; KNOWN_LAYOUT_WRAP)")
+        cut = {}
+        for fsid, wn, _, text, need, avail in known_cut:
+            if wn == w_: cut.setdefault((text, avail), {})[fsid] = need
+        for (text, avail), sets in sorted(cut.items()):
+            print(f"    cut short on one line: '{text}' has {avail}px - needs "
+                  + ", ".join(f"{k} {v}px" for k, v in sorted(sets.items())))
+    for w_, lab_ in known_gone:
+        print(f"  {w_}: wrapmultiline layout label '{lab_}' is gone - remove it from KNOWN_LAYOUT_WRAP")
+
 if not issues:
     print(f"textfit: every fixed label fits in every fontset ({n_items} static list items too)")
+    footer()
     sys.exit(0)
 # group: one line per label, listing the fontsets it breaks in
 groups = {}
@@ -227,10 +316,14 @@ for fsid, wname, ct, text, need, avail in issues:
     g = groups.setdefault((ct, text, avail), {"windows": set(), "sets": {}})
     g["windows"].add(wname)
     g["sets"][fsid] = need
-print(f"textfit: {len(groups)} label(s) overflow")
+print(f"textfit: {len(groups)} label(s) overflow or can't wrap")
 for (ct, text, avail), g in sorted(groups.items(), key=lambda kv: kv[0][1]):
-    sets = ", ".join(f"{k} {v}px" for k, v in sorted(g["sets"].items()))
     where = sorted(g["windows"])
     where = where[0] if len(where) == 1 else f"{len(where)} windows"
+    if "-" in g["sets"]:
+        print(f"  ✗ {ct}: '{text}'  [{where}]")
+        continue
+    sets = ", ".join(f"{k} {v}px" for k, v in sorted(g["sets"].items()))
     print(f"  ✗ {ct} '{text}' has {avail}px - needs: {sets}  [{where}]")
+footer()
 sys.exit(1)

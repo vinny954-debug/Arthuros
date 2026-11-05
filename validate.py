@@ -22,6 +22,14 @@ fonts  = set()
 for fs in ET.parse(os.path.join(XML,"Font.xml")).getroot():
     for f in fs.findall("font"): fonts.add(f.findtext("name"))
 
+# string id -> English text (skin first, then Kodi), for readable messages
+STRINGS_ANY = {}
+for po in (os.path.join(SKIN, "language/resource.language.en_gb/strings.po"),
+           os.path.join(os.path.dirname(os.path.abspath(__file__)), "vendor", "kodi", "strings.po")):
+    if os.path.exists(po):
+        for m in re.finditer(r'msgctxt "#(\d+)"\nmsgid "(.*)"', open(po, encoding="utf-8").read()):
+            STRINGS_ANY.setdefault(int(m.group(1)), m.group(2))
+
 includes, windows = {}, {}
 for p in sorted(glob.glob(os.path.join(XML,"*.xml"))):
     try: root = ET.parse(p).getroot()
@@ -141,6 +149,15 @@ for wname, root in sorted(windows.items()):
         if el.tag in ("onleft","onright","onup","ondown"):
             v = sub((el.text or "").strip(), params)
             if re.fullmatch(r"\d+", v): nav_refs.append((el.tag, v))
+        # GUIControlFactory GetInfoLabelFromElement / GetString / FilterLabel:
+        # a label that is a natural number is a string id (<label>7</label> =
+        # "File manager", S-1), also when it arrives through $PARAM
+        if el.tag in ("label", "label2", "altlabel", "hinttext"):
+            v = (sub(el.text or "", params) or "").strip()
+            if v.isdigit():
+                errors.append(f"{wname}: <{el.tag}>{v}</{el.tag}> is read as string id {v} "
+                              f"({STRINGS_ANY.get(int(v), '?')!r}) - use $NUMBER[{v}] or $LOCALIZE[{v}]"
+                              + (f" (via {' > '.join(chain)})" if chain else ""))
     for (cid, branch), n in seen_ids.items():
         if n > 1:
             errors.append(f"{wname}: control id {cid} defined {n} times" + (f" in {branch.split('?')[0]}" if branch else ""))
@@ -444,10 +461,10 @@ def check_info(where, name):
         return                      # not an info category (a literal like plugin.video.x)
     if len(parts) == 2:
         if parts[1] not in INFO[cat]:
-            warns.append(f"{where}: {name} is not an info label/bool Kodi 21 knows - always empty/false")
+            errors.append(f"{where}: {name} is not an info label/bool Kodi 21 knows - always empty/false")
     elif cat == "container" and parts[1].startswith("listitem") and len(parts) == 3:
         if parts[2] not in INFO["listitem"]:
-            warns.append(f"{where}: {name} is not a ListItem label Kodi 21 knows")
+            errors.append(f"{where}: {name} is not a ListItem label Kodi 21 knows")
 
 # $VAR / $EXP must name a <variable>/<expression> some includes file defines
 variables, expressions = set(), set()
@@ -496,13 +513,56 @@ for p2 in sorted(glob.glob(os.path.join(XML, "*.xml"))):
 # has; Kodi's own ids must exist in the hand-made windows; and a focusable
 # control with no label, no action and no id Kodi fills is a dead blank box.
 # (Window-scoped, so they run on the window with its includes expanded.)
-REQUIRED = {   # #defines in the Omega window classes; a missing one hides a feature
- "MyPlaylist": ({"20","21","22","26"}, "GUIWindowMusicPlaylist.cpp/GUIWindowVideoPlaylist.cpp: shuffle, save, clear, repeat"),
- "MyPVRChannels": ({"28","6"}, "GUIWindowPVRBase.h: channel groups, show hidden"),
- "MyPVRRecordings": ({"28","7"}, "GUIWindowPVRBase.h: channel groups, show deleted"),
- "MyPVRTimers": ({"28"}, "GUIWindowPVRBase.h: channel groups"),
- "MyVideoNav": ({"8","20"}, "GUIWindowVideoNav.cpp: search, update library"),
- "MyMusicNav": ({"8","20"}, "GUIWindowMusicNav.cpp: search, update library"),
+# Kodi's own control ids, from the #defines in the Omega window classes.
+#   need:  a window without them loses a feature (a hidden button, no zoom
+#          feedback, a keypad key that does nothing...)
+#   fills: ids whose caption Kodi writes itself, so an empty <label> is right
+# Only ids read in the Omega sources - inventory.json also has Estuary-private
+# ones (S-4), so it can't be used for this.
+KODI_IDS = {
+ "MyPlaylist": ({"20","21","22","26"}, set(),
+   "GUIWindowMusicPlaylist.cpp/GUIWindowVideoPlaylist.cpp: shuffle, save, clear, repeat"),
+ "MyPVRChannels": ({"28","6"}, set(), "GUIWindowPVRBase.h: channel groups, show hidden"),
+ # 28 (channel groups) is only a hidden stub in Estuary's recordings and
+ # timers (Includes_MediaMenu.xml PVRSideBar); their filters are 5/7 and 8
+ "MyPVRRecordings": ({"5","7"}, set(), "GUIWindowPVRBase.h: group items, show deleted"),
+ "MyPVRTimers": ({"8"}, set(), "GUIWindowPVRBase.h: hide disabled timers"),
+ "MyVideoNav": ({"8","20"}, set(), "GUIWindowVideoNav.cpp: search, update library"),
+ "MyMusicNav": ({"8","20"}, set(), "GUIWindowMusicNav.cpp: search, update library"),
+ "VideoFullScreen": ({"10","11","12"}, set(),
+   "GUIWindowFullScreenDefines.h LABEL_ROW1-3: zoom / view mode feedback"),
+ "MusicVisualisation": ({"2"}, set(), "GUIWindowVisualisation.cpp CONTROL_VIS: preset and lock actions"),
+ "DialogConfirm": ({"1","9","10","11"}, {"10","11","12"},
+   "GUIDialogBoxBase: heading 1, text 9, choices 10-12 labelled by Kodi"),
+ "DialogSelect": ({"1","3","6","7"}, {"5","7","8"},
+   "GUIDialogSelect.cpp: heading, simple and detailed list, cancel; extra buttons 5/8"),
+ "DialogTextViewer": ({"1","5"}, set(), "GUIDialogTextViewer.cpp: heading, text"),
+ "DialogNumeric": ({"1","4"} | {str(i) for i in range(10, 24)}, set(),
+   "GUIDialogNumeric.cpp: heading, input, keys 0-9, previous/enter/next/backspace"),
+ "DialogSlider": ({"10","11","12"}, set(), "GUIDialogSlider.cpp: heading, slider, value"),
+ "DialogExtendedProgressBar": ({"30","31","32"}, set(),
+   "GUIDialogExtendedProgressBar.cpp: header, title, progress"),
+ # 1000 is only the template: Kodi hides it and captions its clones 1001+
+ # (GUIDialogContextMenu.cpp:124-140), so it is in KODI_HIDDEN, not fills
+ "DialogContextMenu": ({"996","999","1000"}, set(),
+   "GUIDialogContextMenu.cpp: group list, background, button template"),
+ # keys: BUTTONS_MAX_ROWS 4 x BUTTONS_PER_ROW 20 + BUTTON_ID_OFFSET 100 = 100-179
+ # (GUIDialogKeyboardGeneric.cpp:549-556); layout 309 (:537), reveal 310 (:219/615).
+ # 307 (IP address) is only handled in OnClick - Kodi never captions it.
+ "DialogKeyboard": ({"300","301","302","303","304","305","306","311","312"},
+   {str(i) for i in range(100, 180)} | {"309","310"},
+   "GUIDialogKeyboardGeneric.cpp: done, cancel, shift, caps, symbols, left, right, heading, edit"),
+ "DialogSettings": (set(), {"28","29","30"}, "GUIDialogSettingsBase.h: OK, cancel, custom"),
+ "DialogAddonSettings": (set(), {"28","29","30"}, "GUIDialogAddonSettings.cpp:428: OK, cancel, defaults"),
+ "DialogColorPicker": (set(), {"7"}, "GUIDialogColorPicker.cpp:235: cancel"),
+ "DialogMusicInfo": (set(), {"6","7","8","10","12"}, "GUIDialogMusicInfo.cpp:576-580"),
+ "EventLog": (set(), {"21","22"}, "GUIWindowEventLog.cpp:187-192: level buttons"),
+ "SmartPlaylistRule": (set(), {"15","16","17"}, "GUIDialogSmartPlaylistRule.cpp:504-514"),
+ "MyWeather": (set(), {"2","3"}, "GUIWindowWeather.cpp:163-173: location, refresh"),
+}
+# Buttons Kodi hides itself (SetVisible(false)), so a blank one is never seen.
+KODI_HIDDEN = {
+ "DialogContextMenu": {"1000"},   # GUIDialogContextMenu.cpp:124 pButtonTemplate->SetVisible(false)
 }
 FOCUS_RE = re.compile(r"(?i)\b(?:control\.setfocus|setfocus|control\.move|control\.message|"
                       r"control\.setvisible|control\.sethidden)\((\d+)")
@@ -525,17 +585,22 @@ for wname, root in sorted(windows.items()):
         errors.append(f"{wname}: SetFocus/Control.*({v}) targets a control this window does not have")
     for v in sorted(cond_refs - ids, key=int):
         errors.append(f"{wname}: Control/Container({v}) in a condition names a control this window does not have")
-    if wname in REQUIRED:
-        need, why = REQUIRED[wname]
-        if need - ids:
-            warns.append(f"{wname}: missing Kodi control id(s) {sorted(need - ids, key=int)} ({why})")
+    need, fills, why = KODI_IDS.get(wname, (set(), set(), ""))
+    if need - ids:
+        errors.append(f"{wname}: missing Kodi control id(s) {sorted(need - ids, key=int)} ({why})")
     for el, params, chain in resolve(root):
-        if el.tag == "control" and el.get("type") in ("button", "radiobutton", "togglebutton"):
+        if el.tag == "control" and el.get("type") in ("button", "radiobutton", "togglebutton", "colorbutton"):
             lab = sub(el.findtext("label") or "", params).strip()
             acts = [c for c in el if c.tag in ("onclick", "onfocus") and (c.text or "").strip()]
             cid = sub(el.get("id"), params)
-            if not lab and not acts and not cid:
+            left = (sub(el.findtext("left") or "", params) or "").strip()
+            if lab or acts or "@layout" in chain or left.startswith("-"):
+                continue    # captioned, does something, per item, or a parked template
+            if not cid:
                 errors.append(f"{wname}: {el.get('type')} with no id, no label and no onclick - a dead blank box")
+            elif cid not in fills and cid not in KODI_HIDDEN.get(wname, ()):
+                errors.append(f"{wname}: {el.get('type')} {cid} has no label and no onclick, and Kodi does "
+                              f"not caption id {cid} in this window - a blank box (else list it in KODI_IDS fills)")
 
 # Warnings are allowed only if they are known. A new one (a dead onup/ondown
 # target, an info label Kodi doesn't have, a missing Kodi id) fails the build:

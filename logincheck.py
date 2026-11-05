@@ -13,18 +13,26 @@ conditional on the login screen not being visible.
 Includes are expanded the way Kodi does (with $PARAM substitution, so
 Win_Boxes_$PARAM[boxes] resolves), for xml/ and xml768/.
 
-Not covered here: DialogConfirm.xml and DialogSelect.xml (hand-maintained,
-also reachable: incorrect-password OK box, profile choice) - they take
-their title-bar boxes from Win_Boxes_dialog, which must guard its
-ActivateWindow(Home) itself.
+DialogConfirm.xml and DialogSelect.xml (hand-maintained, also reachable:
+the incorrect-password OK box, the profile choice) are checked too. They
+take their title-bar boxes from Win_Boxes_dialog in Includes_Chrome.xml,
+whose 9901 box still runs an unguarded ActivateWindow(Home); until that
+include guards it, those two are listed in KNOWN (reported, not failed).
+Any other hole, or a known one in a new place, fails.
 """
 import copy, glob, os, re, sys
 from lxml import etree
 
 S = os.path.join(os.path.dirname(os.path.abspath(__file__)), "skin.arthuros")
-WINDOWS = ["LoginScreen", "DialogButtonMenu", "DialogKeyboard", "DialogNumeric"]
+WINDOWS = ["LoginScreen", "DialogButtonMenu", "DialogKeyboard", "DialogNumeric",
+           "DialogConfirm", "DialogSelect"]
 GUARD = "!Window.IsVisible(loginscreen)"
 ALLOWED = {"shutdownmenu"}
+# Win_Boxes_dialog's 9901 (Includes_Chrome.xml, another package's file):
+# fix there with <onclick condition="!Window.IsVisible(loginscreen)"> and
+# the same in 9901's <visible>, then empty this set.
+KNOWN = {f"{d}/{w}.xml: <onclick>ActivateWindow(Home)</onclick> is reachable from the login screen"
+         for d in ("xml", "xml768") for w in ("DialogConfirm", "DialogSelect")}
 
 def definitions(d):
     defs = {}
@@ -96,7 +104,13 @@ for d in ("xml", "xml768"):
                 if m.group(1).strip().lower() in ALLOWED or guarded(a):
                     continue
                 bad.append(f"{d}/{w}.xml: <{a.tag}>{a.text.strip()}</{a.tag}> is reachable from the login screen")
+known = [b for b in bad if b in KNOWN]
+bad = [b for b in bad if b not in KNOWN]
+for k in sorted(set(known)):
+    print("known (Win_Boxes_dialog 9901, see KNOWN):", k)
+for k in sorted(KNOWN - set(known)):
+    print("fixed, remove from KNOWN in logincheck.py:", k)
 if bad:
     print("\n".join(bad))
     sys.exit(1)
-print(f"logincheck: {len(WINDOWS)} windows x 2 layouts, nothing gets past the login screen")
+print(f"logincheck: {len(WINDOWS)} windows x 2 layouts, nothing else gets past the login screen")
