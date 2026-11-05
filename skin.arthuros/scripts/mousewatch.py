@@ -8,11 +8,20 @@
 # A mouse is any input device reporting relative X and Y motion (REL_X,
 # REL_Y). Touchscreens report absolute positions instead, so they don't
 # count; neither do keyboards or remotes. Keyboards with a built-in
-# touchpad do count, which is what you'd want.
+# touchpad do count, which is what you'd want. Many USB touch controllers
+# also register a "mouse" interface of their own: a REL device with the same
+# vendor and product as a touchscreen is ignored. A wireless receiver with no
+# mouse paired still looks like a mouse, which is what the override is for.
 #
-# Started from Home (and from Skin settings when Touch mode is turned on);
-# only one copy runs, and it stops when Kodi quits, Touch mode is turned off,
-# or another skin is chosen.
+# Skin settings can override it with one skin string, Skin.String(touch.pointer):
+# "hide" keeps the pointer hidden, "show" keeps it shown, empty (or anything
+# else) is Auto. The decision, and the device that made it, goes to kodi.log
+# when it changes.
+#
+# Started from Home and from Skin settings when Touch mode is turned on (a
+# Startup.xml onload, so it also runs when Kodi starts in another window, is
+# pending in genwindows.py); only one copy runs, and it stops when Kodi quits,
+# Touch mode is turned off, or another skin is chosen.
 import xbmc
 import xbmcgui
 
@@ -20,20 +29,73 @@ HOME = xbmcgui.Window(10000)
 RUNNING = "arthuros.mousewatch"
 MOUSE = "arthuros.mouse"
 
+ABS_MT_POSITION_X = 0x35
+INPUT_PROP_DIRECT = 0x1
+
+
+def mask(line, prefix):
+    """A /proc/bus/input/devices bitmap ("B: ABS=3 0" ...) as one integer.
+    The kernel prints it in longs, highest first, without leading zero
+    longs. ABS and REL fit in one 64-bit long, and in at most two 32-bit
+    ones, so joining the words as 32-bit is right on both."""
+    words = line[len(prefix):].split()
+    try:
+        if len(words) == 1:
+            return int(words[0], 16)
+        return sum(int(w, 16) << (32 * i) for i, w in enumerate(reversed(words)))
+    except ValueError:
+        return 0
+
+
+def devices():
+    with open("/proc/bus/input/devices") as f:
+        text = f.read()
+    for block in text.split("\n\n"):
+        d = {"name": "?", "id": None, "rel": 0, "abs": 0, "prop": 0}
+        for line in block.splitlines():
+            if line.startswith("I: "):
+                f = dict(w.split("=", 1) for w in line[3:].split() if "=" in w)
+                if f.get("Vendor", "0000") != "0000" or f.get("Product", "0000") != "0000":
+                    d["id"] = (f.get("Vendor"), f.get("Product"))
+            elif line.startswith("N: Name="):
+                d["name"] = line[8:].strip().strip('"')
+            elif line.startswith("B: REL="):
+                d["rel"] = mask(line, "B: REL=")
+            elif line.startswith("B: ABS="):
+                d["abs"] = mask(line, "B: ABS=")
+            elif line.startswith("B: PROP="):
+                d["prop"] = mask(line, "B: PROP=")
+        if any(line.strip() for line in block.splitlines()):
+            yield d
+
 
 def mouse_present():
+    """(present, why) - why names the device, for kodi.log."""
     try:
-        with open("/proc/bus/input/devices") as f:
-            text = f.read()
+        devs = list(devices())
     except OSError:
-        return True          # can't tell: keep the pointer
-    for block in text.split("\n\n"):
-        for line in block.splitlines():
-            if line.startswith("B: REL="):
-                words = line[7:].split()
-                if words and int(words[-1], 16) & 0x3 == 0x3:   # REL_X | REL_Y
-                    return True
-    return False
+        return True, "can't read /proc/bus/input/devices"   # can't tell: keep the pointer
+    touch = {d["id"] for d in devs if d["id"] and (
+        d["abs"] >> ABS_MT_POSITION_X & 1 or
+        (d["prop"] >> INPUT_PROP_DIRECT & 1 and d["abs"] & 0x3 == 0x3))}
+    for d in devs:
+        if d["rel"] & 0x3 == 0x3:                            # REL_X | REL_Y
+            if d["id"] in touch:
+                continue        # the touch controller's own mouse interface
+            return True, "'%s' moves like a mouse" % d["name"]
+    return False, "no mouse among the input devices"
+
+
+POINTER = "Skin.String(touch.pointer)"     # "", "hide" or "show"
+
+
+def override():
+    v = xbmc.getInfoLabel(POINTER).strip().lower()
+    if v == "show":
+        return True, "Skin settings: always show the pointer"
+    if v == "hide":
+        return False, "Skin settings: always hide the pointer"
+    return None
 
 
 def main():
@@ -47,9 +109,11 @@ def main():
             if xbmc.getSkinDir() != "skin.arthuros" or \
                     not xbmc.getCondVisibility("Skin.HasSetting(touchmode)"):
                 break
-            now = mouse_present()
+            now, why = override() or mouse_present()
             if now != last:
                 HOME.setProperty(MOUSE, "1" if now else "")
+                xbmc.log("ArthurOS mousewatch: pointer %s (%s)"
+                         % ("shown" if now else "hidden", why), xbmc.LOGINFO)
                 last = now
             if monitor.waitForAbort(3):
                 break

@@ -23,6 +23,9 @@ chk "settings level button (id 20)"   'grep -q "type=\"button\" id=\"20\"" $S/xm
 # the <?xml?> declaration also has version=, so match the indented addon attribute
 VER=$(sed -n 's/^[[:space:]]*version="\([0-9.]*\)".*/\1/p' "$S/addon.xml" | head -1)
 echo "  ..   addon.xml version: $VER"
+R="$(dirname "$0")/README.md"
+chk "changelog leads with this version" 'head -1 $S/changelog.txt | grep -qx "v$VER"'
+chk "README names this version"         'grep -q "Current version: $VER\*\*" "$R" && ! grep -o "skin.arthuros-[0-9][0-9.]*[0-9]\.zip" "$R" | grep -vqx "skin.arthuros-$VER.zip"'
 chk "menu bar stamp matches version"    'grep -q "(v$VER)" $S/xml/Includes_Chrome.xml'
 chk "skin settings stamp matches"       'grep -q "v$VER  -  1024x600" $S/xml/SkinSettings.xml'
 chk "menu tiles focus the panel"        'test $(grep -c "SetFocus(9010,0)" $S/xml/Home.xml) -eq 36'
@@ -304,6 +307,25 @@ chk "C-1 focused rows keep textinv when marked (file browser, music info)" 'test
 :
 :
 # ===== P9 scripts & tooling =====
+D="$(dirname "$0")"
+chk "build.sh: one command per line (set -e sees every step)" '! grep -v "^[[:space:]]*#" $D/build.sh | grep -q "&&"'
+chk "build.sh checks both layouts' text fit" 'grep -q "RES=xml768 python3 textfit.py" $D/build.sh'
+chk "installer enables a copied skin in Kodi's add-on DB" 'grep -q "UPDATE installed SET enabled=1" $D/install-arthuros.sh && grep -q "My add-ons > Look and feel > Skin" $D/install-arthuros.sh'
+chk "installer works without sudo and restarts Kodi on failure" 'grep -q "\[ \"\$(id -u)\" -eq 0 \] && SUDO=" $D/install-arthuros.sh && grep -q "trap restore EXIT" $D/install-arthuros.sh && ! grep -q "sudo systemctl" $D/install-arthuros.sh && grep -q "kodi.service kodi-gbm.service" $D/install-arthuros.sh'
+chk "installer copies beside addons before replacing" 'grep -q "arthuros-new" $D/install-arthuros.sh'
+chk "netbt: failed open Wi-Fi says why"  'grep -A1 "if not net.get(\"secure\"):" $S/scripts/netbt.py | grep -q "dialog.ok"'
+chk "netbt: denied fix names Kodi's user, polkit rule" 'grep -q "pwd.getpwuid(os.getuid())" $S/scripts/netbt.py && grep -q "50-arthuros-nm.rules" $S/scripts/netbt.py $D/install-arthuros.sh && ! grep -q "usermod -aG netdev \$USER" $S/scripts/netbt.py'
+chk "mousewatch skips touch controllers' mouse nodes" 'grep -q "ABS_MT_POSITION_X = 0x35" $S/scripts/mousewatch.py && grep -q "INPUT_PROP_DIRECT" $S/scripts/mousewatch.py'
+chk "mousewatch honours Skin.String(touch.pointer) hide/show, logs why" 'grep -q "POINTER = \"Skin.String(touch.pointer)\"" $S/scripts/mousewatch.py && grep -q "v == \"hide\"" $S/scripts/mousewatch.py && grep -q "v == \"show\"" $S/scripts/mousewatch.py && grep -q "xbmc.LOGINFO" $S/scripts/mousewatch.py'
+chk "skin XML uses only the pointer setting mousewatch reads" '! grep -rhoE "touch\.pointer[A-Za-z0-9_.]*" $S/xml/ | grep -vx "touch.pointer" && ! grep -rhoE "touch\.pointer\)?,[A-Za-z]+" $S/xml/ | grep -vxE "touch\.pointer\)?,(hide|show)"'
+chk "mousewatch header doesn't claim a Startup start that isn't there" 'grep -q "mousewatch.py" $S/xml/Startup.xml || ! grep -q "Started from Startup" $S/scripts/mousewatch.py'
+chk "installer probes Kodi's home as Kodi's user (0700 homes)" 'grep -q "if as_kodi test -d \"\$ADDONS/skin.arthuros\"" $D/install-arthuros.sh && grep -q "as_kodi sh -c .ls \"\$1\"/Addons" $D/install-arthuros.sh && grep -q "! as_kodi test -e \"\$ADDONS/skin.arthuros\" && as_kodi test -d \"\$BK\"" $D/install-arthuros.sh && ! grep -qE "^[[:space:]]*(if|elif) \[ !? ?-[de] \"\$(ADDONS|DB|KHOME)" $D/install-arthuros.sh'
+chk "installer never moves the new skin into an old folder" 'grep -B4 "^as_kodi mv \"\$STAGE\" \"\$ADDONS/skin.arthuros\"" $D/install-arthuros.sh | grep -q "if as_kodi test -e \"\$ADDONS/skin.arthuros\""'
+chk "installer looks for the polkit rule with sudo (rules.d is 0700)" 'grep -q "! \$SUDO test -e \"\$RULE\"" $D/install-arthuros.sh && ! grep -q "\[ ! -e \"\$RULE\" \]" $D/install-arthuros.sh'
+chk "validate.py fails on any warning not in KNOWN_WARNINGS" 'grep -q "if x not in KNOWN_WARNINGS:" $D/validate.py && grep -A1 "if x not in KNOWN_WARNINGS:" $D/validate.py | grep -q "errors.append"'
+chk "Kodi tables from Omega ship"        'grep -q "^skin.setstring	1$" $D/vendor/kodi/builtins.txt && grep -q "^parentdir$" $D/vendor/kodi/actions.txt && grep -q "^favouritesbrowser	10060$" $D/vendor/kodi/windowids.txt && grep -q "^player.hasmedia$" $D/vendor/kodi/infolabels.txt && test $(wc -l < $D/windownames.txt) -ge 137'
+chk "validate.py checks builtins, windows, infos, \$VAR, focus" 'grep -q "builtins.txt" $D/validate.py && grep -q "windownames.txt" $D/validate.py && grep -q "infolabels.txt" $D/validate.py && grep -q "expressions" $D/validate.py && ! grep -q "\"9490\",\"9500\"" $D/validate.py'
+chk "validate + textfit pass for both layouts" '(cd "$D" && python3 validate.py && RES=xml768 python3 validate.py && python3 textfit.py && RES=xml768 python3 textfit.py)'
 :
 :
 # ===== P10 fonts =====

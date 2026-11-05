@@ -8,12 +8,16 @@ Run with:
     RunScript(special://skin/scripts/netbt.py,audio)     audio output picker
 
 Uses NetworkManager (nmcli) and BlueZ (bluetoothctl), so nothing extra has
-to be installed on Raspberry Pi OS. Kodi runs in the local login session,
-which NetworkManager's default polkit rules allow to change networks.
+to be installed on Raspberry Pi OS. NetworkManager's default polkit rules
+only let an active local login session change networks. Kodi run as a
+systemd service has no such session, so the user it runs as needs a polkit
+rule (/etc/polkit-1/rules.d/50-arthuros-nm.rules, which install-arthuros.sh
+offers to add).
 """
 
 import json
 import os
+import pwd
 import re
 import select
 import shutil
@@ -105,11 +109,16 @@ def nm_denied(err):
 
 
 def show_nm_denied():
+    try:
+        user = pwd.getpwuid(os.getuid()).pw_name   # who Kodi really runs as
+    except Exception:
+        user = "the Kodi user"
     dialog.ok(WIFI_HEADING,
-              "NetworkManager refused the change: Kodi isn't allowed to "
-              "manage networks.[CR][CR]Fix it once over SSH by adding your "
-              "user to the netdev group:[CR]sudo usermod -aG netdev $USER[CR]"
-              "then reboot.")
+              "NetworkManager refused the change: user '%s' (Kodi) isn't "
+              "allowed to manage networks.[CR][CR]Fix it once: run "
+              "install-arthuros.sh again and let it add the polkit rule "
+              "/etc/polkit-1/rules.d/50-arthuros-nm.rules for '%s', "
+              "then try again." % (user, user))
 
 
 def wifi_iface():
@@ -205,8 +214,11 @@ def wifi_connect(iface, net, saved):
         if nm_denied(err):
             show_nm_denied()
             return False
+        if not net.get("secure"):
+            dialog.ok(WIFI_HEADING, "Couldn't connect to %s.[CR]%s" % (ssid, wifi_explain(err)))
+            return False
         # Saved password may be stale: offer to enter it again.
-        if not net.get("secure") or not dialog.yesno(
+        if not dialog.yesno(
                 WIFI_HEADING, "Couldn't connect to %s.[CR]%s[CR][CR]"
                 "Enter the password again?" % (ssid, wifi_explain(err))):
             return False

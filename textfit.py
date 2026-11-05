@@ -7,6 +7,9 @@ real size, against the space its control actually leaves for text:
   label        -> width
   button       -> width - 2*textoffsetx   (Kodi pads both sides)
   radiobutton  -> the same, minus the radio and its gap
+  static list item <label> -> the layout control showing ListItem.Label
+                  (a textbox: every word fits, and the wrapped lines fit
+                  its height)
 Labels driven by $INFO/$VAR are runtime text and cannot be checked here."""
 import os, re, glob, sys
 import xml.etree.ElementTree as ET
@@ -108,8 +111,92 @@ for p in sorted(glob.glob(os.path.join(XML, "*.xml"))):
             if need > avail + 0.5:
                 issues.append((fsid, wname, ct, text, int(need), avail))
 
+# Static list items (<content><item><label>): the desktop catalogue, the
+# Settings hub, the power menu. Their text lands in the layout control that
+# shows ListItem.Label, so measure it there. A layout with an XL/touch
+# condition is used with any fontset (touch mode), the plain one only with the
+# fontsets that condition does not catch.
+def kids(el, params, depth=0):
+    """Direct children, with includes expanded in place."""
+    for ch in list(el):
+        if ch.tag == "include" and depth < 14:
+            name = ch.get("content") or (ch.text.strip() if ch.text else None)
+            inc = INC.get(name)
+            if inc is None: continue
+            p = {pd.get("name"): pd.get("default", "") for pd in inc.findall("param")}
+            for pu in ch.findall("param"):
+                p[pu.get("name")] = sub(pu.get("value", ""), params)
+            body = inc.find("definition")
+            yield from kids(body if body is not None else inc, p, depth + 1)
+        else:
+            yield ch, params
+
+def label_controls(layout, params):
+    for c in layout.iter("control"):
+        if c.get("type") not in ("label", "textbox"): continue
+        src = (sub(c.findtext("label") or "", params) or "") + (c.findtext("info") or "")
+        if re.search(r"ListItem\.Label(?!2)\b", src) and not re.search(r"\$VAR|ListItem\.Label2", src):
+            yield c
+
+def fontsets_for(cond, siblings):
+    if cond:
+        if "touchmode" in cond or "ExtraLarge" not in cond:
+            return list(FONTSETS)
+        return [f for f in FONTSETS if f.startswith("ExtraLarge")]
+    if any(s and "ExtraLarge" in s for s in siblings):
+        return [f for f in FONTSETS if not f.startswith("ExtraLarge")]
+    return list(FONTSETS)
+
+n_items = 0
+for p in sorted(glob.glob(os.path.join(XML, "*.xml"))):
+    wname = os.path.basename(p)[:-4]
+    try: root = ET.parse(p).getroot()
+    except ET.ParseError: continue
+    if root.tag != "window": continue
+    for c, params in walk(root):
+        if c.tag != "control" or c.get("type") not in ("list", "panel", "fixedlist", "wraplist"):
+            continue
+        ch = list(kids(c, params))
+        layouts = [(l, pp) for l, pp in ch if l.tag in ("itemlayout", "focusedlayout")]
+        items = [it for cont, _ in ch if cont.tag == "content" for it in cont.findall("item")]
+        conds = [l.get("condition") for l, _ in layouts]
+        for it in items:
+            raw = (it.findtext("label") or "").strip()
+            if not raw or "$INFO" in raw or "$VAR" in raw or "$PARAM" in raw or "$ESCINFO" in raw:
+                continue
+            text = resolve_text(raw)
+            n_items += 1
+            for l, pp in layouts:
+                for lc in label_controls(l, pp):
+                    if (get(lc, "scroll", pp) or "") == "true": continue
+                    w = get(lc, "width", pp)
+                    if not w or not re.fullmatch(r"\d+", w): continue
+                    font = get(lc, "font", pp, "font13")
+                    for fsid in fontsets_for(l.get("condition"), conds):
+                        if lc.get("type") == "label" and (get(lc, "wrapmultiline", pp) or "") != "true":
+                            need = measure(fsid, font, text)
+                            if need > int(w) + 0.5:
+                                issues.append((fsid, wname, "item", text, int(need), int(w)))
+                        else:   # textbox: each word must fit, and the wrapped lines the height
+                            words = text.split()
+                            wide = [x for x in words if measure(fsid, font, x) > int(w) + 0.5]
+                            lines, cur = 1, ""
+                            for x in words:
+                                t = (cur + " " + x).strip()
+                                if cur and measure(fsid, font, t) > int(w) + 0.5:
+                                    lines, cur = lines + 1, x
+                                else:
+                                    cur = t
+                            h = get(lc, "height", pp)
+                            lh = FONTSETS[fsid].get(font, FONTSETS[fsid]["font13"])[1]
+                            if wide:
+                                issues.append((fsid, wname, "item word", text,
+                                               int(max(measure(fsid, font, x) for x in wide)), int(w)))
+                            elif h and h.isdigit() and lines * lh > int(h):
+                                issues.append((fsid, wname, "item height", text, lines * lh, int(h)))
+
 if not issues:
-    print("textfit: every fixed label fits in every fontset")
+    print(f"textfit: every fixed label fits in every fontset ({n_items} static list items too)")
     sys.exit(0)
 # group: one line per label, listing the fontsets it breaks in
 groups = {}
