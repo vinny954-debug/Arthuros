@@ -179,6 +179,9 @@
        the way: ActivateWindow is refused while a modal dialog is open
        (CGUIWindowManager::ActivateWindow_Internal), and over a player
        window FullScreen would leave it instead. -->
+  <!-- Touch mode with no pointer on screen (the PointerTex rule): focus
+       looks that only make sense under a pointer are left out. -->
+  <expression name="ArthurNoPointer">Skin.HasSetting(touchmode) + !Skin.HasSetting(touch.pointer.show) + [Skin.HasSetting(touch.pointer.hide) | String.IsEmpty(Window(Home).Property(arthuros.mouse))]</expression>
   <expression name="ArthurCanShowPlayer">Player.HasMedia + !Window.IsActive(fullscreenvideo) + !Window.IsActive(visualisation) + !Window.IsActive(fullscreengame) + !Window.IsActive(slideshow)</expression>
 
 </includes>
