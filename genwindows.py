@@ -1429,60 +1429,69 @@ def stubs(ids, placed):
     return out
 
 # ====================================================== keypads
-def keyboard_window():
+def keyboard_window(h=600):
+    """h: the layout's screen height. 600 is xml/; tallpass.py calls this with
+    768 for xml768/, where a logical pixel is also physically larger (9.7"
+    4:3 against 7" 16:9), so the keys grow from 40 to 56 px: the only way to
+    type on a touch-only box. Same ids, order and navigation in both."""
+    tall = h >= 768
+    key, pitch = (56, 60) if tall else (40, 44)       # letter keys
+    mod, act = (44, 44) if tall else (36, 34)          # Shift/... row, Done/... row
+    ew = 54 if tall else 46                           # the text field's well
     rows = [range(100,113), range(120,133), range(140,153), range(160,173)]
-    body  = well(10, 36, 880, 46, "panel_sunken.png")
+    body  = well(10, 36, 880, ew, "panel_sunken.png")
     # Kodi writes the heading into label 311 (GUIDialogKeyboardGeneric.cpp
     # CTL_LABEL_HEADING), never into id 1, so 311 sits on the title bar.
-    body += """      <control type="label" id="311">
+    body += f"""      <control type="label" id="311">
         <left>29</left><top>3</top><width>770</width><height>26</height>
         <font>chromebold</font><textcolor>titletext</textcolor>
         <align>left</align><aligny>center</aligny>
       </control>
       <control type="edit" id="312">
-        <left>16</left><top>42</top><width>868</width><height>34</height>
+        <left>16</left><top>42</top><width>868</width><height>{ew - 12}</height>
         <font>big</font>
       </control>
       <control type="label" id="313"><left>-3000</left><top>0</top><width>200</width><height>24</height></control>
       <control type="label" id="314"><left>-3000</left><top>0</top><width>200</width><height>24</height></control>
 """
-    top = 92
+    top = 36 + ew + 10
     for r, ids in enumerate(rows):
         body += f"""      <control type="grouplist">
-        <left>14</left><top>{top + r*44}</top><width>876</width><height>40</height>
+        <left>14</left><top>{top + r*pitch}</top><width>876</width><height>{key}</height>
         <orientation>horizontal</orientation><itemgap>4</itemgap>
 """
         for cid in ids:
             body += f"""        <control type="button" id="{cid}">
-          <width>62</width><height>40</height>
+          <width>62</width><height>{key}</height>
           <font>big</font><align>center</align><textoffsetx>0</textoffsetx>
         </control>
 """
         body += "      </control>\n"
-    modrow = top + 4*44
+    modrow = top + 4*pitch
+    actrow = modrow + mod + 6
     body += f"""      <control type="grouplist">
-        <left>14</left><top>{modrow}</top><width>876</width><height>36</height>
+        <left>14</left><top>{modrow}</top><width>876</width><height>{mod}</height>
         <orientation>horizontal</orientation><itemgap>4</itemgap>
-        <control type="radiobutton" id="302"><width>104</width><height>36</height><font>chromebold</font><textoffsetx>4</textoffsetx><label>$LOCALIZE[20178]</label></control>
-        <control type="radiobutton" id="303"><width>136</width><height>36</height><font>chromebold</font><textoffsetx>4</textoffsetx><label>$LOCALIZE[20179]</label></control>
-        <control type="radiobutton" id="304"><width>118</width><height>36</height><font>chromebold</font><textoffsetx>4</textoffsetx><label>$LOCALIZE[20180]</label></control>
-        <control type="button" id="32"><width>160</width><height>36</height><label>$LOCALIZE[31912]</label></control>
-        <control type="button" id="8"><width>96</width><height>36</height><label>&lt;-</label></control>
-        <control type="button" id="305"><width>56</width><height>36</height><label>&lt;</label></control>
-        <control type="button" id="306"><width>56</width><height>36</height><label>&gt;</label></control>
+        <control type="radiobutton" id="302"><width>104</width><height>{mod}</height><font>chromebold</font><textoffsetx>4</textoffsetx><label>$LOCALIZE[20178]</label></control>
+        <control type="radiobutton" id="303"><width>136</width><height>{mod}</height><font>chromebold</font><textoffsetx>4</textoffsetx><label>$LOCALIZE[20179]</label></control>
+        <control type="radiobutton" id="304"><width>118</width><height>{mod}</height><font>chromebold</font><textoffsetx>4</textoffsetx><label>$LOCALIZE[20180]</label></control>
+        <control type="button" id="32"><width>160</width><height>{mod}</height><label>$LOCALIZE[31912]</label></control>
+        <control type="button" id="8"><width>96</width><height>{mod}</height><label>&lt;-</label></control>
+        <control type="button" id="305"><width>56</width><height>{mod}</height><label>&lt;</label></control>
+        <control type="button" id="306"><width>56</width><height>{mod}</height><label>&gt;</label></control>
       </control>
       <control type="grouplist">
-        <left>14</left><top>{modrow+42}</top><width>876</width><height>34</height>
+        <left>14</left><top>{actrow}</top><width>876</width><height>{act}</height>
         <orientation>horizontal</orientation><align>center</align><itemgap>8</itemgap>
-        <control type="button" id="300"><width>170</width><height>34</height><label>$LOCALIZE[20177]</label></control>
-        <control type="button" id="301"><width>170</width><height>34</height><label>$LOCALIZE[222]</label></control>
-        <control type="button" id="308"><width>170</width><height>34</height><label>$LOCALIZE[192]</label></control>
-        <control type="button" id="309"><width>170</width><height>34</height><label>$LOCALIZE[31917]</label></control>
-        <control type="button" id="310"><width>120</width><height>34</height><label>$LOCALIZE[31918]</label></control>
+        <control type="button" id="300"><width>170</width><height>{act}</height><label>$LOCALIZE[20177]</label></control>
+        <control type="button" id="301"><width>170</width><height>{act}</height><label>$LOCALIZE[222]</label></control>
+        <control type="button" id="308"><width>170</width><height>{act}</height><label>$LOCALIZE[192]</label></control>
+        <control type="button" id="309"><width>170</width><height>{act}</height><label>$LOCALIZE[31917]</label></control>
+        <control type="button" id="310"><width>120</width><height>{act}</height><label>$LOCALIZE[31918]</label></control>
       </control>
       <control type="button" id="307"><left>-3000</left><top>0</top><width>100</width><height>30</height></control>
 """
-    return dialog("DialogKeyboard", 900, modrow + 86, body, default="300",
+    return dialog("DialogKeyboard", 900, actrow + act + 10, body, default="300",
                   icon="icons24/file.png", heading=False)
 
 def numeric_window():

@@ -208,9 +208,9 @@
         <scrolltime tween="linear">0</scrolltime>
         <pagecontrol>-</pagecontrol>
 
-        <itemlayout width="198" height="162">
+        <itemlayout width="198" height="218">
           <control type="image">
-            <left>3</left><top>3</top><width>192</width><height>156</height>
+            <left>3</left><top>3</top><width>192</width><height>212</height>
             <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
           </control>
           <control type="image">
@@ -224,20 +224,20 @@
             <visible>String.IsEqual(ListItem.Property(bar),accent2)</visible>
           </control>
           <control type="image">
-            <left>75</left><top>34</top><width>48</width><height>48</height>
+            <left>67</left><top>46</top><width>64</width><height>64</height>
             <texture>$INFO[ListItem.Icon]</texture>
           </control>
           <control type="label">
-            <left>10</left><top>92</top><width>178</width><height>58</height>
+            <left>10</left><top>124</top><width>178</width><height>78</height>
             <font>bold</font><align>center</align><aligny>center</aligny>
             <label>$INFO[ListItem.Label]</label>
             <wrapmultiline>true</wrapmultiline>
           </control>
         </itemlayout>
 
-        <focusedlayout width="198" height="162">
+        <focusedlayout width="198" height="218">
           <control type="image">
-            <left>3</left><top>3</top><width>192</width><height>156</height>
+            <left>3</left><top>3</top><width>192</width><height>212</height>
             <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
           </control>
           <control type="image">
@@ -251,22 +251,22 @@
             <visible>String.IsEqual(ListItem.Property(bar),accent2)</visible>
           </control>
           <control type="image">
-            <left>75</left><top>34</top><width>48</width><height>48</height>
+            <left>67</left><top>46</top><width>64</width><height>64</height>
             <texture>$INFO[ListItem.Icon]</texture>
           </control>
           <control type="image">
-            <left>8</left><top>90</top><width>182</width><height>62</height>
+            <left>8</left><top>121</top><width>182</width><height>83</height>
             <texture colordiffuse="accent1">fill.png</texture>
           </control>
           <control type="label">
-            <left>10</left><top>92</top><width>178</width><height>58</height>
+            <left>10</left><top>124</top><width>178</width><height>78</height>
             <font>bold</font><textcolor>textinv</textcolor>
             <align>center</align><aligny>center</aligny>
             <label>$INFO[ListItem.Label]</label>
             <wrapmultiline>true</wrapmultiline>
           </control>
           <control type="image">
-            <left>3</left><top>3</top><width>192</width><height>156</height>
+            <left>3</left><top>3</top><width>192</width><height>212</height>
             <texture border="4" colordiffuse="accent1">select_ring.png</texture>
           </control>
         </focusedlayout>
