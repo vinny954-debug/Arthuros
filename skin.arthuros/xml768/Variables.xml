@@ -1,5 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
+  <!-- OSD title bar: what the player is doing, when it is not just playing -->
+  <variable name="OSDStateVar">
+    <value condition="Player.Caching">$LOCALIZE[15107]</value>
+    <value condition="Player.Seeking">$LOCALIZE[773]</value>
+    <value condition="Player.Paused">$LOCALIZE[112]</value>
+    <value condition="Player.Forwarding | Player.Rewinding">$INFO[Player.PlaySpeed]x</value>
+    <value></value>
+  </variable>
+  <!-- OSD record button: says what a tap will do -->
+  <variable name="OSDRecordLabelVar">
+    <value condition="PVR.IsRecordingPlayingChannel">$LOCALIZE[19059]</value>
+    <value>$LOCALIZE[264]</value>
+  </variable>
+  <!-- bookmarks: Clear asks once more before Kodi wipes them and the resume point -->
+  <variable name="BookmarkClearLabelVar">
+    <value condition="String.IsEqual(Window(Home).Property(arthuros.clearbm),1)">$LOCALIZE[107]</value>
+    <value>$LOCALIZE[296]</value>
+  </variable>
+  <!-- repeat buttons: the current mode (Repeat: Off / One / All) -->
+  <variable name="OSDRepeatLabelVar">
+    <value condition="Playlist.IsRepeatOne">$LOCALIZE[596]</value>
+    <value condition="Playlist.IsRepeat">$LOCALIZE[597]</value>
+    <value>$LOCALIZE[595]</value>
+  </variable>
   <!-- One line of "what am I looking at", shown in media window title bars. -->
   <variable name="BreadcrumbVar">
     <value condition="!String.IsEmpty(Container.FolderName)">$INFO[Container.FolderName]</value>

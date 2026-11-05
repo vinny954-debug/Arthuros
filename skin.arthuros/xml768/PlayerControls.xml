@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <window>
-  <defaultcontrol>602</defaultcontrol>
+  <defaultcontrol always="true">602</defaultcontrol>
   <controls>
     <control type="image">
       <left>0</left><top>0</top><width>1024</width><height>768</height>
@@ -8,26 +8,26 @@
     </control>
     <control type="group">
       <centerleft>50%</centerleft><centertop>50%</centertop>
-      <width>572</width><height>200</height>
+      <width>660</width><height>256</height>
       <control type="image">
         <left>0</left><top>0</top>
-        <width>572</width><height>200</height>
+        <width>660</width><height>256</height>
         <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
       </control>
       <control type="group">
         <left>3</left><top>3</top>
         <control type="group">
-        <width>566</width><height>26</height>
+        <width>654</width><height>26</height>
 
         <control type="image">
           <left>0</left><top>0</top>
-          <width>566</width><height>26</height>
+          <width>654</width><height>26</height>
           <texture colordiffuse="accent2">fill.png</texture>
         </control>
         <!-- hard 1px rule under the bar, the way Arthur draws it -->
         <control type="image">
           <left>0</left><bottom>0</bottom>
-          <width>566</width><height>1</height>
+          <width>654</width><height>1</height>
           <texture>fill_black.png</texture>
         </control>
 
@@ -42,7 +42,7 @@
           <left>26</left><right>100</right><top>0</top><height>26</height>
           <align>left</align><aligny>center</aligny>
           <font>chromebold</font><textcolor>titletext</textcolor>
-          <label>$LOCALIZE[16003]</label>
+          <label>$LOCALIZE[31907]</label>
         </control>
 
         <control type="label">
@@ -129,94 +129,159 @@
       </control>
       <control type="image">
         <left>19</left><top>42</top><width>88</width><height>88</height>
+        <texture fallback="DefaultVideo.png">$INFO[Player.Art(thumb)]</texture>
+        <aspectratio>keep</aspectratio>
+        <visible>Player.HasVideo</visible>
+      </control>
+      <control type="image">
+        <left>19</left><top>42</top><width>88</width><height>88</height>
         <texture fallback="DefaultAudio.png">$INFO[Player.Art(thumb)]</texture>
         <aspectratio>keep</aspectratio>
+        <visible>!Player.HasVideo</visible>
       </control>
       <control type="label">
-        <left>126</left><top>38</top><width>420</width><height>26</height>
-        <font>bigbold</font><label>$VAR[NowPlayingVar]</label>
+        <left>126</left><top>38</top><width>520</width><height>26</height>
+        <font>chromebold</font><label>$VAR[NowPlayingVar]</label>
       </control>
       <control type="label">
-        <left>126</left><top>68</top><width>420</width><height>22</height>
-        <font>small</font><textcolor>textdim</textcolor>
+        <left>126</left><top>66</top><width>520</width><height>22</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor>
         <label>$INFO[Player.Time] / $INFO[Player.Duration]</label>
       </control>
       <control type="progress" id="23">
-        <left>126</left><top>96</top><width>420</width><height>18</height>
+        <left>126</left><top>100</top><width>520</width><height>20</height>
         <info>Player.Progress</info>
+        <visible>!Player.SeekEnabled</visible>
       </control>
       <control type="group" id="699"><left>-3000</left><top>0</top><width>10</width><height>10</height></control>
-      <control type="button" id="87"><left>-3000</left><top>0</top><width>100</width><height>30</height>
-        <onclick>PlayerControl(Play)</onclick></control>
+      <control type="slider" id="9980">
+        <left>126</left><top>92</top><width>520</width><height>36</height>
+        <orientation>horizontal</orientation>
+        <info>Player.Progress</info>
+        <action>seek</action>
+        <onup>202</onup>
+        <ondown>201</ondown>
+        <visible>Player.SeekEnabled</visible>
+      </control>
       <control type="grouplist" id="201">
-        <left>13</left><top>146</top><width>546</width><height>36</height>
+        <left>13</left><top>146</top><width>270</width><height>48</height>
         <orientation>horizontal</orientation><itemgap>6</itemgap>
+        <onup condition="Player.SeekEnabled">9980</onup>
+        <onup>202</onup>
+        <ondown>202</ondown>
+        <onleft>9983</onleft>
+        <onright>9982</onright>
         <control type="radiobutton" id="600">
-          <width>84</width><height>36</height>
+          <width>60</width><height>48</height>
           <label/>
-          <textureradioonfocus>icons16/prev.png</textureradioonfocus>
-          <textureradioonnofocus>icons16/prev.png</textureradioonnofocus>
-          <textureradioofffocus>icons16/prev.png</textureradioofffocus>
-          <textureradiooffnofocus colordiffuse="textdim">icons16/prev.png</textureradiooffnofocus>
-          <radiowidth>16</radiowidth><radioheight>16</radioheight>
-          <radioposx>34</radioposx><radioposy>10</radioposy>
+          <textureradioonfocus>icons24/prev.png</textureradioonfocus>
+          <textureradioonnofocus>icons24/prev.png</textureradioonnofocus>
+          <textureradioondisabled>icons24/prev.png</textureradioondisabled>
+          <textureradioofffocus>icons24/prev.png</textureradioofffocus>
+          <textureradiooffnofocus>icons24/prev.png</textureradiooffnofocus>
+          <textureradiooffdisabled>icons24/prev.png</textureradiooffdisabled>
+          <radiowidth>24</radiowidth><radioheight>24</radioheight>
+          <radioposx>18</radioposx><radioposy>12</radioposy>
           <onclick>PlayerControl(Previous)</onclick>
         </control>
         <control type="radiobutton" id="602">
-          <width>84</width><height>36</height>
+          <width>60</width><height>48</height>
           <label/>
-          <textureradioonfocus>icons16/play.png</textureradioonfocus>
-          <textureradioonnofocus>icons16/play.png</textureradioonnofocus>
-          <textureradioofffocus>icons16/play.png</textureradioofffocus>
-          <textureradiooffnofocus colordiffuse="textdim">icons16/play.png</textureradiooffnofocus>
-          <radiowidth>16</radiowidth><radioheight>16</radioheight>
-          <radioposx>34</radioposx><radioposy>10</radioposy>
+          <textureradioonfocus>icons24/pause.png</textureradioonfocus>
+          <textureradioonnofocus>icons24/pause.png</textureradioonnofocus>
+          <textureradioondisabled>icons24/pause.png</textureradioondisabled>
+          <textureradioofffocus>icons24/play.png</textureradioofffocus>
+          <textureradiooffnofocus>icons24/play.png</textureradiooffnofocus>
+          <textureradiooffdisabled>icons24/play.png</textureradiooffdisabled>
+          <radiowidth>24</radiowidth><radioheight>24</radioheight>
+          <radioposx>18</radioposx><radioposy>12</radioposy>
+          <selected>!Player.Paused + !Player.Forwarding + !Player.Rewinding</selected>
           <onclick>PlayerControl(Play)</onclick>
         </control>
         <control type="radiobutton" id="603">
-          <width>84</width><height>36</height>
+          <width>60</width><height>48</height>
           <label/>
-          <textureradioonfocus>icons16/stop.png</textureradioonfocus>
-          <textureradioonnofocus>icons16/stop.png</textureradioonnofocus>
-          <textureradioofffocus>icons16/stop.png</textureradioofffocus>
-          <textureradiooffnofocus colordiffuse="textdim">icons16/stop.png</textureradiooffnofocus>
-          <radiowidth>16</radiowidth><radioheight>16</radioheight>
-          <radioposx>34</radioposx><radioposy>10</radioposy>
+          <textureradioonfocus>icons24/stop.png</textureradioonfocus>
+          <textureradioonnofocus>icons24/stop.png</textureradioonnofocus>
+          <textureradioondisabled>icons24/stop.png</textureradioondisabled>
+          <textureradioofffocus>icons24/stop.png</textureradioofffocus>
+          <textureradiooffnofocus>icons24/stop.png</textureradiooffnofocus>
+          <textureradiooffdisabled>icons24/stop.png</textureradiooffdisabled>
+          <radiowidth>24</radiowidth><radioheight>24</radioheight>
+          <radioposx>18</radioposx><radioposy>12</radioposy>
           <onclick>PlayerControl(Stop)</onclick>
         </control>
         <control type="radiobutton" id="605">
-          <width>84</width><height>36</height>
+          <width>60</width><height>48</height>
           <label/>
-          <textureradioonfocus>icons16/next.png</textureradioonfocus>
-          <textureradioonnofocus>icons16/next.png</textureradioonnofocus>
-          <textureradioofffocus>icons16/next.png</textureradioofffocus>
-          <textureradiooffnofocus colordiffuse="textdim">icons16/next.png</textureradiooffnofocus>
-          <radiowidth>16</radiowidth><radioheight>16</radioheight>
-          <radioposx>34</radioposx><radioposy>10</radioposy>
+          <textureradioonfocus>icons24/next.png</textureradioonfocus>
+          <textureradioonnofocus>icons24/next.png</textureradioonnofocus>
+          <textureradioondisabled>icons24/next.png</textureradioondisabled>
+          <textureradioofffocus>icons24/next.png</textureradioofffocus>
+          <textureradiooffnofocus>icons24/next.png</textureradiooffnofocus>
+          <textureradiooffdisabled>icons24/next.png</textureradiooffdisabled>
+          <radiowidth>24</radiowidth><radioheight>24</radioheight>
+          <radioposx>18</radioposx><radioposy>12</radioposy>
           <onclick>PlayerControl(Next)</onclick>
         </control>
+      </control>
+      <control type="radiobutton" id="9982">
+        <left>290</left><top>146</top><width>60</width><height>48</height>
+        <label/>
+        <textureradioonfocus>icons24/audio_muted.png</textureradioonfocus>
+        <textureradioonnofocus>icons24/audio_muted.png</textureradioonnofocus>
+        <textureradioondisabled>icons24/audio_muted.png</textureradioondisabled>
+        <textureradioofffocus>icons24/audio.png</textureradioofffocus>
+        <textureradiooffnofocus>icons24/audio.png</textureradiooffnofocus>
+        <textureradiooffdisabled>icons24/audio.png</textureradiooffdisabled>
+        <radiowidth>24</radiowidth><radioheight>24</radioheight>
+        <radioposx>18</radioposx><radioposy>12</radioposy>
+        <selected>Player.Muted</selected>
+        <onclick>Mute</onclick>
+        <onup condition="Player.SeekEnabled">9980</onup>
+        <onup>202</onup>
+        <ondown>202</ondown>
+        <onleft>201</onleft>
+        <onright>9983</onright>
+      </control>
+      <control type="slider" id="9983">
+        <left>356</left><top>152</top><width>290</width><height>36</height>
+        <orientation>horizontal</orientation>
+        <info>Player.Volume</info>
+        <action>volume</action>
+        <enable>!Player.Passthrough</enable>
+        <onup condition="Player.SeekEnabled">9980</onup>
+        <onup>202</onup>
+        <ondown>202</ondown>
+      </control>
+      <control type="grouplist" id="202">
+        <left>13</left><top>202</top><width>634</width><height>44</height>
+        <orientation>horizontal</orientation><itemgap>6</itemgap>
+        <onup>201</onup>
+        <ondown condition="Player.SeekEnabled">9980</ondown>
+        <ondown>201</ondown>
         <control type="radiobutton" id="607">
-          <width>84</width><height>36</height>
-          <label/>
-          <textureradioonfocus>icons16/shuffle.png</textureradioonfocus>
-          <textureradioonnofocus>icons16/shuffle.png</textureradioonnofocus>
-          <textureradioofffocus>icons16/shuffle.png</textureradioofffocus>
-          <textureradiooffnofocus colordiffuse="textdim">icons16/shuffle.png</textureradiooffnofocus>
-          <radiowidth>16</radiowidth><radioheight>16</radioheight>
-          <radioposx>34</radioposx><radioposy>10</radioposy>
+          <width>140</width><height>44</height>
+          <font>chrome</font><label>$LOCALIZE[191]</label>
+          <selected>Playlist.IsRandom</selected>
           <onclick>PlayerControl(Random)</onclick>
         </control>
-        <control type="group" id="9704">
-          <width>84</width><height>36</height>
-          <control type="button" id="704">
-            <left>0</left><top>0</top><width>84</width><height>36</height>
-            <label/>
-            <onclick>PlayerControl(Repeat)</onclick>
-          </control>
-          <control type="image">
-            <left>34</left><top>10</top><width>16</width><height>16</height>
-            <texture>icons16/repeat.png</texture>
-          </control>
+        <control type="button" id="704">
+          <width>150</width><height>44</height>
+          <font>chrome</font><label>$VAR[OSDRepeatLabelVar]</label>
+          <onclick>PlayerControl(Repeat)</onclick>
+        </control>
+        <control type="button" id="87">
+          <width>110</width><height>44</height>
+          <font>chrome</font><label>$LOCALIZE[559]</label>
+          <onclick>Dialog.Close(PlayerControls)</onclick>
+          <onclick condition="Player.HasVideo">ActivateWindow(VideoPlaylist)</onclick>
+          <onclick condition="!Player.HasVideo">ActivateWindow(MusicPlaylist)</onclick>
+        </control>
+        <control type="button" id="9951">
+          <width>100</width><height>44</height>
+          <font>chrome</font><label>$LOCALIZE[15067]</label>
+          <onclick>Dialog.Close(PlayerControls)</onclick>
         </control>
       </control>
     </control>

@@ -359,41 +359,105 @@ def settings_dialog(name):
                   icon="icons24/settings.png", colour="accent1", heading=False)
 
 # ====================================================== player / OSD family
-OSD_BUTTONS = [
-  (600, "radiobutton", "prev",  ["PlayerControl(Previous)"]),
-  (601, "radiobutton", "rew",   ["PlayerControl(Play)", "PlayerControl(Rewind)"]),
-  (602, "button",      "play",  ["PlayerControl(Play)"]),
-  (603, "radiobutton", "stop",  ["PlayerControl(Stop)"]),
-  (606, "radiobutton", "ffwd",  ["PlayerControl(Play)", "PlayerControl(Forward)"]),
-  (607, "radiobutton", "next",  ["PlayerControl(Next)"]),
-]
+# The video, music and game OSDs are one touch-first bar along the bottom
+# edge, like Arthur's icon bar. Nothing is dimmed, and a tap on the picture
+# above the bar closes it (Kodi swallows a tap on a modal dialog otherwise).
+# Every size here is already a touch size, so nothing has to grow for Extra
+# large or Touch mode: rows are 36-48 px, text uses the chrome fonts (never
+# more than 20 px) and the glyphs are 24 px.
+BOXES.update({"VideoOSD": "none", "MusicOSD": "none", "GameOSD": "none",
+              # these carry their own Close button; over playback the title
+              # bar's minimise / full-screen boxes would leave or do nothing
+              "DialogFullScreenInfo": "none", "DialogPlayerProcessInfo": "none",
+              "DialogPVRRadioRDSInfo": "none"})
 
+OSD_W = 1024
+SEEK_T, SEEK_H = 32, 36       # time | seek slider | duration (game: help text)
+TR_T, TR_H = 74, 48           # transport | mute + volume | Hide
+TX_T, TX_H = 128, 44          # text buttons
+OSD_H = TX_T + TX_H + 8
+TR_W = 60                     # a transport button: 60x48 with a 24 px glyph
+VOL_W, HIDE_W = 220, 110
+HIDE_L = OSD_W - 8 - HIDE_W
+VOL_L = HIDE_L - 8 - VOL_W
+MUTE_L = VOL_L - 6 - TR_W
 
-def icon_radio(cid, glyph, w, h, clicks, indent=8):
-    """A transport button whose radio texture is the glyph. radioposx is
-    measured from the control's left edge (GUIRadioButtonControl.cpp), so
-    (w-16)/2 centres it. 'Off' is drawn dimmed so toggles like shuffle show
-    their state."""
+LIVE_V = "VideoPlayer.Content(LiveTV)"
+LIVE_M = "MusicPlayer.Content(LiveTV)"
+LIVE = f"[{LIVE_V} | {LIVE_M}]"
+OSD_LIVE = {"video": LIVE_V, "music": LIVE_M}
+
+def xattr(s):
+    return s.replace("&", "&amp;").replace("<", "&lt;").replace('"', "&quot;")
+
+def onclicks(acts, sp):
+    """<onclick> lines; an action may be (condition, action). CGUIAction
+    evaluates every condition before it runs anything."""
+    out = ""
+    for a in acts:
+        if isinstance(a, tuple):
+            out += f'{sp}<onclick condition="{xattr(a[0])}">{a[1]}</onclick>\n'
+        else:
+            out += f"{sp}<onclick>{a}</onclick>\n"
+    return out
+
+def navs(sp, **dirs):
+    """<onup>... lines. A value is an id, or a list of (condition, id) tried in
+    order (CGUIAction::GetNavigation takes the first whose condition holds)."""
+    out = ""
+    for d in ("up", "down", "left", "right"):
+        v = dirs.get(d)
+        if v is None:
+            continue
+        for cond, tgt in (v if isinstance(v, list) else [(None, v)]):
+            c = f' condition="{xattr(cond)}"' if cond else ""
+            out += f"{sp}<on{d}{c}>{tgt}</on{d}>\n"
+    return out
+
+def glyph_tex(glyph, size):
+    return glyph if ("/" in glyph or "$" in glyph) else f"icons{size}/{glyph}.png"
+
+def icon_radio(cid, glyph, w, h, clicks, indent=8, size=16, selected=None,
+               glyph_on=None, visible=None, nav=None, pos=None):
+    """A glyph button that is a single focusable control: the radio texture is
+    the glyph (radioposx is measured from the left edge,
+    GUIRadioButtonControl.cpp). It keeps keyboard navigation inside a
+    grouplist, which a group holding a button and an image does not (Kodi
+    navigates from the button, which has no actions of its own).
+    Without `selected` both states draw the same glyph, so a tap never flips
+    its look. With it, the state follows the condition (m_toggleSelect):
+    `glyph_on` while it holds, `glyph` otherwise (Play/Pause, Mute)."""
     sp = " " * indent
-    x, y = (w - 16) // 2, (h - 16) // 2
-    ons = "".join(f"\n{sp}  <onclick>{c}</onclick>" for c in clicks)
-    return (f'{sp}<control type="radiobutton" id="{cid}">\n'
-            f'{sp}  <width>{w}</width><height>{h}</height>\n'
-            f'{sp}  <label></label>\n'
-            f'{sp}  <textureradioonfocus>icons16/{glyph}.png</textureradioonfocus>\n'
-            f'{sp}  <textureradioonnofocus>icons16/{glyph}.png</textureradioonnofocus>\n'
-            f'{sp}  <textureradioofffocus>icons16/{glyph}.png</textureradioofffocus>\n'
-            f'{sp}  <textureradiooffnofocus colordiffuse="textdim">icons16/{glyph}.png</textureradiooffnofocus>\n'
-            f'{sp}  <radiowidth>16</radiowidth><radioheight>16</radioheight>\n'
-            f'{sp}  <radioposx>{x}</radioposx><radioposy>{y}</radioposy>{ons}\n'
-            f'{sp}</control>\n')
+    x, y = (w - size) // 2, (h - size) // 2
+    off = glyph_tex(glyph, size)
+    on = glyph_tex(glyph_on, size) if glyph_on else off
+    s = f'{sp}<control type="radiobutton" id="{cid}">\n'
+    if pos:
+        s += f"{sp}  <left>{pos[0]}</left><top>{pos[1]}</top>"
+    else:
+        s += f"{sp}  "
+    s += f"<width>{w}</width><height>{h}</height>\n"
+    s += f"{sp}  <label></label>\n"
+    for state, tex in (("on", on), ("off", off)):
+        for f in ("focus", "nofocus", "disabled"):
+            s += f"{sp}  <textureradio{state}{f}>{tex}</textureradio{state}{f}>\n"
+    s += f"{sp}  <radiowidth>{size}</radiowidth><radioheight>{size}</radioheight>\n"
+    s += f"{sp}  <radioposx>{x}</radioposx><radioposy>{y}</radioposy>\n"
+    if selected:
+        s += f"{sp}  <selected>{selected}</selected>\n"
+    s += onclicks(clicks, sp + "  ")
+    if nav:
+        s += navs(sp + "  ", **nav)
+    if visible:
+        s += f"{sp}  <visible>{visible}</visible>\n"
+    return s + f"{sp}</control>\n"
 
-def icon_button(cid, glyph, w, h, clicks, indent=8):
-    """Plain buttons have no radio texture, so the glyph rides in a group."""
+def icon_button(cid, glyph, w, h, clicks, indent=8, size=16):
+    """Plain buttons have no radio texture, so the glyph rides in a group.
+    (Kept for callers outside the OSD; inside a grouplist prefer icon_radio,
+    whose single control keeps keyboard navigation.)"""
     sp = " " * indent
     ons = "".join(f"\n{sp}    <onclick>{c}</onclick>" for c in clicks)
-    # the group needs an id of its own: a grouplist chains navigation by
-    # child id, and an id-less child (id 0) stops the keyboard dead
     return (f'{sp}<control type="group" id="{9000 + int(cid)}">\n'
             f'{sp}  <width>{w}</width><height>{h}</height>\n'
             f'{sp}  <control type="button" id="{cid}">\n'
@@ -401,142 +465,542 @@ def icon_button(cid, glyph, w, h, clicks, indent=8):
             f'{sp}    <label></label>{ons}\n'
             f'{sp}  </control>\n'
             f'{sp}  <control type="image">\n'
-            f'{sp}    <left>{(w-16)//2}</left><top>{(h-16)//2}</top><width>16</width><height>16</height>\n'
-            f'{sp}    <texture>icons16/{glyph}.png</texture>\n'
+            f'{sp}    <left>{(w-size)//2}</left><top>{(h-size)//2}</top><width>{size}</width><height>{size}</height>\n'
+            f'{sp}    <texture>{glyph_tex(glyph, size)}</texture>\n'
             f'{sp}  </control>\n'
             f'{sp}</control>\n')
 
-def osd_transport(top):
-    """Icon buttons: each is a group holding the button plus its glyph, so the
-    grouplist still lays them out one per slot."""
-    s = f"""      <control type="grouplist" id="201">
-        <left>13</left><top>{top}</top><width>560</width><height>36</height>
-        <orientation>horizontal</orientation><itemgap>6</itemgap>
-        <onup>203</onup><ondown>202</ondown>
-"""
-    for cid, kind, glyph, acts in OSD_BUTTONS:
-        if kind == "radiobutton":
-            s += icon_radio(cid, glyph, 86, 36, acts)
+def slider(cid, l, t, wd, ht, action, info, visible=None, enable=None, nav=None, indent=6):
+    """A touch slider: a tap jumps, a drag follows the finger
+    (CGUISliderControl::OnMouseEvent). <action> seek / pvr.seek / volume are
+    Kodi's own (GUISliderControl.cpp). The nib is the bevel texture scaled to
+    the control height, so it is a ht x ht square. Kodi's default slider
+    orientation is vertical, hence the explicit horizontal."""
+    sp = " " * indent
+    s = (f'{sp}<control type="slider" id="{cid}">\n'
+         f"{sp}  <left>{l}</left><top>{t}</top><width>{wd}</width><height>{ht}</height>\n"
+         f"{sp}  <orientation>horizontal</orientation>\n")
+    if info:
+        s += f"{sp}  <info>{info}</info>\n"
+    if action:
+        s += f"{sp}  <action>{action}</action>\n"
+    if enable:
+        s += f"{sp}  <enable>{enable}</enable>\n"
+    if nav:
+        s += navs(sp + "  ", **nav)
+    if visible:
+        s += f"{sp}  <visible>{visible}</visible>\n"
+    return s + f"{sp}</control>\n"
+
+# (id, glyph, onclick actions, {kind: visible condition}) - a kind that is not
+# listed does not get the button. Rewind/forward resume first when paused:
+# PlayerControl(Play) then Rewind would pause and the Rewind be ignored
+# (PlayerBuiltins.cpp: rewind/forward only act while playing).
+PREV_V = ("Player.HasSceneMarkers | Player.ChapterCount | Integer.IsGreater(Playlist.Length(video),1)"
+          f" | [Player.SeekEnabled + {LIVE_V}]")
+NEXT_V = ("Player.HasSceneMarkers | Player.ChapterCount | Integer.IsGreater(Playlist.Length(video),1)"
+          " | PVR.IsTimeShift")
+PREV_M = f"Player.ChapterCount | MusicPlayer.HasPrevious | [Player.SeekEnabled + {LIVE_M}]"
+NEXT_M = "Player.ChapterCount | MusicPlayer.HasNext | PVR.IsTimeShift"
+OSD_BUTTONS = [
+  (600, "prev", ["PlayerControl(Previous)"], {"video": PREV_V, "music": PREV_M}),
+  (601, "rew",  [("Player.Paused", "PlayerControl(Play)"), ("!Player.Paused", "PlayerControl(Rewind)")],
+                {"video": f"Player.SeekEnabled + !{LIVE_V}", "music": f"Player.SeekEnabled + !{LIVE_M}"}),
+  (602, "play", ["PlayerControl(Play)"], {"video": None, "music": None, "game": None}),
+  (603, "stop", ["PlayerControl(Stop)"], {"video": None, "music": None, "game": None}),
+  (606, "ffwd", [("Player.Paused", "PlayerControl(Play)"), ("!Player.Paused", "PlayerControl(Forward)")],
+                {"video": f"Player.SeekEnabled + !{LIVE_V}", "music": f"Player.SeekEnabled + !{LIVE_M}"}),
+  (607, "next", ["PlayerControl(Next)"], {"video": NEXT_V, "music": NEXT_M}),
+]
+# Play/Pause shows Pause while playing at normal speed (Estuary's rule)
+PLAYING = "!Player.Paused + !Player.Forwarding + !Player.Rewinding"
+
+def seek_targets(kind):
+    """Where Up from the transport row (and Down from the text row) lands."""
+    if kind == "game":
+        return []
+    live = OSD_LIVE[kind]
+    return [(f"Player.SeekEnabled + !{live}", "9980"), (f"Player.SeekEnabled + {live}", "9981")]
+
+def osd_transport(kind="video", top=TR_T):
+    """Grouplist 201: big glyph buttons. Hidden ones collapse (the grouplist
+    lays out visible children only)."""
+    up = seek_targets(kind) + [(None, "202")]
+    s = (f'      <control type="grouplist" id="201">\n'
+         f"        <left>8</left><top>{top}</top><width>{MUTE_L - 16}</width><height>{TR_H}</height>\n"
+         f"        <orientation>horizontal</orientation><itemgap>6</itemgap>\n"
+         + navs("        ", up=up, down="202", left="9951", right="9982"))
+    for cid, glyph, acts, vis in OSD_BUTTONS:
+        if kind not in vis:
+            continue
+        if cid == 602:
+            s += icon_radio(cid, "play", TR_W, TR_H, acts, size=24, selected=PLAYING,
+                            glyph_on="pause", visible=vis[kind])
         else:
-            s += icon_button(cid, glyph, 86, 36, acts)
+            s += icon_radio(cid, glyph, TR_W, TR_H, acts, size=24, visible=vis[kind])
     s += "      </control>\n"
     return s
 
 # Set by every media browser as it closes (onunload), so the OSD knows which
-# add-on is playing: a plugin's resolved stream path no longer names it.
+# add-on is playing when the stream path does not say.
 PLUGIN_PROP = "Window(Home).Property(arthuros.plugin)"
-LIVE = "[PVR.IsPlayingTV | PVR.IsPlayingRadio]"
 
-def osd_buttons(gid, top, buttons, onup, ondown):
-    """A row of text buttons: (id or None, width, label, [actions], visible).
-    A leading ("caption", ...) entry becomes a label in front of the row; it
-    stays outside the grouplist, where a label would stop keyboard focus."""
-    s, left = "", 13
-    if buttons and buttons[0][0] == "caption":
-        _, w, label, _, _ = buttons[0]
-        buttons = buttons[1:]
-        s += (f"      <control type=\"label\">\n        <left>{left}</left><top>{top}</top>"
-              f"<width>{w}</width><height>30</height>\n"
-              f"        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>\n"
-              f"        <label>{label}</label>\n      </control>\n")
-        left += w + 6
-    s += f"""      <control type="grouplist" id="{gid}">
-        <left>{left}</left><top>{top}</top><width>{879 - left}</width><height>30</height>
-        <orientation>horizontal</orientation><itemgap>6</itemgap>
-        <onup>{onup}</onup><ondown>{ondown}</ondown>
-"""
-    for cid, w, label, acts, vis in buttons:
-        kind = "radiobutton" if cid in (608, 804) else "button"
-        idattr = f' id="{cid}"' if cid else ""
-        s += f'        <control type="{kind}"{idattr}>\n'
-        s += f"          <width>{w}</width><height>30</height>\n"
-        s += f"          <label>{label}</label>\n"
-        s += "".join(f"          <onclick>{x}</onclick>\n" for x in acts)
+def osd_buttons(gid, top, buttons, onup, ondown, onright=None, left=8, width=None, h=TX_H):
+    """A row of text buttons: (id, width, label, [actions], visible[, selected]).
+    With `selected` the entry is a radiobutton, whose circle shows the state
+    (shuffle). Chrome font: at most 20 px, so the row fits every fontset."""
+    width = width or (OSD_W - 2 * left)
+    s = (f'      <control type="grouplist" id="{gid}">\n'
+         f"        <left>{left}</left><top>{top}</top><width>{width}</width><height>{h}</height>\n"
+         f"        <orientation>horizontal</orientation><itemgap>6</itemgap>\n"
+         + navs("        ", up=onup, down=ondown, right=onright))
+    for b in buttons:
+        cid, w, label, acts, vis = b[:5]
+        sel = b[5] if len(b) > 5 else None
+        kind = "radiobutton" if sel else "button"
+        s += f'        <control type="{kind}" id="{cid}">\n'
+        s += f"          <width>{w}</width><height>{h}</height>\n"
+        s += f"          <font>chrome</font><label>{label}</label>\n"
+        if sel:
+            s += f"          <selected>{sel}</selected>\n"
+        s += onclicks(acts, "          ")
         if vis:
             s += f"          <visible>{vis}</visible>\n"
         s += "        </control>\n"
     return s + "      </control>\n"
 
-CLOSE = (9951, 140, "$LOCALIZE[15067]", ["Dialog.Close(all,true)", "Action(FullScreen)"], None)
-SETTINGS = ("caption", 110, "$LOCALIZE[5]:", [], None)
-# short labels, so a row still fits at the Extra large font sizes
-ADDON = (9960, 120, "$LOCALIZE[24000]", [f"Addon.OpenSettings($INFO[{PLUGIN_PROP}])"],
-         f"!String.IsEmpty({PLUGIN_PROP})")
-AUDIO = (9962, 100, "$LOCALIZE[292]", ["ActivateWindow(OSDAudioSettings)"], None)
+# Settings dialogs stay over the bar (Kodi closes audio/subtitle settings when
+# the OSD goes); windows that need the picture close the bar first.
+AUDIO = (9962, 70, "$LOCALIZE[292]", ["ActivateWindow(OSDAudioSettings)"], None)
+# The add-on that is playing: plugin:// paths name it; otherwise the browser
+# it was started from recorded it (scripts/addonsettings.py).
+ADDON = (9960, 170, "$LOCALIZE[10140]", ["RunScript(special://skin/scripts/addonsettings.py)"],
+         f"String.StartsWith(Player.FilenameAndPath,plugin://) | !String.IsEmpty({PLUGIN_PROP})")
 
-def osd_extras(top, kind="video"):
-    """Two rows under the transport: player actions, then the settings Kodi
-    keeps for the thing playing (Estuary's OSD offers the same set)."""
+def live_buttons(name, live):
+    """Channels, Guide (and the radio's RDS text): close the bar first, so it
+    does not sit over them. CGUIDialogVideoOSD keeps itself alive for these
+    otherwise (GUIDialogVideoOSD.cpp FrameMove)."""
+    return [(9966, 100, "$LOCALIZE[19019]", [f"Dialog.Close({name})", "ActivateWindow(PVROSDChannels)"], live),
+            (9967, 70, "$LOCALIZE[19069]", [f"Dialog.Close({name})", "ActivateWindow(PVRChannelGuide)"],
+             f"{live} + VideoPlayer.HasEPG")]
+
+def record_button(live):
+    return (608, 160, "$VAR[OSDRecordLabelVar]", ["PVR.ToggleRecordPlayingChannel"],
+            f"{live} + PVR.CanRecordPlayingChannel")
+
+def osd_rows(name, kind):
+    """The text-button row (grouplist 202)."""
     if kind == "game":
-        row1 = [(9970, 180, "$LOCALIZE[35249]", ["ActivateWindow(InGameSaves)"], None),
-                (9971, 140, "$LOCALIZE[13007]", ["PlayerControl(Reset)"], None),
-                CLOSE]
-        row2 = [SETTINGS,
-                (9972, 110, "$LOCALIZE[587]", ["ActivateWindow(GameVideoFilter)"], None),
-                (9973, 130, "$LOCALIZE[31997]", ["ActivateWindow(GameStretchMode)"], None),
-                (9974, 140, "$LOCALIZE[35227]", ["ActivateWindow(GameVideoRotation)"], None),
-                (9975, 120, "$LOCALIZE[13376]", ["ActivateWindow(GameVolume)"], None),
-                (9976, 140, "$LOCALIZE[10038]", ["ActivateWindow(GameAdvancedSettings)"], None)]
-    else:
-        row1 = [(87, 150, "$LOCALIZE[136]", ["ActivateWindow(PlayerControls)"], None),
-                (608, 150, "$LOCALIZE[264]", ["PVR.ToggleRecordPlayingChannel"], LIVE)]
-        if kind == "video":
-            row1 += [(804, 170, "$LOCALIZE[33061]", ["PlayerControl(ShowVideoMenu)"], "VideoPlayer.HasMenu"),
-                     (9950, 220, "$LOCALIZE[31998]", ["ActivateWindow(SubtitleSearch)"], None)]
-        row1 += [CLOSE]
-        if kind == "video":
-            row2 = [SETTINGS,
-                    (9961, 100, "$LOCALIZE[291]", ["ActivateWindow(OSDVideoSettings)"], None),
-                    AUDIO,
-                    (9963, 150, "$LOCALIZE[287]", ["ActivateWindow(OSDSubtitleSettings)"], None),
-                    (9964, 150, "$LOCALIZE[298]", ["ActivateWindow(VideoBookmarks)"], None),
-                    ADDON]
-        else:
-            row2 = [SETTINGS, AUDIO, ADDON]
-    return (osd_buttons(202, top, row1, 201, 203)
-            + osd_buttons(203, top + 36, row2, 202, 201))
+        return [(9970, 130, "$LOCALIZE[35249]", ["ActivateWindow(InGameSaves)"], None),
+                (9971, 70, "$LOCALIZE[13007]", ["PlayerControl(Reset)"], None),
+                (9977, 100, "$LOCALIZE[35234]", ["ActivateWindow(GameControllers)"], None),
+                (9978, 70, "$LOCALIZE[35110]", ["ActivateWindow(GamePorts)"], None),
+                (9979, 90, "$LOCALIZE[35172]", ["ActivateWindow(GameAgents)"], None),
+                (9972, 80, "$LOCALIZE[587]", ["ActivateWindow(GameVideoFilter)"], None),
+                (9973, 90, "$LOCALIZE[31997]", ["ActivateWindow(GameStretchMode)"], None),
+                (9974, 100, "$LOCALIZE[35227]", ["ActivateWindow(GameVideoRotation)"], None),
+                (9976, 100, "$LOCALIZE[10038]", ["ActivateWindow(GameAdvancedSettings)"], None)]
+    if kind == "video":
+        L = LIVE_V
+        return [(9963, 110, "$LOCALIZE[287]", ["ActivateWindow(OSDSubtitleSettings)"],
+                 f"!{L} | VideoPlayer.HasSubtitles"),
+                (9950, 160, "$LOCALIZE[31998]", ["ActivateWindow(SubtitleSearch)"], f"!{L}"),
+                AUDIO,
+                (9961, 70, "$LOCALIZE[291]", ["ActivateWindow(OSDVideoSettings)"], None),
+                (9964, 110, "$LOCALIZE[298]", [f"Dialog.Close({name})", "ActivateWindow(VideoBookmarks)"], f"!{L}"),
+                (9965, 60, "$LOCALIZE[29915]", [f"Dialog.Close({name})", "ActivateWindow(FullscreenInfo)"], None),
+                (804, 60, "$LOCALIZE[33061]", ["PlayerControl(ShowVideoMenu)"], "VideoPlayer.HasMenu"),
+                # the play queue (Kodi's own Playlist action opens the same window)
+                (87, 100, "$LOCALIZE[559]", ["Dialog.Close(all,true)", "ActivateWindow(VideoPlaylist)"],
+                 "Integer.IsGreater(Playlist.Length(video),1)"),
+                *live_buttons(name, L),
+                (9968, 100, "$LOCALIZE[10550]", [f"Dialog.Close({name})", "ActivateWindow(Teletext)"],
+                 "VideoPlayer.HasTeletext"),
+                record_button(L),
+                ADDON]
+    L = LIVE_M
+    not_live = f"![{L} | MusicPartyMode.Enabled]"
+    return [(9984, 130, "$LOCALIZE[191]", ["PlayerControl(Random)"], not_live, "Playlist.IsRandom"),
+            (9985, 140, "$VAR[OSDRepeatLabelVar]", ["PlayerControl(Repeat)"], not_live),
+            AUDIO,
+            (87, 100, "$LOCALIZE[559]", ["Dialog.Close(all,true)", "ActivateWindow(MusicPlaylist)"],
+             "Integer.IsGreater(Playlist.Length(music),0)"),
+            *live_buttons(name, L),
+            (9969, 120, "$LOCALIZE[31801]", [f"Dialog.Close({name})", "ActivateWindow(PVRRadioRDSInfo)"],
+             f"{L} + RDS.HasRDS"),
+            record_button(L),
+            ADDON]
 
 def osd_window(name, kind="video"):
-    video = kind == "video"
-    body  = f"""      <control type="group" id="200">
-        <left>0</left><top>0</top><width>892</width><height>240</height>
-      </control>
-      <control type="group" id="698">
-        <left>0</left><top>0</top><width>892</width><height>240</height>
-      </control>
-"""
-    if not video:
-        body += """      <control type="group" id="699">
-        <left>0</left><top>0</top><width>892</width><height>240</height>
-      </control>
-"""
-    body += """      <control type="image">
-        <left>13</left><top>36</top><width>120</width><height>120</height>
-        <texture border="2">panel_raised.png</texture>
-      </control>
-      <control type="image">
-        <left>19</left><top>42</top><width>108</width><height>108</height>
-        <texture fallback="DefaultVideo.png">$INFO[Player.Art(thumb)]</texture>\n        <aspectratio>keep</aspectratio>
-      </control>
-      <control type="label">
-        <left>146</left><top>38</top><width>730</width><height>26</height>
-        <font>bigbold</font>
-        <label>$VAR[NowPlayingVar]</label>
-      </control>
-      <control type="label">
-        <left>146</left><top>68</top><width>730</width><height>22</height>
-        <font>small</font><textcolor>textdim</textcolor>
-        <label>$INFO[Player.Time] / $INFO[Player.Duration]</label>
-      </control>
-      <control type="progress">
-        <left>146</left><top>96</top><width>730</width><height>18</height>
-        <info>Player.Progress</info>
-      </control>
-"""
-    body += osd_transport(166)
-    body += osd_extras(210, kind)
-    return dialog(name, 892, 288, body, default="602", icon="icons24/audio.png",
-                  dim=False, heading=False)
+    up = seek_targets(kind) + [(None, "202")]
+    T, H_ = SEEK_T, SEEK_H
+    # a tap on the picture above the bar closes the bar and nothing else
+    # (Estuary's "background close area"); never reached by the keyboard
+    pre = (f'    <control type="button" id="9990">\n'
+           f"      <left>0</left><top>0</top><width>{OSD_W}</width><bottom>{OSD_H}</bottom>\n"
+           f"      <texturefocus />\n      <texturenofocus />\n      <label></label>\n"
+           f"      <onclick>Dialog.Close({name})</onclick>\n"
+           + navs("      ", up="602", down="602", left="602", right="602")
+           + "    </control>\n")
+    body = ""
+    for gid in (200, 698) + ((699,) if kind != "video" else ()):
+        # ids Kodi skins traditionally carry; empty here
+        body += (f'      <control type="group" id="{gid}">\n'
+                 f"        <left>0</left><top>0</top><width>1</width><height>1</height>\n      </control>\n")
+    # play state on the right of the title bar, where the window boxes would be
+    body += ("      <control type=\"label\">\n"
+             "        <left>874</left><top>3</top><width>140</width><height>26</height>\n"
+             "        <font>chromebold</font><textcolor>titletext</textcolor>\n"
+             "        <align>right</align><aligny>center</aligny>\n"
+             "        <label>$VAR[OSDStateVar]</label>\n      </control>\n")
+    if kind == "game":
+        # V-24: Kodi opens the game menu at launch when no controller is
+        # connected, with the game paused; say why. Kodi writes the
+        # "Press ... to open the in-game menu" text into 1101 and lets Back
+        # dismiss it first while it is visible (DialogGameOSDHelp.cpp).
+        help_ = "System.GetBool(gamesgeneral.showosdhelp)"
+        body += (f'      <control type="label" id="1101">\n'
+                 f"        <left>12</left><top>{T}</top><width>500</width><height>{H_}</height>\n"
+                 f"        <font>chromesmall</font><aligny>center</aligny>\n"
+                 f"        <visible>{help_}</visible>\n      </control>\n"
+                 f'      <control type="label">\n'
+                 f"        <left>12</left><top>{T}</top><width>500</width><height>{H_}</height>\n"
+                 f"        <font>chrome</font><aligny>center</aligny>\n"
+                 f"        <label>$INFO[Player.Time]</label>\n"
+                 f"        <visible>!{help_}</visible>\n      </control>\n"
+                 f'      <control type="label">\n'
+                 f"        <left>520</left><top>{T}</top><width>{OSD_W - 520 - 12}</width><height>{H_}</height>\n"
+                 f"        <font>chromesmall</font><textcolor>textdim</textcolor>\n"
+                 f"        <align>right</align><aligny>center</aligny>\n"
+                 f"        <label>$LOCALIZE[35236]</label>\n      </control>\n")
+    else:
+        live = OSD_LIVE[kind]
+        sl, sw = 112, OSD_W - 2 * 112
+        body += (f'      <control type="label">\n'
+                 f"        <left>8</left><top>{T}</top><width>96</width><height>{H_}</height>\n"
+                 f"        <font>chrome</font><align>right</align><aligny>center</aligny>\n"
+                 f"        <label>$INFO[Player.Time]</label>\n      </control>\n"
+                 f'      <control type="label">\n'
+                 f"        <left>{OSD_W - 104}</left><top>{T}</top><width>96</width><height>{H_}</height>\n"
+                 f"        <font>chrome</font><aligny>center</aligny>\n"
+                 f"        <label>$INFO[Player.Duration]</label>\n      </control>\n")
+        # V-5: drag or tap to seek; live TV seeks the timeshift buffer
+        nav = {"up": "202", "down": "201"}
+        body += slider(9980, sl, T, sw, H_, "seek", "Player.Progress",
+                       visible=f"Player.SeekEnabled + !{live}", nav=nav)
+        body += slider(9981, sl, T, sw, H_, "pvr.seek", "PVR.TimeshiftProgressPlayPos",
+                       visible=f"Player.SeekEnabled + {live}", nav=nav)
+        body += (f'      <control type="progress">\n'
+                 f"        <left>{sl}</left><top>{T + 8}</top><width>{sw}</width><height>{H_ - 16}</height>\n"
+                 f"        <info>Player.Progress</info>\n"
+                 f"        <visible>!Player.SeekEnabled</visible>\n      </control>\n")
+    body += osd_transport(kind)
+    # V-2: mute and volume, by touch. Tap or drag the slider (fireOnDrag:
+    # the volume follows the finger); not while the receiver decodes.
+    body += icon_radio(9982, "audio", TR_W, TR_H, ["Mute"], indent=6, size=24,
+                       selected="Player.Muted", glyph_on="audio_muted", pos=(MUTE_L, TR_T),
+                       nav={"up": up, "down": "202", "left": "201", "right": "9983"})
+    body += slider(9983, VOL_L, TR_T + 6, VOL_W, TR_H - 12, "volume", "Player.Volume",
+                   enable="!Player.Passthrough",
+                   nav={"up": up, "down": "202"})
+    # V-3: Hide closes the bar only; playback carries on underneath
+    body += (f'      <control type="button" id="9951">\n'
+             f"        <left>{HIDE_L}</left><top>{TR_T}</top><width>{HIDE_W}</width><height>{TR_H}</height>\n"
+             f"        <font>chromebold</font><label>$LOCALIZE[31800]</label>\n"
+             f"        <onclick>Dialog.Close({name})</onclick>\n"
+             + navs("        ", up=up, down="202", left="9983", right="201")
+             + "      </control>\n")
+    body += osd_buttons(202, TX_T, osd_rows(name, kind), "201",
+                        seek_targets(kind) + [(None, "201")], onright="9951")
+    title = "$INFO[Player.Title]" if kind == "game" else "$VAR[NowPlayingVar]"
+    # V-23: a remote's OK must not re-press whatever was focused last (Stop)
+    return dialog(name, OSD_W, OSD_H, body, default="602", icon="icons24/audio.png",
+                  dim=False, heading=False, title=title, anchor="bottom",
+                  default_always=True, pre=pre)
+
+
+# ---- player overlays and the dialogs the OSD opens ------------------------
+def tap_close(name, above, cid=9990, focus="9012"):
+    """A transparent full-width button over the picture above a bottom panel:
+    a tap there closes the dialog (Kodi would swallow it: a modal dialog only
+    closes on a right click, GUIWindow.cpp OnMouseEvent)."""
+    return (f'    <control type="button" id="{cid}">\n'
+            f"      <left>0</left><top>0</top><width>{OSD_W}</width><bottom>{above}</bottom>\n"
+            f"      <texturefocus />\n      <texturenofocus />\n      <label></label>\n"
+            f"      <onclick>Dialog.Close({name})</onclick>\n"
+            + navs("      ", up=focus, down=focus, left=focus, right=focus)
+            + "    </control>\n")
+
+def kv_rows(l, t, rows, keyw=156, valw=300, rowh=26, indent=6):
+    """label: value lines, the key dimmed. rows: (key label, value label)."""
+    sp = " " * indent
+    s = ""
+    for i, (k, v) in enumerate(rows):
+        y = t + i * rowh
+        s += (f'{sp}<control type="label">\n'
+              f"{sp}  <left>{l}</left><top>{y}</top><width>{keyw}</width><height>{rowh}</height>\n"
+              f"{sp}  <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>\n"
+              f"{sp}  <label>{k}</label>\n{sp}</control>\n"
+              f'{sp}<control type="label">\n'
+              f"{sp}  <left>{l + keyw + 6}</left><top>{y}</top><width>{valw}</width><height>{rowh}</height>\n"
+              f"{sp}  <font>chrome</font><aligny>center</aligny>\n"
+              f"{sp}  <label>{v}</label>\n{sp}</control>\n")
+    return s
+
+def heading_label(l, t, w, label, indent=6):
+    sp = " " * indent
+    return (f'{sp}<control type="label">\n'
+            f"{sp}  <left>{l}</left><top>{t}</top><width>{w}</width><height>26</height>\n"
+            f"{sp}  <font>chromebold</font><aligny>center</aligny>\n"
+            f"{sp}  <label>{label}</label>\n{sp}</control>\n")
+
+def seek_bar():
+    """V-6: Kodi never opens DialogSeekBar itself; it shows while its window
+    <visible> conditions hold (CGUIDialog::UpdateVisibility; Kodi ANDs them,
+    GUIWindow.cpp). A thin strip on the bottom edge, never together with the
+    OSD bar or a dialog the OSD opened. 401/403 are filled by Kodi with the
+    seek target (GUIDialogSeekBar.cpp FrameMove)."""
+    over = ("videoosd", "musicosd", "sliderdialog", "pvrosdchannels", "pvrchannelguide",
+            "fullscreeninfo", "playerprocessinfo", "videobookmarks", "osdvideosettings",
+            "osdaudiosettings", "osdsubtitlesettings", "pvrradiordsinfo")
+    vis = ["[Window.IsActive(fullscreenvideo) | Window.IsActive(visualisation)]",
+           "![" + " | ".join(f"Window.IsVisible({w})" for w in over) + "]",
+           "Player.Seeking | Player.HasPerformedSeek(3) | [Player.Paused + !Player.Caching] | "
+           "Player.Forwarding | Player.Rewinding | Player.ShowTime | !String.IsEmpty(Player.SeekNumeric)"]
+    Hs = 44
+    sl = 8 + 120 + 6 + 96 + 8
+    sw = OSD_W - sl - 8 - 96 - 8
+    s = H + "<window>\n" + "".join(f"  <visible>{v}</visible>\n" for v in vis)
+    s += "  <zorder>3</zorder>\n  <controls>\n"
+    s += (f"    <control type=\"group\">\n"
+          f"      <left>0</left><bottom>0</bottom><width>{OSD_W}</width><height>{Hs}</height>\n"
+          f"      <include content=\"Win_Frame\"><param name=\"width\" value=\"{OSD_W}\" />"
+          f"<param name=\"height\" value=\"{Hs}\" /></include>\n"
+          f"      <control type=\"label\">\n"
+          f"        <left>12</left><top>0</top><width>120</width><height>{Hs}</height>\n"
+          f"        <font>chromebold</font><aligny>center</aligny>\n"
+          f"        <label>$VAR[OSDStateVar]</label>\n      </control>\n")
+    for lab, v in (("$INFO[Player.SeekTime]", "Player.Seeking"),
+                   ("$INFO[Player.SeekNumeric]", "!Player.Seeking + !String.IsEmpty(Player.SeekNumeric)"),
+                   ("$INFO[Player.Time]", "!Player.Seeking + String.IsEmpty(Player.SeekNumeric)")):
+        s += (f"      <control type=\"label\">\n"
+              f"        <left>{8 + 120 + 6}</left><top>0</top><width>96</width><height>{Hs}</height>\n"
+              f"        <font>chrome</font><align>right</align><aligny>center</aligny>\n"
+              f"        <label>{lab}</label>\n        <visible>{v}</visible>\n      </control>\n")
+    s += slider(401, sl, 8, sw, Hs - 16, None, None, visible="!VideoPlayer.Content(LiveTV)")
+    s += slider(403, sl, 8, sw, Hs - 16, None, None,
+                visible="VideoPlayer.Content(LiveTV)")
+    s += (f"      <control type=\"label\">\n"
+          f"        <left>{OSD_W - 8 - 96}</left><top>0</top><width>96</width><height>{Hs}</height>\n"
+          f"        <font>chrome</font><aligny>center</aligny>\n"
+          f"        <label>$INFO[Player.Duration]</label>\n      </control>\n")
+    s += "    </control>\n  </controls>\n</window>\n"
+    return s
+
+def bookmarks_dialog():
+    """V-8. GUIDialogVideoBookmarks.cpp: 2 create, 3 clear, 4 episode bookmark
+    (Kodi enables it only for episodes), 11 the bookmarks and chapters (a tap
+    jumps there; a long press offers Remove). Kodi sets none of the labels.
+    Clear also wipes the resume point with no question asked (ClearBookmarks),
+    so the visible Clear asks first: the first tap arms it, the second clicks
+    the real 3. A bottom panel, so the picture being bookmarked stays in view."""
+    W, Hh = OSD_W, 250
+    armed = "String.IsEqual(Window(Home).Property(arthuros.clearbm),1)"
+    body = well(8, 34, 244, Hh - 42, "panel_sunken_grey.png")
+    body += (f'      <control type="grouplist" id="9000">\n'
+             f"        <left>16</left><top>42</top><width>228</width><height>{Hh - 58}</height>\n"
+             f"        <orientation>vertical</orientation><itemgap>4</itemgap>\n"
+             f"        <onright>11</onright>\n"
+             f'        <control type="button" id="2">\n'
+             f"          <width>228</width><height>44</height>\n"
+             f"          <font>chrome</font><label>$LOCALIZE[294]</label>\n        </control>\n"
+             f'        <control type="button" id="4">\n'
+             f"          <width>228</width><height>44</height>\n"
+             f"          <font>chrome</font><label>$LOCALIZE[20406]</label>\n"
+             f"          <visible>Control.IsEnabled(4)</visible>\n        </control>\n"
+             f'        <control type="button" id="9993">\n'
+             f"          <width>228</width><height>44</height>\n"
+             f"          <font>chrome</font><label>$VAR[BookmarkClearLabelVar]</label>\n"
+             f"          <onclick condition=\"!{armed}\">SetProperty(arthuros.clearbm,1,home)</onclick>\n"
+             f"          <onclick condition=\"{armed}\">ClearProperty(arthuros.clearbm,home)</onclick>\n"
+             f"          <onclick condition=\"{armed}\">SendClick(videobookmarks,3)</onclick>\n"
+             f"        </control>\n"
+             f'        <control type="button" id="9994">\n'
+             f"          <width>228</width><height>44</height>\n"
+             f"          <font>chrome</font><label>$LOCALIZE[106]</label>\n"
+             f"          <onclick>ClearProperty(arthuros.clearbm,home)</onclick>\n"
+             f"          <onclick>SetFocus(9993)</onclick>\n"
+             f"          <visible>{armed}</visible>\n        </control>\n"
+             f"      </control>\n")
+    # the real Clear: only ever clicked by 9993's second tap
+    body += ('      <control type="button" id="3">\n'
+             "        <left>-3000</left><top>0</top><width>10</width><height>10</height>\n"
+             "        <label></label>\n      </control>\n")
+    pw = W - 260 - 8
+    body += well(260, 34, pw, Hh - 42, "panel_sunken.png")
+    body += (f'      <control type="label">\n'
+             f"        <left>276</left><top>34</top><width>{pw - 32}</width><height>{Hh - 42}</height>\n"
+             f"        <font>chrome</font><textcolor>textdim</textcolor><align>center</align><aligny>center</aligny>\n"
+             f"        <label>$LOCALIZE[31802]</label>\n"
+             f"        <visible>Integer.IsEqual(Container(11).NumItems,0) + !{armed}</visible>\n      </control>\n"
+             f'      <control type="label">\n'
+             f"        <left>276</left><top>34</top><width>{pw - 32}</width><height>{Hh - 42}</height>\n"
+             f"        <font>chromebold</font><textcolor>marked</textcolor><align>center</align><aligny>center</aligny>\n"
+             f"        <label>$LOCALIZE[31803]</label>\n"
+             f"        <visible>{armed}</visible>\n      </control>\n")
+    iw, ih = 156, Hh - 54
+    item = lambda focus: (
+        (f'          <control type="image">\n'
+         f"            <left>0</left><top>0</top><width>{iw - 6}</width><height>{ih}</height>\n"
+         f'            <texture border="2" colordiffuse="select">select_bevel.png</texture>\n'
+         f"          </control>\n" if focus else "")
+        + f'          <control type="image">\n'
+          f"            <left>6</left><top>6</top><width>{iw - 18}</width><height>{ih - 64}</height>\n"
+          f'            <texture fallback="DefaultVideo.png">$INFO[ListItem.Art(thumb)]</texture>\n'
+          f"            <aspectratio>keep</aspectratio>\n          </control>\n"
+          f'          <control type="label">\n'
+          f"            <left>6</left><top>{ih - 54}</top><width>{iw - 18}</width><height>26</height>\n"
+          f"            <font>chromebold</font><align>center</align>"
+          f"<textcolor>{'textinv' if focus else 'text'}</textcolor>\n"
+          f"            <label>$INFO[ListItem.Label]</label>\n          </control>\n"
+          f'          <control type="label">\n'
+          f"            <left>6</left><top>{ih - 28}</top><width>{iw - 18}</width><height>22</height>\n"
+          f"            <font>chromesmall</font><align>center</align>"
+          f"<textcolor>{'textinv' if focus else 'textdim'}</textcolor>\n"
+          f"            <label>$INFO[ListItem.Label2]</label>\n          </control>\n")
+    body += (f'      <control type="panel" id="11">\n'
+             f"        <left>266</left><top>40</top><width>{pw - 12}</width><height>{ih + 2}</height>\n"
+             f"        <orientation>horizontal</orientation>\n"
+             f"        <onleft>9000</onleft><onup>9000</onup><ondown>9000</ondown>\n"
+             f"        <visible>!{armed}</visible>\n"
+             f'        <itemlayout width="{iw}" height="{ih}">\n{item(False)}        </itemlayout>\n'
+             f'        <focusedlayout width="{iw}" height="{ih}">\n{item(True)}        </focusedlayout>\n'
+             f"      </control>\n")
+    s = dialog("VideoOSDBookmarks", W, Hh, body, default="2", icon="icons24/bookmarks.png",
+               dim=False, heading=False, title="$LOCALIZE[298]", anchor="bottom",
+               pre=tap_close("VideoBookmarks", Hh, focus="2"))
+    # a half-done Clear never survives the dialog closing
+    return s.replace("<window>\n", "<window>\n  <onload>ClearProperty(arthuros.clearbm,home)</onload>\n", 1)
+
+def fullscreen_info():
+    """V-14. CGUIDialogFullScreenInfo writes nothing (it only closes itself on
+    Info), so everything comes from infolabels. Bottom panel, picture kept."""
+    W, Hh = OSD_W, 238
+    body = ('      <control type="image">\n'
+            "        <left>8</left><top>34</top><width>120</width><height>196</height>\n"
+            '        <texture border="2">panel_raised.png</texture>\n      </control>\n'
+            '      <control type="image">\n'
+            "        <left>14</left><top>40</top><width>108</width><height>184</height>\n"
+            '        <texture fallback="DefaultVideo.png">$INFO[Player.Art(thumb)]</texture>\n'
+            "        <aspectratio>keep</aspectratio>\n      </control>\n"
+            '      <control type="label">\n'
+            "        <left>136</left><top>34</top><width>880</width><height>26</height>\n"
+            "        <font>chrome</font><textcolor>textdim</textcolor><aligny>center</aligny>\n"
+            "        <label>$INFO[VideoPlayer.ChannelName,,   ]$INFO[VideoPlayer.Year,,   ]$INFO[VideoPlayer.Genre]</label>\n"
+            "      </control>\n")
+    body += well(136, 62, 880, 118, "panel_sunken.png")
+    body += ('      <control type="textbox">\n'
+             "        <left>144</left><top>68</top><width>842</width><height>106</height>\n"
+             "        <font>small</font><pagecontrol>61</pagecontrol>\n"
+             "        <label>$INFO[VideoPlayer.Plot]</label>\n      </control>\n"
+             '      <control type="scrollbar" id="61">\n'
+             "        <left>992</left><top>65</top><width>20</width><height>112</height>\n"
+             "        <onleft>9013</onleft><onright>9013</onright><ondown>9013</ondown><onup>9013</onup>\n"
+             "      </control>\n"
+             '      <control type="label">\n'
+             "        <left>136</left><top>186</top><width>300</width><height>44</height>\n"
+             "        <font>chrome</font><aligny>center</aligny>\n"
+             "        <label>$INFO[Player.Time] / $INFO[Player.Duration]</label>\n      </control>\n")
+    body += osd_buttons(9013, 186, [
+        (9011, 150, "$LOCALIZE[31806]", ["Dialog.Close(FullscreenInfo)", "ActivateWindow(PlayerProcessInfo)"], None),
+        (9012, 110, "$LOCALIZE[15067]", ["Dialog.Close(FullscreenInfo)"], None),
+    ], "61", "61", left=W - 8 - 266, width=266)
+    return dialog("DialogFullScreenInfo", W, Hh, body, default="9012", default_always=True,
+                  icon="icons24/info.png", dim=False, heading=False,
+                  title="$INFO[VideoPlayer.Title]", anchor="bottom",
+                  pre=tap_close("FullscreenInfo", Hh))
+
+def process_info():
+    """V-14. CGUIDialogPlayerProcessInfo writes nothing either: decoder, picture
+    and audio details are Player.Process(...) infolabels."""
+    W, Hh = OSD_W, 242
+    cw = (W - 24) // 2
+    body = ""
+    for x, head, rows in (
+        (8, "$LOCALIZE[291]", [
+            ("$LOCALIZE[31804]", "$INFO[Player.Process(videodecoder)]"),
+            ("$LOCALIZE[31805]", "$INFO[Player.Process(pixformat)]"),
+            ("$LOCALIZE[169]", "$INFO[Player.Process(videowidth)]$INFO[Player.Process(videoheight),x,]"
+                               "$INFO[Player.Process(videofps), @ , fps]$INFO[Player.Process(videodar),  (,)]"),
+            ("$LOCALIZE[16038]", "$INFO[Player.Process(deintmethod)]")]),
+        (16 + cw, "$LOCALIZE[292]", [
+            ("$LOCALIZE[31804]", "$INFO[Player.Process(audiodecoder)]"),
+            ("$LOCALIZE[21444]", "$INFO[Player.Process(audiochannels)]"),
+            ("$LOCALIZE[613]", "$INFO[Player.Process(audiosamplerate),, Hz]"),
+            ("$LOCALIZE[612]", "$INFO[Player.Process(audiobitspersample)]")])):
+        body += well(x, 34, cw, 148, "panel_sunken_grey.png")
+        body += heading_label(x + 10, 38, cw - 20, head)
+        body += kv_rows(x + 10, 66, rows, keyw=156, valw=cw - 20 - 162)
+    body += ('      <control type="label">\n'
+             "        <left>12</left><top>190</top><width>860</width><height>44</height>\n"
+             "        <font>chrome</font><aligny>center</aligny>\n"
+             "        <label>$LOCALIZE[140] $INFO[System.CpuUsage]     $LOCALIZE[439]: "
+             "$INFO[Player.CacheLevel,,%]     $INFO[System.ScreenResolution]</label>\n      </control>\n"
+             '      <control type="button" id="9012">\n'
+             f"        <left>{W - 8 - 110}</left><top>190</top><width>110</width><height>44</height>\n"
+             "        <font>chrome</font><label>$LOCALIZE[15067]</label>\n"
+             "        <onclick>Dialog.Close(PlayerProcessInfo)</onclick>\n      </control>\n")
+    return dialog("DialogPlayerProcessInfo", W, Hh, body, default="9012", default_always=True,
+                  icon="icons24/process_info.png", dim=False, heading=False,
+                  title="$LOCALIZE[10116]", anchor="bottom",
+                  pre=tap_close("PlayerProcessInfo", Hh))
+
+def rds_info():
+    """V-14. GUIDialogPVRRadioRDSInfo.cpp: 10 close, 21 a spin of the info
+    pages the station sends (news, sport, weather...), 22 the page text, 70
+    the group holding them (Kodi shows it only when a page exists). The rest
+    is RDS.* infolabels."""
+    W, Hh = 900, 452
+    cw = (W - 24) // 2
+    body = ""
+    for x, head, rows in (
+        (8, "$LOCALIZE[179]", [
+            ("$LOCALIZE[556]", "$INFO[RDS.Title]"), ("$LOCALIZE[557]", "$INFO[RDS.Artist]"),
+            ("$LOCALIZE[29901]", "$INFO[RDS.Band]"), ("$LOCALIZE[558]", "$INFO[RDS.Album]"),
+            ("$LOCALIZE[29903]", "$INFO[RDS.Composer]"), ("$LOCALIZE[29905]", "$INFO[RDS.Conductor]")]),
+        (16 + cw, "$LOCALIZE[29908]", [
+            ("$LOCALIZE[19148]", "$INFO[RDS.ProgStation]"), ("$LOCALIZE[19030]", "$INFO[RDS.ProgNow]"),
+            ("$LOCALIZE[19031]", "$INFO[RDS.ProgNext]"), ("$LOCALIZE[29906]", "$INFO[RDS.ProgHost]"),
+            ("$LOCALIZE[29902]", "$INFO[RDS.ProgStyle]"), ("$LOCALIZE[29914]", "$INFO[RDS.ProgHomepage]")])):
+        body += well(x, 34, cw, 184, "panel_sunken_grey.png")
+        body += heading_label(x + 10, 38, cw - 20, head)
+        body += kv_rows(x + 10, 66, rows, keyw=110, valw=cw - 20 - 116, rowh=24)
+    body += well(8, 224, W - 16, 112, "panel_sunken.png")
+    body += heading_label(18, 228, W - 36, "$LOCALIZE[31801]")
+    for i in range(4):
+        body += ('      <control type="label">\n'
+                 f"        <left>18</left><top>{254 + i * 20}</top><width>{W - 36}</width><height>20</height>\n"
+                 f"        <font>chromesmall</font><label>$INFO[RDS.GetLine({i})]</label>\n      </control>\n")
+    body += ('      <control type="group" id="70">\n'
+             f"        <left>8</left><top>342</top><width>{W - 16}</width><height>56</height>\n"
+             '        <control type="spincontrol" id="21">\n'
+             "          <left>0</left><top>8</top><width>220</width><height>40</height>\n"
+             "          <font>chrome</font>\n"
+             "          <onright>10</onright><onleft>10</onleft><onup>10</onup><ondown>10</ondown>\n"
+             "        </control>\n"
+             '        <control type="textbox" id="22">\n'
+             f"          <left>228</left><top>4</top><width>{W - 16 - 236}</width><height>48</height>\n"
+             "          <font>small</font>\n        </control>\n"
+             "      </control>\n"
+             '      <control type="button" id="10">\n'
+             f"        <left>{W - 8 - 110}</left><top>404</top><width>110</width><height>40</height>\n"
+             "        <font>chrome</font><label>$LOCALIZE[15067]</label>\n"
+             "        <onup>21</onup><ondown>21</ondown><onleft>21</onleft><onright>21</onright>\n"
+             "      </control>\n")
+    return dialog("DialogPVRRadioRDSInfo", W, Hh, body, default="10", default_always=True,
+                  icon="icons24/rds.png", dim=False, heading=False, title="$LOCALIZE[29900]")
+
 
 # ====================================================== info dialogs
 def info_dialog(name, ids=None):
@@ -949,21 +1413,12 @@ def small_dialogs():
       "      </control>\n"
       "    </control>\n  </controls>\n</window>\n")
 
-    body = ("      <control type=\"label\">\n"
-            "        <left>16</left><top>38</top><width>560</width><height>26</height>\n"
-            "        <font>bold</font><label>$VAR[NowPlayingVar]</label>\n      </control>\n"
-            "      <control type=\"slider\" id=\"401\">\n"
-            "        <left>16</left><top>70</top><width>860</width><height>24</height>\n      </control>\n"
-            "      <control type=\"slider\" id=\"403\">\n"
-            "        <left>-3000</left><top>0</top><width>200</width><height>24</height>\n      </control>\n"
-            "      <control type=\"label\">\n"
-            "        <left>16</left><top>100</top><width>420</width><height>22</height>\n"
-            "        <font>small</font><label>$INFO[Player.SeekTime]$INFO[Player.Time]</label>\n      </control>\n"
-            "      <control type=\"label\">\n"
-            "        <left>456</left><top>100</top><width>420</width><height>22</height>\n"
-            "        <font>small</font><align>right</align><label>$INFO[Player.Duration]</label>\n      </control>\n")
-    out["DialogSeekBar"] = dialog("DialogSeekBar", 892, 134, body, icon="icons24/movies.png",
-                                  dim=False, heading=False, zorder=3)
+    # playback overlays (V-6, V-8, V-14): built in the player / OSD section
+    out["DialogSeekBar"] = seek_bar()
+    out["VideoOSDBookmarks"] = bookmarks_dialog()
+    out["DialogFullScreenInfo"] = fullscreen_info()
+    out["DialogPlayerProcessInfo"] = process_info()
+    out["DialogPVRRadioRDSInfo"] = rds_info()
 
     body = (well(10, 36, 840, 380, "panel_sunken.png")
             + "      <control type=\"textbox\" id=\"5\">\n"
@@ -1417,18 +1872,37 @@ def weather():
     return fullwindow("MyWeather", body, default="2", icon="icons24/weather.png")
 
 def fullscreen_video():
+    """Kodi draws the picture itself (CGUIWindowFullScreen::Render); a
+    videowindow here would only take taps meant for DVD/Blu-ray menus (V-22).
+    Labels 10-12 are the zoom / view-mode readout Kodi fills and shows for a
+    few seconds after a change (FrameMove). Kodi also toggles id 0, but id 0
+    is never in the lookup (GUIControlLookup::AddLookup), so the frame follows
+    label 10 instead (V-20). Group 1: the buffering box (V-21)."""
     return (H + "<window>\n  <controls>\n"
-      "    <control type=\"group\" id=\"0\"><left>0</left><top>0</top><width>1024</width><height>600</height></control>\n"
-      "    <control type=\"group\" id=\"1\"><left>0</left><top>0</top><width>1024</width><height>600</height></control>\n"
-      "    <control type=\"videowindow\">\n"
-      "      <left>0</left><top>0</top><width>1024</width><height>600</height>\n    </control>\n"
-      "    <control type=\"group\">\n"
+      "    <control type=\"group\" id=\"0\">\n"
       "      <left>6</left><top>6</top><width>620</width><height>84</height>\n"
-      "      <visible>Player.ShowCodec</visible>\n"
-      "      <include content=\"Win_Frame\"><param name=\"width\" value=\"620\" /><param name=\"height\" value=\"84\" /></include>\n"
+      "      <control type=\"group\">\n"
+      "        <left>0</left><top>0</top><width>620</width><height>84</height>\n"
+      "        <visible>Control.IsVisible(10)</visible>\n"
+      "        <include content=\"Win_Frame\"><param name=\"width\" value=\"620\" /><param name=\"height\" value=\"84\" /></include>\n"
+      "      </control>\n"
       "      <control type=\"label\" id=\"10\"><left>10</left><top>6</top><width>600</width><height>24</height><font>small</font></control>\n"
       "      <control type=\"label\" id=\"11\"><left>10</left><top>30</top><width>600</width><height>24</height><font>small</font></control>\n"
       "      <control type=\"label\" id=\"12\"><left>10</left><top>54</top><width>600</width><height>24</height><font>small</font></control>\n"
+      "    </control>\n"
+      "    <control type=\"group\" id=\"1\">\n"
+      "      <centerleft>50%</centerleft><centertop>50%</centertop><width>240</width><height>90</height>\n"
+      "      <visible>Player.Caching + Integer.IsGreater(Player.CacheLevel,0)</visible>\n"
+      "      <include content=\"Win_Frame\"><param name=\"width\" value=\"240\" /><param name=\"height\" value=\"90\" /></include>\n"
+      "      <control type=\"label\">\n"
+      "        <left>10</left><top>10</top><width>220</width><height>28</height>\n"
+      "        <font>chromebold</font><align>center</align><aligny>center</aligny>\n"
+      "        <label>$LOCALIZE[15107] $INFO[Player.CacheLevel]%</label>\n"
+      "      </control>\n"
+      "      <control type=\"progress\">\n"
+      "        <left>16</left><top>50</top><width>208</width><height>24</height>\n"
+      "        <info>Player.CacheLevel</info>\n"
+      "      </control>\n"
       "    </control>\n  </controls>\n</window>\n")
 
 def slideshow():
@@ -1464,43 +1938,69 @@ def music_vis():
       "    </control>\n  </controls>\n</window>\n")
 
 def player_controls():
-    body  = """      <control type="image">
+    """The desktop mini-player (task bar): what is playing, seek, transport,
+    volume, shuffle/repeat with their state, and the play queue."""
+    W, H_ = 660, 256
+    seek = [("Player.SeekEnabled", "9980"), (None, "202")]
+    body = """      <control type="image">
         <left>13</left><top>36</top><width>100</width><height>100</height>
         <texture border="2">panel_raised.png</texture>
       </control>
       <control type="image">
         <left>19</left><top>42</top><width>88</width><height>88</height>
+        <texture fallback="DefaultVideo.png">$INFO[Player.Art(thumb)]</texture>
+        <aspectratio>keep</aspectratio>
+        <visible>Player.HasVideo</visible>
+      </control>
+      <control type="image">
+        <left>19</left><top>42</top><width>88</width><height>88</height>
         <texture fallback="DefaultAudio.png">$INFO[Player.Art(thumb)]</texture>
         <aspectratio>keep</aspectratio>
+        <visible>!Player.HasVideo</visible>
       </control>
       <control type="label">
-        <left>126</left><top>38</top><width>420</width><height>26</height>
-        <font>bigbold</font><label>$VAR[NowPlayingVar]</label>
+        <left>126</left><top>38</top><width>520</width><height>26</height>
+        <font>chromebold</font><label>$VAR[NowPlayingVar]</label>
       </control>
       <control type="label">
-        <left>126</left><top>68</top><width>420</width><height>22</height>
-        <font>small</font><textcolor>textdim</textcolor>
+        <left>126</left><top>66</top><width>520</width><height>22</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor>
         <label>$INFO[Player.Time] / $INFO[Player.Duration]</label>
       </control>
       <control type="progress" id="23">
-        <left>126</left><top>96</top><width>420</width><height>18</height>
+        <left>126</left><top>100</top><width>520</width><height>20</height>
         <info>Player.Progress</info>
+        <visible>!Player.SeekEnabled</visible>
       </control>
       <control type="group" id="699"><left>-3000</left><top>0</top><width>10</width><height>10</height></control>
-      <control type="button" id="87"><left>-3000</left><top>0</top><width>100</width><height>30</height>
-        <onclick>PlayerControl(Play)</onclick></control>
-      <control type="grouplist" id="201">
-        <left>13</left><top>146</top><width>546</width><height>36</height>
-        <orientation>horizontal</orientation><itemgap>6</itemgap>
-""" + icon_radio(600, "prev", 84, 36, ["PlayerControl(Previous)"]) \
-    + icon_radio(602, "play", 84, 36, ["PlayerControl(Play)"]) \
-    + icon_radio(603, "stop", 84, 36, ["PlayerControl(Stop)"]) \
-    + icon_radio(605, "next", 84, 36, ["PlayerControl(Next)"]) \
-    + icon_radio(607, "shuffle", 84, 36, ["PlayerControl(Random)"]) \
-    + icon_button(704, "repeat", 84, 36, ["PlayerControl(Repeat)"]) + """      </control>
 """
-    return dialog("PlayerControls", 572, 200, body, default="602",
-                  icon="icons24/audio.png", heading=False)
+    body += slider(9980, 126, 92, 520, 36, "seek", "Player.Progress",
+                   visible="Player.SeekEnabled", nav={"up": "202", "down": "201"})
+    body += ("      <control type=\"grouplist\" id=\"201\">\n"
+             "        <left>13</left><top>146</top><width>270</width><height>48</height>\n"
+             "        <orientation>horizontal</orientation><itemgap>6</itemgap>\n"
+             + navs("        ", up=seek, down="202", left="9983", right="9982"))
+    body += icon_radio(600, "prev", 60, 48, ["PlayerControl(Previous)"], size=24)
+    body += icon_radio(602, "play", 60, 48, ["PlayerControl(Play)"], size=24,
+                       selected=PLAYING, glyph_on="pause")
+    body += icon_radio(603, "stop", 60, 48, ["PlayerControl(Stop)"], size=24)
+    body += icon_radio(605, "next", 60, 48, ["PlayerControl(Next)"], size=24)
+    body += "      </control>\n"
+    body += icon_radio(9982, "audio", 60, 48, ["Mute"], indent=6, size=24,
+                       selected="Player.Muted", glyph_on="audio_muted", pos=(290, 146),
+                       nav={"up": seek, "down": "202", "left": "201", "right": "9983"})
+    body += slider(9983, 356, 152, 290, 36, "volume", "Player.Volume",
+                   enable="!Player.Passthrough", nav={"up": seek, "down": "202"})
+    body += osd_buttons(202, 202, [
+        (607, 140, "$LOCALIZE[191]", ["PlayerControl(Random)"], None, "Playlist.IsRandom"),
+        (704, 150, "$VAR[OSDRepeatLabelVar]", ["PlayerControl(Repeat)"], None),
+        (87, 110, "$LOCALIZE[559]", ["Dialog.Close(PlayerControls)",
+                                     ("Player.HasVideo", "ActivateWindow(VideoPlaylist)"),
+                                     ("!Player.HasVideo", "ActivateWindow(MusicPlaylist)")], None),
+        (9951, 100, "$LOCALIZE[15067]", ["Dialog.Close(PlayerControls)"], None),
+    ], "201", seek[:1] + [(None, "201")], left=13, width=W - 26)
+    return dialog("PlayerControls", W, H_, body, default="602", default_always=True,
+                  icon="icons24/audio.png", heading=False, title="$LOCALIZE[31907]")
 
 # ====================================================== generic fallbacks
 LISTY   = {"list","panel","fixedlist","wraplist"}

@@ -1,32 +1,40 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <window>
+  <defaultcontrol always="true">9012</defaultcontrol>
   <controls>
-    <control type="image">
-      <left>0</left><top>0</top><width>1024</width><height>768</height>
-      <texture>dim.png</texture>
+    <control type="button" id="9990">
+      <left>0</left><top>0</top><width>1024</width><bottom>242</bottom>
+      <texturefocus/>
+      <texturenofocus/>
+      <label/>
+      <onclick>Dialog.Close(PlayerProcessInfo)</onclick>
+      <onup>9012</onup>
+      <ondown>9012</ondown>
+      <onleft>9012</onleft>
+      <onright>9012</onright>
     </control>
     <control type="group">
-      <centerleft>50%</centerleft><centertop>50%</centertop>
-      <width>900</width><height>500</height>
+      <centerleft>50%</centerleft><bottom>0</bottom>
+      <width>1024</width><height>242</height>
       <control type="image">
         <left>0</left><top>0</top>
-        <width>900</width><height>500</height>
+        <width>1024</width><height>242</height>
         <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
       </control>
       <control type="group">
         <left>3</left><top>3</top>
         <control type="group">
-        <width>894</width><height>26</height>
+        <width>1018</width><height>26</height>
 
         <control type="image">
           <left>0</left><top>0</top>
-          <width>894</width><height>26</height>
+          <width>1018</width><height>26</height>
           <texture colordiffuse="accent2">fill.png</texture>
         </control>
         <!-- hard 1px rule under the bar, the way Arthur draws it -->
         <control type="image">
           <left>0</left><bottom>0</bottom>
-          <width>894</width><height>1</height>
+          <width>1018</width><height>1</height>
           <texture>fill_black.png</texture>
         </control>
 
@@ -41,7 +49,7 @@
           <left>26</left><right>100</right><top>0</top><height>26</height>
           <align>left</align><aligny>center</aligny>
           <font>chromebold</font><textcolor>titletext</textcolor>
-          <label></label>
+          <label>$LOCALIZE[10116]</label>
         </control>
 
         <control type="label">
@@ -53,79 +61,116 @@
 
         <!-- The window boxes. Which set a title bar gets is chosen by the
              "boxes" parameter: window, dialog, home or none. -->
-        <control type="group">
-      <control type="button" id="9901">
-        <right>70</right><top>2</top><width>22</width><height>22</height>
-        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
-        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
-        <label/>
-        <onclick>Dialog.Close(all,true)</onclick>
-        <onclick>ActivateWindow(Home)</onclick>
-        <onright>9902</onright>
-        <ondown></ondown>
+        <control type="group"/>
+      </control>
       </control>
       <control type="image">
-        <right>70</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="text">wc_min_g.png</texture>
-        <visible>!Control.HasFocus(9901)</visible>
+        <left>8</left><top>34</top><width>500</width><height>148</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      </control>
+      <control type="label">
+        <left>18</left><top>38</top><width>480</width><height>26</height>
+        <font>chromebold</font><aligny>center</aligny>
+        <label>$LOCALIZE[291]</label>
+      </control>
+      <control type="label">
+        <left>18</left><top>66</top><width>156</width><height>26</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[31804]</label>
+      </control>
+      <control type="label">
+        <left>180</left><top>66</top><width>318</width><height>26</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[Player.Process(videodecoder)]</label>
+      </control>
+      <control type="label">
+        <left>18</left><top>92</top><width>156</width><height>26</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[31805]</label>
+      </control>
+      <control type="label">
+        <left>180</left><top>92</top><width>318</width><height>26</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[Player.Process(pixformat)]</label>
+      </control>
+      <control type="label">
+        <left>18</left><top>118</top><width>156</width><height>26</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[169]</label>
+      </control>
+      <control type="label">
+        <left>180</left><top>118</top><width>318</width><height>26</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[Player.Process(videowidth)]$INFO[Player.Process(videoheight),x,]$INFO[Player.Process(videofps), @ , fps]$INFO[Player.Process(videodar),  (,)]</label>
+      </control>
+      <control type="label">
+        <left>18</left><top>144</top><width>156</width><height>26</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[16038]</label>
+      </control>
+      <control type="label">
+        <left>180</left><top>144</top><width>318</width><height>26</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[Player.Process(deintmethod)]</label>
       </control>
       <control type="image">
-        <right>70</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="titletext">wc_min_g.png</texture>
-        <visible>Control.HasFocus(9901)</visible>
+        <left>516</left><top>34</top><width>500</width><height>148</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
       </control>
-      <control type="button" id="9902">
-        <right>46</right><top>2</top><width>22</width><height>22</height>
-        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
-        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
-        <label/>
-        <enable>Player.HasMedia</enable>
-        <onclick>Action(FullScreen)</onclick>
-        <onleft>9901</onleft>
-        <onright>9903</onright>
-        <ondown></ondown>
+      <control type="label">
+        <left>526</left><top>38</top><width>480</width><height>26</height>
+        <font>chromebold</font><aligny>center</aligny>
+        <label>$LOCALIZE[292]</label>
       </control>
-      <control type="image">
-        <right>46</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="text">wc_max_g.png</texture>
-        <visible>!Control.HasFocus(9902) + Player.HasMedia</visible>
+      <control type="label">
+        <left>526</left><top>66</top><width>156</width><height>26</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[31804]</label>
       </control>
-      <control type="image">
-        <right>46</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="titletext">wc_max_g.png</texture>
-        <visible>Control.HasFocus(9902)</visible>
+      <control type="label">
+        <left>688</left><top>66</top><width>318</width><height>26</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[Player.Process(audiodecoder)]</label>
       </control>
-      <control type="image">
-        <right>46</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="textdim">wc_max_dg.png</texture>
-        <visible>!Player.HasMedia</visible>
+      <control type="label">
+        <left>526</left><top>92</top><width>156</width><height>26</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[21444]</label>
       </control>
-      <control type="button" id="9903">
-        <right>22</right><top>2</top><width>22</width><height>22</height>
-        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
-        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
-        <label/>
-        <onclick>Action(Back)</onclick>
-        <onleft>9902</onleft>
-        <ondown></ondown>
+      <control type="label">
+        <left>688</left><top>92</top><width>318</width><height>26</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[Player.Process(audiochannels)]</label>
       </control>
-      <control type="image">
-        <right>22</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="text">wc_close_g.png</texture>
-        <visible>!Control.HasFocus(9903)</visible>
+      <control type="label">
+        <left>526</left><top>118</top><width>156</width><height>26</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[613]</label>
       </control>
-      <control type="image">
-        <right>22</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="titletext">wc_close_g.png</texture>
-        <visible>Control.HasFocus(9903)</visible>
+      <control type="label">
+        <left>688</left><top>118</top><width>318</width><height>26</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[Player.Process(audiosamplerate),, Hz]</label>
       </control>
-    </control>
+      <control type="label">
+        <left>526</left><top>144</top><width>156</width><height>26</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[612]</label>
       </control>
+      <control type="label">
+        <left>688</left><top>144</top><width>318</width><height>26</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[Player.Process(audiobitspersample)]</label>
       </control>
-      <control type="label" id="1">
-        <left>29</left><top>3</top><width>794</width><height>26</height>
-        <font>chromebold</font><textcolor>titletext</textcolor>
-        <align>left</align><aligny>center</aligny>
+      <control type="label">
+        <left>12</left><top>190</top><width>860</width><height>44</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$LOCALIZE[140] $INFO[System.CpuUsage]     $LOCALIZE[439]: $INFO[Player.CacheLevel,,%]     $INFO[System.ScreenResolution]</label>
+      </control>
+      <control type="button" id="9012">
+        <left>906</left><top>190</top><width>110</width><height>44</height>
+        <font>chrome</font><label>$LOCALIZE[15067]</label>
+        <onclick>Dialog.Close(PlayerProcessInfo)</onclick>
       </control>
     </control>
   </controls>

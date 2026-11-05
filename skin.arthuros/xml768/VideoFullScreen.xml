@@ -1,22 +1,38 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <window>
   <controls>
-    <control type="group" id="0"><left>0</left><top>0</top><width>1024</width><height>768</height></control>
-    <control type="group" id="1"><left>0</left><top>0</top><width>1024</width><height>768</height></control>
-    <control type="videowindow">
-      <left>0</left><top>0</top><width>1024</width><height>768</height>
-    </control>
-    <control type="group">
+    <control type="group" id="0">
       <left>6</left><top>6</top><width>620</width><height>84</height>
-      <visible>Player.ShowCodec</visible>
-      <control type="image">
+      <control type="group">
+        <left>0</left><top>0</top><width>620</width><height>84</height>
+        <visible>Control.IsVisible(10)</visible>
+        <control type="image">
         <left>0</left><top>0</top>
         <width>620</width><height>84</height>
         <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
       </control>
+      </control>
       <control type="label" id="10"><left>10</left><top>6</top><width>600</width><height>24</height><font>small</font></control>
       <control type="label" id="11"><left>10</left><top>30</top><width>600</width><height>24</height><font>small</font></control>
       <control type="label" id="12"><left>10</left><top>54</top><width>600</width><height>24</height><font>small</font></control>
+    </control>
+    <control type="group" id="1">
+      <centerleft>50%</centerleft><centertop>50%</centertop><width>240</width><height>90</height>
+      <visible>Player.Caching + Integer.IsGreater(Player.CacheLevel,0)</visible>
+      <control type="image">
+        <left>0</left><top>0</top>
+        <width>240</width><height>90</height>
+        <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+      </control>
+      <control type="label">
+        <left>10</left><top>10</top><width>220</width><height>28</height>
+        <font>chromebold</font><align>center</align><aligny>center</aligny>
+        <label>$LOCALIZE[15107] $INFO[Player.CacheLevel]%</label>
+      </control>
+      <control type="progress">
+        <left>16</left><top>50</top><width>208</width><height>24</height>
+        <info>Player.CacheLevel</info>
+      </control>
     </control>
   </controls>
 </window>

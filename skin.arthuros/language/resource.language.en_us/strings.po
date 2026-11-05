@@ -407,6 +407,34 @@ msgstr ""
 
 # ===== P1 strings: 31800-31819, 31700-31719 =====
 
+msgctxt "#31800"
+msgid "Hide"
+msgstr ""
+
+msgctxt "#31801"
+msgid "Radio text"
+msgstr ""
+
+msgctxt "#31802"
+msgid "No bookmarks or chapters yet"
+msgstr ""
+
+msgctxt "#31803"
+msgid "Clear all bookmarks and the resume point?"
+msgstr ""
+
+msgctxt "#31804"
+msgid "Decoder"
+msgstr ""
+
+msgctxt "#31805"
+msgid "Pixel format"
+msgstr ""
+
+msgctxt "#31806"
+msgid "Process info"
+msgstr ""
+
 # ===== P2 strings: 31820-31829 =====
 
 # ===== P3 strings: 31830-31844, 31720-31739 =====

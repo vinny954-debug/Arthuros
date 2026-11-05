@@ -1,29 +1,40 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <window>
-  <defaultcontrol>602</defaultcontrol>
+  <defaultcontrol always="true">602</defaultcontrol>
   <controls>
+    <control type="button" id="9990">
+      <left>0</left><top>0</top><width>1024</width><bottom>180</bottom>
+      <texturefocus/>
+      <texturenofocus/>
+      <label/>
+      <onclick>Dialog.Close(GameOSD)</onclick>
+      <onup>602</onup>
+      <ondown>602</ondown>
+      <onleft>602</onleft>
+      <onright>602</onright>
+    </control>
     <control type="group">
-      <centerleft>50%</centerleft><centertop>50%</centertop>
-      <width>892</width><height>288</height>
+      <centerleft>50%</centerleft><bottom>0</bottom>
+      <width>1024</width><height>180</height>
       <control type="image">
         <left>0</left><top>0</top>
-        <width>892</width><height>288</height>
+        <width>1024</width><height>180</height>
         <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
       </control>
       <control type="group">
         <left>3</left><top>3</top>
         <control type="group">
-        <width>886</width><height>26</height>
+        <width>1018</width><height>26</height>
 
         <control type="image">
           <left>0</left><top>0</top>
-          <width>886</width><height>26</height>
+          <width>1018</width><height>26</height>
           <texture colordiffuse="accent2">fill.png</texture>
         </control>
         <!-- hard 1px rule under the bar, the way Arthur draws it -->
         <control type="image">
           <left>0</left><bottom>0</bottom>
-          <width>886</width><height>1</height>
+          <width>1018</width><height>1</height>
           <texture>fill_black.png</texture>
         </control>
 
@@ -38,7 +49,7 @@
           <left>26</left><right>100</right><top>0</top><height>26</height>
           <align>left</align><aligny>center</aligny>
           <font>chromebold</font><textcolor>titletext</textcolor>
-          <label>$LOCALIZE[31907]</label>
+          <label>$INFO[Player.Title]</label>
         </control>
 
         <control type="label">
@@ -50,234 +61,161 @@
 
         <!-- The window boxes. Which set a title bar gets is chosen by the
              "boxes" parameter: window, dialog, home or none. -->
-        <control type="group">
-      <control type="button" id="9901">
-        <right>70</right><top>2</top><width>22</width><height>22</height>
-        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
-        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
-        <label/>
-        <onclick>Dialog.Close(all,true)</onclick>
-        <onclick>ActivateWindow(Home)</onclick>
-        <onright>9902</onright>
-        <ondown>602</ondown>
-      </control>
-      <control type="image">
-        <right>70</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="text">wc_min_g.png</texture>
-        <visible>!Control.HasFocus(9901)</visible>
-      </control>
-      <control type="image">
-        <right>70</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="titletext">wc_min_g.png</texture>
-        <visible>Control.HasFocus(9901)</visible>
-      </control>
-      <control type="button" id="9902">
-        <right>46</right><top>2</top><width>22</width><height>22</height>
-        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
-        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
-        <label/>
-        <enable>Player.HasMedia</enable>
-        <onclick>Action(FullScreen)</onclick>
-        <onleft>9901</onleft>
-        <onright>9903</onright>
-        <ondown>602</ondown>
-      </control>
-      <control type="image">
-        <right>46</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="text">wc_max_g.png</texture>
-        <visible>!Control.HasFocus(9902) + Player.HasMedia</visible>
-      </control>
-      <control type="image">
-        <right>46</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="titletext">wc_max_g.png</texture>
-        <visible>Control.HasFocus(9902)</visible>
-      </control>
-      <control type="image">
-        <right>46</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="textdim">wc_max_dg.png</texture>
-        <visible>!Player.HasMedia</visible>
-      </control>
-      <control type="button" id="9903">
-        <right>22</right><top>2</top><width>22</width><height>22</height>
-        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
-        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
-        <label/>
-        <onclick>Action(Back)</onclick>
-        <onleft>9902</onleft>
-        <ondown>602</ondown>
-      </control>
-      <control type="image">
-        <right>22</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="text">wc_close_g.png</texture>
-        <visible>!Control.HasFocus(9903)</visible>
-      </control>
-      <control type="image">
-        <right>22</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="titletext">wc_close_g.png</texture>
-        <visible>Control.HasFocus(9903)</visible>
-      </control>
-    </control>
+        <control type="group"/>
       </control>
       </control>
       <control type="group" id="200">
-        <left>0</left><top>0</top><width>892</width><height>240</height>
+        <left>0</left><top>0</top><width>1</width><height>1</height>
       </control>
       <control type="group" id="698">
-        <left>0</left><top>0</top><width>892</width><height>240</height>
+        <left>0</left><top>0</top><width>1</width><height>1</height>
       </control>
       <control type="group" id="699">
-        <left>0</left><top>0</top><width>892</width><height>240</height>
-      </control>
-      <control type="image">
-        <left>13</left><top>36</top><width>120</width><height>120</height>
-        <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
-      </control>
-      <control type="image">
-        <left>19</left><top>42</top><width>108</width><height>108</height>
-        <texture fallback="DefaultVideo.png">$INFO[Player.Art(thumb)]</texture>
-        <aspectratio>keep</aspectratio>
+        <left>0</left><top>0</top><width>1</width><height>1</height>
       </control>
       <control type="label">
-        <left>146</left><top>38</top><width>730</width><height>26</height>
-        <font>bigbold</font>
-        <label>$VAR[NowPlayingVar]</label>
+        <left>874</left><top>3</top><width>140</width><height>26</height>
+        <font>chromebold</font><textcolor>titletext</textcolor>
+        <align>right</align><aligny>center</aligny>
+        <label>$VAR[OSDStateVar]</label>
+      </control>
+      <control type="label" id="1101">
+        <left>12</left><top>32</top><width>500</width><height>36</height>
+        <font>chromesmall</font><aligny>center</aligny>
+        <visible>System.GetBool(gamesgeneral.showosdhelp)</visible>
       </control>
       <control type="label">
-        <left>146</left><top>68</top><width>730</width><height>22</height>
-        <font>small</font><textcolor>textdim</textcolor>
-        <label>$INFO[Player.Time] / $INFO[Player.Duration]</label>
+        <left>12</left><top>32</top><width>500</width><height>36</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[Player.Time]</label>
+        <visible>!System.GetBool(gamesgeneral.showosdhelp)</visible>
       </control>
-      <control type="progress">
-        <left>146</left><top>96</top><width>730</width><height>18</height>
-        <info>Player.Progress</info>
+      <control type="label">
+        <left>520</left><top>32</top><width>492</width><height>36</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor>
+        <align>right</align><aligny>center</aligny>
+        <label>$LOCALIZE[35236]</label>
       </control>
       <control type="grouplist" id="201">
-        <left>13</left><top>166</top><width>560</width><height>36</height>
+        <left>8</left><top>74</top><width>596</width><height>48</height>
         <orientation>horizontal</orientation><itemgap>6</itemgap>
-        <onup>203</onup><ondown>202</ondown>
-        <control type="radiobutton" id="600">
-          <width>86</width><height>36</height>
+        <onup>202</onup>
+        <ondown>202</ondown>
+        <onleft>9951</onleft>
+        <onright>9982</onright>
+        <control type="radiobutton" id="602">
+          <width>60</width><height>48</height>
           <label/>
-          <textureradioonfocus>icons16/prev.png</textureradioonfocus>
-          <textureradioonnofocus>icons16/prev.png</textureradioonnofocus>
-          <textureradioofffocus>icons16/prev.png</textureradioofffocus>
-          <textureradiooffnofocus colordiffuse="textdim">icons16/prev.png</textureradiooffnofocus>
-          <radiowidth>16</radiowidth><radioheight>16</radioheight>
-          <radioposx>35</radioposx><radioposy>10</radioposy>
-          <onclick>PlayerControl(Previous)</onclick>
-        </control>
-        <control type="radiobutton" id="601">
-          <width>86</width><height>36</height>
-          <label/>
-          <textureradioonfocus>icons16/rew.png</textureradioonfocus>
-          <textureradioonnofocus>icons16/rew.png</textureradioonnofocus>
-          <textureradioofffocus>icons16/rew.png</textureradioofffocus>
-          <textureradiooffnofocus colordiffuse="textdim">icons16/rew.png</textureradiooffnofocus>
-          <radiowidth>16</radiowidth><radioheight>16</radioheight>
-          <radioposx>35</radioposx><radioposy>10</radioposy>
+          <textureradioonfocus>icons24/pause.png</textureradioonfocus>
+          <textureradioonnofocus>icons24/pause.png</textureradioonnofocus>
+          <textureradioondisabled>icons24/pause.png</textureradioondisabled>
+          <textureradioofffocus>icons24/play.png</textureradioofffocus>
+          <textureradiooffnofocus>icons24/play.png</textureradiooffnofocus>
+          <textureradiooffdisabled>icons24/play.png</textureradiooffdisabled>
+          <radiowidth>24</radiowidth><radioheight>24</radioheight>
+          <radioposx>18</radioposx><radioposy>12</radioposy>
+          <selected>!Player.Paused + !Player.Forwarding + !Player.Rewinding</selected>
           <onclick>PlayerControl(Play)</onclick>
-          <onclick>PlayerControl(Rewind)</onclick>
-        </control>
-        <control type="group" id="9602">
-          <width>86</width><height>36</height>
-          <control type="button" id="602">
-            <left>0</left><top>0</top><width>86</width><height>36</height>
-            <label/>
-            <onclick>PlayerControl(Play)</onclick>
-          </control>
-          <control type="image">
-            <left>35</left><top>10</top><width>16</width><height>16</height>
-            <texture>icons16/play.png</texture>
-          </control>
         </control>
         <control type="radiobutton" id="603">
-          <width>86</width><height>36</height>
+          <width>60</width><height>48</height>
           <label/>
-          <textureradioonfocus>icons16/stop.png</textureradioonfocus>
-          <textureradioonnofocus>icons16/stop.png</textureradioonnofocus>
-          <textureradioofffocus>icons16/stop.png</textureradioofffocus>
-          <textureradiooffnofocus colordiffuse="textdim">icons16/stop.png</textureradiooffnofocus>
-          <radiowidth>16</radiowidth><radioheight>16</radioheight>
-          <radioposx>35</radioposx><radioposy>10</radioposy>
+          <textureradioonfocus>icons24/stop.png</textureradioonfocus>
+          <textureradioonnofocus>icons24/stop.png</textureradioonnofocus>
+          <textureradioondisabled>icons24/stop.png</textureradioondisabled>
+          <textureradioofffocus>icons24/stop.png</textureradioofffocus>
+          <textureradiooffnofocus>icons24/stop.png</textureradiooffnofocus>
+          <textureradiooffdisabled>icons24/stop.png</textureradiooffdisabled>
+          <radiowidth>24</radiowidth><radioheight>24</radioheight>
+          <radioposx>18</radioposx><radioposy>12</radioposy>
           <onclick>PlayerControl(Stop)</onclick>
         </control>
-        <control type="radiobutton" id="606">
-          <width>86</width><height>36</height>
-          <label/>
-          <textureradioonfocus>icons16/ffwd.png</textureradioonfocus>
-          <textureradioonnofocus>icons16/ffwd.png</textureradioonnofocus>
-          <textureradioofffocus>icons16/ffwd.png</textureradioofffocus>
-          <textureradiooffnofocus colordiffuse="textdim">icons16/ffwd.png</textureradiooffnofocus>
-          <radiowidth>16</radiowidth><radioheight>16</radioheight>
-          <radioposx>35</radioposx><radioposy>10</radioposy>
-          <onclick>PlayerControl(Play)</onclick>
-          <onclick>PlayerControl(Forward)</onclick>
-        </control>
-        <control type="radiobutton" id="607">
-          <width>86</width><height>36</height>
-          <label/>
-          <textureradioonfocus>icons16/next.png</textureradioonfocus>
-          <textureradioonnofocus>icons16/next.png</textureradioonnofocus>
-          <textureradioofffocus>icons16/next.png</textureradioofffocus>
-          <textureradiooffnofocus colordiffuse="textdim">icons16/next.png</textureradiooffnofocus>
-          <radiowidth>16</radiowidth><radioheight>16</radioheight>
-          <radioposx>35</radioposx><radioposy>10</radioposy>
-          <onclick>PlayerControl(Next)</onclick>
-        </control>
+      </control>
+      <control type="radiobutton" id="9982">
+        <left>612</left><top>74</top><width>60</width><height>48</height>
+        <label/>
+        <textureradioonfocus>icons24/audio_muted.png</textureradioonfocus>
+        <textureradioonnofocus>icons24/audio_muted.png</textureradioonnofocus>
+        <textureradioondisabled>icons24/audio_muted.png</textureradioondisabled>
+        <textureradioofffocus>icons24/audio.png</textureradioofffocus>
+        <textureradiooffnofocus>icons24/audio.png</textureradiooffnofocus>
+        <textureradiooffdisabled>icons24/audio.png</textureradiooffdisabled>
+        <radiowidth>24</radiowidth><radioheight>24</radioheight>
+        <radioposx>18</radioposx><radioposy>12</radioposy>
+        <selected>Player.Muted</selected>
+        <onclick>Mute</onclick>
+        <onup>202</onup>
+        <ondown>202</ondown>
+        <onleft>201</onleft>
+        <onright>9983</onright>
+      </control>
+      <control type="slider" id="9983">
+        <left>678</left><top>80</top><width>220</width><height>36</height>
+        <orientation>horizontal</orientation>
+        <info>Player.Volume</info>
+        <action>volume</action>
+        <enable>!Player.Passthrough</enable>
+        <onup>202</onup>
+        <ondown>202</ondown>
+      </control>
+      <control type="button" id="9951">
+        <left>906</left><top>74</top><width>110</width><height>48</height>
+        <font>chromebold</font><label>$LOCALIZE[31800]</label>
+        <onclick>Dialog.Close(GameOSD)</onclick>
+        <onup>202</onup>
+        <ondown>202</ondown>
+        <onleft>9983</onleft>
+        <onright>201</onright>
       </control>
       <control type="grouplist" id="202">
-        <left>13</left><top>210</top><width>866</width><height>30</height>
+        <left>8</left><top>128</top><width>1008</width><height>44</height>
         <orientation>horizontal</orientation><itemgap>6</itemgap>
-        <onup>201</onup><ondown>203</ondown>
+        <onup>201</onup>
+        <ondown>201</ondown>
+        <onright>9951</onright>
         <control type="button" id="9970">
-          <width>180</width><height>30</height>
-          <label>$LOCALIZE[35249]</label>
+          <width>130</width><height>44</height>
+          <font>chrome</font><label>$LOCALIZE[35249]</label>
           <onclick>ActivateWindow(InGameSaves)</onclick>
         </control>
         <control type="button" id="9971">
-          <width>140</width><height>30</height>
-          <label>$LOCALIZE[13007]</label>
+          <width>70</width><height>44</height>
+          <font>chrome</font><label>$LOCALIZE[13007]</label>
           <onclick>PlayerControl(Reset)</onclick>
         </control>
-        <control type="button" id="9951">
-          <width>140</width><height>30</height>
-          <label>$LOCALIZE[15067]</label>
-          <onclick>Dialog.Close(all,true)</onclick>
-          <onclick>Action(FullScreen)</onclick>
+        <control type="button" id="9977">
+          <width>100</width><height>44</height>
+          <font>chrome</font><label>$LOCALIZE[35234]</label>
+          <onclick>ActivateWindow(GameControllers)</onclick>
         </control>
-      </control>
-      <control type="label">
-        <left>13</left><top>246</top><width>110</width><height>30</height>
-        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
-        <label>$LOCALIZE[5]:</label>
-      </control>
-      <control type="grouplist" id="203">
-        <left>129</left><top>246</top><width>750</width><height>30</height>
-        <orientation>horizontal</orientation><itemgap>6</itemgap>
-        <onup>202</onup><ondown>201</ondown>
+        <control type="button" id="9978">
+          <width>70</width><height>44</height>
+          <font>chrome</font><label>$LOCALIZE[35110]</label>
+          <onclick>ActivateWindow(GamePorts)</onclick>
+        </control>
+        <control type="button" id="9979">
+          <width>90</width><height>44</height>
+          <font>chrome</font><label>$LOCALIZE[35172]</label>
+          <onclick>ActivateWindow(GameAgents)</onclick>
+        </control>
         <control type="button" id="9972">
-          <width>110</width><height>30</height>
-          <label>$LOCALIZE[587]</label>
+          <width>80</width><height>44</height>
+          <font>chrome</font><label>$LOCALIZE[587]</label>
           <onclick>ActivateWindow(GameVideoFilter)</onclick>
         </control>
         <control type="button" id="9973">
-          <width>130</width><height>30</height>
-          <label>$LOCALIZE[31997]</label>
+          <width>90</width><height>44</height>
+          <font>chrome</font><label>$LOCALIZE[31997]</label>
           <onclick>ActivateWindow(GameStretchMode)</onclick>
         </control>
         <control type="button" id="9974">
-          <width>140</width><height>30</height>
-          <label>$LOCALIZE[35227]</label>
+          <width>100</width><height>44</height>
+          <font>chrome</font><label>$LOCALIZE[35227]</label>
           <onclick>ActivateWindow(GameVideoRotation)</onclick>
         </control>
-        <control type="button" id="9975">
-          <width>120</width><height>30</height>
-          <label>$LOCALIZE[13376]</label>
-          <onclick>ActivateWindow(GameVolume)</onclick>
-        </control>
         <control type="button" id="9976">
-          <width>140</width><height>30</height>
-          <label>$LOCALIZE[10038]</label>
+          <width>100</width><height>44</height>
+          <font>chrome</font><label>$LOCALIZE[10038]</label>
           <onclick>ActivateWindow(GameAdvancedSettings)</onclick>
         </control>
       </control>

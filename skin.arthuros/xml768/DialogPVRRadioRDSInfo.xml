@@ -1,17 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <window>
-  <defaultcontrol>799</defaultcontrol>
+  <defaultcontrol always="true">10</defaultcontrol>
   <controls>
-    <control type="image">
-      <left>0</left><top>0</top><width>1024</width><height>768</height>
-      <texture>dim.png</texture>
-    </control>
     <control type="group">
       <centerleft>50%</centerleft><centertop>50%</centertop>
-      <width>900</width><height>500</height>
+      <width>900</width><height>452</height>
       <control type="image">
         <left>0</left><top>0</top>
-        <width>900</width><height>500</height>
+        <width>900</width><height>452</height>
         <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
       </control>
       <control type="group">
@@ -42,7 +38,7 @@
           <left>26</left><right>100</right><top>0</top><height>26</height>
           <align>left</align><aligny>center</aligny>
           <font>chromebold</font><textcolor>titletext</textcolor>
-          <label></label>
+          <label>$LOCALIZE[29900]</label>
         </control>
 
         <control type="label">
@@ -54,93 +50,188 @@
 
         <!-- The window boxes. Which set a title bar gets is chosen by the
              "boxes" parameter: window, dialog, home or none. -->
-        <control type="group">
-      <control type="button" id="9901">
-        <right>70</right><top>2</top><width>22</width><height>22</height>
-        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
-        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
-        <label/>
-        <onclick>Dialog.Close(all,true)</onclick>
-        <onclick>ActivateWindow(Home)</onclick>
-        <onright>9902</onright>
-        <ondown>799</ondown>
+        <control type="group"/>
+      </control>
       </control>
       <control type="image">
-        <right>70</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="text">wc_min_g.png</texture>
-        <visible>!Control.HasFocus(9901)</visible>
-      </control>
-      <control type="image">
-        <right>70</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="titletext">wc_min_g.png</texture>
-        <visible>Control.HasFocus(9901)</visible>
-      </control>
-      <control type="button" id="9902">
-        <right>46</right><top>2</top><width>22</width><height>22</height>
-        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
-        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
-        <label/>
-        <enable>Player.HasMedia</enable>
-        <onclick>Action(FullScreen)</onclick>
-        <onleft>9901</onleft>
-        <onright>9903</onright>
-        <ondown>799</ondown>
-      </control>
-      <control type="image">
-        <right>46</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="text">wc_max_g.png</texture>
-        <visible>!Control.HasFocus(9902) + Player.HasMedia</visible>
-      </control>
-      <control type="image">
-        <right>46</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="titletext">wc_max_g.png</texture>
-        <visible>Control.HasFocus(9902)</visible>
-      </control>
-      <control type="image">
-        <right>46</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="textdim">wc_max_dg.png</texture>
-        <visible>!Player.HasMedia</visible>
-      </control>
-      <control type="button" id="9903">
-        <right>22</right><top>2</top><width>22</width><height>22</height>
-        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
-        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
-        <label/>
-        <onclick>Action(Back)</onclick>
-        <onleft>9902</onleft>
-        <ondown>799</ondown>
-      </control>
-      <control type="image">
-        <right>22</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="text">wc_close_g.png</texture>
-        <visible>!Control.HasFocus(9903)</visible>
-      </control>
-      <control type="image">
-        <right>22</right><top>2</top><width>22</width><height>22</height>
-        <texture colordiffuse="titletext">wc_close_g.png</texture>
-        <visible>Control.HasFocus(9903)</visible>
-      </control>
-    </control>
-      </control>
-      </control>
-      <control type="label" id="1">
-        <left>29</left><top>3</top><width>794</width><height>26</height>
-        <font>chromebold</font><textcolor>titletext</textcolor>
-        <align>left</align><aligny>center</aligny>
-      </control>
-      <control type="image">
-        <left>10</left><top>36</top><width>880</width><height>420</height>
+        <left>8</left><top>34</top><width>438</width><height>184</height>
         <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
       </control>
-      <control type="grouplist">
-        <left>18</left><top>42</top><width>864</width><height>408</height>
-        <orientation>vertical</orientation><itemgap>3</itemgap>
-        <onup>9100</onup><ondown>9100</ondown>
-        <control type="radiobutton" id="799">
-          <width>864</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
-          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
-          <align>left</align><textoffsetx>12</textoffsetx>
+      <control type="label">
+        <left>18</left><top>38</top><width>418</width><height>26</height>
+        <font>chromebold</font><aligny>center</aligny>
+        <label>$LOCALIZE[179]</label>
+      </control>
+      <control type="label">
+        <left>18</left><top>66</top><width>110</width><height>24</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[556]</label>
+      </control>
+      <control type="label">
+        <left>134</left><top>66</top><width>302</width><height>24</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[RDS.Title]</label>
+      </control>
+      <control type="label">
+        <left>18</left><top>90</top><width>110</width><height>24</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[557]</label>
+      </control>
+      <control type="label">
+        <left>134</left><top>90</top><width>302</width><height>24</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[RDS.Artist]</label>
+      </control>
+      <control type="label">
+        <left>18</left><top>114</top><width>110</width><height>24</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[29901]</label>
+      </control>
+      <control type="label">
+        <left>134</left><top>114</top><width>302</width><height>24</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[RDS.Band]</label>
+      </control>
+      <control type="label">
+        <left>18</left><top>138</top><width>110</width><height>24</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[558]</label>
+      </control>
+      <control type="label">
+        <left>134</left><top>138</top><width>302</width><height>24</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[RDS.Album]</label>
+      </control>
+      <control type="label">
+        <left>18</left><top>162</top><width>110</width><height>24</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[29903]</label>
+      </control>
+      <control type="label">
+        <left>134</left><top>162</top><width>302</width><height>24</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[RDS.Composer]</label>
+      </control>
+      <control type="label">
+        <left>18</left><top>186</top><width>110</width><height>24</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[29905]</label>
+      </control>
+      <control type="label">
+        <left>134</left><top>186</top><width>302</width><height>24</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[RDS.Conductor]</label>
+      </control>
+      <control type="image">
+        <left>454</left><top>34</top><width>438</width><height>184</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      </control>
+      <control type="label">
+        <left>464</left><top>38</top><width>418</width><height>26</height>
+        <font>chromebold</font><aligny>center</aligny>
+        <label>$LOCALIZE[29908]</label>
+      </control>
+      <control type="label">
+        <left>464</left><top>66</top><width>110</width><height>24</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[19148]</label>
+      </control>
+      <control type="label">
+        <left>580</left><top>66</top><width>302</width><height>24</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[RDS.ProgStation]</label>
+      </control>
+      <control type="label">
+        <left>464</left><top>90</top><width>110</width><height>24</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[19030]</label>
+      </control>
+      <control type="label">
+        <left>580</left><top>90</top><width>302</width><height>24</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[RDS.ProgNow]</label>
+      </control>
+      <control type="label">
+        <left>464</left><top>114</top><width>110</width><height>24</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[19031]</label>
+      </control>
+      <control type="label">
+        <left>580</left><top>114</top><width>302</width><height>24</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[RDS.ProgNext]</label>
+      </control>
+      <control type="label">
+        <left>464</left><top>138</top><width>110</width><height>24</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[29906]</label>
+      </control>
+      <control type="label">
+        <left>580</left><top>138</top><width>302</width><height>24</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[RDS.ProgHost]</label>
+      </control>
+      <control type="label">
+        <left>464</left><top>162</top><width>110</width><height>24</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[29902]</label>
+      </control>
+      <control type="label">
+        <left>580</left><top>162</top><width>302</width><height>24</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[RDS.ProgStyle]</label>
+      </control>
+      <control type="label">
+        <left>464</left><top>186</top><width>110</width><height>24</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[29914]</label>
+      </control>
+      <control type="label">
+        <left>580</left><top>186</top><width>302</width><height>24</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[RDS.ProgHomepage]</label>
+      </control>
+      <control type="image">
+        <left>8</left><top>224</top><width>884</width><height>112</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+      </control>
+      <control type="label">
+        <left>18</left><top>228</top><width>864</width><height>26</height>
+        <font>chromebold</font><aligny>center</aligny>
+        <label>$LOCALIZE[31801]</label>
+      </control>
+      <control type="label">
+        <left>18</left><top>254</top><width>864</width><height>20</height>
+        <font>chromesmall</font><label>$INFO[RDS.GetLine(0)]</label>
+      </control>
+      <control type="label">
+        <left>18</left><top>274</top><width>864</width><height>20</height>
+        <font>chromesmall</font><label>$INFO[RDS.GetLine(1)]</label>
+      </control>
+      <control type="label">
+        <left>18</left><top>294</top><width>864</width><height>20</height>
+        <font>chromesmall</font><label>$INFO[RDS.GetLine(2)]</label>
+      </control>
+      <control type="label">
+        <left>18</left><top>314</top><width>864</width><height>20</height>
+        <font>chromesmall</font><label>$INFO[RDS.GetLine(3)]</label>
+      </control>
+      <control type="group" id="70">
+        <left>8</left><top>342</top><width>884</width><height>56</height>
+        <control type="spincontrol" id="21">
+          <left>0</left><top>8</top><width>220</width><height>40</height>
+          <font>chrome</font>
+          <onright>10</onright><onleft>10</onleft><onup>10</onup><ondown>10</ondown>
         </control>
+        <control type="textbox" id="22">
+          <left>228</left><top>4</top><width>648</width><height>48</height>
+          <font>small</font>
+        </control>
+      </control>
+      <control type="button" id="10">
+        <left>782</left><top>404</top><width>110</width><height>40</height>
+        <font>chrome</font><label>$LOCALIZE[15067]</label>
+        <onup>21</onup><ondown>21</ondown><onleft>21</onleft><onright>21</onright>
       </control>
     </control>
   </controls>

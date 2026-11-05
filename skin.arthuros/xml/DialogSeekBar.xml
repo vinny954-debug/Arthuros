@@ -1,35 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
+  <visible>[Window.IsActive(fullscreenvideo) | Window.IsActive(visualisation)]</visible>
+  <visible>![Window.IsVisible(videoosd) | Window.IsVisible(musicosd) | Window.IsVisible(sliderdialog) | Window.IsVisible(pvrosdchannels) | Window.IsVisible(pvrchannelguide) | Window.IsVisible(fullscreeninfo) | Window.IsVisible(playerprocessinfo) | Window.IsVisible(videobookmarks) | Window.IsVisible(osdvideosettings) | Window.IsVisible(osdaudiosettings) | Window.IsVisible(osdsubtitlesettings) | Window.IsVisible(pvrradiordsinfo)]</visible>
+  <visible>Player.Seeking | Player.HasPerformedSeek(3) | [Player.Paused + !Player.Caching] | Player.Forwarding | Player.Rewinding | Player.ShowTime | !String.IsEmpty(Player.SeekNumeric)</visible>
   <zorder>3</zorder>
   <controls>
     <control type="group">
-      <centerleft>50%</centerleft><centertop>50%</centertop>
-      <width>892</width><height>134</height>
-      <include content="Dialog_Box">
-        <param name="width" value="892" /><param name="height" value="134" />
-        <param name="innerwidth" value="886" />
-        <param name="icon" value="icons24/seek.png" /><param name="colour" value="accent2" />
-        <param name="down" value="" />
-        <param name="boxes" value="none" />
-        <param name="title" value="$LOCALIZE[31907]" />
-      </include>
+      <left>0</left><bottom>0</bottom><width>1024</width><height>44</height>
+      <include content="Win_Frame"><param name="width" value="1024" /><param name="height" value="44" /></include>
       <control type="label">
-        <left>16</left><top>38</top><width>560</width><height>26</height>
-        <font>bold</font><label>$VAR[NowPlayingVar]</label>
+        <left>12</left><top>0</top><width>120</width><height>44</height>
+        <font>chromebold</font><aligny>center</aligny>
+        <label>$VAR[OSDStateVar]</label>
+      </control>
+      <control type="label">
+        <left>134</left><top>0</top><width>96</width><height>44</height>
+        <font>chrome</font><align>right</align><aligny>center</aligny>
+        <label>$INFO[Player.SeekTime]</label>
+        <visible>Player.Seeking</visible>
+      </control>
+      <control type="label">
+        <left>134</left><top>0</top><width>96</width><height>44</height>
+        <font>chrome</font><align>right</align><aligny>center</aligny>
+        <label>$INFO[Player.SeekNumeric]</label>
+        <visible>!Player.Seeking + !String.IsEmpty(Player.SeekNumeric)</visible>
+      </control>
+      <control type="label">
+        <left>134</left><top>0</top><width>96</width><height>44</height>
+        <font>chrome</font><align>right</align><aligny>center</aligny>
+        <label>$INFO[Player.Time]</label>
+        <visible>!Player.Seeking + String.IsEmpty(Player.SeekNumeric)</visible>
       </control>
       <control type="slider" id="401">
-        <left>16</left><top>70</top><width>860</width><height>24</height>
+        <left>238</left><top>8</top><width>674</width><height>28</height>
+        <orientation>horizontal</orientation>
+        <visible>!VideoPlayer.Content(LiveTV)</visible>
       </control>
       <control type="slider" id="403">
-        <left>-3000</left><top>0</top><width>200</width><height>24</height>
+        <left>238</left><top>8</top><width>674</width><height>28</height>
+        <orientation>horizontal</orientation>
+        <visible>VideoPlayer.Content(LiveTV)</visible>
       </control>
       <control type="label">
-        <left>16</left><top>100</top><width>420</width><height>22</height>
-        <font>small</font><label>$INFO[Player.SeekTime]$INFO[Player.Time]</label>
-      </control>
-      <control type="label">
-        <left>456</left><top>100</top><width>420</width><height>22</height>
-        <font>small</font><align>right</align><label>$INFO[Player.Duration]</label>
+        <left>920</left><top>0</top><width>96</width><height>44</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[Player.Duration]</label>
       </control>
     </control>
   </controls>
