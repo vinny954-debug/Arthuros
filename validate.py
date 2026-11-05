@@ -606,8 +606,7 @@ for wname, root in sorted(windows.items()):
 # target, an info label Kodi doesn't have, a missing Kodi id) fails the build:
 # fix it, or add it here with a reason. Fixed ones are only reported, so a
 # package that fixes one doesn't break the build until this list is trimmed.
-KNOWN_WARNINGS = {
-}
+KNOWN_WARNINGS = set()   # none left in 0.9.7; add "text": reason lines as a set literal
 for x in warns:
     if x not in KNOWN_WARNINGS:
         errors.append(f"{x}  [new warning: fix it, or list it in KNOWN_WARNINGS in validate.py]")
