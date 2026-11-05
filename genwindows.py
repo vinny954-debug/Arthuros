@@ -902,11 +902,18 @@ def small_dialogs():
     # the render loop and closes. Its OnBack sets m_cancelled, which
     # WaitOnEvent(allowCancel) honours - so a Cancel button that sends Back
     # is all a touch user needs. busydialognocancel loads this same file and
-    # ignores the flag, so it gets the box without the button.
+    # ignores the flag (its Back just closes it), so it gets the box without
+    # the button. Window.Is() tests the window evaluating the condition
+    # (WINDOW_IS uses the control's context window, GUIControlsGUIInfo.cpp),
+    # so each instance picks its own box even while both are open; only the
+    # topmost of the two renders at all (CGUIDialogBusy*::DoProcess/Render).
+    # No default focus: a second OK pressed while a listing loads must not
+    # land on Cancel. Touch and mouse press it without focus; a remote has
+    # Back, which does the same.
     def busy_box(cancel):
         ht = 148 if cancel else 92
         s  = "    <control type=\"group\">\n"
-        s += f"      <visible>{'' if cancel else '!'}Window.IsActive(busydialog)</visible>\n"
+        s += f"      <visible>{'' if cancel else '!'}Window.Is(busydialog)</visible>\n"
         s += "      <centerleft>50%</centerleft><centertop>50%</centertop>\n"
         s += f"      <width>360</width><height>{ht}</height>\n"
         s += "      <include content=\"Dialog_Box\">\n"
@@ -931,8 +938,7 @@ def small_dialogs():
             s += "        <onup>9810</onup><ondown>9810</ondown><onleft>9810</onleft><onright>9810</onright>\n"
             s += "      </control>\n"
         return s + "    </control>\n"
-    out["DialogBusy"] = (H + "<window>\n  <zorder>5</zorder>\n"
-      "  <defaultcontrol always=\"true\">9810</defaultcontrol>\n  <controls>\n"
+    out["DialogBusy"] = (H + "<window>\n  <zorder>5</zorder>\n  <controls>\n"
       "    <!-- no dimming over a playing video (Estuary does the same) -->\n"
       "    <control type=\"group\">\n"
       "      <visible>!Window.IsVisible(fullscreenvideo) + !Window.IsVisible(fullscreengame)</visible>\n"
@@ -1529,6 +1535,10 @@ def slideshow():
     restart = f"Skin.TimerStart({SLIDEBAR})"
     stop = f"Skin.TimerStop({SLIDEBAR})"
     playing = "Slideshow.IsActive + !Slideshow.IsPaused"
+    # RunSlideShow(paths) opens a plain viewer with m_bPause true and
+    # m_bSlideShow false, so IsPaused alone would hold "Paused" up over a
+    # single picture: only a running slideshow can be paused.
+    paused = "[Slideshow.IsActive + Slideshow.IsPaused]"
     W = 8 + 72 * 5 + 6 * 2 + 18 * 2 + 8     # prev play next | info | close
     x = [8, 86, 164, 254, 344]
     strip = (_slide_button(9801, x[0], [("icons24/prev.png", None)],
@@ -1560,7 +1570,7 @@ def slideshow():
       "    <!-- caption: with the strip, and whenever the slideshow is paused -->\n"
       "    <control type=\"group\">\n"
       "      <left>4</left><top>4</top><width>1016</width><height>30</height>\n"
-      f"      <visible>{SLIDEBAR_ON} | Slideshow.IsPaused</visible>\n"
+      f"      <visible>{SLIDEBAR_ON} | {paused}</visible>\n"
       "      <include content=\"Win_Frame\"><param name=\"width\" value=\"1016\" /><param name=\"height\" value=\"30\" /></include>\n"
       "      <control type=\"label\">\n"
       "        <left>10</left><top>2</top><width>600</width><height>26</height>\n"
@@ -1574,7 +1584,7 @@ def slideshow():
       "      <control type=\"label\">\n"
       "        <left>620</left><top>2</top><width>190</width><height>26</height>\n"
       "        <font>chromebold</font><textcolor>marked</textcolor><align>right</align><aligny>center</aligny>\n"
-      "        <label>$LOCALIZE[112]</label><visible>Slideshow.IsPaused</visible>\n"
+      f"        <label>$LOCALIZE[112]</label><visible>{paused}</visible>\n"
       "      </control>\n"
       "    </control>\n"
       "    <!-- the strip: previous, play/pause, next | information | close -->\n"
@@ -1582,6 +1592,16 @@ def slideshow():
       f"      <left>{(1024 - W) // 2}</left><bottom>8</bottom><width>{W}</width><height>68</height>\n"
       f"      <visible>{SLIDEBAR_ON}</visible>\n"
       f"      <include content=\"Win_Frame\"><param name=\"width\" value=\"{W}\" /><param name=\"height\" value=\"68\" /></include>\n"
+      "      <!-- the strip's frame and the gaps between its buttons: a tap that\n"
+      "           just misses a button keeps the strip up instead of falling\n"
+      "           through to 9800 and hiding it. Mouse hits go to the last\n"
+      "           control first (CGUIControlGroup::SendMouseEvent), so the\n"
+      "           buttons below still win. -->\n"
+      "      <control type=\"button\" id=\"9806\">\n"
+      f"        <left>0</left><top>0</top><width>{W}</width><height>68</height>\n"
+      "        <label></label><texturefocus /><texturenofocus />\n"
+      f"        <onclick>{restart}</onclick>\n"
+      "      </control>\n"
       + strip +
       "    </control>\n"
       "  </controls>\n</window>\n")
@@ -1910,9 +1930,9 @@ def pvr_channels_osd():
         <onleft>11</onleft><onright>60</onright><onup>11</onup><ondown>11</ondown>
         <pagecontrol>60</pagecontrol><scrolltime tween="linear">0</scrolltime>
         <itemlayout height="64" width="856" condition="{XLC}">
-{_channel_row(64, 60, 48, "normal", 30, "small", 28, False)}        </itemlayout>
+{_channel_row(64, 76, 48, "normal", 30, "small", 28, False)}        </itemlayout>
         <focusedlayout height="64" width="856" condition="{XLC}">
-{_channel_row(64, 60, 48, "bold", 30, "small", 28, True)}        </focusedlayout>
+{_channel_row(64, 76, 48, "bold", 30, "small", 28, True)}        </focusedlayout>
         <itemlayout height="44" width="856">
 {_channel_row(44, 46, 36, "normal", 20, "small", 20, False)}        </itemlayout>
         <focusedlayout height="44" width="856">
@@ -1923,18 +1943,20 @@ def pvr_channels_osd():
         <onleft>11</onleft><onright>9811</onright>
       </control>
 """
+    # The footer lines are sized for Extra large (bold 28, small 24 px) so
+    # they never touch; at the normal sizes they simply sit a little apart.
     b += well(10, 394, 880, 96, "panel_sunken_grey.png")
     b += f"""      <control type="label" id="2">
-        <left>20</left><top>400</top><width>640</width><height>26</height>
+        <left>20</left><top>397</top><width>640</width><height>30</height>
         <font>bold</font><aligny>center</aligny><label>$INFO[{C}.Title]</label>
       </control>
       <control type="label">
-        <left>20</left><top>428</top><width>640</width><height>24</height>
+        <left>20</left><top>428</top><width>640</width><height>26</height>
         <font>small</font><textcolor>textdim</textcolor><aligny>center</aligny>
         <label>$INFO[{C}.StartTime]$INFO[{C}.EndTime, - ,]$INFO[{C}.Label,  -  ,]</label>
       </control>
       <control type="label">
-        <left>20</left><top>456</top><width>640</width><height>24</height>
+        <left>20</left><top>456</top><width>640</width><height>26</height>
         <font>small</font><aligny>center</aligny>
         <label>$INFO[{C}.NextTitle,$LOCALIZE[19031]: ,]</label>
       </control>

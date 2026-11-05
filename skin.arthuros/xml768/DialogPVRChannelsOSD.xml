@@ -128,25 +128,25 @@
         <onleft>11</onleft><onright>60</onright><onup>11</onup><ondown>11</ondown>
         <pagecontrol>60</pagecontrol><scrolltime tween="linear">0</scrolltime>
         <itemlayout height="64" width="856" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <control type="image"><left>76</left><top>8</top><width>48</width><height>48</height><texture fallback="DefaultTVShows.png">$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>
+          <control type="image"><left>92</left><top>8</top><width>48</width><height>48</height><texture fallback="DefaultTVShows.png">$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>
           <control type="progress"><left>596</left><top>12</top><width>250</width><height>12</height><info>ListItem.Progress</info><visible>!String.IsEmpty(ListItem.Title)</visible></control>
-          <control type="label"><left>4</left><top>0</top><width>60</width><height>64</height><font>normal</font><align>right</align><aligny>center</aligny><textcolor>text</textcolor><label>$INFO[ListItem.ChannelNumberLabel]</label></control>
-          <control type="label"><left>132</left><top>3</top><width>448</width><height>30</height><font>normal</font><aligny>center</aligny><textcolor>text</textcolor><label>$INFO[ListItem.Label]</label></control>
-          <control type="label"><left>132</left><top>33</top><width>448</width><height>28</height><font>small</font><aligny>center</aligny><textcolor>textdim</textcolor><label>$INFO[ListItem.Title]</label></control>
+          <control type="label"><left>4</left><top>0</top><width>76</width><height>64</height><font>normal</font><align>right</align><aligny>center</aligny><textcolor>text</textcolor><label>$INFO[ListItem.ChannelNumberLabel]</label></control>
+          <control type="label"><left>148</left><top>3</top><width>432</width><height>30</height><font>normal</font><aligny>center</aligny><textcolor>text</textcolor><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>148</left><top>33</top><width>432</width><height>28</height><font>small</font><aligny>center</aligny><textcolor>textdim</textcolor><label>$INFO[ListItem.Title]</label></control>
           <control type="label"><left>596</left><top>33</top><width>250</width><height>28</height><font>small</font><align>right</align><aligny>center</aligny><textcolor>textdim</textcolor><label>$INFO[ListItem.StartTime]$INFO[ListItem.EndTime, - ,]</label></control>
         </itemlayout>
         <focusedlayout height="64" width="856" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image"><left>0</left><top>0</top><width>856</width><height>64</height><texture colordiffuse="select">fill.png</texture><visible>Control.HasFocus(11)</visible></control>
           <control type="image"><left>0</left><top>0</top><width>856</width><height>64</height><texture border="4" colordiffuse="select">select_ring.png</texture><visible>!Control.HasFocus(11)</visible></control>
-          <control type="image"><left>76</left><top>8</top><width>48</width><height>48</height><texture fallback="DefaultTVShows.png">$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>
+          <control type="image"><left>92</left><top>8</top><width>48</width><height>48</height><texture fallback="DefaultTVShows.png">$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>
           <control type="progress"><left>596</left><top>12</top><width>250</width><height>12</height><info>ListItem.Progress</info><visible>!String.IsEmpty(ListItem.Title)</visible></control>
-          <control type="label"><left>4</left><top>0</top><width>60</width><height>64</height><font>bold</font><align>right</align><aligny>center</aligny><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><label>$INFO[ListItem.ChannelNumberLabel]</label><visible>Control.HasFocus(11)</visible></control>
-          <control type="label"><left>132</left><top>3</top><width>448</width><height>30</height><font>bold</font><aligny>center</aligny><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><label>$INFO[ListItem.Label]</label><visible>Control.HasFocus(11)</visible></control>
-          <control type="label"><left>132</left><top>33</top><width>448</width><height>28</height><font>small</font><aligny>center</aligny><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><label>$INFO[ListItem.Title]</label><visible>Control.HasFocus(11)</visible></control>
+          <control type="label"><left>4</left><top>0</top><width>76</width><height>64</height><font>bold</font><align>right</align><aligny>center</aligny><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><label>$INFO[ListItem.ChannelNumberLabel]</label><visible>Control.HasFocus(11)</visible></control>
+          <control type="label"><left>148</left><top>3</top><width>432</width><height>30</height><font>bold</font><aligny>center</aligny><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><label>$INFO[ListItem.Label]</label><visible>Control.HasFocus(11)</visible></control>
+          <control type="label"><left>148</left><top>33</top><width>432</width><height>28</height><font>small</font><aligny>center</aligny><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><label>$INFO[ListItem.Title]</label><visible>Control.HasFocus(11)</visible></control>
           <control type="label"><left>596</left><top>33</top><width>250</width><height>28</height><font>small</font><align>right</align><aligny>center</aligny><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><label>$INFO[ListItem.StartTime]$INFO[ListItem.EndTime, - ,]</label><visible>Control.HasFocus(11)</visible></control>
-          <control type="label"><left>4</left><top>0</top><width>60</width><height>64</height><font>bold</font><align>right</align><aligny>center</aligny><textcolor>text</textcolor><label>$INFO[ListItem.ChannelNumberLabel]</label><visible>!Control.HasFocus(11)</visible></control>
-          <control type="label"><left>132</left><top>3</top><width>448</width><height>30</height><font>bold</font><aligny>center</aligny><textcolor>text</textcolor><label>$INFO[ListItem.Label]</label><visible>!Control.HasFocus(11)</visible></control>
-          <control type="label"><left>132</left><top>33</top><width>448</width><height>28</height><font>small</font><aligny>center</aligny><textcolor>textdim</textcolor><label>$INFO[ListItem.Title]</label><visible>!Control.HasFocus(11)</visible></control>
+          <control type="label"><left>4</left><top>0</top><width>76</width><height>64</height><font>bold</font><align>right</align><aligny>center</aligny><textcolor>text</textcolor><label>$INFO[ListItem.ChannelNumberLabel]</label><visible>!Control.HasFocus(11)</visible></control>
+          <control type="label"><left>148</left><top>3</top><width>432</width><height>30</height><font>bold</font><aligny>center</aligny><textcolor>text</textcolor><label>$INFO[ListItem.Label]</label><visible>!Control.HasFocus(11)</visible></control>
+          <control type="label"><left>148</left><top>33</top><width>432</width><height>28</height><font>small</font><aligny>center</aligny><textcolor>textdim</textcolor><label>$INFO[ListItem.Title]</label><visible>!Control.HasFocus(11)</visible></control>
           <control type="label"><left>596</left><top>33</top><width>250</width><height>28</height><font>small</font><align>right</align><aligny>center</aligny><textcolor>textdim</textcolor><label>$INFO[ListItem.StartTime]$INFO[ListItem.EndTime, - ,]</label><visible>!Control.HasFocus(11)</visible></control>
         </focusedlayout>
         <itemlayout height="44" width="856">
@@ -181,16 +181,16 @@
         <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
       </control>
       <control type="label" id="2">
-        <left>20</left><top>400</top><width>640</width><height>26</height>
+        <left>20</left><top>397</top><width>640</width><height>30</height>
         <font>bold</font><aligny>center</aligny><label>$INFO[Container(11).ListItem.Title]</label>
       </control>
       <control type="label">
-        <left>20</left><top>428</top><width>640</width><height>24</height>
+        <left>20</left><top>428</top><width>640</width><height>26</height>
         <font>small</font><textcolor>textdim</textcolor><aligny>center</aligny>
         <label>$INFO[Container(11).ListItem.StartTime]$INFO[Container(11).ListItem.EndTime, - ,]$INFO[Container(11).ListItem.Label,  -  ,]</label>
       </control>
       <control type="label">
-        <left>20</left><top>456</top><width>640</width><height>24</height>
+        <left>20</left><top>456</top><width>640</width><height>26</height>
         <font>small</font><aligny>center</aligny>
         <label>$INFO[Container(11).ListItem.NextTitle,$LOCALIZE[19031]: ,]</label>
       </control>

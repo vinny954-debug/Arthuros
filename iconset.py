@@ -464,6 +464,30 @@ BASES["addon_radio"] = [
 "................",
 ]
 
+# P2
+# tick: the selected-row mark in select lists. White with a black
+# 4-neighbour edge (as _disc_outline draws), so the palette can tint it with
+# colordiffuse (text on plain rows, textinv on the focused one) and it still
+# reads on a light panel in the desktop icon picker.
+BASES["tick"] = [
+"................",
+".............KK.",
+"............KWWK",
+"...........KWWWK",
+"..........KWWWK.",
+".K.......KWWWK..",
+"KWK.....KWWWK...",
+"KWWK...KWWWK....",
+"KWWWK.KWWWK.....",
+".KWWWKWWWK......",
+"..KWWWWWK.......",
+"...KWWWK........",
+"....KWK.........",
+".....K..........",
+"................",
+"................",
+]
+
 EMBLEMS = {
  "star":    ("B", "Y", ["...#...", "..###..", "#######", ".#####.", "..###..", ".##.##.", ".#...#."]),
  "clock":   ("W", "K", [".#####.", "#..#..#", "#..#..#", "#..##.#", "#.....#", "#.....#", ".#####."]),

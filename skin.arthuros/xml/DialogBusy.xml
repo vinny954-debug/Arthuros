@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
   <zorder>5</zorder>
-  <defaultcontrol always="true">9810</defaultcontrol>
   <controls>
     <!-- no dimming over a playing video (Estuary does the same) -->
     <control type="group">
@@ -9,7 +8,7 @@
       <include>Dialog_Dim</include>
     </control>
     <control type="group">
-      <visible>Window.IsActive(busydialog)</visible>
+      <visible>Window.Is(busydialog)</visible>
       <centerleft>50%</centerleft><centertop>50%</centertop>
       <width>360</width><height>148</height>
       <include content="Dialog_Box">
@@ -34,7 +33,7 @@
       </control>
     </control>
     <control type="group">
-      <visible>!Window.IsActive(busydialog)</visible>
+      <visible>!Window.Is(busydialog)</visible>
       <centerleft>50%</centerleft><centertop>50%</centertop>
       <width>360</width><height>92</height>
       <include content="Dialog_Box">

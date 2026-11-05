@@ -17,7 +17,7 @@
     <!-- caption: with the strip, and whenever the slideshow is paused -->
     <control type="group">
       <left>4</left><top>4</top><width>1016</width><height>30</height>
-      <visible>Skin.TimerIsRunning(arthur_slidebar) | Slideshow.IsPaused</visible>
+      <visible>Skin.TimerIsRunning(arthur_slidebar) | [Slideshow.IsActive + Slideshow.IsPaused]</visible>
       <include content="Win_Frame"><param name="width" value="1016" /><param name="height" value="30" /></include>
       <control type="label">
         <left>10</left><top>2</top><width>600</width><height>26</height>
@@ -31,7 +31,7 @@
       <control type="label">
         <left>620</left><top>2</top><width>190</width><height>26</height>
         <font>chromebold</font><textcolor>marked</textcolor><align>right</align><aligny>center</aligny>
-        <label>$LOCALIZE[112]</label><visible>Slideshow.IsPaused</visible>
+        <label>$LOCALIZE[112]</label><visible>[Slideshow.IsActive + Slideshow.IsPaused]</visible>
       </control>
     </control>
     <!-- the strip: previous, play/pause, next | information | close -->
@@ -39,6 +39,16 @@
       <left>300</left><bottom>8</bottom><width>424</width><height>68</height>
       <visible>Skin.TimerIsRunning(arthur_slidebar)</visible>
       <include content="Win_Frame"><param name="width" value="424" /><param name="height" value="68" /></include>
+      <!-- the strip's frame and the gaps between its buttons: a tap that
+           just misses a button keeps the strip up instead of falling
+           through to 9800 and hiding it. Mouse hits go to the last
+           control first (CGUIControlGroup::SendMouseEvent), so the
+           buttons below still win. -->
+      <control type="button" id="9806">
+        <left>0</left><top>0</top><width>424</width><height>68</height>
+        <label></label><texturefocus /><texturenofocus />
+        <onclick>Skin.TimerStart(arthur_slidebar)</onclick>
+      </control>
         <control type="button" id="9801">
           <left>8</left><top>8</top><width>72</width><height>52</height>
           <label></label><onleft>9805</onleft><onright>9802</onright>

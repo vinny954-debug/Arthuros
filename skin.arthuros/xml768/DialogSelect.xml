@@ -174,8 +174,8 @@
             <label>$INFO[ListItem.Label2]</label>
           </control>
           <control type="image">
-            <left>590</left><top>13</top><width>18</width><height>18</height>
-            <texture>check_on.png</texture>
+            <left>591</left><top>14</top><width>16</width><height>16</height>
+            <texture colordiffuse="text">icons24/tick.png</texture>
             <visible>ListItem.IsSelected</visible>
           </control>
         </itemlayout>
@@ -202,8 +202,8 @@
             <label>$INFO[ListItem.Label2]</label>
           </control>
           <control type="image">
-            <left>590</left><top>13</top><width>18</width><height>18</height>
-            <texture>check_on.png</texture>
+            <left>591</left><top>14</top><width>16</width><height>16</height>
+            <texture colordiffuse="textinv">icons24/tick.png</texture>
             <visible>ListItem.IsSelected</visible>
           </control>
         </focusedlayout>
@@ -226,8 +226,8 @@
             <label>$INFO[ListItem.Label2]</label>
           </control>
           <control type="image">
-            <left>590</left><top>5</top><width>18</width><height>18</height>
-            <texture>check_on.png</texture>
+            <left>591</left><top>6</top><width>16</width><height>16</height>
+            <texture colordiffuse="text">icons24/tick.png</texture>
             <visible>ListItem.IsSelected</visible>
           </control>
         </itemlayout>
@@ -254,8 +254,8 @@
             <label>$INFO[ListItem.Label2]</label>
           </control>
           <control type="image">
-            <left>590</left><top>5</top><width>18</width><height>18</height>
-            <texture>check_on.png</texture>
+            <left>591</left><top>6</top><width>16</width><height>16</height>
+            <texture colordiffuse="textinv">icons24/tick.png</texture>
             <visible>ListItem.IsSelected</visible>
           </control>
         </focusedlayout>
@@ -281,8 +281,8 @@
             <label>$INFO[ListItem.Label2]</label>
           </control>
           <control type="image">
-            <left>590</left><top>23</top><width>18</width><height>18</height>
-            <texture>check_on.png</texture>
+            <left>591</left><top>24</top><width>16</width><height>16</height>
+            <texture colordiffuse="text">icons24/tick.png</texture>
             <visible>ListItem.IsSelected</visible>
           </control>
         </itemlayout>
@@ -306,8 +306,8 @@
             <label>$INFO[ListItem.Label2]</label>
           </control>
           <control type="image">
-            <left>590</left><top>23</top><width>18</width><height>18</height>
-            <texture>check_on.png</texture>
+            <left>591</left><top>24</top><width>16</width><height>16</height>
+            <texture colordiffuse="textinv">icons24/tick.png</texture>
             <visible>ListItem.IsSelected</visible>
           </control>
         </focusedlayout>
@@ -326,8 +326,8 @@
             <label>$INFO[ListItem.Label2]</label>
           </control>
           <control type="image">
-            <left>590</left><top>15</top><width>18</width><height>18</height>
-            <texture>check_on.png</texture>
+            <left>591</left><top>16</top><width>16</width><height>16</height>
+            <texture colordiffuse="text">icons24/tick.png</texture>
             <visible>ListItem.IsSelected</visible>
           </control>
         </itemlayout>
@@ -351,8 +351,8 @@
             <label>$INFO[ListItem.Label2]</label>
           </control>
           <control type="image">
-            <left>590</left><top>15</top><width>18</width><height>18</height>
-            <texture>check_on.png</texture>
+            <left>591</left><top>16</top><width>16</width><height>16</height>
+            <texture colordiffuse="textinv">icons24/tick.png</texture>
             <visible>ListItem.IsSelected</visible>
           </control>
         </focusedlayout>
