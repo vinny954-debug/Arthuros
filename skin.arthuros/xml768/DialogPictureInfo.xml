@@ -88,6 +88,18 @@
         <!-- The window boxes. Which set a title bar gets is chosen by the
              "boxes" parameter: window, dialog, home or none. -->
         <control type="group">
+      <control type="image">
+        <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinBox_1_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <texture border="4" colordiffuse="facetint">wc_face.png</texture>
+        <visible>Window.IsVisible(loginscreen)</visible>
+      </control>
+      <control type="image">
+        <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
+      <include content="WinGlyph_1_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <texture colordiffuse="textdim">wc_min_dg.png</texture>
+        <visible>Window.IsVisible(loginscreen)</visible>
+      </control>
       <control type="button" id="9901">
         <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
       <include content="WinBox_1_Touch" condition="Skin.HasSetting(touchmode)"/>
@@ -95,21 +107,22 @@
         <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
         <label/>
         <onclick>Dialog.Close(all,true)</onclick>
-        <onclick>ActivateWindow(Home)</onclick>
+        <onclick condition="!Window.IsVisible(loginscreen)">ActivateWindow(Home)</onclick>
         <onright>9902</onright>
         <ondown>5</ondown>
+        <visible>!Window.IsVisible(loginscreen)</visible>
       </control>
       <control type="image">
         <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
       <include content="WinGlyph_1_Touch" condition="Skin.HasSetting(touchmode)"/>
         <texture colordiffuse="text">wc_min_g.png</texture>
-        <visible>!Control.HasFocus(9901)</visible>
+        <visible>!Control.HasFocus(9901) + !Window.IsVisible(loginscreen)</visible>
       </control>
       <control type="image">
         <include content="WinBox_1" condition="!Skin.HasSetting(touchmode)"/>
       <include content="WinGlyph_1_Touch" condition="Skin.HasSetting(touchmode)"/>
         <texture colordiffuse="titletext">wc_min_g.png</texture>
-        <visible>Control.HasFocus(9901)</visible>
+        <visible>Control.HasFocus(9901) + !Window.IsVisible(loginscreen)</visible>
       </control>
       <control type="button" id="9902">
         <include content="WinBox_2" condition="!Skin.HasSetting(touchmode)"/>

@@ -31,12 +31,6 @@
     <value></value>
   </variable>
 
-  <!-- Item count for the status strip. -->
-  <variable name="ItemCountVar">
-    <value condition="Container.NumItems">$INFO[Container.NumItems] $LOCALIZE[127]</value>
-    <value>$LOCALIZE[2080]</value>
-  </variable>
-
   <!-- Right hand info panel heading. -->
   <variable name="InfoTitleVar">
     <value condition="!String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
@@ -57,15 +51,21 @@
 
   <!-- Pointer style, chosen in Skin settings. Empty string = Arthur. -->
   <variable name="PointerTex">
-    <!-- Touch mode with no mouse plugged in: no pointer at all -->
-    <value condition="Skin.HasSetting(touchmode) + String.IsEmpty(Window(Home).Property(arthuros.mouse))"></value>
+    <!-- Touch mode: no pointer at all when Skin settings say "Pointer:
+         never" (touch.pointer.hide), or on Auto (neither bool) while
+         mousewatch.py has found no mouse. "Always" (touch.pointer.show)
+         keeps it whatever mousewatch says. -->
+    <value condition="Skin.HasSetting(touchmode) + !Skin.HasSetting(touch.pointer.show) + [Skin.HasSetting(touch.pointer.hide) | String.IsEmpty(Window(Home).Property(arthuros.mouse))]"></value>
     <value condition="String.IsEqual(Skin.String(pointer),classic)">pointer_classic.png</value>
     <value condition="String.IsEqual(Skin.String(pointer),inverse)">pointer_inverse.png</value>
     <value>pointer_arthur.png</value>
   </variable>
   <variable name="PointerClickTex">
-    <!-- Touch mode with no mouse plugged in: no pointer at all -->
-    <value condition="Skin.HasSetting(touchmode) + String.IsEmpty(Window(Home).Property(arthuros.mouse))"></value>
+    <!-- Touch mode: no pointer at all when Skin settings say "Pointer:
+         never" (touch.pointer.hide), or on Auto (neither bool) while
+         mousewatch.py has found no mouse. "Always" (touch.pointer.show)
+         keeps it whatever mousewatch says. -->
+    <value condition="Skin.HasSetting(touchmode) + !Skin.HasSetting(touch.pointer.show) + [Skin.HasSetting(touch.pointer.hide) | String.IsEmpty(Window(Home).Property(arthuros.mouse))]"></value>
     <value condition="String.IsEqual(Skin.String(pointer),classic)">pointer_classic_click.png</value>
     <value condition="String.IsEqual(Skin.String(pointer),inverse)">pointer_inverse_click.png</value>
     <value>pointer_arthur_click.png</value>

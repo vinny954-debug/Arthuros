@@ -13,7 +13,9 @@ taller version that Kodi picks only while an Extra large fontset is active:
 * spin controls and settings sliders get bigger arrows / bar (SpinSize_XL,
   SliderSize_XL), and a scrollbar that pages a textbox gets 12 px wider,
   into the textbox (Size_Left / Size_Width pairs) - a textbox can only be
-  scrolled through its scrollbar.
+  scrolled through its scrollbar;
+* Touch mode only: buttons under 30 px in a horizontal button strip (the
+  media toolbar) get a 34 px hit rect (Size_Hit), their face unchanged.
 
 Changing the font makes Kodi reload the skin, so include conditions are
 re-evaluated then. Idempotent; run after genwindows.py on every build.
@@ -66,6 +68,9 @@ changed = set()
 
 TOUCH_SIZES = {"spincontrol": "SpinSize_XL", "spincontrolex": "SpinSize_XL", "sliderex": "SliderSize_XL"}
 SB_GROW = 12        # scrollbar 18 -> 30 with taller rows
+TOUCH = "Skin.HasSetting(touchmode)"
+TOUCH_HIT = 34      # hit height for short strip buttons in Touch mode
+HIT_TYPES = ("button", "radiobutton", "togglebutton")
 
 def conditional_param(ctrl, tag, inc, normal, xl):
     """<tag>normal</tag> becomes the XLC pair <include content=inc> with the
@@ -203,6 +208,32 @@ for p in sorted(glob.glob(os.path.join(XML, "*.xml"))):
         conditional_param(t, "width", "Size_Width", tw, tw - SB_GROW)
         touched = True
 
+    # Touch mode: buttons in a horizontal button strip that are drawn lower
+    # than a finger (the media toolbar 9490, 26 px) keep their face but get
+    # a hit rect TOUCH_HIT px high, centred on it, reaching half the item gap
+    # to each side, so neighbouring rects meet without overlapping. A
+    # grouplist places its children at 0,0 (CGUIControlGroupList::AddControl)
+    # and hit-tests them in their own coordinates, beyond its own bounds, so
+    # the rect may stick out above and below the strip.
+    for g in root.iter("control"):
+        if g.get("type") != "grouplist" or (g.findtext("orientation") or "").strip() != "horizontal":
+            continue
+        half = (num(g, "itemgap") or 0) // 2
+        for c in g:
+            if c.tag != "control" or c.get("type") not in HIT_TYPES:
+                continue
+            h, w = num(c, "height"), num(c, "width")
+            if h is None or w is None or h >= TOUCH_HIT - 4 or c.find("hitrect") is not None \
+                    or any(i.get("content") == "Size_Hit" for i in c.findall("include")):
+                continue
+            x = etree.Element("include", content="Size_Hit", condition=TOUCH)
+            for k, v in (("x", -half), ("y", -((TOUCH_HIT - h) // 2)), ("w", w + 2 * half), ("h", TOUCH_HIT)):
+                etree.SubElement(x, "param", name=k, value=str(v))
+            hel = c.find("height")
+            x.tail = hel.tail
+            hel.addnext(x)
+            touched = True
+
     if touched:
         save(tree, p)
         changed.add(base)
@@ -227,6 +258,10 @@ inc.append('  <include name="SliderSize_XL"><sliderwidth>240</sliderwidth><slide
 for tag in ("Left", "Width"):
     inc.append(f'  <include name="Size_{tag}"><param name="v" default="0" />'
                f'<definition><{tag.lower()}>$PARAM[v]</{tag.lower()}></definition></include>\n')
+# Touch mode hit rect for short strip buttons (Kodi resolves $PARAM in
+# attribute values: CGUIIncludes::ResolveParametersForNode)
+inc.append('  <include name="Size_Hit">' + "".join(f'<param name="{k}" default="0" />' for k in "xywh")
+           + '<definition><hitrect x="$PARAM[x]" y="$PARAM[y]" w="$PARAM[w]" h="$PARAM[h]" /></definition></include>\n')
 inc.append("</includes>\n")
 open(os.path.join(XML, "Includes_Size.xml"), "w").write("".join(inc))
 

@@ -69,9 +69,12 @@
     </definition>
   </include>
 
-  <!-- Kodi writes the dialog heading into control id 1, so it lives on the
-       title bar itself rather than being mirrored with Control.GetLabel.
-       (The on-screen keyboard is the exception: it writes label 311.)
+  <!-- Most dialogs get their heading from Kodi in control id 1, so it lives
+       on the title bar itself rather than being mirrored with
+       Control.GetLabel. Two exceptions write their own id and draw it on the
+       title bar the same way, without this include: the on-screen keyboard
+       uses label 311 (CTL_LABEL_HEADING, GUIDialogKeyboardGeneric.cpp) and
+       the slider dialog label 10 (CONTROL_HEADING, GUIDialogSlider.cpp).
        In Touch mode the title-bar boxes are wider, so the heading stops 138
        px from the dialog's right edge instead (left + right, no width). -->
   <include name="Dialog_Heading">

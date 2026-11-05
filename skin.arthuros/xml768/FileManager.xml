@@ -35,6 +35,22 @@
         <visible>System.InternetState</visible>
       </control>
 
+      <!-- The speaker and gauge are a button: a tap opens the mini player
+           (PlayerControls), which has the volume slider and mute. Drawn
+           under them, flat until pointed at, then pressed in like the tray.
+           Its hit rect reaches down to the window frame (y 30), so a finger
+           at the top edge of the screen finds it. Nothing navigates here;
+           Down leaves for the task bar. Not on the login screen. -->
+      <control type="button" id="9109">
+        <right>24</right><top>0</top><width>96</width><height>26</height>
+        <hitrect x="120r" y="0" w="96" h="30"/>
+        <texturenofocus>-</texturenofocus>
+        <texturefocus border="2" colordiffuse="facetint">panel_sunken_chrome.png</texturefocus>
+        <label/>
+        <ondown>9100</ondown>
+        <onclick>ActivateWindow(PlayerControls)</onclick>
+        <visible>!Window.IsVisible(loginscreen)</visible>
+      </control>
       <control type="image">
         <right>100</right><top>5</top><width>16</width><height>16</height>
         <texture>$VAR[VolumeIconVar]</texture>
@@ -641,13 +657,13 @@
         <control type="label">
           <left>26</left><top>0</top><width>72</width><height>24</height>
           <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
-          <label>Start</label>
+          <label>$LOCALIZE[335]</label>
           <visible>!Control.HasFocus(9100)</visible>
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>72</width><height>24</height>
           <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
-          <label>Start</label>
+          <label>$LOCALIZE[335]</label>
           <visible>Control.HasFocus(9100)</visible>
         </control>
       </control>
