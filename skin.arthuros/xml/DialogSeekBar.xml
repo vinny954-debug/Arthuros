@@ -31,14 +31,12 @@
         <label>$INFO[Player.Time]</label>
         <visible>!Player.Seeking + String.IsEmpty(Player.SeekNumeric)</visible>
       </control>
-      <control type="slider" id="401">
+      <control type="progress" id="401">
         <left>238</left><top>8</top><width>674</width><height>28</height>
-        <orientation>horizontal</orientation>
         <visible>!VideoPlayer.Content(LiveTV)</visible>
       </control>
-      <control type="slider" id="403">
+      <control type="progress" id="403">
         <left>238</left><top>8</top><width>674</width><height>28</height>
-        <orientation>horizontal</orientation>
         <visible>VideoPlayer.Content(LiveTV)</visible>
       </control>
       <control type="label">

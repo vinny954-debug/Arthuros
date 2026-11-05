@@ -43,18 +43,24 @@
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
       <control type="textbox">
-        <left>144</left><top>68</top><width>842</width><height>106</height>
+        <left>144</left><top>68</top><width>822</width><height>106</height>
         <font>small</font><pagecontrol>61</pagecontrol>
         <label>$INFO[VideoPlayer.Plot]</label>
       </control>
       <control type="scrollbar" id="61">
-        <left>992</left><top>65</top><width>20</width><height>112</height>
+        <right>12</right><top>65</top><height>112</height>
+        <include content="Media_SBWidth_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Media_SBWidth" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
         <onleft>9013</onleft><onright>9013</onright><ondown>9013</ondown><onup>9013</onup>
       </control>
       <control type="label">
-        <left>136</left><top>186</top><width>300</width><height>44</height>
+        <left>136</left><top>186</top><width>240</width><height>44</height>
         <font>chrome</font><aligny>center</aligny>
         <label>$INFO[Player.Time] / $INFO[Player.Duration]</label>
+      </control>
+      <control type="progress">
+        <left>384</left><top>198</top><width>354</width><height>20</height>
+        <info>Player.Progress</info>
       </control>
       <control type="grouplist" id="9013">
         <left>750</left><top>186</top><width>266</width><height>44</height>

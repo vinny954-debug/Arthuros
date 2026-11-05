@@ -1,3 +1,87 @@
+v0.9.7
+A big touch and remote pass, from the 0.9.6 review. Everything below was
+checked in Kodi's source and in preview renders only - none of it has been
+tried on the Pi yet. Please test on the box, by finger and by remote.
+
+Playing video, music and games
+- The on-screen controls are now one bar along the bottom edge, with big
+  buttons: seek slider (drag or tap; on live TV it seeks the timeshift),
+  previous / rewind / play-pause / stop / forward / next, mute and a volume
+  slider. Tap the picture above the bar to hide it.
+- "Close" is now "Hide": it only hides the bar. NEW "Menus" goes back to
+  the browser or desktop while the film, song or game keeps playing; the
+  task bar's Now playing brings you back.
+- Live TV: swiping up/down only previews another channel. The channel name
+  and programme now show at the top, and the bar has "Switch to channel"
+  while the preview is up (tap the picture, then Switch). Previous / Next
+  on live TV now always show as a pair.
+- Info shows a progress bar; the seek strip that pops up when you skip is
+  a plain bar now (it looked draggable and wasn't).
+- Music: visualisation and preset buttons; radio shows Radio text.
+- Picture viewer: tap the picture for a strip with previous, play/pause,
+  next, info and close.
+- The zoom / view-mode readout is full width and scrolls, so the long
+  "Sizing" line is no longer cut off with Extra large fonts.
+
+Touch
+- Most buttons are finger-sized in Touch mode: task bar, title-bar boxes,
+  toolbars, OSD rows, dialog button rows, info-dialog buttons, the file
+  browser (tile picture picker) and the select lists' OK/Cancel row.
+- The on-screen keyboard on the 7" panel gets 56 px keys in Touch mode
+  (and with Extra large fonts), like the 4:3 layout.
+- List and settings scrollbars are a finger wide in Touch mode.
+- Tapping the dimmed picture closes the OSD Subtitle/Audio/Video settings,
+  the Power menu and Now playing (it never closes the keyboard, number pad,
+  a confirmation or add-on settings, where you'd lose what you typed).
+- The context menu: a tap outside closes it; a tap that just misses an
+  entry no longer does. With a real mouse, clicking outside does nothing
+  (right-click or Back closes it).
+- Screen calibration says what really works by touch: tap to pick the next
+  marker, swipe to nudge it, tap and hold (or Back) to finish.
+- Long dialog titles (keyboard prompts, add-on settings) no longer run
+  under the title-bar boxes in Touch mode.
+
+Remote
+- The on-screen keyboard and the number pad work with a remote: Up/Down
+  move between the rows (before, only the bottom row could be reached).
+- Select lists: Up from OK/Cancel goes back to the list.
+- OSD: Left/Right go round both rows the same way, also during audio
+  passthrough when the volume slider is off.
+
+TV guide and PVR
+- Real TV/Radio guide grid with a button strip (Group, Now, -12 h, +12 h,
+  Date, Page up/down, Information, Options, Navigate...). The strip is
+  wider so "Group: All channels" fits.
+- Programme and recording info show channel, date, start-end time,
+  episode and genre; the empty cast box is gone.
+- The channel list title names the group being shown (TV and radio), and
+  the channel's guide is titled "Guide - <channel>".
+- The playing channel (and any marked row) is readable when focused - it
+  was dark red on blue.
+
+Desktop and settings
+- Power button on the task bar and in the Settings hub; Reset skin settings
+  asks first and keeps Touch mode, colours and fonts.
+- Rename on a library tile starts empty: cancel or confirm an empty name
+  and the tile keeps following its own (UK/US) label.
+- "Scroll long descriptions" now really decides whether plots and
+  descriptions scroll by themselves (info dialogs, browser info panel,
+  add-on info, System information). Confirmations and the skin settings
+  help always scroll.
+
+Fonts
+- The bitmap font now has curly quotes, dashes, the ellipsis, bullet, and
+  NEW euro and trademark signs (€ ™), so YouTube and Plex titles no longer
+  lose them. For other alphabets choose the "Unicode (all alphabets)" font
+  in Settings > Interface > Skin > Fonts.
+
+Network & Bluetooth (your netbt.py - two small changes, please approve)
+- A saved open (no-password) Wi-Fi network that fails to connect now says
+  why, instead of nothing.
+- "Not allowed to manage networks" names the user Kodi really runs as and
+  points at the polkit rule install-arthuros.sh offers to add (a systemd
+  Kodi has no login session, so NetworkManager refuses it otherwise).
+
 v0.9.6
 - Player settings are back in the on-screen controls. Tap the screen (or
   press OK) while something plays; the second row reads Settings:

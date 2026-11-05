@@ -171,7 +171,7 @@
           <radiowidth>32</radiowidth><radioheight>32</radioheight>
           <radioposx>14</radioposx><radioposy>8</radioposy>
           <onclick>PlayerControl(Next)</onclick>
-          <visible>Player.ChapterCount | MusicPlayer.HasNext | PVR.IsTimeShift</visible>
+          <visible>Player.ChapterCount | MusicPlayer.HasNext | [Player.SeekEnabled + MusicPlayer.Content(LiveTV)]</visible>
         </control>
       </control>
       <control type="grouplist" id="203">
@@ -229,6 +229,8 @@
         <onup condition="Player.SeekEnabled + MusicPlayer.Content(LiveTV)">9981</onup>
         <onup>202</onup>
         <ondown>202</ondown>
+        <onleft>9982</onleft>
+        <onright>9951</onright>
       </control>
       <control type="button" id="9951">
         <left>906</left><top>74</top><width>110</width><height>48</height>
@@ -249,7 +251,6 @@
         <ondown condition="Player.SeekEnabled + !MusicPlayer.Content(LiveTV)">9980</ondown>
         <ondown condition="Player.SeekEnabled + MusicPlayer.Content(LiveTV)">9981</ondown>
         <ondown>201</ondown>
-        <onright>9951</onright>
         <control type="radiobutton" id="9984">
           <width>130</width><height>44</height>
           <hitrect x="-3" y="-3" w="136" h="50" />
@@ -321,6 +322,13 @@
           <font>chrome</font><label>$LOCALIZE[10140]</label>
           <onclick>RunScript(special://skin/scripts/addonsettings.py)</onclick>
           <visible>!MusicPlayer.Content(LiveTV) + [String.StartsWith(Player.FilenameAndPath,plugin://) | !String.IsEmpty(Window(Home).Property(arthuros.plugin))]</visible>
+        </control>
+        <control type="button" id="9952">
+          <width>110</width><height>44</height>
+          <hitrect x="-3" y="-3" w="116" h="50" />
+          <font>chrome</font><label>$LOCALIZE[31897]</label>
+          <onclick>Dialog.Close(all,true)</onclick>
+          <onclick>Action(FullScreen,Visualisation)</onclick>
         </control>
       </control>
     </control>

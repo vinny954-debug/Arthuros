@@ -32,7 +32,7 @@
       </control>
       <control type="label">
         <left>30</left><top>0</top><width>80</width><height>32</height>
-        <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+        <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
         <label>$LOCALIZE[31994]</label>
         <visible>Control.HasFocus(9108)</visible>
       </control>
@@ -185,10 +185,10 @@
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
       <control type="list" id="20">
-        <left>13</left><top>39</top><width>396</width><height>394</height>
+        <left>13</left><top>39</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="384"/></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="396"/></include><height>394</height>
         <onup>9903</onup><ondown>4</ondown><onleft>9002</onleft><onright>60</onright>
         <pagecontrol>60</pagecontrol>
-        <itemlayout height="44" width="396" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+        <itemlayout height="44" width="384" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image"><left>0</left><top>0</top><width>4</width><height>44</height><texture colordiffuse="marked">fill.png</texture><visible>ListItem.Property(Changed)</visible></control>
           <control type="image"><left>8</left><top>14</top><width>16</width><height>16</height><texture fallback="icons24/livetv.png">$INFO[ListItem.Property(Icon)]</texture><aspectratio>keep</aspectratio></control>
           <control type="image"><left>28</left><top>14</top><width>16</width><height>16</height><texture>icons24/masterlock.png</texture><visible>ListItem.Property(ParentalLocked)</visible></control>
@@ -196,13 +196,13 @@
           <control type="label"><left>48</left><top>0</top><width>246</width><height>44</height><font>normal</font><textcolor>textdim</textcolor><aligny>center</aligny><label>$INFO[ListItem.Property(Number),, ]$INFO[ListItem.Property(Name)]</label><visible>!ListItem.Property(ActiveChannel)</visible></control>
           <control type="label"><left>298</left><top>0</top><width>90</width><height>44</height><font>small</font><textcolor>textdim</textcolor><align>right</align><aligny>center</aligny><label>$INFO[ListItem.Property(ClientName)]</label></control>
         </itemlayout>
-        <focusedlayout height="44" width="396" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <control type="image"><left>0</left><top>0</top><width>396</width><height>44</height><texture colordiffuse="select">fill.png</texture></control>
+        <focusedlayout height="44" width="384" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image"><left>0</left><top>0</top><width>384</width><height>44</height><texture colordiffuse="select">fill.png</texture></control>
           <control type="image"><left>0</left><top>0</top><width>4</width><height>44</height><texture colordiffuse="marked">fill.png</texture><visible>ListItem.Property(Changed)</visible></control>
           <control type="image"><left>8</left><top>14</top><width>16</width><height>16</height><texture fallback="icons24/livetv.png">$INFO[ListItem.Property(Icon)]</texture><aspectratio>keep</aspectratio></control>
           <control type="image"><left>28</left><top>14</top><width>16</width><height>16</height><texture>icons24/masterlock.png</texture><visible>ListItem.Property(ParentalLocked)</visible></control>
-          <control type="label"><left>48</left><top>0</top><width>246</width><height>44</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Property(Number),, ]$INFO[ListItem.Property(Name)]</label></control>
-          <control type="label"><left>298</left><top>0</top><width>90</width><height>44</height><font>small</font><textcolor>textinv</textcolor><align>right</align><aligny>center</aligny><label>$INFO[ListItem.Property(ClientName)]</label></control>
+          <control type="label"><left>48</left><top>0</top><width>246</width><height>44</height><font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny><label>$INFO[ListItem.Property(Number),, ]$INFO[ListItem.Property(Name)]</label></control>
+          <control type="label"><left>298</left><top>0</top><width>90</width><height>44</height><font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><align>right</align><aligny>center</aligny><label>$INFO[ListItem.Property(ClientName)]</label></control>
         </focusedlayout>
       <itemlayout height="28" width="396">
           <control type="image"><left>0</left><top>0</top><width>4</width><height>28</height><texture colordiffuse="marked">fill.png</texture><visible>ListItem.Property(Changed)</visible></control>
@@ -217,12 +217,12 @@
           <control type="image"><left>0</left><top>0</top><width>4</width><height>28</height><texture colordiffuse="marked">fill.png</texture><visible>ListItem.Property(Changed)</visible></control>
           <control type="image"><left>8</left><top>6</top><width>16</width><height>16</height><texture fallback="icons24/livetv.png">$INFO[ListItem.Property(Icon)]</texture><aspectratio>keep</aspectratio></control>
           <control type="image"><left>28</left><top>6</top><width>16</width><height>16</height><texture>icons24/masterlock.png</texture><visible>ListItem.Property(ParentalLocked)</visible></control>
-          <control type="label"><left>48</left><top>0</top><width>246</width><height>28</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Property(Number),, ]$INFO[ListItem.Property(Name)]</label></control>
-          <control type="label"><left>298</left><top>0</top><width>90</width><height>28</height><font>small</font><textcolor>textinv</textcolor><align>right</align><aligny>center</aligny><label>$INFO[ListItem.Property(ClientName)]</label></control>
+          <control type="label"><left>48</left><top>0</top><width>246</width><height>28</height><font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny><label>$INFO[ListItem.Property(Number),, ]$INFO[ListItem.Property(Name)]</label></control>
+          <control type="label"><left>298</left><top>0</top><width>90</width><height>28</height><font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><align>right</align><aligny>center</aligny><label>$INFO[ListItem.Property(ClientName)]</label></control>
         </focusedlayout>
       </control>
       <control type="scrollbar" id="60">
-        <left>409</left><top>39</top><width>18</width><height>394</height>
+        <include content="Size_Left" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="397"/></include><include content="Size_Left" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="409"/></include><top>39</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30"/></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="18"/></include><height>394</height>
         <onleft>20</onleft><onright>9002</onright>
       </control>
       <control type="image">
@@ -298,7 +298,7 @@
         </control>
       </control>
       <control type="scrollbar" id="9603">
-        <left>870</left><top>42</top><width>18</width><height>388</height>
+        <left>870</left><top>42</top><width>18</width><include content="Size_Hit" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="858"/><param name="y" value="42"/><param name="w" value="30"/><param name="h" value="388"/></include><height>388</height>
         <onleft>9002</onleft><onright>20</onright>
       </control>
       <control type="grouplist" id="9000">

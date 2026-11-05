@@ -162,6 +162,8 @@
         <enable>!Player.Passthrough</enable>
         <onup>202</onup>
         <ondown>202</ondown>
+        <onleft>9982</onleft>
+        <onright>9951</onright>
       </control>
       <control type="button" id="9951">
         <left>906</left><top>74</top><width>110</width><height>48</height>
@@ -178,7 +180,6 @@
         <orientation>horizontal</orientation><itemgap>6</itemgap>
         <onup>201</onup>
         <ondown>201</ondown>
-        <onright>9951</onright>
         <control type="button" id="9970">
           <width>130</width><height>44</height>
           <hitrect x="-3" y="-3" w="136" h="50"/>
@@ -232,6 +233,13 @@
           <hitrect x="-3" y="-3" w="106" h="50"/>
           <font>chrome</font><label>$LOCALIZE[10038]</label>
           <onclick>ActivateWindow(GameAdvancedSettings)</onclick>
+        </control>
+        <control type="button" id="9952">
+          <width>110</width><height>44</height>
+          <hitrect x="-3" y="-3" w="116" h="50"/>
+          <font>chrome</font><label>$LOCALIZE[31897]</label>
+          <onclick>Dialog.Close(all,true)</onclick>
+          <onclick>Action(FullScreen,FullscreenGame)</onclick>
         </control>
       </control>
     </control>

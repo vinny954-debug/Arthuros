@@ -419,6 +419,8 @@ def check_lines():
         if not os.path.exists(os.path.join(SRC, name)):
             bad.append(f"{name}: in xml768 but not in xml")
             continue
+        if os.path.splitext(name)[0] in TALL_GENERATORS:
+            continue        # drawn for 768 by its generator (check_keyboard)
         ca, cb = list(_expanded(name).iter("control")), list(b.iter("control"))
         if [(c.get("type"), c.get("id")) for c in ca] != [(c.get("type"), c.get("id")) for c in cb]:
             bad.append(f"{name}: controls differ from xml, cannot pair them")
@@ -478,12 +480,24 @@ def check_keyboard():
     a, b = _expanded("DialogKeyboard.xml"), etree.parse(os.path.join(DST, "DialogKeyboard.xml")).getroot()
     ids = lambda r: sorted(c.get("id") for c in r.iter("control") if c.get("id"))
     key = lambda r: geti(r.find(".//control[@id='100']"), "height")
+    def key_600(xl):
+        # the 600 keys: an XLC Height_N pair (56 px with taller rows)
+        k = a.find(".//control[@id='100']")
+        for inc in k.findall("include"):
+            c = inc.get("condition") or ""
+            m = re.fullmatch(r"Height_(\d+)(_XL)?", inc.get("content") or "")
+            if m and c.startswith("!") != xl:
+                d = includes[m.group(0)]
+                return int(d.findtext("height"))
+        return None
     box = [c for c in kids(b.find("controls")) if c.findtext("centertop") == "50%"]
     bad = []
-    if ids(a) != ids(b):
+    # (the 600 box is a pair of conditional Dialog_Box includes, left
+    # unexpanded, so its title-bar ids are only in the 768 tree)
+    if not set(ids(a)) <= set(ids(b)) or len(ids(a)) < 70:
         bad.append("different control ids")
-    if not key(b) >= 56 > key(a):
-        bad.append(f"keys {key(a)} -> {key(b)} px")
+    if not (key(b) >= 56 > (key_600(False) or 99) and (key_600(True) or 0) >= 56):
+        bad.append(f"keys {key_600(False)}/{key_600(True)} -> {key(b)} px")
     if len(box) != 1 or geti(box[0], "height") > H1 - 32 - 30:
         bad.append("not one centred box clear of the menu and task bars")
     return bad

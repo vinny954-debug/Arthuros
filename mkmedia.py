@@ -904,8 +904,16 @@ CAL["cal_tl"] = [
 CAL["cal_br"] = [r[::-1] for r in CAL["cal_tl"][::-1]]
 # subtitle position: a bar across the middle, with the transparent space
 # above and below that Kodi expects (CONTROL_SUBTITLES_SPACE, 80 of 90 px)
-CAL["cal_sub"] = ["." * 16] * 7 + ["WWWWWWWWWWWWWWWW", "KKKKKKKKKKKKKKKK"] + ["." * 16] * 7
-# pixel ratio: a ring that is round when the ratio is right
+# Kodi sizes every mover itself from a 1920x1080 design
+# (CGUIWindowSettingsScreenCalibration::ResetControls), so no texture here
+# can stay at exactly 1x or 2x; what can be avoided is stretching the art.
+# The subtitle bar is drawn at its design size, 380x90 (drawn as given, not
+# scaled up from 16 px): a 6 px white band over a 6 px black one, centred.
+CAL_SUB = ["." * 380] * 39 + ["W" * 380] * 6 + ["K" * 380] * 6 + ["." * 380] * 39
+# pixel ratio: a ring that is round when the ratio is right. Kodi stretches
+# it to half the screen height; genwindows gives it border="36" (6 art
+# pixels at 6x), so the corners keep their size and the straight middle
+# rows/columns only get longer: the 6 px outline stays 6 px at any size.
 CAL["cal_ratio"] = [
 "................",
 ".....KKKKKK.....",
@@ -929,6 +937,7 @@ CAL["cal_reset"] = iconset.badge(CAL["cal_ratio"], "refresh")
 shutil.rmtree(os.path.join(OUT, "calibrate"), ignore_errors=True)
 for nm, rows in CAL.items():
     grid(rows, scale=6, name="calibrate/%s.png" % nm)
+grid(CAL_SUB, scale=1, name="calibrate/cal_sub.png")
 
 # ---------------------------------------------------------------- themeable
 # Neutral textures that colors/*.xml tint at render time via colordiffuse.

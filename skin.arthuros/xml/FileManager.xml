@@ -38,15 +38,15 @@
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
       <control type="list" id="20">
-        <left>9</left><top>73</top><width>474</width><height>452</height>
+        <left>9</left><top>73</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="462" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="474" /></include><height>452</height>
         <onleft>21</onleft><onright>60</onright>
         <onup>20</onup><ondown>9100</ondown>
         <pagecontrol>60</pagecontrol>
-        <itemlayout height="40" width="474" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <include content="Arthur_ItemLayout_XL"><param name="width" value="466" /></include>
+        <itemlayout height="40" width="462" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_ItemLayout_XL"><param name="width" value="454" /></include>
         </itemlayout>
-        <focusedlayout height="40" width="474" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <include content="Arthur_FocusedLayout_XL"><param name="width" value="474" /></include>
+        <focusedlayout height="40" width="462" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_FocusedLayout_XL"><param name="width" value="462" /></include>
         </focusedlayout>
       <itemlayout height="24" width="474">
           <include content="Arthur_ItemLayout"><param name="width" value="466" /></include>
@@ -56,7 +56,7 @@
         </focusedlayout>
       </control>
       <control type="scrollbar" id="60">
-        <left>483</left><top>73</top><width>18</width><height>452</height>
+        <include content="Size_Left" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="471" /></include><include content="Size_Left" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="483" /></include><top>73</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="18" /></include><height>452</height>
         <onleft>20</onleft><onright>21</onright>
       </control>
       <control type="image">
@@ -76,15 +76,15 @@
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
       <control type="list" id="21">
-        <left>513</left><top>73</top><width>474</width><height>452</height>
+        <left>513</left><top>73</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="462" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="474" /></include><height>452</height>
         <onleft>20</onleft><onright>61</onright>
         <onup>21</onup><ondown>9100</ondown>
         <pagecontrol>61</pagecontrol>
-        <itemlayout height="40" width="474" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <include content="Arthur_ItemLayout_XL"><param name="width" value="466" /></include>
+        <itemlayout height="40" width="462" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_ItemLayout_XL"><param name="width" value="454" /></include>
         </itemlayout>
-        <focusedlayout height="40" width="474" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <include content="Arthur_FocusedLayout_XL"><param name="width" value="474" /></include>
+        <focusedlayout height="40" width="462" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_FocusedLayout_XL"><param name="width" value="462" /></include>
         </focusedlayout>
       <itemlayout height="24" width="474">
           <include content="Arthur_ItemLayout"><param name="width" value="466" /></include>
@@ -94,7 +94,7 @@
         </focusedlayout>
       </control>
       <control type="scrollbar" id="61">
-        <left>987</left><top>73</top><width>18</width><height>452</height>
+        <include content="Size_Left" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="975" /></include><include content="Size_Left" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="987" /></include><top>73</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="18" /></include><height>452</height>
         <onleft>21</onleft><onright>20</onright>
       </control>
     </control>

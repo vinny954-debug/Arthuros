@@ -863,12 +863,14 @@ def tile_dialog():
         b += f"          <label>$LOCALIZE[{sid}]</label>\n"
         if enable:
             b += f"          <enable>{enable}</enable>\n"
-        if cid == 1134:   # start the keyboard from the name the tile shows now
-            # only from a looked-up name: never copy "(empty)" into a slot
-            acts_x = [oc(f"Skin.SetString({k}.name,$ESCVAR[EditTileName])",
-                         "String.IsEmpty(Container(1150).ListItem.Property(name)) + "
-                         "!String.IsEmpty(Container(1150).ListItem.Property(lid))"),
-                      oc(f"Skin.SetString({k}.name)")]
+        if cid == 1134:
+            # D-3: the keyboard starts from the tile's OWN name only. A
+            # library tile without one shows its localized label (lid /
+            # pre); copying that in first froze it ('Movies - Genres') even
+            # when the keyboard was cancelled, and the tile stopped
+            # following the UK/US strings. Confirming an empty name keeps
+            # the label.
+            acts_x = [oc(f"Skin.SetString({k}.name)")]
         elif cid == 1135:
             acts_x = swap(-1)
         elif cid == 1136:
@@ -1129,11 +1131,11 @@ def reset_dialog():
     b += '      <control type="grouplist" id="1126">\n'
     b += f"        <left>20</left><top>{Hh - 50}</top><width>{W - 40}</width><height>34</height>\n"
     b += "        <orientation>horizontal</orientation><align>center</align><itemgap>12</itemgap>\n"
-    b += '        <control type="button" id="1127">\n          <width>150</width><height>34</height>\n'
+    b += '        <control type="button" id="1127">\n          <width>150</width><height>34</height>\n          <hitrect x="-6" y="-4" w="162" h="42" />\n'
     b += "          <align>center</align><label>$LOCALIZE[107]</label>\n"
     b += "".join(f"          {a}\n" for a in acts)
     b += "        </control>\n"
-    b += '        <control type="button" id="1128">\n          <width>150</width><height>34</height>\n'
+    b += '        <control type="button" id="1128">\n          <width>150</width><height>34</height>\n          <hitrect x="-6" y="-4" w="162" h="42" />\n'
     b += "          <align>center</align><label>$LOCALIZE[106]</label>\n"
     b += "          <onclick>Dialog.Close(1125)</onclick>\n        </control>\n"
     b += "      </control>\n"

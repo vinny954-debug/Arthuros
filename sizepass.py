@@ -14,8 +14,11 @@ taller version that Kodi picks only while an Extra large fontset is active:
   SliderSize_XL), and a scrollbar that pages a textbox gets 12 px wider,
   into the textbox (Size_Left / Size_Width pairs) - a textbox can only be
   scrolled through its scrollbar;
-* Touch mode only: buttons under 30 px in a horizontal button strip (the
-  media toolbar) get a 34 px hit rect (Size_Hit), their face unchanged.
+* every other 18 px scrollbar: 30 px beside a list (the list 12 px
+  narrower), else a 30 px hit rect (T-7);
+* Touch mode only: buttons under 34 px in a horizontal button strip (the
+  media toolbar, info and browser rows) get a 34 px hit rect (Size_Hit),
+  their face unchanged.
 
 Changing the font makes Kodi reload the skin, so include conditions are
 re-evaluated then. Idempotent; run after genwindows.py on every build.
@@ -208,6 +211,58 @@ for p in sorted(glob.glob(os.path.join(XML, "*.xml"))):
         conditional_param(t, "width", "Size_Width", tw, tw - SB_GROW)
         touched = True
 
+    # T-7: every other visible 18 px scrollbar (lists, panels, settings
+    # grouplists, the guide) becomes a 30 px target with taller rows too.
+    # Beside a plain list the bar really grows 12 px into the list, which
+    # gets 12 px narrower, and so do the list's XLC layouts (their right-
+    # hand parts move in with it). A panel would lose a column and a
+    # grouplist would clip its full-width rows (the settings values sit at
+    # the right end), so beside those the bar keeps its looks and gets a
+    # hit rect 12 px wider to the left: GUIScrollBarControl takes a drag or
+    # a pan anywhere in it (OnMouseEvent), drawn after the container, so it
+    # wins there (CGUIControlGroup::SendMouseEvent, last rendered first).
+    for sb in list(root.iter("control")):
+        if sb.get("type") != "scrollbar" or (sb.findtext("width") or "").strip() != "18":
+            continue
+        sl, st = num(sb, "left"), num(sb, "top")
+        if sl is None or sl < 0 or sb.find("hitrect") is not None \
+                or any(i.get("content") == "Size_Hit" for i in sb.findall("include")):
+            continue                  # parked off screen, right-anchored, or done
+        par = sb.getparent()
+        pair = [c for c in par if c.tag == "control" and (c.findtext("pagecontrol") or "").strip() == sb.get("id")]
+        if pair and all(c.get("type") in ("list", "fixedlist", "wraplist") and num(c, "left") is not None
+                        and num(c, "width") is not None and num(c, "left") + num(c, "width") <= sl
+                        for c in pair):
+            conditional_param(sb, "left", "Size_Left", sl, sl - SB_GROW)
+            conditional_param(sb, "width", "Size_Width", 18, 18 + SB_GROW)
+            for c in pair:
+                cw = num(c, "width")
+                conditional_param(c, "width", "Size_Width", cw, cw - SB_GROW)
+                for lay in c:
+                    if lay.tag not in ("itemlayout", "focusedlayout") or XLC not in (lay.get("condition") or ""):
+                        continue
+                    if lay.get("width", "").isdigit() and int(lay.get("width")) >= cw - SB_GROW:
+                        lay.set("width", str(int(lay.get("width")) - SB_GROW))
+                    edge = cw - 60        # parts that reach the right-hand end
+                    for el in lay.iter():
+                        if el.tag in ("width", "left") and el.text and re.fullmatch(r"\d+", el.text.strip()) \
+                                and int(el.text) > edge:
+                            el.text = str(int(el.text) - SB_GROW)
+                        elif el.tag == "param" and el.get("name") == "width" and (el.get("value") or "").isdigit() \
+                                and int(el.get("value")) > edge:
+                            el.set("value", str(int(el.get("value")) - SB_GROW))
+        else:
+            x = etree.Element("include", content="Size_Hit", condition=XLC)
+            hv = sb.findtext("height").strip() if sb.find("height") is not None else None
+            if st is None or not hv:
+                continue
+            for k, v in (("x", sl - SB_GROW), ("y", st), ("w", 18 + SB_GROW), ("h", hv)):
+                etree.SubElement(x, "param", name=k, value=str(v))
+            wel = sb.find("width")
+            x.tail = wel.tail
+            wel.addnext(x)
+        touched = True
+
     # Touch mode: buttons in a horizontal button strip that are drawn lower
     # than a finger (the media toolbar 9490, 26 px) keep their face but get
     # a hit rect TOUCH_HIT px high, centred on it, reaching half the item gap
@@ -223,7 +278,7 @@ for p in sorted(glob.glob(os.path.join(XML, "*.xml"))):
             if c.tag != "control" or c.get("type") not in HIT_TYPES:
                 continue
             h, w = num(c, "height"), num(c, "width")
-            if h is None or w is None or h >= TOUCH_HIT - 4 or c.find("hitrect") is not None \
+            if h is None or w is None or h >= TOUCH_HIT or c.find("hitrect") is not None \
                     or any(i.get("content") == "Size_Hit" for i in c.findall("include")):
                 continue
             x = etree.Element("include", content="Size_Hit", condition=TOUCH)
@@ -257,7 +312,7 @@ inc.append('  <include name="SpinSize_XL"><spinwidth>32</spinwidth><spinheight>3
 inc.append('  <include name="SliderSize_XL"><sliderwidth>240</sliderwidth><sliderheight>32</sliderheight></include>\n')
 # (Size_Height: a bottom-anchored dialog whose box height follows XLC,
 # genwindows.pvr_guide_controls)
-for tag in ("Left", "Width", "Height"):
+for tag in ("Left", "Top", "Width", "Height"):
     inc.append(f'  <include name="Size_{tag}"><param name="v" default="0" />'
                f'<definition><{tag.lower()}>$PARAM[v]</{tag.lower()}></definition></include>\n')
 # Touch mode hit rect for short strip buttons (Kodi resolves $PARAM in

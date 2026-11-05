@@ -70,7 +70,16 @@ def measure(fontset, name, text):
         return measure_kodi(text, size, "bold" in style)
     key = (fn, size)
     if key not in _cache: _cache[key] = ImageFont.truetype(os.path.join(SKIN, "fonts", fn), size)
+    # C-5: Kodi draws a code point the face lacks as glyph 0, which is empty
+    # in Tamzen, so the character silently vanishes; PIL measures it as 0.
+    # That is a failure, not a fit.
+    for ch in set(text):
+        if not ch.isspace() and (fn, ch) not in _has:
+            _has[(fn, ch)] = _cache[key].getmask(ch).getbbox() is not None
+        if not ch.isspace() and not _has[(fn, ch)]:
+            MISSING.setdefault((ch, text), set()).add(fontset)
     return _cache[key].getlength(text)
+_has, MISSING = {}, {}
 
 INC, DEF = {}, {}
 for p in glob.glob(os.path.join(XML, "*.xml")):
@@ -306,6 +315,12 @@ def footer():
     for w_, lab_ in known_gone:
         print(f"  {w_}: wrapmultiline layout label '{lab_}' is gone - remove it from KNOWN_LAYOUT_WRAP")
 
+if MISSING:
+    print(f"textfit: {len(MISSING)} label(s) use a character the font does not have (it would not draw):")
+    for (ch, text), sets in sorted(MISSING.items()):
+        print(f"  ✗ U+{ord(ch):04X} '{ch}' in '{text[:60]}'  [{', '.join(sorted(sets))}]")
+    footer()
+    sys.exit(1)
 if not issues:
     print(f"textfit: every fixed label fits in every fontset ({n_items} static list items too)")
     footer()

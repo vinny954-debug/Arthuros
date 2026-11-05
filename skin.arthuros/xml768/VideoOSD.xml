@@ -209,7 +209,22 @@
           <radiowidth>32</radiowidth><radioheight>32</radioheight>
           <radioposx>14</radioposx><radioposy>8</radioposy>
           <onclick>PlayerControl(Next)</onclick>
-          <visible>Player.HasSceneMarkers | Player.ChapterCount | Integer.IsGreater(Playlist.Length(video),1) | PVR.IsTimeShift</visible>
+          <visible>Player.HasSceneMarkers | Player.ChapterCount | Integer.IsGreater(Playlist.Length(video),1) | [Player.SeekEnabled + VideoPlayer.Content(LiveTV)]</visible>
+        </control>
+        <control type="button" id="9953">
+          <width>190</width><height>48</height>
+          <hitrect x="-3" y="-3" w="196" h="54"/>
+          <font>chrome</font><label>$LOCALIZE[19000]</label>
+          <onclick>Dialog.Close(VideoOSD,true)</onclick>
+          <onclick>Action(Select)</onclick>
+          <visible>Player.ChannelPreviewActive + VideoPlayer.Content(LiveTV)</visible>
+        </control>
+        <control type="button" id="9952">
+          <width>110</width><height>48</height>
+          <hitrect x="-3" y="-3" w="116" h="54"/>
+          <font>chrome</font><label>$LOCALIZE[31897]</label>
+          <onclick>Dialog.Close(all,true)</onclick>
+          <onclick>Action(FullScreen,FullscreenVideo)</onclick>
         </control>
       </control>
       <control type="radiobutton" id="9982">
@@ -243,6 +258,8 @@
         <onup condition="Player.SeekEnabled + VideoPlayer.Content(LiveTV)">9981</onup>
         <onup>202</onup>
         <ondown>202</ondown>
+        <onleft>9982</onleft>
+        <onright>9951</onright>
       </control>
       <control type="button" id="9951">
         <left>906</left><top>74</top><width>110</width><height>48</height>
@@ -263,7 +280,6 @@
         <ondown condition="Player.SeekEnabled + !VideoPlayer.Content(LiveTV)">9980</ondown>
         <ondown condition="Player.SeekEnabled + VideoPlayer.Content(LiveTV)">9981</ondown>
         <ondown>201</ondown>
-        <onright>9951</onright>
         <control type="button" id="9963">
           <width>110</width><height>44</height>
           <hitrect x="-3" y="-3" w="116" h="50"/>

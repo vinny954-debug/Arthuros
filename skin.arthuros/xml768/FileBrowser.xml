@@ -32,7 +32,7 @@
       </control>
       <control type="label">
         <left>30</left><top>0</top><width>80</width><height>32</height>
-        <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+        <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
         <label>$LOCALIZE[31994]</label>
         <visible>Control.HasFocus(9108)</visible>
       </control>
@@ -181,7 +181,10 @@
       </control>
       </control>
       <control type="label" id="411">
-        <left>29</left><top>3</top><width>760</width><height>26</height>
+        <left>29</left><top>3</top>
+        <include content="Dialog_Heading_Width" condition="!Skin.HasSetting(touchmode)"><param name="width" value="760"/></include>
+        <include content="Dialog_Heading_Touch" condition="Skin.HasSetting(touchmode)"/>
+        <height>26</height>
         <font>bold</font><textcolor>titletext</textcolor><aligny>center</aligny>
       </control>
       <control type="image">
@@ -359,17 +362,42 @@
         </focusedlayout>
       </control>
       <control type="scrollbar" id="60">
-        <left>868</left><top>74</top><width>18</width><height>316</height>
+        <left>868</left><top>74</top><width>18</width><include content="Size_Hit" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="856"/><param name="y" value="74"/><param name="w" value="30"/><param name="h" value="316"/></include><height>316</height>
         <onleft>450</onleft><onright>413</onright>
       </control>
       <control type="grouplist">
-        <left>13</left><top>404</top><width>874</width><height>32</height>
+        <left>13</left>
+        <include content="Size_Top" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="398"/></include>
+        <include content="Size_Top" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="404"/></include>
+        <include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+        <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+        <width>874</width>
         <orientation>horizontal</orientation><align>center</align><itemgap>6</itemgap>
         <onup>450</onup>
-        <control type="button" id="413"><width>200</width><height>32</height><label>$LOCALIZE[186]</label></control>
-        <control type="button" id="414"><width>200</width><height>32</height><label>$LOCALIZE[222]</label></control>
-        <control type="button" id="415"><width>230</width><height>32</height><label>$LOCALIZE[20309]</label><visible>Control.IsEnabled(415)</visible></control>
-        <control type="togglebutton" id="416"><width>200</width><height>32</height><label>$LOCALIZE[749]</label>
+        <control type="button" id="413"><width>200</width>
+          <include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <include content="Size_Hit" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="-3"/><param name="y" value="-4"/><param name="w" value="206"/><param name="h" value="56"/></include>
+          <include content="Size_Hit" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="-3"/><param name="y" value="-6"/><param name="w" value="206"/><param name="h" value="44"/></include>
+          <label>$LOCALIZE[186]</label></control>
+        <control type="button" id="414"><width>200</width>
+          <include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <include content="Size_Hit" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="-3"/><param name="y" value="-4"/><param name="w" value="206"/><param name="h" value="56"/></include>
+          <include content="Size_Hit" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="-3"/><param name="y" value="-6"/><param name="w" value="206"/><param name="h" value="44"/></include>
+          <label>$LOCALIZE[222]</label></control>
+        <control type="button" id="415"><width>230</width>
+          <include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <include content="Size_Hit" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="-3"/><param name="y" value="-4"/><param name="w" value="236"/><param name="h" value="56"/></include>
+          <include content="Size_Hit" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="-3"/><param name="y" value="-6"/><param name="w" value="236"/><param name="h" value="44"/></include>
+          <label>$LOCALIZE[20309]</label><visible>Control.IsEnabled(415)</visible></control>
+        <control type="togglebutton" id="416"><width>200</width>
+          <include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <include content="Size_Hit" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="-3"/><param name="y" value="-4"/><param name="w" value="206"/><param name="h" value="56"/></include>
+          <include content="Size_Hit" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="-3"/><param name="y" value="-6"/><param name="w" value="206"/><param name="h" value="44"/></include>
+          <label>$LOCALIZE[749]</label>
           <usealttexture/>
           <alttexturefocus border="2" colordiffuse="select">select_bevel.png</alttexturefocus>
           <alttexturenofocus border="2" colordiffuse="facetint">button_down.png</alttexturenofocus>

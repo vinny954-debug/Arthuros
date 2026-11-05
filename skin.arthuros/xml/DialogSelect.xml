@@ -35,12 +35,12 @@
 
       <control type="list" id="3">
         <visible>![Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
-        <left>13</left><top>63</top><width>612</width><height>340</height>
+        <left>13</left><top>63</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="600" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="612" /></include><height>340</height>
         <onleft>7</onleft><onright>61</onright><onup>3</onup><ondown>3</ondown>
         <pagecontrol>61</pagecontrol>
         <!-- written out rather than included, so there is no doubt about
              which layout or which width is in play -->
-        <itemlayout height="44" width="612" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+        <itemlayout height="44" width="600" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image">
             <left>4</left><top>14</top><width>16</width><height>16</height>
             <texture>$INFO[ListItem.Icon]</texture>
@@ -53,20 +53,20 @@
             <label>$INFO[ListItem.Label]</label>
           </control>
           <control type="label">
-            <left>26</left><top>0</top><width>556</width><height>44</height>
+            <left>26</left><top>0</top><width>544</width><height>44</height>
             <font>small</font><textcolor>textdim</textcolor>
             <align>right</align><aligny>center</aligny>
             <label>$INFO[ListItem.Label2]</label>
           </control>
           <control type="image">
-            <left>591</left><top>14</top><width>16</width><height>16</height>
+            <left>579</left><top>14</top><width>16</width><height>16</height>
             <texture colordiffuse="text">icons24/tick.png</texture>
             <visible>ListItem.IsSelected</visible>
           </control>
         </itemlayout>
-        <focusedlayout height="44" width="612" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+        <focusedlayout height="44" width="600" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image">
-            <left>0</left><top>0</top><width>612</width><height>44</height>
+            <left>0</left><top>0</top><width>600</width><height>44</height>
             <texture colordiffuse="select">fill.png</texture>
           </control>
           <control type="image">
@@ -81,13 +81,13 @@
             <label>$INFO[ListItem.Label]</label>
           </control>
           <control type="label">
-            <left>26</left><top>0</top><width>556</width><height>44</height>
+            <left>26</left><top>0</top><width>544</width><height>44</height>
             <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
             <align>right</align><aligny>center</aligny>
             <label>$INFO[ListItem.Label2]</label>
           </control>
           <control type="image">
-            <left>591</left><top>14</top><width>16</width><height>16</height>
+            <left>579</left><top>14</top><width>16</width><height>16</height>
             <texture colordiffuse="textinv">icons24/tick.png</texture>
             <visible>ListItem.IsSelected</visible>
           </control>
@@ -148,10 +148,10 @@
 
       <control type="list" id="6">
         <visible>![Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
-        <left>13</left><top>63</top><width>612</width><height>340</height>
+        <left>13</left><top>63</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="600" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="612" /></include><height>340</height>
         <onleft>7</onleft><onright>61</onright><onup>6</onup><ondown>6</ondown>
         <pagecontrol>61</pagecontrol>
-        <itemlayout height="64" width="612" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+        <itemlayout height="64" width="600" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image">
             <left>4</left><top>12</top><width>40</width><height>40</height>
             <texture fallback="DefaultFile.png">$INFO[ListItem.Icon]</texture>
@@ -166,14 +166,14 @@
             <label>$INFO[ListItem.Label2]</label>
           </control>
           <control type="image">
-            <left>591</left><top>24</top><width>16</width><height>16</height>
+            <left>579</left><top>24</top><width>16</width><height>16</height>
             <texture colordiffuse="text">icons24/tick.png</texture>
             <visible>ListItem.IsSelected</visible>
           </control>
         </itemlayout>
-        <focusedlayout height="64" width="612" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+        <focusedlayout height="64" width="600" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image">
-            <left>0</left><top>0</top><width>612</width><height>64</height>
+            <left>0</left><top>0</top><width>600</width><height>64</height>
             <texture colordiffuse="select">fill.png</texture>
           </control>
           <control type="image">
@@ -191,7 +191,7 @@
             <label>$INFO[ListItem.Label2]</label>
           </control>
           <control type="image">
-            <left>591</left><top>24</top><width>16</width><height>16</height>
+            <left>579</left><top>24</top><width>16</width><height>16</height>
             <texture colordiffuse="textinv">icons24/tick.png</texture>
             <visible>ListItem.IsSelected</visible>
           </control>
@@ -253,7 +253,10 @@
         <left>-3000</left><top>0</top><width>500</width><height>22</height>
       </control>
       <control type="label">
-        <left>29</left><top>3</top><width>520</width><height>26</height>
+        <left>29</left><top>3</top><height>26</height>
+        <!-- Touch mode: stop short of the wider title-bar boxes -->
+        <include content="Dialog_Heading_Width" condition="!Skin.HasSetting(touchmode)"><param name="width" value="520" /></include>
+        <include content="Dialog_Heading_Touch" condition="Skin.HasSetting(touchmode)" />
         <font>chromebold</font><textcolor>titletext</textcolor>
         <align>left</align><aligny>center</aligny>
         <label>$INFO[Control.GetLabel(10810)]</label>
@@ -412,7 +415,7 @@
         </focusedlayout>
       </control>
       <control type="scrollbar" id="10861">
-        <left>629</left><top>40</top><width>18</width><height>328</height>
+        <left>629</left><top>40</top><width>18</width><include content="Size_Hit" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="617" /><param name="y" value="40" /><param name="w" value="30" /><param name="h" value="328" /></include><height>328</height>
         <onleft>10811</onleft>
         <visible>[Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
       </control>
@@ -433,18 +436,46 @@
 
       <control type="scrollbar" id="61">
         <visible>![Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
-        <left>629</left><top>63</top><width>18</width><height>340</height>
+        <include content="Size_Left" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="617" /></include><include content="Size_Left" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="629" /></include><top>63</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="18" /></include><height>340</height>
         <onleft>3</onleft><onright>7</onright>
       </control>
 
       <control type="grouplist">
         <visible>![Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
-        <left>13</left><top>420</top><width>634</width><height>30</height>
+        <!-- T-6: 46 px buttons with taller rows (the row moves up 8 into
+             the margin above it); hit rects reach half the 8 px gaps.
+             Up goes back to whichever list Kodi shows (3 plain, 6 with
+             details): a horizontal grouplist hands its onup to every
+             button (CGUIControlGroupList::AddControl), conditions kept. -->
+        <left>13</left>
+        <include content="Size_Top" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="412" /></include>
+        <include content="Size_Top" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="420" /></include>
+        <include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <width>634</width>
         <orientation>horizontal</orientation><align>center</align><itemgap>8</itemgap>
-        <control type="button" id="5"><width>190</width><height>30</height></control>
-        <control type="button" id="8"><width>190</width><height>30</height></control>
+        <onup condition="Control.IsVisible(6)">6</onup>
+        <onup>3</onup>
+        <control type="button" id="5">
+          <width>190</width>
+          <include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Size_Hit" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="-4" /><param name="y" value="-4" /><param name="w" value="198" /><param name="h" value="54" /></include>
+          <include content="Size_Hit" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="-4" /><param name="y" value="-4" /><param name="w" value="198" /><param name="h" value="38" /></include>
+        </control>
+        <control type="button" id="8">
+          <width>190</width>
+          <include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Size_Hit" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="-4" /><param name="y" value="-4" /><param name="w" value="198" /><param name="h" value="54" /></include>
+          <include content="Size_Hit" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="-4" /><param name="y" value="-4" /><param name="w" value="198" /><param name="h" value="38" /></include>
+        </control>
         <control type="button" id="7">
-          <width>190</width><height>30</height>
+          <width>190</width>
+          <include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Size_Hit" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="-4" /><param name="y" value="-4" /><param name="w" value="198" /><param name="h" value="54" /></include>
+          <include content="Size_Hit" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="-4" /><param name="y" value="-4" /><param name="w" value="198" /><param name="h" value="38" /></include>
           <label>$LOCALIZE[222]</label>
         </control>
       </control>

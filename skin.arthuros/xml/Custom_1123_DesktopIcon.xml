@@ -219,7 +219,7 @@
         </content>
       </control>
       <control type="scrollbar" id="401">
-        <left>763</left><top>47</top><width>18</width><height>408</height>
+        <left>763</left><top>47</top><width>18</width><include content="Size_Hit" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="751" /><param name="y" value="47" /><param name="w" value="30" /><param name="h" value="408" /></include><height>408</height>
         <onleft>400</onleft>
         <onright>400</onright>
       </control>

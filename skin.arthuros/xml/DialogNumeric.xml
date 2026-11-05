@@ -22,9 +22,10 @@
         <left>18</left><top>40</top><width>324</width><height>36</height>
         <font>big</font><align>center</align>
       </control>
-      <control type="grouplist">
+      <control type="grouplist" id="9211">
         <left>22</left><top>92</top><width>320</width><height>50</height>
         <orientation>horizontal</orientation><itemgap>6</itemgap>
+        <onup>9215</onup><ondown>9212</ondown>
         <control type="button" id="17">
           <width>100</width><height>50</height><font>big</font><align>center</align><textoffsetx>0</textoffsetx>
           <label>$LOCALIZE[12317]</label>
@@ -38,9 +39,10 @@
           <label>$LOCALIZE[12319]</label>
         </control>
       </control>
-      <control type="grouplist">
+      <control type="grouplist" id="9212">
         <left>22</left><top>146</top><width>320</width><height>50</height>
         <orientation>horizontal</orientation><itemgap>6</itemgap>
+        <onup>9211</onup><ondown>9213</ondown>
         <control type="button" id="14">
           <width>100</width><height>50</height><font>big</font><align>center</align><textoffsetx>0</textoffsetx>
           <label>$LOCALIZE[12314]</label>
@@ -54,9 +56,10 @@
           <label>$LOCALIZE[12316]</label>
         </control>
       </control>
-      <control type="grouplist">
+      <control type="grouplist" id="9213">
         <left>22</left><top>200</top><width>320</width><height>50</height>
         <orientation>horizontal</orientation><itemgap>6</itemgap>
+        <onup>9212</onup><ondown>9214</ondown>
         <control type="button" id="11">
           <width>100</width><height>50</height><font>big</font><align>center</align><textoffsetx>0</textoffsetx>
           <label>$LOCALIZE[12311]</label>
@@ -70,9 +73,10 @@
           <label>$LOCALIZE[12313]</label>
         </control>
       </control>
-      <control type="grouplist">
+      <control type="grouplist" id="9214">
         <left>22</left><top>254</top><width>320</width><height>50</height>
         <orientation>horizontal</orientation><itemgap>6</itemgap>
+        <onup>9213</onup><ondown>9215</ondown>
         <control type="button" id="23">
           <width>100</width><height>50</height><font>big</font><align>center</align><textoffsetx>0</textoffsetx>
           <label>&lt;-</label>
@@ -86,11 +90,12 @@
           <label>$LOCALIZE[186]</label>
         </control>
       </control>
-      <control type="grouplist">
+      <control type="grouplist" id="9215">
         <left>22</left><top>308</top><width>320</width><height>34</height>
         <orientation>horizontal</orientation><itemgap>6</itemgap>
-        <control type="radiobutton" id="20"><width>155</width><height>34</height><label>&lt;&lt;</label></control>
-        <control type="radiobutton" id="22"><width>155</width><height>34</height><label>&gt;&gt;</label></control>
+        <onup>9214</onup><ondown>9211</ondown>
+        <control type="button" id="20"><width>155</width><height>34</height><hitrect x="-3" y="-2" w="161" h="38" /><label>&lt;&lt;</label></control>
+        <control type="button" id="22"><width>155</width><height>34</height><hitrect x="-3" y="-2" w="161" h="38" /><label>&gt;&gt;</label></control>
       </control>
     </control>
   </controls>

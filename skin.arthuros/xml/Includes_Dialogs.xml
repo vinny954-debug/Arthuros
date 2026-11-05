@@ -19,6 +19,37 @@
     </definition>
   </include>
 
+  <!-- Dialog_Dim whose dimmed picture closes the dialog when tapped (T-3),
+       for the dialogs that hold nothing to lose: the OSD's subtitle / audio /
+       video settings over the picture, the Power menu, Now playing. The dim
+       image is not a control, so a tap there hit nothing while the OSD
+       itself closes on a tap outside. 9989 is a texture-less full-screen
+       button placed before the dialog, so every control drawn after it wins
+       wherever they overlap (CGUIControlGroup::SendMouseEvent, last drawn
+       first), the touch Back included. A remote never lands on it: all four
+       directions lead to the dialog's own control ("focus"). Not for the
+       keyboard, number pad, confirmation or add-on settings: there a stray
+       tap would throw away what was typed or chosen. -->
+  <include name="Dialog_DimClose">
+    <param name="up" default="9903" />
+    <param name="focus" default="9903" />
+    <definition>
+    <control type="image">
+      <left>0</left><top>0</top><width>1024</width><height>600</height>
+      <texture>dim.png</texture>
+    </control>
+    <control type="button" id="9989">
+      <left>0</left><top>0</top><width>1024</width><height>600</height>
+      <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>
+      <label></label>
+      <onclick>Action(Back)</onclick>
+      <onup>$PARAM[focus]</onup><ondown>$PARAM[focus]</ondown>
+      <onleft>$PARAM[focus]</onleft><onright>$PARAM[focus]</onright>
+    </control>
+    <include content="Dialog_TouchBack"><param name="up" value="$PARAM[up]" /></include>
+    </definition>
+  </include>
+
   <!-- The touch Back on its own, for a dialog stacked over another one that
        already dims the screen (the desktop editor's Choose / Choose an icon,
        home.py): the dialog underneath is dead while it is on top, so its

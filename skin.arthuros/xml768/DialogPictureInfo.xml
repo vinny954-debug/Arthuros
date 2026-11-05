@@ -32,7 +32,7 @@
       </control>
       <control type="label">
         <left>30</left><top>0</top><width>80</width><height>32</height>
-        <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+        <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
         <label>$LOCALIZE[31994]</label>
         <visible>Control.HasFocus(9108)</visible>
       </control>
@@ -194,17 +194,17 @@
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
       <control type="list" id="5">
-        <left>339</left><top>39</top><width>530</width><height>414</height>
+        <left>339</left><top>39</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="518"/></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="530"/></include><height>414</height>
         <onup>5</onup><ondown>5</ondown><onleft>5</onleft><onright>60</onright>
         <pagecontrol>60</pagecontrol>
-        <itemlayout height="44" width="530" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+        <itemlayout height="44" width="518" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="label"><left>8</left><top>0</top><width>190</width><height>44</height><font>small</font><textcolor>textdim</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
           <control type="label"><left>206</left><top>0</top><width>316</width><height>44</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label2]</label></control>
         </itemlayout>
-        <focusedlayout height="44" width="530" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <control type="image"><left>0</left><top>0</top><width>530</width><height>44</height><texture colordiffuse="select">fill.png</texture></control>
-          <control type="label"><left>8</left><top>0</top><width>190</width><height>44</height><font>small</font><textcolor>textinv</textcolor><aligny>center</aligny><scroll>true</scroll><label>$INFO[ListItem.Label]</label></control>
-          <control type="label"><left>206</left><top>0</top><width>316</width><height>44</height><font>normal</font><textcolor>textinv</textcolor><aligny>center</aligny><scroll>true</scroll><label>$INFO[ListItem.Label2]</label></control>
+        <focusedlayout height="44" width="518" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image"><left>0</left><top>0</top><width>518</width><height>44</height><texture colordiffuse="select">fill.png</texture></control>
+          <control type="label"><left>8</left><top>0</top><width>190</width><height>44</height><font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny><scroll>true</scroll><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>206</left><top>0</top><width>316</width><height>44</height><font>normal</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny><scroll>true</scroll><label>$INFO[ListItem.Label2]</label></control>
         </focusedlayout>
       <itemlayout height="28" width="530">
           <control type="label"><left>8</left><top>0</top><width>190</width><height>28</height><font>small</font><textcolor>textdim</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
@@ -212,12 +212,12 @@
         </itemlayout>
         <focusedlayout height="28" width="530">
           <control type="image"><left>0</left><top>0</top><width>530</width><height>28</height><texture colordiffuse="select">fill.png</texture></control>
-          <control type="label"><left>8</left><top>0</top><width>190</width><height>28</height><font>small</font><textcolor>textinv</textcolor><aligny>center</aligny><scroll>true</scroll><label>$INFO[ListItem.Label]</label></control>
-          <control type="label"><left>206</left><top>0</top><width>316</width><height>28</height><font>normal</font><textcolor>textinv</textcolor><aligny>center</aligny><scroll>true</scroll><label>$INFO[ListItem.Label2]</label></control>
+          <control type="label"><left>8</left><top>0</top><width>190</width><height>28</height><font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny><scroll>true</scroll><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>206</left><top>0</top><width>316</width><height>28</height><font>normal</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny><scroll>true</scroll><label>$INFO[ListItem.Label2]</label></control>
         </focusedlayout>
       </control>
       <control type="scrollbar" id="60">
-        <left>869</left><top>39</top><width>18</width><height>414</height>
+        <include content="Size_Left" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="857"/></include><include content="Size_Left" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="869"/></include><top>39</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30"/></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="18"/></include><height>414</height>
         <onleft>5</onleft><onright>5</onright>
       </control>
     </control>

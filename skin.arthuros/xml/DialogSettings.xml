@@ -2,11 +2,20 @@
 <window>
   <defaultcontrol>5</defaultcontrol>
   <controls>
-    <include>Dialog_Dim</include>
+    <include content="Dialog_DimClose"><param name="focus" value="5" /></include>
     <control type="group">
       <centerleft>50%</centerleft><centertop>50%</centertop>
-      <width>900</width><height>486</height>
-      <include content="Dialog_Box">
+      <width>900</width>
+      <include content="Size_Height" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="502" /></include>
+      <include content="Size_Height" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="486" /></include>
+      <include content="Dialog_Box" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+        <param name="width" value="900" /><param name="height" value="502" />
+        <param name="innerwidth" value="894" />
+        <param name="icon" value="icons24/settings.png" /><param name="colour" value="accent1" />
+        <param name="down" value="5" />
+        <param name="boxes" value="dialog" />
+      </include>
+      <include content="Dialog_Box" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
         <param name="width" value="900" /><param name="height" value="486" />
         <param name="innerwidth" value="894" />
         <param name="icon" value="icons24/settings.png" /><param name="colour" value="accent1" />
@@ -14,7 +23,10 @@
         <param name="boxes" value="dialog" />
       </include>
       <control type="label" id="2">
-        <left>29</left><top>3</top><width>790</width><height>26</height>
+        <left>29</left><top>3</top>
+        <include content="Dialog_Heading_Width" condition="!Skin.HasSetting(touchmode)"><param name="width" value="790" /></include>
+        <include content="Dialog_Heading_Touch" condition="Skin.HasSetting(touchmode)" />
+        <height>26</height>
         <font>chromebold</font><textcolor>titletext</textcolor><aligny>center</aligny>
       </control>
       <control type="grouplist" id="3">
@@ -37,7 +49,7 @@
         <pagecontrol>60</pagecontrol>
       </control>
       <control type="scrollbar" id="60">
-        <left>870</left><top>44</top><width>18</width><height>304</height>
+        <left>870</left><top>44</top><width>18</width><include content="Size_Hit" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="858" /><param name="y" value="44" /><param name="w" value="30" /><param name="h" value="304" /></include><height>304</height>
         <onleft>5</onleft><onright>5</onright>
       </control>
       <control type="image">

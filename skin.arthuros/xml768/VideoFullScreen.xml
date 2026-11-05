@@ -2,15 +2,39 @@
 <window>
   <controls>
     <control type="group" id="0">
-      <left>6</left><top>6</top><width>620</width><height>84</height>
+      <left>6</left><top>6</top><width>1012</width><height>84</height>
       <control type="image">
         <left>0</left><top>0</top>
-        <width>620</width><height>84</height>
+        <width>1012</width><height>84</height>
         <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
       </control>
-      <control type="label" id="10"><left>10</left><top>6</top><width>600</width><height>24</height><font>small</font></control>
-      <control type="label" id="11"><left>10</left><top>30</top><width>600</width><height>24</height><font>small</font></control>
-      <control type="label" id="12"><left>10</left><top>54</top><width>600</width><height>24</height><font>small</font></control>
+      <control type="label" id="10"><left>10</left><top>6</top><width>992</width><height>24</height><font>small</font><scroll>true</scroll></control>
+      <control type="label" id="11"><left>10</left><top>30</top><width>992</width><height>24</height><font>small</font><scroll>true</scroll></control>
+      <control type="label" id="12"><left>10</left><top>54</top><width>992</width><height>24</height><font>small</font><scroll>true</scroll></control>
+    </control>
+    <control type="group" id="2">
+      <left>6</left><top>6</top><width>1012</width><height>96</height>
+      <visible>Player.ChannelPreviewActive + VideoPlayer.Content(LiveTV)</visible>
+      <control type="image" id="2">
+        <left>0</left><top>0</top><width>1012</width><height>96</height>
+        <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+      </control>
+      <control type="label" id="2">
+        <left>12</left><top>6</top><width>988</width><height>28</height>
+        <font>chromebold</font><aligny>center</aligny>
+        <label>$INFO[VideoPlayer.ChannelNumberLabel,,  ]$INFO[VideoPlayer.ChannelName]</label>
+      </control>
+      <control type="label" id="2">
+        <left>12</left><top>34</top><width>988</width><height>28</height>
+        <font>chrome</font><aligny>center</aligny>
+        <label>$INFO[VideoPlayer.Title]</label>
+      </control>
+      <control type="label" id="2">
+        <left>12</left><top>62</top><width>988</width><height>28</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[31898]</label>
+        <visible>Skin.HasSetting(touchmode)</visible>
+      </control>
     </control>
     <control type="group" id="1">
       <centerleft>50%</centerleft><centertop>50%</centertop><width>240</width><height>90</height>

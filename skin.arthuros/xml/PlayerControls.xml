@@ -2,7 +2,7 @@
 <window>
   <defaultcontrol always="true">602</defaultcontrol>
   <controls>
-    <include>Dialog_Dim</include>
+    <include content="Dialog_DimClose"><param name="focus" value="602" /></include>
     <control type="group">
       <centerleft>50%</centerleft><centertop>50%</centertop>
       <width>660</width><height>256</height>
@@ -149,6 +149,8 @@
         <onup condition="Player.SeekEnabled">9980</onup>
         <onup>202</onup>
         <ondown>202</ondown>
+        <onleft>9982</onleft>
+        <onright>201</onright>
       </control>
       <control type="grouplist" id="202">
         <left>13</left><top>202</top><width>634</width><height>44</height>

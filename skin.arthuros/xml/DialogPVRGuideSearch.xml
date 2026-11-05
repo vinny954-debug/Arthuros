@@ -90,7 +90,7 @@
         </control>
       </control>
       <control type="scrollbar" id="5001">
-        <left>452</left><top>106</top><width>18</width><height>318</height>
+        <left>452</left><top>106</top><width>18</width><include content="Size_Hit" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="440" /><param name="y" value="106" /><param name="w" value="30" /><param name="h" value="318" /></include><height>318</height>
         <onleft>5000</onleft><onright>6000</onright>
       </control>
       <control type="image">
@@ -162,7 +162,7 @@
         </control>
       </control>
       <control type="scrollbar" id="6001">
-        <left>926</left><top>106</top><width>18</width><height>318</height>
+        <left>926</left><top>106</top><width>18</width><include content="Size_Hit" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="914" /><param name="y" value="106" /><param name="w" value="30" /><param name="h" value="318" /></include><height>318</height>
         <onleft>6000</onleft><onright>5000</onright>
       </control>
       <control type="grouplist" id="9000">

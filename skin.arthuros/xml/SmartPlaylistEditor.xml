@@ -14,7 +14,10 @@
         <param name="boxes" value="dialog" />
       </include>
       <control type="label" id="2">
-        <left>29</left><top>3</top><width>770</width><height>26</height>
+        <left>29</left><top>3</top>
+        <include content="Dialog_Heading_Width" condition="!Skin.HasSetting(touchmode)"><param name="width" value="770" /></include>
+        <include content="Dialog_Heading_Touch" condition="Skin.HasSetting(touchmode)" />
+        <height>26</height>
         <font>chromebold</font><textcolor>titletext</textcolor>
         <align>left</align><aligny>center</aligny>
       </control>
@@ -77,7 +80,7 @@
         </control>
       </control>
       <control type="scrollbar" id="501">
-        <left>426</left><top>42</top><width>18</width><height>376</height>
+        <left>426</left><top>42</top><width>18</width><include content="Size_Hit" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="414" /><param name="y" value="42" /><param name="w" value="30" /><param name="h" value="376" /></include><height>376</height>
         <onleft>500</onleft><onright>10</onright>
       </control>
       <control type="image">
@@ -85,14 +88,14 @@
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
       <control type="list" id="10">
-        <left>461</left><top>39</top><width>408</width><height>334</height>
+        <left>461</left><top>39</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="396" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="408" /></include><height>334</height>
         <onup>9903</onup><ondown>9010</ondown><onleft>500</onleft><onright>60</onright>
         <pagecontrol>60</pagecontrol>
-        <itemlayout height="44" width="408" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <include content="Arthur_ItemLayout_XL"><param name="width" value="400" /></include>
+        <itemlayout height="44" width="396" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_ItemLayout_XL"><param name="width" value="388" /></include>
         </itemlayout>
-        <focusedlayout height="44" width="408" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <include content="Arthur_FocusedLayout_XL"><param name="width" value="408" /></include>
+        <focusedlayout height="44" width="396" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_FocusedLayout_XL"><param name="width" value="396" /></include>
         </focusedlayout>
       <itemlayout height="28" width="408">
           <include content="Arthur_ItemLayout"><param name="width" value="400" /></include>
@@ -102,7 +105,7 @@
         </focusedlayout>
       </control>
       <control type="scrollbar" id="60">
-        <left>869</left><top>39</top><width>18</width><height>334</height>
+        <include content="Size_Left" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="857" /></include><include content="Size_Left" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="869" /></include><top>39</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="18" /></include><height>334</height>
         <onleft>10</onleft><onright>500</onright>
       </control>
       <control type="grouplist" id="9010">

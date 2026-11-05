@@ -416,7 +416,7 @@ msgid "Long-press a song on the left to add it. Long-press a song in the playlis
 msgstr ""
 
 msgctxt "#31834"
-msgid "Drag each marker until it sits on the edge of the picture. To finish, tap and hold an empty spot, or press Back."
+msgid "Tap to pick the next marker, swipe to nudge it one step (a mouse can drag it). To finish, tap and hold, or press Back."
 msgstr ""
 
 # ===== P4 strings: 31845-31854 =====
@@ -491,6 +491,16 @@ msgstr ""
 
 #. Skin settings help, paragraph about fonts (append to 31922 with [CR][CR])
 msgctxt "#31896"
-msgid "The bitmap font has Western European letters and the usual punctuation (’ “ ” – … •). For titles with other letters or alphabets (Polish, Greek, Russian, Japanese...) choose Settings > Interface > Skin > Fonts > Unicode (all alphabets). It uses Kodi's own smooth font at the same sizes."
+msgid "The bitmap font has Western European letters and the usual punctuation and signs (’ “ ” – … • € ™). For titles with other letters or alphabets (Polish, Greek, Russian, Japanese...) choose Settings > Interface > Skin > Fonts > Unicode (all alphabets). It uses Kodi's own smooth font at the same sizes."
+msgstr ""
+
+#. Video, music and game OSD: back to the browser/desktop, playback keeps running
+msgctxt "#31897"
+msgid "Menus"
+msgstr ""
+
+#. Live TV channel preview (full-screen video), Touch mode only
+msgctxt "#31898"
+msgid "Tap the picture and choose Switch to channel."
 msgstr ""
 

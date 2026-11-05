@@ -77,7 +77,7 @@
         <pagecontrol>60</pagecontrol>
       </control>
       <control type="scrollbar" id="60">
-        <left>982</left><top>68</top><width>18</width><height>360</height>
+        <left>982</left><top>68</top><width>18</width><include content="Size_Hit" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="970" /><param name="y" value="68" /><param name="w" value="30" /><param name="h" value="360" /></include><height>360</height>
         <onleft>5</onleft><onright>3</onright>
       </control>
       <control type="image">

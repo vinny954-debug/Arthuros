@@ -12,22 +12,22 @@
         <param name="icon" value="icons24/pvr_guide.png" /><param name="colour" value="accent2" />
         <param name="down" value="11" />
         <param name="boxes" value="dialog" />
-        <param name="title" value="$LOCALIZE[19019]" />
+        <param name="title" value="$LOCALIZE[19069]$VAR[PVRChannelVar]" />
       </include>
       <control type="image">
         <left>10</left><top>36</top><width>880</width><height>320</height>
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
       <control type="list" id="11">
-        <left>13</left><top>39</top><width>856</width><height>314</height>
+        <left>13</left><top>39</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="844" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="856" /></include><height>314</height>
         <onleft>11</onleft><onright>60</onright>
         <onup>11</onup><ondown>11</ondown>
         <pagecontrol>60</pagecontrol>
-        <itemlayout height="44" width="856" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <include content="Arthur_ItemLayout_XL"><param name="width" value="848" /></include>
+        <itemlayout height="44" width="844" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_ItemLayout_XL"><param name="width" value="836" /></include>
         </itemlayout>
-        <focusedlayout height="44" width="856" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <include content="Arthur_FocusedLayout_XL"><param name="width" value="856" /></include>
+        <focusedlayout height="44" width="844" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_FocusedLayout_XL"><param name="width" value="844" /></include>
         </focusedlayout>
       <itemlayout height="28" width="856">
           <include content="Arthur_ItemLayout"><param name="width" value="848" /></include>
@@ -37,7 +37,7 @@
         </focusedlayout>
       </control>
       <control type="scrollbar" id="60">
-        <left>869</left><top>39</top><width>18</width><height>314</height>
+        <include content="Size_Left" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="857" /></include><include content="Size_Left" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="869" /></include><top>39</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="18" /></include><height>314</height>
         <onleft>11</onleft><onright>11</onright>
       </control>
       <control type="image">

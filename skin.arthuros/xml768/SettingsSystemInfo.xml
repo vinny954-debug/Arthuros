@@ -25,7 +25,7 @@
         <left>27</left><top>0</top><width>520</width><height>26</height>
         <font>chromebold</font><textcolor>text</textcolor>
         <align>left</align><aligny>center</aligny>
-        <label>Kodi $INFO[System.BuildVersionShort] - ArthurOS 1.2 (v0.9.6)</label>
+        <label>Kodi $INFO[System.BuildVersionShort] - ArthurOS 1.2 (v0.9.7)</label>
       </control>
 
       <!-- right-hand status cluster, anchored to the right edge -->
@@ -331,7 +331,7 @@
         <left>324</left><top>76</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="628"/></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="640"/></include><height>558</height>
         <font>small</font>
         <pagecontrol>60</pagecontrol>
-        <autoscroll delay="6000" time="4000" repeat="8000">!Control.HasFocus(60)</autoscroll>
+        <autoscroll delay="6000" time="4000" repeat="8000">Skin.HasSetting(autoscroll) + !Control.HasFocus(60)</autoscroll>
       </control>
       <control type="scrollbar" id="60">
         <include content="Size_Left" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="964"/></include><include content="Size_Left" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="976"/></include><top>76</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30"/></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="18"/></include><height>558</height>
@@ -404,7 +404,7 @@
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>72</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
           <label>$LOCALIZE[335]</label>
           <visible>Control.HasFocus(9100)</visible>
         </control>
@@ -434,7 +434,7 @@
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>68</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
           <label>$LOCALIZE[33060]</label>
           <visible>Control.HasFocus(9106)</visible>
         </control>
@@ -468,7 +468,7 @@
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>168</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
           <label>$VAR[NowPlayingVar]</label>
           <visible>Control.HasFocus(9101)</visible>
         </control>
@@ -497,7 +497,7 @@
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>118</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
           <label>$LOCALIZE[31907]</label>
           <visible>Control.HasFocus(9102)</visible>
         </control>
@@ -530,7 +530,7 @@
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>150</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
           <label>$INFO[Skin.String(arthur.mintitle)]</label>
           <visible>Control.HasFocus(9104)</visible>
         </control>
@@ -558,7 +558,7 @@
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>108</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
           <label>$LOCALIZE[5]</label>
           <visible>Control.HasFocus(9103)</visible>
         </control>
@@ -590,7 +590,7 @@
       </control>
       <control type="label">
         <left>30</left><top>0</top><width>80</width><height>32</height>
-        <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+        <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
         <label>$LOCALIZE[31994]</label>
         <visible>Control.HasFocus(9105)</visible>
       </control>
@@ -620,6 +620,7 @@
       </control>
       <control type="button" id="9107">
         <left>0</left><top>0</top><width>116</width><height>32</height>
+        <hitrect x="-2" y="0" w="122" h="32"/>
         <label/>
         <onup>95</onup><onleft>95</onleft>
         <!-- also the way out of the menu bar's volume button: 9109 -> hidden
@@ -639,7 +640,7 @@
       </control>
       <control type="label">
         <left>30</left><top>0</top><width>80</width><height>32</height>
-        <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+        <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
         <label>$LOCALIZE[31994]</label>
         <visible>Control.HasFocus(9107)</visible>
       </control>

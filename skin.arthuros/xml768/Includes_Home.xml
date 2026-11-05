@@ -26,7 +26,7 @@
       </control>
       <control type="label">
         <left>44</left><right>6</right><top>0</top><height>$PARAM[height]</height>
-        <font>bold</font><textcolor>textinv</textcolor>
+        <font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
         <align>left</align><aligny>center</aligny>
         <label>$INFO[ListItem.Label]</label>
         <visible>$PARAM[focused]</visible>
@@ -110,7 +110,7 @@
         <control type="image"><left>33</left><top>22</top><width>80</width><height>80</height><aspectratio>keep</aspectratio><visible>!String.IsEmpty(ListItem.Property(image))</visible><texture>$INFO[ListItem.Property(image)]</texture></control>
         <control type="image"><left>2</left><top>104</top><width>142</width><height>119</height><texture colordiffuse="select">fill.png</texture></control>
         <control type="image"><left>0</left><top>0</top><width>146</width><height>227</height><texture border="4" colordiffuse="select">select_ring.png</texture></control>
-        <control type="textbox"><left>4</left><top>104</top><width>138</width><height>119</height><font>tilebig</font><textcolor>textinv</textcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
+        <control type="textbox"><left>4</left><top>104</top><width>138</width><height>119</height><font>tilebig</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
       </control>
     </focusedlayout>
     <itemlayout width="150" height="231">
@@ -140,7 +140,7 @@
         <control type="image"><left>25</left><top>22</top><width>96</width><height>96</height><aspectratio>keep</aspectratio><visible>!String.IsEmpty(ListItem.Property(image))</visible><texture>$INFO[ListItem.Property(image)]</texture></control>
         <control type="image"><left>2</left><top>120</top><width>142</width><height>103</height><texture colordiffuse="select">fill.png</texture></control>
         <control type="image"><left>0</left><top>0</top><width>146</width><height>227</height><texture border="4" colordiffuse="select">select_ring.png</texture></control>
-        <control type="textbox"><left>4</left><top>120</top><width>138</width><height>103</height><font>tilebig</font><textcolor>textinv</textcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
+        <control type="textbox"><left>4</left><top>120</top><width>138</width><height>103</height><font>tilebig</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
       </control>
     </focusedlayout>
   </include>
@@ -239,7 +239,7 @@
         <control type="image"><left>33</left><top>22</top><width>80</width><height>80</height><aspectratio>keep</aspectratio><visible>!String.IsEmpty(ListItem.Property(image))</visible><texture>$INFO[ListItem.Property(image)]</texture></control>
         <control type="image"><left>2</left><top>104</top><width>142</width><height>119</height><texture colordiffuse="select">fill.png</texture></control>
         <control type="image"><left>0</left><top>0</top><width>146</width><height>227</height><texture border="4" colordiffuse="select">select_ring.png</texture></control>
-        <control type="textbox"><left>4</left><top>104</top><width>138</width><height>119</height><font>tilebig</font><textcolor>textinv</textcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
+        <control type="textbox"><left>4</left><top>104</top><width>138</width><height>119</height><font>tilebig</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
       </control>
     </focusedlayout>
     <itemlayout width="150" height="231">
@@ -269,7 +269,7 @@
         <control type="image"><left>25</left><top>22</top><width>96</width><height>96</height><aspectratio>keep</aspectratio><visible>!String.IsEmpty(ListItem.Property(image))</visible><texture>$INFO[ListItem.Property(image)]</texture></control>
         <control type="image"><left>2</left><top>120</top><width>142</width><height>103</height><texture colordiffuse="select">fill.png</texture></control>
         <control type="image"><left>0</left><top>0</top><width>146</width><height>227</height><texture border="4" colordiffuse="select">select_ring.png</texture></control>
-        <control type="textbox"><left>4</left><top>120</top><width>138</width><height>103</height><font>tilebig</font><textcolor>textinv</textcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
+        <control type="textbox"><left>4</left><top>120</top><width>138</width><height>103</height><font>tilebig</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
       </control>
     </focusedlayout>
   </include>
@@ -368,7 +368,7 @@
         <control type="image"><left>30</left><top>18</top><width>48</width><height>48</height><aspectratio>keep</aspectratio><visible>!String.IsEmpty(ListItem.Property(image))</visible><texture>$INFO[ListItem.Property(image)]</texture></control>
         <control type="image"><left>2</left><top>68</top><width>105</width><height>97</height><texture colordiffuse="select">fill.png</texture></control>
         <control type="image"><left>0</left><top>0</top><width>109</width><height>169</height><texture border="4" colordiffuse="select">select_ring.png</texture></control>
-        <control type="textbox"><left>4</left><top>68</top><width>101</width><height>97</height><font>tilesmall</font><textcolor>textinv</textcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
+        <control type="textbox"><left>4</left><top>68</top><width>101</width><height>97</height><font>tilesmall</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
       </control>
     </focusedlayout>
     <itemlayout width="113" height="173">
@@ -398,7 +398,7 @@
         <control type="image"><left>22</left><top>18</top><width>64</width><height>64</height><aspectratio>keep</aspectratio><visible>!String.IsEmpty(ListItem.Property(image))</visible><texture>$INFO[ListItem.Property(image)]</texture></control>
         <control type="image"><left>2</left><top>84</top><width>105</width><height>81</height><texture colordiffuse="select">fill.png</texture></control>
         <control type="image"><left>0</left><top>0</top><width>109</width><height>169</height><texture border="4" colordiffuse="select">select_ring.png</texture></control>
-        <control type="textbox"><left>4</left><top>84</top><width>101</width><height>81</height><font>tilesmall</font><textcolor>textinv</textcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
+        <control type="textbox"><left>4</left><top>84</top><width>101</width><height>81</height><font>tilesmall</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
       </control>
     </focusedlayout>
   </include>
@@ -497,7 +497,7 @@
         <control type="image"><left>30</left><top>18</top><width>48</width><height>48</height><aspectratio>keep</aspectratio><visible>!String.IsEmpty(ListItem.Property(image))</visible><texture>$INFO[ListItem.Property(image)]</texture></control>
         <control type="image"><left>2</left><top>68</top><width>105</width><height>97</height><texture colordiffuse="select">fill.png</texture></control>
         <control type="image"><left>0</left><top>0</top><width>109</width><height>169</height><texture border="4" colordiffuse="select">select_ring.png</texture></control>
-        <control type="textbox"><left>4</left><top>68</top><width>101</width><height>97</height><font>tilesmall</font><textcolor>textinv</textcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
+        <control type="textbox"><left>4</left><top>68</top><width>101</width><height>97</height><font>tilesmall</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
       </control>
     </focusedlayout>
     <itemlayout width="113" height="173">
@@ -527,7 +527,7 @@
         <control type="image"><left>22</left><top>18</top><width>64</width><height>64</height><aspectratio>keep</aspectratio><visible>!String.IsEmpty(ListItem.Property(image))</visible><texture>$INFO[ListItem.Property(image)]</texture></control>
         <control type="image"><left>2</left><top>84</top><width>105</width><height>81</height><texture colordiffuse="select">fill.png</texture></control>
         <control type="image"><left>0</left><top>0</top><width>109</width><height>169</height><texture border="4" colordiffuse="select">select_ring.png</texture></control>
-        <control type="textbox"><left>4</left><top>84</top><width>101</width><height>81</height><font>tilesmall</font><textcolor>textinv</textcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
+        <control type="textbox"><left>4</left><top>84</top><width>101</width><height>81</height><font>tilesmall</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
       </control>
     </focusedlayout>
   </include>
@@ -620,7 +620,7 @@
         <control type="image"><left>27</left><top>13</top><width>32</width><height>32</height><aspectratio>keep</aspectratio><visible>!String.IsEmpty(ListItem.Property(image))</visible><texture>$INFO[ListItem.Property(image)]</texture></control>
         <control type="image"><left>2</left><top>46</top><width>82</width><height>85</height><texture colordiffuse="select">fill.png</texture></control>
         <control type="image"><left>0</left><top>0</top><width>86</width><height>134</height><texture border="4" colordiffuse="select">select_ring.png</texture></control>
-        <control type="textbox"><left>4</left><top>46</top><width>78</width><height>85</height><font>tilesmall</font><textcolor>textinv</textcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
+        <control type="textbox"><left>4</left><top>46</top><width>78</width><height>85</height><font>tilesmall</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
       </control>
     </focusedlayout>
     <itemlayout width="90" height="138">
@@ -644,7 +644,7 @@
         <control type="image"><left>19</left><top>13</top><width>48</width><height>48</height><aspectratio>keep</aspectratio><visible>!String.IsEmpty(ListItem.Property(image))</visible><texture>$INFO[ListItem.Property(image)]</texture></control>
         <control type="image"><left>2</left><top>62</top><width>82</width><height>69</height><texture colordiffuse="select">fill.png</texture></control>
         <control type="image"><left>0</left><top>0</top><width>86</width><height>134</height><texture border="4" colordiffuse="select">select_ring.png</texture></control>
-        <control type="textbox"><left>4</left><top>62</top><width>78</width><height>69</height><font>tilesmall</font><textcolor>textinv</textcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
+        <control type="textbox"><left>4</left><top>62</top><width>78</width><height>69</height><font>tilesmall</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
       </control>
     </focusedlayout>
   </include>
@@ -737,7 +737,7 @@
         <control type="image"><left>27</left><top>13</top><width>32</width><height>32</height><aspectratio>keep</aspectratio><visible>!String.IsEmpty(ListItem.Property(image))</visible><texture>$INFO[ListItem.Property(image)]</texture></control>
         <control type="image"><left>2</left><top>46</top><width>82</width><height>85</height><texture colordiffuse="select">fill.png</texture></control>
         <control type="image"><left>0</left><top>0</top><width>86</width><height>134</height><texture border="4" colordiffuse="select">select_ring.png</texture></control>
-        <control type="textbox"><left>4</left><top>46</top><width>78</width><height>85</height><font>tilesmall</font><textcolor>textinv</textcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
+        <control type="textbox"><left>4</left><top>46</top><width>78</width><height>85</height><font>tilesmall</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
       </control>
     </focusedlayout>
     <itemlayout width="90" height="138">
@@ -761,7 +761,7 @@
         <control type="image"><left>19</left><top>13</top><width>48</width><height>48</height><aspectratio>keep</aspectratio><visible>!String.IsEmpty(ListItem.Property(image))</visible><texture>$INFO[ListItem.Property(image)]</texture></control>
         <control type="image"><left>2</left><top>62</top><width>82</width><height>69</height><texture colordiffuse="select">fill.png</texture></control>
         <control type="image"><left>0</left><top>0</top><width>86</width><height>134</height><texture border="4" colordiffuse="select">select_ring.png</texture></control>
-        <control type="textbox"><left>4</left><top>62</top><width>78</width><height>69</height><font>tilesmall</font><textcolor>textinv</textcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
+        <control type="textbox"><left>4</left><top>62</top><width>78</width><height>69</height><font>tilesmall</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
       </control>
     </focusedlayout>
   </include>
@@ -854,7 +854,7 @@
         <control type="image"><left>19</left><top>11</top><width>32</width><height>32</height><aspectratio>keep</aspectratio><visible>!String.IsEmpty(ListItem.Property(image))</visible><texture>$INFO[ListItem.Property(image)]</texture></control>
         <control type="image"><left>2</left><top>44</top><width>67</width><height>64</height><texture colordiffuse="select">fill.png</texture></control>
         <control type="image"><left>0</left><top>0</top><width>71</width><height>111</height><texture border="4" colordiffuse="select">select_ring.png</texture></control>
-        <control type="textbox"><left>4</left><top>44</top><width>63</width><height>64</height><font>tiletiny</font><textcolor>textinv</textcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
+        <control type="textbox"><left>4</left><top>44</top><width>63</width><height>64</height><font>tiletiny</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
       </control>
     </focusedlayout>
     <itemlayout width="75" height="115">
@@ -878,7 +878,7 @@
         <control type="image"><left>11</left><top>11</top><width>48</width><height>48</height><aspectratio>keep</aspectratio><visible>!String.IsEmpty(ListItem.Property(image))</visible><texture>$INFO[ListItem.Property(image)]</texture></control>
         <control type="image"><left>2</left><top>60</top><width>67</width><height>48</height><texture colordiffuse="select">fill.png</texture></control>
         <control type="image"><left>0</left><top>0</top><width>71</width><height>111</height><texture border="4" colordiffuse="select">select_ring.png</texture></control>
-        <control type="textbox"><left>4</left><top>60</top><width>63</width><height>48</height><font>tiletiny</font><textcolor>textinv</textcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
+        <control type="textbox"><left>4</left><top>60</top><width>63</width><height>48</height><font>tiletiny</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><align>center</align><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
       </control>
     </focusedlayout>
   </include>
@@ -939,7 +939,7 @@
       <control type="image"><left>6</left><top>6</top><width>186</width><height>14</height><texture colordiffuse="accent2">fill.png</texture><visible>String.IsEqual(ListItem.Property(bar),accent2)</visible></control>
       <control type="image"><left>67</left><top>38</top><width>64</width><height>64</height><texture>icons64/$INFO[ListItem.Property(ico)].png</texture></control>
       <control type="image"><left>8</left><top>110</top><width>182</width><height>98</height><texture colordiffuse="accent1">fill.png</texture></control>
-      <control type="textbox"><left>10</left><top>112</top><width>178</width><height>94</height><font>bold</font><textcolor>textinv</textcolor><align>center</align><aligny>center</aligny><autoscroll>false</autoscroll><label>$INFO[ListItem.Label]</label></control>
+      <control type="textbox"><left>10</left><top>112</top><width>178</width><height>94</height><font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><align>center</align><aligny>center</aligny><autoscroll>false</autoscroll><label>$INFO[ListItem.Label]</label></control>
       <control type="image"><left>3</left><top>3</top><width>192</width><height>212</height><texture border="4" colordiffuse="accent1">select_ring.png</texture></control>
     </focusedlayout>
   </include>

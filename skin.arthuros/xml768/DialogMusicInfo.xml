@@ -32,7 +32,7 @@
       </control>
       <control type="label">
         <left>30</left><top>0</top><width>80</width><height>32</height>
-        <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+        <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
         <label>$LOCALIZE[31994]</label>
         <visible>Control.HasFocus(9108)</visible>
       </control>
@@ -221,7 +221,7 @@
         <left>528</left><top>44</top><width>322</width><height>244</height>
         <font>small</font>
         <pagecontrol>61</pagecontrol>
-        <autoscroll delay="6000" time="4000" repeat="8000">!Control.HasFocus(61)</autoscroll>
+        <autoscroll delay="6000" time="4000" repeat="8000">Skin.HasSetting(autoscroll) + !Control.HasFocus(61)</autoscroll>
         <label>$INFO[ListItem.Plot]$INFO[ListItem.Comment]</label>
       </control>
       <control type="scrollbar" id="61">
@@ -316,16 +316,16 @@
         <left>13</left><top>434</top><width>874</width><height>30</height>
         <orientation>horizontal</orientation><align>center</align><itemgap>6</itemgap>
         <onup>50</onup><ondown>9002</ondown>
-        <control type="button" id="8"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align></control>
-        <control type="button" id="6"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align></control>
-        <control type="button" id="7"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align></control>
-        <control type="button" id="10"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align></control>
+        <control type="button" id="8"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34"/><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align></control>
+        <control type="button" id="6"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34"/><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align></control>
+        <control type="button" id="7"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34"/><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align></control>
+        <control type="button" id="10"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34"/><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align></control>
       </control>
       <control type="grouplist" id="9002">
         <left>13</left><top>468</top><width>874</width><height>30</height>
         <orientation>horizontal</orientation><align>center</align><itemgap>6</itemgap>
         <onup>9001</onup><ondown>61</ondown>
-        <control type="button" id="12"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align></control>
+        <control type="button" id="12"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34"/><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align></control>
       </control>
       <control type="list" id="41">
         <left>-3000</left><top>0</top><width>200</width><height>24</height>

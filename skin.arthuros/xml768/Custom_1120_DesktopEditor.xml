@@ -26,7 +26,7 @@
         <left>27</left><top>0</top><width>520</width><height>26</height>
         <font>chromebold</font><textcolor>text</textcolor>
         <align>left</align><aligny>center</aligny>
-        <label>Kodi $INFO[System.BuildVersionShort] - ArthurOS 1.2 (v0.9.6)</label>
+        <label>Kodi $INFO[System.BuildVersionShort] - ArthurOS 1.2 (v0.9.7)</label>
       </control>
 
       <!-- right-hand status cluster, anchored to the right edge -->
@@ -302,22 +302,22 @@
       <control type="label"><left>256</left><top>40</top><width>400</width><height>26</height><font>bold</font><textcolor>text</textcolor><label>$LOCALIZE[31959]</label></control>
       <control type="image"><left>256</left><top>70</top><width>436</width><height>618</height><texture border="2" colordiffuse="facetint">panel_sunken.png</texture></control>
       <control type="list" id="320">
-        <left>259</left><top>73</top><width>406</width><height>612</height>
+        <left>259</left><top>73</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="394"/></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="406"/></include><height>612</height>
         <onleft>300</onleft><onright>321</onright><ondown>9100</ondown>
         <pagecontrol>321</pagecontrol>
         <scrolltime tween="linear">0</scrolltime>
-        <itemlayout width="406" height="48" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+        <itemlayout width="394" height="48" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="label"><left>8</left><top>0</top><width>40</width><height>48</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><align>right</align><label>$INFO[ListItem.Property(slot)].</label></control>
           <control type="image"><left>56</left><top>8</top><width>32</width><height>32</height><texture>icons24/$INFO[ListItem.Property(ico)].png</texture><visible>String.IsEmpty(ListItem.Property(image))</visible></control>
           <control type="image"><left>56</left><top>8</top><width>32</width><height>32</height><aspectratio>keep</aspectratio><texture>$INFO[ListItem.Property(image)]</texture><visible>!String.IsEmpty(ListItem.Property(image))</visible></control>
           <control type="label"><left>98</left><top>0</top><width>302</width><height>48</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
         </itemlayout>
-        <focusedlayout width="406" height="48" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <control type="image"><left>0</left><top>0</top><width>406</width><height>48</height><texture colordiffuse="select">fill.png</texture></control>
-          <control type="label"><left>8</left><top>0</top><width>40</width><height>48</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><align>right</align><label>$INFO[ListItem.Property(slot)].</label></control>
+        <focusedlayout width="394" height="48" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image"><left>0</left><top>0</top><width>394</width><height>48</height><texture colordiffuse="select">fill.png</texture></control>
+          <control type="label"><left>8</left><top>0</top><width>40</width><height>48</height><font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny><align>right</align><label>$INFO[ListItem.Property(slot)].</label></control>
           <control type="image"><left>56</left><top>8</top><width>32</width><height>32</height><texture>icons24/$INFO[ListItem.Property(ico)].png</texture><visible>String.IsEmpty(ListItem.Property(image))</visible></control>
           <control type="image"><left>56</left><top>8</top><width>32</width><height>32</height><aspectratio>keep</aspectratio><texture>$INFO[ListItem.Property(image)]</texture><visible>!String.IsEmpty(ListItem.Property(image))</visible></control>
-          <control type="label"><left>98</left><top>0</top><width>302</width><height>48</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
+          <control type="label"><left>98</left><top>0</top><width>302</width><height>48</height><font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
         </focusedlayout>
         <itemlayout width="406" height="38">
           <control type="label"><left>8</left><top>0</top><width>40</width><height>38</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><align>right</align><label>$INFO[ListItem.Property(slot)].</label></control>
@@ -327,10 +327,10 @@
         </itemlayout>
         <focusedlayout width="406" height="38">
           <control type="image"><left>0</left><top>0</top><width>406</width><height>38</height><texture colordiffuse="select">fill.png</texture></control>
-          <control type="label"><left>8</left><top>0</top><width>40</width><height>38</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><align>right</align><label>$INFO[ListItem.Property(slot)].</label></control>
+          <control type="label"><left>8</left><top>0</top><width>40</width><height>38</height><font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny><align>right</align><label>$INFO[ListItem.Property(slot)].</label></control>
           <control type="image"><left>56</left><top>3</top><width>32</width><height>32</height><texture>icons24/$INFO[ListItem.Property(ico)].png</texture><visible>String.IsEmpty(ListItem.Property(image))</visible></control>
           <control type="image"><left>56</left><top>3</top><width>32</width><height>32</height><aspectratio>keep</aspectratio><texture>$INFO[ListItem.Property(image)]</texture><visible>!String.IsEmpty(ListItem.Property(image))</visible></control>
-          <control type="label"><left>98</left><top>0</top><width>302</width><height>38</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
+          <control type="label"><left>98</left><top>0</top><width>302</width><height>38</height><font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
         </focusedlayout>
         <content>
           <item id="1">
@@ -867,7 +867,7 @@
         </content>
       </control>
       <control type="scrollbar" id="321">
-        <left>668</left><top>73</top><width>18</width><height>612</height>
+        <include content="Size_Left" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="656"/></include><include content="Size_Left" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="668"/></include><top>73</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30"/></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="18"/></include><height>612</height>
         <onleft>320</onleft>
         <onright>300</onright>
       </control>
@@ -916,7 +916,7 @@
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>72</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
           <label>$LOCALIZE[335]</label>
           <visible>Control.HasFocus(9100)</visible>
         </control>
@@ -946,7 +946,7 @@
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>68</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
           <label>$LOCALIZE[33060]</label>
           <visible>Control.HasFocus(9106)</visible>
         </control>
@@ -980,7 +980,7 @@
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>168</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
           <label>$VAR[NowPlayingVar]</label>
           <visible>Control.HasFocus(9101)</visible>
         </control>
@@ -1009,7 +1009,7 @@
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>118</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
           <label>$LOCALIZE[31907]</label>
           <visible>Control.HasFocus(9102)</visible>
         </control>
@@ -1042,7 +1042,7 @@
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>150</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
           <label>$INFO[Skin.String(arthur.mintitle)]</label>
           <visible>Control.HasFocus(9104)</visible>
         </control>
@@ -1070,7 +1070,7 @@
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>108</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
           <label>$LOCALIZE[5]</label>
           <visible>Control.HasFocus(9103)</visible>
         </control>
@@ -1102,7 +1102,7 @@
       </control>
       <control type="label">
         <left>30</left><top>0</top><width>80</width><height>32</height>
-        <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+        <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
         <label>$LOCALIZE[31994]</label>
         <visible>Control.HasFocus(9105)</visible>
       </control>
@@ -1132,6 +1132,7 @@
       </control>
       <control type="button" id="9107">
         <left>0</left><top>0</top><width>116</width><height>32</height>
+        <hitrect x="-2" y="0" w="122" h="32"/>
         <label/>
         <onup>320</onup><onleft>320</onleft>
         <!-- also the way out of the menu bar's volume button: 9109 -> hidden
@@ -1151,7 +1152,7 @@
       </control>
       <control type="label">
         <left>30</left><top>0</top><width>80</width><height>32</height>
-        <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+        <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
         <label>$LOCALIZE[31994]</label>
         <visible>Control.HasFocus(9107)</visible>
       </control>

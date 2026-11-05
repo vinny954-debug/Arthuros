@@ -6,6 +6,14 @@
       <left>0</left><top>0</top><width>1024</width><height>768</height>
       <texture>dim.png</texture>
     </control>
+    <control type="button" id="9989">
+      <left>0</left><top>0</top><width>1024</width><height>768</height>
+      <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>
+      <label/>
+      <onclick>Action(Back)</onclick>
+      <onup>602</onup><ondown>602</ondown>
+      <onleft>602</onleft><onright>602</onright>
+    </control>
     <control type="group">
       <right>4</right><top>736</top><width>116</width><height>32</height>
       <visible>Skin.HasSetting(touchmode)</visible>
@@ -32,7 +40,7 @@
       </control>
       <control type="label">
         <left>30</left><top>0</top><width>80</width><height>32</height>
-        <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+        <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
         <label>$LOCALIZE[31994]</label>
         <visible>Control.HasFocus(9108)</visible>
       </control>
@@ -315,6 +323,8 @@
         <onup condition="Player.SeekEnabled">9980</onup>
         <onup>202</onup>
         <ondown>202</ondown>
+        <onleft>9982</onleft>
+        <onright>201</onright>
       </control>
       <control type="grouplist" id="202">
         <left>13</left><top>202</top><width>634</width><height>44</height>

@@ -37,7 +37,7 @@ TITLES = {
  "DialogPVRChannelManager":"$LOCALIZE[19199]$INFO[Container(20).NumItems, (,)]",
  "DialogPVRGroupManager":"$LOCALIZE[19205]",
  "DialogPVRGuideSearch":"$LOCALIZE[19142]", "DialogPVRGuideControls":"$LOCALIZE[19222]",
- "DialogPVRChannelsOSD":"$LOCALIZE[19019]", "DialogPVRChannelGuide":"$LOCALIZE[19019]",
+ "DialogPVRChannelsOSD":"$LOCALIZE[19019]", "DialogPVRChannelGuide":"$LOCALIZE[19069]$VAR[PVRChannelVar]",
  "DialogPictureInfo":"$LOCALIZE[13406]", "DialogPlayerProcessInfo":"$LOCALIZE[14116]",
  "DialogFullScreenInfo":"$LOCALIZE[14116]", "DialogPVRRadioRDSInfo":"$LOCALIZE[29900]",
 }
@@ -116,16 +116,38 @@ def fullwindow(name, body, default="", views="", colour="accent2",
 # dialogs whose heading Kodi writes into their own label (id 2) on the title bar
 KODI_HEADED = {"DialogSettings", "DialogAddonSettings"}
 
+# A heading label on the title bar (Kodi writes it: settings 2, keyboard 311,
+# file browser 411...). In Touch mode the title-bar boxes are wider and start
+# 135 px from the dialog's right edge (WinBox_1_Touch), so a fixed width
+# that runs past that drew a long heading over the boxes; in Touch mode the
+# label stops 138 px from the right edge instead, as Dialog_Heading does.
+DIALOG_HEADING_W = ('        <include content="Dialog_Heading_Width" condition="!Skin.HasSetting(touchmode)">'
+                    '<param name="width" value="{w}" /></include>\n'
+                    '        <include content="Dialog_Heading_Touch" condition="Skin.HasSetting(touchmode)" />\n')
+TOUCH_BOXES_R = 138
+
+def touch_headings(body, wd):
+    """Every <left>29</left><top>3</top><width>N</width> heading in a dialog
+    wd wide that would reach the Touch-mode boxes gets the include pair."""
+    def rep(m):
+        n = int(m.group(2))
+        if 29 + n <= wd - TOUCH_BOXES_R:
+            return m.group(0)
+        return f"{m.group(1)}<left>29</left><top>3</top>\n" + DIALOG_HEADING_W.format(w=n) + m.group(1)
+    return re.sub(r"( *)<left>29</left><top>3</top><width>(\d+)</width>", rep, body)
+
 def dialog(name, wd, ht, body, default="", icon="icons24/file.png",
            colour="accent2", heading=True, dim=True, zorder=None, title=None,
-           anchor="center", visible=(), default_always=False, pre=""):
+           anchor="center", visible=(), default_always=False, pre="", outside=None):
     """title: a fixed title-bar label, for dialogs Kodi gives no heading (id 1).
     Without one, a dialog with heading=False takes its TITLES entry.
     anchor: "center" (default) or "bottom" (sits on the bottom edge, centred
     horizontally - tallpass keeps it on the bottom edge at 768).
     visible: window-level <visible> conditions (Kodi opens modeless dialogs
     such as DialogSeekBar only through these, CGUIDialog::UpdateVisibility).
-    pre: controls placed before the dialog box (e.g. a full-screen tap catcher)."""
+    pre: controls placed before the dialog box (e.g. a full-screen tap catcher).
+    outside: a control id; a tap on the dimmed picture then closes the
+    dialog (Dialog_DimClose; the remote is sent to that control)."""
     inner = wd - 6
     if title is None and not heading and name not in KODI_HEADED:
         title = TITLES.get(name)
@@ -139,7 +161,10 @@ def dialog(name, wd, ht, body, default="", icon="icons24/file.png",
         al = ' always="true"' if default_always else ""
         s += f"  <defaultcontrol{al}>{default}</defaultcontrol>\n"
     s += "  <controls>\n"
-    if dim: s += "    <include>Dialog_Dim</include>\n"
+    if dim and outside:
+        s += f'    <include content="Dialog_DimClose"><param name="focus" value="{outside}" /></include>\n'
+    elif dim:
+        s += "    <include>Dialog_Dim</include>\n"
     s += pre
     s += "    <control type=\"group\">\n"
     if anchor == "bottom":
@@ -159,7 +184,7 @@ def dialog(name, wd, ht, body, default="", icon="icons24/file.png",
     s += "      </include>\n"
     if heading:
         s += f'      <include content="Dialog_Heading"><param name="width" value="{inner-100}" /></include>\n'
-    s += body
+    s += touch_headings(body, wd) if BOXES.get(name, "dialog") == "dialog" else body
     s += "    </control>\n  </controls>\n</window>\n"
     return s
 
@@ -378,8 +403,14 @@ def settings_dialog(name):
              + (("        <!-- settings level: Kodi labels it (GUIDialogAddonSettings.cpp CONTROL_BTN_LEVELS) -->\n"
                  + btn(20, "<onclick>SettingsLevelChange</onclick>")) if cats else "")
              + "      </control>\n")
-    return dialog(name, 900, 486, body, default="3" if cats else "5",
-                  icon="icons24/settings.png", colour="accent1", heading=False)
+    # the taller row would butt against the help panel (364-434), so the
+    # box is 16 px taller with it: the same 16 px gap in both sizes
+    # T-3: DialogSettings (the OSD's subtitle / audio / video settings
+    # over the picture) closes on a tap outside; add-on settings do not
+    return box_heights(dialog(name, 900, 486, body, default="3" if cats else "5",
+                              icon="icons24/settings.png", colour="accent1", heading=False,
+                              outside=None if cats else "5"),
+                       900, 486, {XLC: 502, "!" + XLC: 486})
 
 # ====================================================== player / OSD family
 # The video, music and game OSDs are one touch-first bar along the bottom
@@ -576,12 +607,17 @@ def slider(cid, l, t, wd, ht, action, info, visible=None, enable=None, nav=None,
 # listed does not get the button. Rewind/forward resume first when paused:
 # PlayerControl(Play) then Rewind would pause and the Rewind be ignored
 # (PlayerBuiltins.cpp: rewind/forward only act while playing).
+# On live TV/radio Previous/Next seek the timeshift buffer to the start of
+# this / the next programme (PVRGUIActionListener ACTION_PREV_ITEM /
+# ACTION_NEXT_ITEM -> CPVRGUIActionsPlayback::SeekBackward/SeekForward), so
+# the pair shares one live term and never shows half of itself.
+LIVE_SEEK_V = f"[Player.SeekEnabled + {LIVE_V}]"
+LIVE_SEEK_M = f"[Player.SeekEnabled + {LIVE_M}]"
 PREV_V = ("Player.HasSceneMarkers | Player.ChapterCount | Integer.IsGreater(Playlist.Length(video),1)"
-          f" | [Player.SeekEnabled + {LIVE_V}]")
-NEXT_V = ("Player.HasSceneMarkers | Player.ChapterCount | Integer.IsGreater(Playlist.Length(video),1)"
-          " | PVR.IsTimeShift")
-PREV_M = f"Player.ChapterCount | MusicPlayer.HasPrevious | [Player.SeekEnabled + {LIVE_M}]"
-NEXT_M = "Player.ChapterCount | MusicPlayer.HasNext | PVR.IsTimeShift"
+          f" | {LIVE_SEEK_V}")
+NEXT_V = PREV_V
+PREV_M = f"Player.ChapterCount | MusicPlayer.HasPrevious | {LIVE_SEEK_M}"
+NEXT_M = f"Player.ChapterCount | MusicPlayer.HasNext | {LIVE_SEEK_M}"
 OSD_BUTTONS = [
   (600, "prev", ["PlayerControl(Previous)"], {"video": PREV_V, "music": PREV_M}),
   (601, "rew",  [("Player.Paused", "PlayerControl(Play)"), ("!Player.Paused", "PlayerControl(Rewind)")],
@@ -628,6 +664,35 @@ def osd_transport(kind="video", top=TR_T):
                             glyph_on="pause", visible=vis[kind], hit=OSD_HIT)
         else:
             s += icon_radio(cid, glyph, TR_W, TR_H, acts, size=24, visible=vis[kind], hit=OSD_HIT)
+    if kind == "video":
+        # the video text row is full (998 px), the transport row has room:
+        # six glyph buttons (390 px) + gap + Menus inside 201's width
+        assert 6 * TR_W + 5 * 6 + 6 + MENUS_W <= MUTE_L - 16, "VideoOSD: Menus does not fit row 201"
+        # live TV: a swipe up/down only PREVIEWS a channel
+        # (pvrplayback.confirmchannelswitch, PVRGUIActionListener
+        # GetChannelSwitchMode -> NO_SWITCH) and only ACTION_SELECT_ITEM
+        # switches; a tap is LeftClick, which the full-screen window turns
+        # into TriggerOSD. So the bar offers the switch while the preview
+        # shows. The bar is closed first (it is modal: with it open, Select
+        # would press this button again); then Select reaches
+        # CApplication::OnAction -> the full-screen window (no focusable
+        # control, not handled) -> the PVR action listener ->
+        # SwitchToCurrentChannel. Live: no rewind/forward, so at most
+        # 4 glyphs + this + Menus.
+        assert 4 * TR_W + 3 * 6 + 6 + SWITCH_W + 6 + MENUS_W <= MUTE_L - 16, "VideoOSD: Switch does not fit"
+        s += ('        <control type="button" id="9953">\n'
+              f"          <width>{SWITCH_W}</width><height>{TR_H}</height>\n"
+              + hitrect("          ", 0, 0, SWITCH_W, TR_H, OSD_HIT)
+              + "          <font>chrome</font><label>$LOCALIZE[19000]</label>\n"
+              + onclicks(["Dialog.Close(VideoOSD,true)", "Action(Select)"], "          ")
+              + f"          <visible>{PREVIEW_ON}</visible>\n"
+              + "        </control>\n")
+        s += ('        <control type="button" id="9952">\n'
+              f"          <width>{MENUS_W}</width><height>{TR_H}</height>\n"
+              + hitrect("          ", 0, 0, MENUS_W, TR_H, OSD_HIT)
+              + "          <font>chrome</font><label>$LOCALIZE[31897]</label>\n"
+              + onclicks(menus_clicks(kind), "          ")
+              + "        </control>\n")
     s += "      </control>\n"
     return s
 
@@ -700,6 +765,31 @@ def vis_presets():
     ], up, "202", onright="9982", left=VIS_L, width=VIS_W, h=TR_H,
        onleft="201", visible=VIS_ON)
 
+# Menus: back to the browser or desktop with playback running. Hide only
+# closes the bar, and the full-screen windows have no chrome of their own, so
+# a touch user had no visible way out but Stop (the long-press is RightClick
+# -> PREVIOUS_MENU, which nobody finds). The action goes straight to the
+# full-screen window (Action builtin with a window: TMSG_GUI_ACTION ->
+# CGUIWindow::OnAction), whose ACTION_SHOW_GUI calls PreviousWindow
+# (GUIWindowFullScreen.cpp, GUIWindowVisualisation.cpp,
+# GameWindowFullScreen.cpp). Not plain Action(FullScreen): that passes
+# CApplication::OnAction -> SwitchToFullScreen first, which during a game
+# would open the video window (RetroPlayer has video). The OSD is closed
+# first and at once (force), so no closing dialog swallows the action.
+MENUS_W = 110
+SWITCH_W = 190   # "Switch to channel" at Extra large: 17 x 10 + 2 x 10
+# (a preview happens only on live TV; saying so lets the width checks see
+# that rewind/forward, which need !LiveTV, never show with it)
+PREVIEW_ON = f"Player.ChannelPreviewActive + {LIVE_V}"
+MENUS_WIN = {"video": "FullscreenVideo", "music": "Visualisation", "game": "FullscreenGame"}
+
+def menus_clicks(kind):
+    return ["Dialog.Close(all,true)", f"Action(FullScreen,{MENUS_WIN[kind]})"]
+
+def menus_entry(kind):
+    """The Menus button as an osd_buttons() entry (music and game row 202)."""
+    return (9952, MENUS_W, "$LOCALIZE[31897]", menus_clicks(kind), None)
+
 def osd_rows(name, kind):
     """The text-button row (grouplist 202), 1008 px. Widths are what each
     label needs at Extra large (10 px a glyph + 2x10 textoffsetx). The video
@@ -718,7 +808,8 @@ def osd_rows(name, kind):
                 (9972, 80, "$LOCALIZE[587]", ["ActivateWindow(GameVideoFilter)"], None),
                 (9973, 90, "$LOCALIZE[31997]", ["ActivateWindow(GameStretchMode)"], None),
                 (9974, 100, "$LOCALIZE[35227]", ["ActivateWindow(GameVideoRotation)"], None),
-                (9976, 100, "$LOCALIZE[10038]", ["ActivateWindow(GameAdvancedSettings)"], None)]
+                (9976, 100, "$LOCALIZE[10038]", ["ActivateWindow(GameAdvancedSettings)"], None),
+                menus_entry("game")]
     if kind == "video":
         L = LIVE_V
         return [(9963, 110, "$LOCALIZE[287]", ["ActivateWindow(OSDSubtitleSettings)"],
@@ -751,7 +842,8 @@ def osd_rows(name, kind):
             (9969, 120, "$LOCALIZE[31801]", [f"Dialog.Close({name})", "ActivateWindow(PVRRadioRDSInfo)"],
              f"{L} + RDS.HasRDS"),
             record_button(L),
-            addon_button(L)]
+            addon_button(L),
+            menus_entry("music")]
 
 # The text row must never run past the bar: CGUIControlGroupList clips a
 # child that does not fit whole, and hands it no taps. Its guards keep the
@@ -880,9 +972,13 @@ def osd_window(name, kind="video"):
                        selected="Player.Muted", glyph_on="mute", pos=(MUTE_L, TR_T),
                        nav={"up": up, "down": "202", "left": left, "right": "9983"},
                        hit=OSD_HIT)
+    # left/right only act while the slider is disabled (passthrough): a
+    # focused horizontal slider uses them for its value
+    # (CGUISliderControl::OnAction), a disabled one is skipped by
+    # CGUIWindow::OnMove through its own actions, so the row ring holds
     body += slider(9983, VOL_L, TR_T + 6, VOL_W, TR_H - 12, "volume", "Player.Volume",
                    enable="!Player.Passthrough",
-                   nav={"up": up, "down": "202"})
+                   nav={"up": up, "down": "202", "left": "9982", "right": "9951"})
     # V-3: Hide closes the bar only; playback carries on underneath
     body += (f'      <control type="button" id="9951">\n'
              f"        <left>{HIDE_L}</left><top>{TR_T}</top><width>{HIDE_W}</width><height>{TR_H}</height>\n"
@@ -894,8 +990,10 @@ def osd_window(name, kind="video"):
              + "      </control>\n")
     worst = osd_row_worst(kind)
     assert max(worst.values()) <= OSD_W - 16, f"{name}: OSD text row can overflow: {worst}"
+    # no onleft/onright: both ends wrap inside the row
+    # (CGUIControlGroupList::AddControl); Up/Down reach row 1
     body += osd_buttons(202, TX_T, osd_rows(name, kind), "201",
-                        seek_targets(kind) + [(None, "201")], onright="9951")
+                        seek_targets(kind) + [(None, "201")])
     title = "$INFO[Player.Title]" if kind == "game" else "$VAR[NowPlayingVar]"
     # V-23: a remote's OK must not re-press whatever was focused last (Stop)
     return dialog(name, OSD_W, OSD_H, body, default="602", icon="icons24/audio.png",
@@ -990,9 +1088,15 @@ def seek_bar():
               f"        <left>{8 + 120 + 6}</left><top>0</top><width>96</width><height>{Hs}</height>\n"
               f"        <font>chrome</font><align>right</align><aligny>center</aligny>\n"
               f"        <label>{lab}</label>\n        <visible>{v}</visible>\n      </control>\n")
-    s += slider(401, sl, 8, sw, Hs - 16, None, None, visible="!VideoPlayer.Content(LiveTV)")
-    s += slider(403, sl, 8, sw, Hs - 16, None, None,
-                visible="VideoPlayer.Content(LiveTV)")
+    # progress, not slider: the dialog is modeless and never gets input
+    # (CGUIWindowManager::HandleAction passes only modal dialogs), so a
+    # slider's nib looked draggable and did nothing. CGUIProgressControl
+    # takes the same GUI_MSG_ITEM_SELECT percentage (OnMessage), and with
+    # no <info> UpdateInfo never overwrites it.
+    for cid, vis in ((401, "!VideoPlayer.Content(LiveTV)"), (403, "VideoPlayer.Content(LiveTV)")):
+        s += (f'      <control type="progress" id="{cid}">\n'
+              f"        <left>{sl}</left><top>8</top><width>{sw}</width><height>{Hs - 16}</height>\n"
+              f"        <visible>{vis}</visible>\n      </control>\n")
     s += (f"      <control type=\"label\">\n"
           f"        <left>{OSD_W - 8 - 96}</left><top>0</top><width>96</width><height>{Hs}</height>\n"
           f"        <font>chrome</font><aligny>center</aligny>\n"
@@ -1116,17 +1220,22 @@ def fullscreen_info():
             "      </control>\n")
     body += well(136, 62, 880, 118, "panel_sunken.png")
     body += ('      <control type="textbox">\n'
-             "        <left>144</left><top>68</top><width>842</width><height>106</height>\n"
+             "        <left>144</left><top>68</top><width>822</width><height>106</height>\n"
              "        <font>small</font><pagecontrol>61</pagecontrol>\n"
              "        <label>$INFO[VideoPlayer.Plot]</label>\n      </control>\n"
+             # T-7: 30 px with taller rows, like the other info plots
              '      <control type="scrollbar" id="61">\n'
-             "        <left>992</left><top>65</top><width>20</width><height>112</height>\n"
+             "        <right>12</right><top>65</top><height>112</height>\n" + info_sb_width() +
              "        <onleft>9013</onleft><onright>9013</onright><ondown>9013</ondown><onup>9013</onup>\n"
              "      </control>\n"
              '      <control type="label">\n'
-             "        <left>136</left><top>186</top><width>300</width><height>44</height>\n"
+             "        <left>136</left><top>186</top><width>240</width><height>44</height>\n"
              "        <font>chrome</font><aligny>center</aligny>\n"
-             "        <label>$INFO[Player.Time] / $INFO[Player.Duration]</label>\n      </control>\n")
+             "        <label>$INFO[Player.Time] / $INFO[Player.Duration]</label>\n      </control>\n"
+             # how far in, between the time and the buttons (V-14)
+             '      <control type="progress">\n'
+             "        <left>384</left><top>198</top><width>354</width><height>20</height>\n"
+             "        <info>Player.Progress</info>\n      </control>\n")
     body += osd_buttons(9013, 186, [
         (9011, 150, "$LOCALIZE[31806]", ["Dialog.Close(FullscreenInfo)", "ActivateWindow(PlayerProcessInfo)"], None),
         (9012, 110, "$LOCALIZE[15067]", ["Dialog.Close(FullscreenInfo)"], None),
@@ -1220,6 +1329,25 @@ def rds_info():
 # ====================================================== info dialogs
 INFO_XLC = "[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"
 
+def xlc_param(content, normal, xl, sp):
+    """An XLC / !XLC pair of value-carrying includes (sizepass's Size_*)."""
+    return (f'{sp}<include content="{content}" condition="{INFO_XLC}"><param name="v" value="{xl}" /></include>\n'
+            f'{sp}<include content="{content}" condition="!{INFO_XLC}"><param name="v" value="{normal}" /></include>\n')
+
+def xlc_height(h, sp):
+    """The Height_N / Height_N_XL pair (16 px taller under XLC)."""
+    return (f'{sp}<include content="Height_{h}_XL" condition="{INFO_XLC}" />\n'
+            f'{sp}<include content="Height_{h}" condition="!{INFO_XLC}" />\n')
+
+def xlc_hit(normal, xl, sp):
+    """A hit rect per row height: normal and xl are (x, y, w, h)."""
+    out = ""
+    for cond, r in ((INFO_XLC, xl), ("!" + INFO_XLC, normal)):
+        out += (f'{sp}<include content="Size_Hit" condition="{cond}">'
+                + "".join(f'<param name="{k}" value="{v}" />' for k, v in zip("xywh", r))
+                + "</include>\n")
+    return out
+
 def info_sb_width(indent=8):
     """A scrollbar width that grows for a finger (Media_SBWidth* live in
     Includes_Media.xml)."""
@@ -1246,7 +1374,13 @@ def info_dialog(name, ids=None):
     rows = INFO_BUTTONS[name]
     chunks = [rows[i:i + 4] for i in range(0, len(rows), 4)]
     gids = [9001 + i for i in range(len(chunks))]
-    body  = well(10, 36, 500, 260, "panel_sunken_grey.png")
+    # PVR (guide programme / recording): neither GUIDialogPVRGuideInfo nor
+    # GUIDialogPVRRecordingInfo fills a container 50, so there is no cast
+    # strip; the columns run down to the buttons instead, and the lines say
+    # what a programme needs: channel, date and time, episode, genre.
+    pvr = name == "DialogPVRInfo"
+    CH = 388 if pvr else 260                 # column height (36 .. 424 / 296)
+    body  = well(10, 36, 500, CH, "panel_sunken_grey.png")
     body += f"""      <control type="image">
         <left>20</left><top>46</top><width>150</width><height>220</height>
         <texture border="2">panel_raised.png</texture>
@@ -1261,41 +1395,45 @@ def info_dialog(name, ids=None):
         <font>bigbold</font><wrapmultiline>true</wrapmultiline>
         <label>$VAR[InfoTitleVar]</label>
       </control>
-      <control type="label">
-        <left>184</left><top>104</top><width>316</width><height>22</height>
-        <font>small</font><textcolor>textdim</textcolor>
-        <label>$INFO[ListItem.Year]  $INFO[ListItem.Duration]</label>
-      </control>
-      <control type="label">
-        <left>184</left><top>128</top><width>316</width><height>22</height>
-        <font>small</font><textcolor>textdim</textcolor>
-        <label>$INFO[ListItem.Genre]</label>
-      </control>
-      <control type="label">
-        <left>184</left><top>152</top><width>316</width><height>22</height>
-        <font>small</font><textcolor>textdim</textcolor>
-        <label>$INFO[ListItem.Rating]  $INFO[ListItem.Studio]$INFO[ListItem.Artist]</label>
-      </control>
 """
+    lines = (["$INFO[ListItem.ChannelNumberLabel,,  ]$INFO[ListItem.ChannelName]",
+              "$INFO[ListItem.StartDate,,  ]$INFO[ListItem.StartTime]$INFO[ListItem.EndTime, - ,]",
+              "$INFO[ListItem.EpisodeName]",
+              "$INFO[ListItem.Genre]",
+              "$INFO[ListItem.Duration]"] if pvr else
+             ["$INFO[ListItem.Year]  $INFO[ListItem.Duration]",
+              "$INFO[ListItem.Genre]",
+              "$INFO[ListItem.Rating]  $INFO[ListItem.Studio]$INFO[ListItem.Artist]"])
+    for k, lab in enumerate(lines):
+        body += (f'      <control type="label">\n'
+                 f"        <left>184</left><top>{104 + 24 * k}</top><width>316</width><height>22</height>\n"
+                 f"        <font>small</font><textcolor>textdim</textcolor>\n"
+                 f"        <label>{lab}</label>\n      </control>\n")
     # the plot: a textbox scrolls only through a pagecontrol, so give it a
     # scrollbar a finger can drag; it still scrolls by itself, except while
     # the scrollbar has the focus
-    body += well(520, 36, 370, 260, "panel_sunken.png")
+    # D-5: it scrolls by itself only with Skin settings > Scroll long
+    # descriptions on (the control's own <autoscroll> wins over Defaults')
+    below = gids[0] if pvr else 50
+    body += well(520, 36, 370, CH, "panel_sunken.png")
     body += f"""      <control type="textbox">
-        <left>528</left><top>44</top><width>322</width><height>244</height>
+        <left>528</left><top>44</top><width>322</width><height>{CH - 16}</height>
         <font>small</font>
         <pagecontrol>61</pagecontrol>
-        <autoscroll delay="6000" time="4000" repeat="8000">!Control.HasFocus(61)</autoscroll>
+        <autoscroll delay="6000" time="4000" repeat="8000">Skin.HasSetting(autoscroll) + !Control.HasFocus(61)</autoscroll>
         <label>$INFO[ListItem.Plot]$INFO[ListItem.Comment]</label>
       </control>
       <control type="scrollbar" id="61">
-        <right>14</right><top>44</top><height>244</height>
-{info_sb_width()}        <onup>{gids[-1]}</onup><ondown>50</ondown>
-        <onleft>50</onleft><onright>50</onright>
+        <right>14</right><top>44</top><height>{CH - 16}</height>
+{info_sb_width()}        <onup>{gids[-1]}</onup><ondown>{below}</ondown>
+        <onleft>{below}</onleft><onright>{below}</onright>
       </control>
 """
-    body += well(10, 304, 880, 120, "panel_sunken.png")
-    if music:
+    if not pvr:
+        body += well(10, 304, 880, 120, "panel_sunken.png")
+    if pvr:
+        pass
+    elif music:
         # album: its songs; artist: the discography. Full-width rows so a
         # title is not cut off after a few letters (GUIDialogMusicInfo binds
         # either list to 50; any container type works)
@@ -1388,13 +1526,18 @@ def info_dialog(name, ids=None):
              f"        <onup>{up}</onup><ondown>{down}</ondown>\n" + rowvis)
         for (cid, sid, *vis) in items:
             v = f"<visible>{vis[0]}</visible>" if vis else ""
-            # chrome font: these rows stay one line high in every fontset
+            # chrome font: these rows stay one line high in every fontset.
+            # T-6: the rows are stacked 4 px apart with 6 px between
+            # buttons, so a hit rect reaching half of each gap makes the
+            # whole block a target (the dialog has no room to grow them:
+            # 3 rows at 46 px would not fit 534)
             s += (f"        <control type=\"button\" id=\"{cid}\"><width>212</width><height>30</height>"
+                  f'<hitrect x="-3" y="-2" w="218" h="34" />'
                   f"<font>chrome</font><textoffsetx>4</textoffsetx><align>center</align>"
                   f"{info_label(sid)}{v}</control>\n")
         return s + "      </control>\n"
     for i, items in enumerate(chunks):
-        up = gids[i - 1] if i else 50
+        up = gids[i - 1] if i else (61 if pvr else 50)
         down = gids[i + 1] if i + 1 < len(gids) else 61
         body += row(gids[i], items, 434 + 34 * i, up, down)
     ids = {k: v for k, v in (ids or {}).items() if int(k) < 100 or int(k) == 140}
@@ -1481,7 +1624,7 @@ def addon_info_dialog():
         <left>18</left><top>220</top><width>830</width><height>134</height>
         <font>small</font>
         <pagecontrol>61</pagecontrol>
-        <autoscroll delay="6000" time="2500" repeat="6000">!Control.HasFocus(61)</autoscroll>
+        <autoscroll delay="6000" time="2500" repeat="6000">Skin.HasSetting(autoscroll) + !Control.HasFocus(61)</autoscroll>
         <!-- Kodi 21 exposes add-on details as ListItem.Addon* info labels;
              the old Addon.* item properties are always empty. -->
         <label>$INFO[ListItem.AddonDescription]$INFO[ListItem.AddonDisclaimer,[CR][CR]]$INFO[ListItem.AddonNews,[CR][CR]]</label>
@@ -1554,16 +1697,54 @@ def stubs(ids, placed):
     return out
 
 # ====================================================== keypads
+KB_ROWS = [9201, 9202, 9203, 9204, 9205, 9206]   # 4 letter rows, Shift/..., Done/...
+
+def row_nav(gids, sp):
+    """Up/Down between stacked horizontal grouplists, wrapping top to bottom.
+    Kodi has no spatial navigation: a horizontal grouplist hands its own
+    onup/ondown to every child (CGUIControlGroupList::AddControl), and a
+    grouplist that gets the focus gives it back to its last focused child.
+    Without these the keyboard and number pad rows could not be reached
+    from each other with a remote (neither dialog handles Up/Down)."""
+    return {g: f"{sp}<onup>{gids[i - 1]}</onup><ondown>{gids[(i + 1) % len(gids)]}</ondown>\n"
+            for i, g in enumerate(gids)}
+
 def keyboard_window(h=600):
     """h: the layout's screen height. 600 is xml/; tallpass.py calls this with
     768 for xml768/, where a logical pixel is also physically larger (9.7"
     4:3 against 7" 16:9), so the keys grow from 40 to 56 px: the only way to
-    type on a touch-only box. Same ids, order and navigation in both."""
+    type on a touch-only box. Same ids, order and navigation in both.
+    At 600 the keys grow to 56 px too with taller rows (Touch mode or Extra
+    large: the 7" panel's 40 px keys were the smallest targets anywhere,
+    and the Extra large 'big' font is 32 px): every row height and top is
+    an XLC include pair, and so is the box (450 px, inside the 534 frame)."""
     tall = h >= 768
-    key, pitch = (56, 60) if tall else (40, 44)       # letter keys
-    mod, act = (44, 44) if tall else (36, 34)          # Shift/... row, Done/... row
     ew = 54 if tall else 46                           # the text field's well
+    # (key row, letter pitch, Shift row, Done row) heights; XL = +16 each
+    norm = (56, 60, 44, 44) if tall else (40, 44, 36, 34)
+    sizes = {None: norm} if tall else {"!" + INFO_XLC: norm,
+                                        INFO_XLC: (56, 60, 52, 50)}
     rows = [range(100,113), range(120,133), range(140,153), range(160,173)]
+    top = 36 + ew + 10
+    def geo(fn, sp):
+        """fn(key, pitch, mod, act) -> {tag: value}; literal tags when one
+        size, else XLC pairs (Size_Top / Height_N includes)."""
+        vals = {c: fn(*v) for c, v in sizes.items()}
+        out = ""
+        for tag in next(iter(vals.values())):
+            if tall:
+                out += f"{sp}<{tag}>{vals[None][tag]}</{tag}>\n"
+            elif tag == "height":
+                out += xlc_height(vals["!" + INFO_XLC][tag], sp)
+                assert vals[INFO_XLC][tag] == vals["!" + INFO_XLC][tag] + 16
+            else:
+                out += xlc_param("Size_" + tag.capitalize(), vals["!" + INFO_XLC][tag], vals[INFO_XLC][tag], sp)
+        return out
+    def heights(k, p, m, a):
+        modrow = top + 4 * p
+        actrow = modrow + m + 6
+        return modrow, actrow, actrow + a + 10
+    nav = row_nav(KB_ROWS, "        ")
     body  = well(10, 36, 880, ew, "panel_sunken.png")
     # Kodi writes the heading into label 311 (GUIDialogKeyboardGeneric.cpp
     # CTL_LABEL_HEADING), never into id 1, so 311 sits on the title bar.
@@ -1579,45 +1760,73 @@ def keyboard_window(h=600):
       <control type="label" id="313"><left>-3000</left><top>0</top><width>200</width><height>24</height></control>
       <control type="label" id="314"><left>-3000</left><top>0</top><width>200</width><height>24</height></control>
 """
-    top = 36 + ew + 10
     for r, ids in enumerate(rows):
-        body += f"""      <control type="grouplist">
-        <left>14</left><top>{top + r*pitch}</top><width>876</width><height>{key}</height>
-        <orientation>horizontal</orientation><itemgap>4</itemgap>
-"""
+        gid = KB_ROWS[r]
+        body += (f'      <control type="grouplist" id="{gid}">\n        <left>14</left>\n'
+                 + geo(lambda k, p, m, a: {"top": top + r * p, "height": k}, "        ")
+                 + "        <width>876</width>\n"
+                 "        <orientation>horizontal</orientation><itemgap>4</itemgap>\n" + nav[gid])
         for cid in ids:
-            body += f"""        <control type="button" id="{cid}">
-          <width>62</width><height>{key}</height>
-          <font>big</font><align>center</align><textoffsetx>0</textoffsetx>
-        </control>
-"""
+            body += (f'        <control type="button" id="{cid}">\n          <width>62</width>\n'
+                     + geo(lambda k, p, m, a: {"height": k}, "          ")
+                     + "          <font>big</font><align>center</align><textoffsetx>0</textoffsetx>\n"
+                     "        </control>\n")
         body += "      </control>\n"
-    modrow = top + 4*pitch
-    actrow = modrow + mod + 6
-    body += f"""      <control type="grouplist">
-        <left>14</left><top>{modrow}</top><width>876</width><height>{mod}</height>
-        <orientation>horizontal</orientation><itemgap>4</itemgap>
-        <control type="radiobutton" id="302"><width>104</width><height>{mod}</height><font>chromebold</font><textoffsetx>4</textoffsetx><label>$LOCALIZE[20178]</label></control>
-        <control type="radiobutton" id="303"><width>136</width><height>{mod}</height><font>chromebold</font><textoffsetx>4</textoffsetx><label>$LOCALIZE[20179]</label></control>
-        <control type="radiobutton" id="304"><width>118</width><height>{mod}</height><font>chromebold</font><textoffsetx>4</textoffsetx><label>$LOCALIZE[20180]</label></control>
-        <control type="button" id="32"><width>160</width><height>{mod}</height><label>$LOCALIZE[31912]</label></control>
-        <control type="button" id="8"><width>96</width><height>{mod}</height><label>&lt;-</label></control>
-        <control type="button" id="305"><width>56</width><height>{mod}</height><label>&lt;</label></control>
-        <control type="button" id="306"><width>56</width><height>{mod}</height><label>&gt;</label></control>
-      </control>
-      <control type="grouplist">
-        <left>14</left><top>{actrow}</top><width>876</width><height>{act}</height>
-        <orientation>horizontal</orientation><align>center</align><itemgap>8</itemgap>
-        <control type="button" id="300"><width>170</width><height>{act}</height><label>$LOCALIZE[20177]</label></control>
-        <control type="button" id="301"><width>170</width><height>{act}</height><label>$LOCALIZE[222]</label></control>
-        <control type="button" id="308"><width>170</width><height>{act}</height><label>$LOCALIZE[192]</label></control>
-        <control type="button" id="309"><width>170</width><height>{act}</height><label>$LOCALIZE[31917]</label></control>
-        <control type="button" id="310"><width>120</width><height>{act}</height><label>$LOCALIZE[31918]</label></control>
-      </control>
-      <control type="button" id="307"><left>-3000</left><top>0</top><width>100</width><height>30</height></control>
-"""
-    return dialog("DialogKeyboard", 900, actrow + act + 10, body, default="300",
-                  icon="icons24/file.png", heading=False)
+    def mrow(gid, fn_top, fn_h, align, gap, buttons):
+        s = (f'      <control type="grouplist" id="{gid}">\n        <left>14</left>\n'
+             + geo(lambda k, p, m, a: {"top": fn_top(k, p, m, a), "height": fn_h(k, p, m, a)}, "        ")
+             + "        <width>876</width>\n"
+             f"        <orientation>horizontal</orientation>{align}<itemgap>{gap}</itemgap>\n" + nav[gid])
+        for kind, cid, w, rest in buttons:
+            s += (f'        <control type="{kind}" id="{cid}"><width>{w}</width>\n'
+                  + geo(lambda k, p, m, a: {"height": fn_h(k, p, m, a)}, "          ")
+                  + f"          {rest}</control>\n")
+        return s + "      </control>\n"
+    CB = "<font>chromebold</font><textoffsetx>4</textoffsetx>"
+    body += mrow(9205, lambda *v: heights(*v)[0], lambda k, p, m, a: m, "", 4, [
+        ("radiobutton", 302, 104, f"{CB}<label>$LOCALIZE[20178]</label>"),
+        ("radiobutton", 303, 136, f"{CB}<label>$LOCALIZE[20179]</label>"),
+        ("radiobutton", 304, 118, f"{CB}<label>$LOCALIZE[20180]</label>"),
+        ("button", 32, 160, "<label>$LOCALIZE[31912]</label>"),
+        ("button", 8, 96, "<label>&lt;-</label>"),
+        ("button", 305, 56, "<label>&lt;</label>"),
+        ("button", 306, 56, "<label>&gt;</label>")])
+    body += mrow(9206, lambda *v: heights(*v)[1], lambda k, p, m, a: a, "<align>center</align>", 8, [
+        ("button", 300, 170, "<label>$LOCALIZE[20177]</label>"),
+        ("button", 301, 170, "<label>$LOCALIZE[222]</label>"),
+        ("button", 308, 170, "<label>$LOCALIZE[192]</label>"),
+        ("button", 309, 170, "<label>$LOCALIZE[31917]</label>"),
+        ("button", 310, 120, "<label>$LOCALIZE[31918]</label>")])
+    body += '      <control type="button" id="307"><left>-3000</left><top>0</top><width>100</width><height>30</height></control>\n'
+    box = {c: heights(*v)[2] for c, v in sizes.items()}
+    HT = box[None] if tall else box["!" + INFO_XLC]
+    s = dialog("DialogKeyboard", 900, HT, body, default="300",
+               icon="icons24/file.png", heading=False)
+    if tall:
+        return s
+    assert box[INFO_XLC] <= 534, box
+    return box_heights(s, 900, HT, {c: v for c, v in box.items()})
+
+def box_heights(s, WD, HT, sizes):
+    """A dialog() whose box takes one height per condition ({cond: h}): the
+    group and Dialog_Box both become conditional includes. Kodi keeps only
+    the include whose condition holds when the window loads (CGUIIncludes),
+    and a font or Touch mode change reloads the skin."""
+    grp = f"      <width>{WD}</width><height>{HT}</height>\n"
+    assert s.count(grp) == 1
+    s = s.replace(grp, f"      <width>{WD}</width>\n" + "".join(
+        f'      <include content="Size_Height" condition="{cond}"><param name="v" value="{h}" /></include>\n'
+        for cond, h in sizes.items()))
+    i = s.index('      <include content="Dialog_Box">\n')
+    j = s.index("      </include>\n", i) + len("      </include>\n")
+    box = s[i:j]
+    pair = ""
+    for cond, h in sizes.items():
+        pair += (box.replace('<include content="Dialog_Box">', f'<include content="Dialog_Box" condition="{cond}">', 1)
+                    .replace(f'<param name="height" value="{HT}" />', f'<param name="height" value="{h}" />', 1))
+    return s[:i] + pair + s[j:]
+
+NUM_ROWS = [9211, 9212, 9213, 9214, 9215]
 
 def numeric_window():
     body  = well(10, 36, 340, 44, "panel_sunken.png")
@@ -1633,12 +1842,13 @@ def numeric_window():
     # string #7, "File manager". 12310-12319 are Kodi's own "0".."9".
     labels = {10 + n: f"$LOCALIZE[{12310 + n}]" for n in range(10)}
     labels.update({21: "$LOCALIZE[186]", 23: "&lt;-"})
+    nav = row_nav(NUM_ROWS, "        ")
     top = 92
     for r, row in enumerate(grid):
-        body += f"""      <control type="grouplist">
+        body += f"""      <control type="grouplist" id="{NUM_ROWS[r]}">
         <left>22</left><top>{top + r*54}</top><width>320</width><height>50</height>
         <orientation>horizontal</orientation><itemgap>6</itemgap>
-"""
+{nav[NUM_ROWS[r]]}"""
         for cid in row:
             body += f"""        <control type="button" id="{cid}">
           <width>100</width><height>50</height><font>big</font><align>center</align><textoffsetx>0</textoffsetx>
@@ -1646,11 +1856,14 @@ def numeric_window():
         </control>
 """
         body += "      </control>\n"
-    body += f"""      <control type="grouplist">
+    # 20/22 (previous / next field of a date, time or IP) are only clicked
+    # (GUIDialogNumeric.cpp OnMessage), never selected: plain buttons, not
+    # radiobuttons with a circle that never changes
+    body += f"""      <control type="grouplist" id="{NUM_ROWS[4]}">
         <left>22</left><top>{top + 4*54}</top><width>320</width><height>34</height>
         <orientation>horizontal</orientation><itemgap>6</itemgap>
-        <control type="radiobutton" id="20"><width>155</width><height>34</height><label>&lt;&lt;</label></control>
-        <control type="radiobutton" id="22"><width>155</width><height>34</height><label>&gt;&gt;</label></control>
+{nav[NUM_ROWS[4]]}        <control type="button" id="20"><width>155</width><height>34</height><hitrect x="-3" y="-2" w="161" h="38" /><label>&lt;&lt;</label></control>
+        <control type="button" id="22"><width>155</width><height>34</height><hitrect x="-3" y="-2" w="161" h="38" /><label>&gt;&gt;</label></control>
       </control>
 """
     return dialog("DialogNumeric", 360, top + 4*54 + 50, body, default="21",
@@ -1695,6 +1908,14 @@ def small_dialogs():
     # it). Only the title bar, whose boxes are live, is left alone. They come
     # first, so everything else gets a tap before them
     # (CGUIControlGroup::SendMouseEvent tries the last-rendered first).
+    # Touch mode only: with a real mouse, hovering beside the menu focused
+    # an invisible catcher and the next remote OK closed the menu (a mouse
+    # has right-click / Back). Inside the menu body the entries' hit rects
+    # (below) cover the 2 px gaps and the bar column of a one-page menu,
+    # so a near miss there picks the nearest entry instead of falling
+    # through to 9974 and closing the menu. Any button click closes this
+    # dialog (CGUIDialogContextMenu::OnMessage GUI_MSG_CLICKED), so an
+    # "inert" button would not help.
     F = 2048
     catchers = ""
     for cid, (l, t, w_, h_) in ((9971, (-F, -F, F, 2 * F)), (9972, (W, -F, F, 2 * F)),
@@ -1704,7 +1925,15 @@ def small_dialogs():
                      "      <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>\n"
                      "      <label></label>\n      <onclick>Action(close)</onclick>\n"
                      "      <onup>996</onup><ondown>996</ondown><onleft>996</onleft><onright>996</onright>\n"
+                     "      <visible>Skin.HasSetting(touchmode)</visible>\n"
                      "    </control>\n")
+    # entry hit rects: full row width (over the bar column; a visible 997
+    # is drawn after 996 and still wins) and 1 px into each 2 px gap. Kodi
+    # clones 1000 for every entry, hit rect included (CGUIControl copy).
+    hit1000 = "".join(
+        f'        <include content="Size_Hit" condition="{c}"><param name="x" value="0" /><param name="y" value="-1" />'
+        f'<param name="w" value="{BW}" /><param name="h" value="{h + 2}" /></include>\n'
+        for c, h in ((XLC, 46), ("!" + XLC, 30)))
     out["DialogContextMenu"] = (H + "<window>\n  <defaultcontrol>996</defaultcontrol>\n"
       "  <coordinates><left>0</left><top>0</top></coordinates>\n  <controls>\n"
       + catchers +
@@ -1729,7 +1958,7 @@ def small_dialogs():
       "      <onright>997</onright>\n"
       "      <control type=\"button\" id=\"1000\">\n"
       f"        <height>30</height>\n"
-      + xl_pair("Size_Width", BW, BWX, "        ") +
+      + xl_pair("Size_Width", BW, BWX, "        ") + hit1000 +
       "        <align>left</align><textoffsetx>12</textoffsetx>\n"
       "      </control>\n"
       "    </control>\n"
@@ -2053,7 +2282,7 @@ def button_menu():
 """
     return dialog("DialogButtonMenu", 460, 456, body, default="9000",
                   icon="icons24/settings.png", colour="accent1",
-                  heading=False)
+                  heading=False, outside="9000")
 
 
 def file_browser():
@@ -2148,14 +2377,24 @@ def file_browser():
         <onleft>450</onleft><onright>413</onright>
       </control>
       <control type="grouplist">
-        <left>13</left><top>404</top><width>874</width><height>32</height>
+        <left>13</left>
+""" + xlc_param("Size_Top", 404, 398, "        ") + xlc_height(32, "        ") + """        <width>874</width>
         <orientation>horizontal</orientation><align>center</align><itemgap>6</itemgap>
         <onup>450</onup>
-        <control type="button" id="413"><width>200</width><height>32</height><label>$LOCALIZE[186]</label></control>
-        <control type="button" id="414"><width>200</width><height>32</height><label>$LOCALIZE[222]</label></control>
-        <control type="button" id="415"><width>230</width><height>32</height><label>$LOCALIZE[20309]</label><visible>Control.IsEnabled(415)</visible></control>
-        <control type="togglebutton" id="416"><width>200</width><height>32</height><label>$LOCALIZE[749]</label>
-          <usealttexture></usealttexture>
+"""
+    # T-6: 48 px buttons under XLC (the row moves up 6 into the margin
+    # above it), and hit rects that reach half the 6 px gaps and the
+    # margins above and below, in both sizes
+    def fb_button(kind, cid, w, rest):
+        return (f'        <control type="{kind}" id="{cid}"><width>{w}</width>\n'
+                + xlc_height(32, "          ")
+                + xlc_hit((-3, -6, w + 6, 44), (-3, -4, w + 6, 56), "          ")
+                + f"          {rest}\n")
+    body += (fb_button("button", 413, 200, "<label>$LOCALIZE[186]</label></control>")
+             + fb_button("button", 414, 200, "<label>$LOCALIZE[222]</label></control>")
+             + fb_button("button", 415, 230, "<label>$LOCALIZE[20309]</label><visible>Control.IsEnabled(415)</visible></control>")
+             + fb_button("togglebutton", 416, 200, "<label>$LOCALIZE[749]</label>"))
+    body += """          <usealttexture></usealttexture>
           <alttexturefocus border="2" colordiffuse="select">select_bevel.png</alttexturefocus>
           <alttexturenofocus border="2" colordiffuse="facetint">button_down.png</alttexturenofocus>
           <visible>Control.IsEnabled(416)</visible>
@@ -2183,24 +2422,27 @@ def media_source():
       </control>
 """
     body += well(10, 60, 660, 180, "panel_sunken.png")
+    # 60 beside the path list, so a source with many paths shows that
+    # there are more (sizepass makes it 30 px with taller rows)
     body += """      <control type="list" id="10">
-        <left>16</left><top>66</top><width>648</width><height>168</height>
-        <onleft>11</onleft><onright>11</onright>
+        <left>16</left><top>66</top><width>624</width><height>168</height>
+        <onleft>11</onleft><onright>60</onright>
         <onup>10</onup><ondown>9011</ondown>
+        <pagecontrol>60</pagecontrol>
         <scrolltime tween="linear">0</scrolltime>
-        <itemlayout height="28" width="648">
+        <itemlayout height="28" width="624">
           <control type="label">
-            <left>8</left><top>0</top><width>632</width><height>28</height>
+            <left>8</left><top>0</top><width>608</width><height>28</height>
             <aligny>center</aligny><label>$INFO[ListItem.Label]</label>
           </control>
         </itemlayout>
-        <focusedlayout height="28" width="648">
+        <focusedlayout height="28" width="624">
           <control type="image">
-            <left>0</left><top>0</top><width>648</width><height>28</height>
+            <left>0</left><top>0</top><width>624</width><height>28</height>
             <texture>bar_blue.png</texture>
           </control>
           <control type="label">
-            <left>8</left><top>0</top><width>632</width><height>28</height>
+            <left>8</left><top>0</top><width>608</width><height>28</height>
             <font>bold</font><textcolor>textinv</textcolor>
             <aligny>center</aligny><label>$INFO[ListItem.Label]</label>
           </control>
@@ -2252,7 +2494,10 @@ def media_source():
              + btn(18, 280, 186, 12, 18) + btn(19, 280, 222, 12, 19) +
              '        </control>\n'
              '      </control>\n')
-    body += """      <control type="scrollbar" id="60"><left>-3000</left><top>0</top><width>18</width><height>100</height></control>
+    body += """      <control type="scrollbar" id="60">
+        <left>646</left><top>66</top><width>18</width><height>168</height>
+        <onleft>10</onleft><onright>11</onright><onup>10</onup><ondown>9011</ondown>
+      </control>
 """
     # themepass sets only the FIRST icon param to the registry's title-bar
     # icon (iconset.WINDOW_ICONS), so both Dialog_Box copies name it here
@@ -2379,7 +2624,7 @@ def system_info():
         <left>324</left><top>76</top><width>640</width><height>390</height>
         <font>small</font>
         <pagecontrol>60</pagecontrol>
-        <autoscroll delay="6000" time="4000" repeat="8000">!Control.HasFocus(60)</autoscroll>
+        <autoscroll delay="6000" time="4000" repeat="8000">Skin.HasSetting(autoscroll) + !Control.HasFocus(60)</autoscroll>
       </control>
       <control type="scrollbar" id="60">
         <left>976</left><top>76</top><width>18</width><height>390</height>
@@ -2539,12 +2784,42 @@ def fullscreen_video():
     (the buffering box, V-21) carries id 1, as in Estuary; never add an
     id-less control outside group 0 here."""
     return (H + "<window>\n  <controls>\n"
+      # full width: Kodi's sizing line (string 245, ~84 characters) is
+      # 672 px in the 8 px fonts and 1008 in the Extra large 12 px ones,
+      # so the labels also scroll whatever still does not fit
       "    <control type=\"group\" id=\"0\">\n"
-      "      <left>6</left><top>6</top><width>620</width><height>84</height>\n"
-      "      <include content=\"Win_Frame\"><param name=\"width\" value=\"620\" /><param name=\"height\" value=\"84\" /></include>\n"
-      "      <control type=\"label\" id=\"10\"><left>10</left><top>6</top><width>600</width><height>24</height><font>small</font></control>\n"
-      "      <control type=\"label\" id=\"11\"><left>10</left><top>30</top><width>600</width><height>24</height><font>small</font></control>\n"
-      "      <control type=\"label\" id=\"12\"><left>10</left><top>54</top><width>600</width><height>24</height><font>small</font></control>\n"
+      "      <left>6</left><top>6</top><width>1012</width><height>84</height>\n"
+      "      <include content=\"Win_Frame\"><param name=\"width\" value=\"1012\" /><param name=\"height\" value=\"84\" /></include>\n"
+      + "".join(f"      <control type=\"label\" id=\"{10 + i}\"><left>10</left><top>{6 + 24 * i}</top><width>992</width><height>24</height><font>small</font><scroll>true</scroll></control>\n"
+                for i in range(3))
+      + "    </control>\n"
+      # live TV channel preview (a swipe up/down or Up/Down): which channel
+      # and what is on; SelectChannel makes the previewed channel the
+      # current item, so the VideoPlayer labels name it. Every child
+      # carries id 2 (see above).
+      "    <control type=\"group\" id=\"2\">\n"
+      "      <left>6</left><top>6</top><width>1012</width><height>96</height>\n"
+      f"      <visible>{PREVIEW_ON}</visible>\n"
+      "      <control type=\"image\" id=\"2\">\n"
+      "        <left>0</left><top>0</top><width>1012</width><height>96</height>\n"
+      "        <texture border=\"2\" colordiffuse=\"facetint\">panel_raised.png</texture>\n"
+      "      </control>\n"
+      "      <control type=\"label\" id=\"2\">\n"
+      "        <left>12</left><top>6</top><width>988</width><height>28</height>\n"
+      "        <font>chromebold</font><aligny>center</aligny>\n"
+      "        <label>$INFO[VideoPlayer.ChannelNumberLabel,,  ]$INFO[VideoPlayer.ChannelName]</label>\n"
+      "      </control>\n"
+      "      <control type=\"label\" id=\"2\">\n"
+      "        <left>12</left><top>34</top><width>988</width><height>28</height>\n"
+      "        <font>chrome</font><aligny>center</aligny>\n"
+      "        <label>$INFO[VideoPlayer.Title]</label>\n"
+      "      </control>\n"
+      "      <control type=\"label\" id=\"2\">\n"
+      "        <left>12</left><top>62</top><width>988</width><height>28</height>\n"
+      "        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>\n"
+      "        <label>$LOCALIZE[31898]</label>\n"
+      "        <visible>Skin.HasSetting(touchmode)</visible>\n"
+      "      </control>\n"
       "    </control>\n"
       "    <control type=\"group\" id=\"1\">\n"
       "      <centerleft>50%</centerleft><centertop>50%</centertop><width>240</width><height>90</height>\n"
@@ -2583,13 +2858,17 @@ def timers():
       "  </timer>\n"
       "</timers>\n")
 
-def _slide_button(cid, left, glyphs, clicks, onleft, onright, w=72, h=52):
+def _slide_button(cid, left, glyphs, clicks, w=72, h=52):
     """A strip button with a 32 px glyph on it. glyphs: [(texture, visible)].
     The images come after the button so they draw on top of it; an image
-    never takes the mouse, so taps still reach the button underneath."""
+    never takes the mouse, so taps still reach the button underneath.
+    Pointer and touch only: CGUIWindowSlideShow::OnAction takes every arrow
+    (previous / next / pan) before focus navigation and the keymap turns
+    Select into Rotate, so a remote never focuses a strip button and
+    onleft/onright would be dead; remote users keep Kodi's own keys."""
     s  = f'        <control type="button" id="{cid}">\n'
     s += f"          <left>{left}</left><top>8</top><width>{w}</width><height>{h}</height>\n"
-    s += f"          <label></label><onleft>{onleft}</onleft><onright>{onright}</onright>\n"
+    s += f"          <label></label>\n"
     s += "".join(f"          <onclick>{c}</onclick>\n" for c in clicks)
     s += "        </control>\n"
     for tex, vis in glyphs:
@@ -2629,16 +2908,16 @@ def slideshow():
     W = 8 + 72 * 5 + 6 * 2 + 18 * 2 + 8     # prev play next | info | close
     x = [8, 86, 164, 254, 344]
     strip = (_slide_button(9801, x[0], [("prev", None)],
-                           ["Action(PreviousPicture)", restart], 9805, 9802)
+                           ["Action(PreviousPicture)", restart])
            + _slide_button(9802, x[1], [("pause", playing),
                                         ("play", f"![{playing}]")],
-                           ["Action(Pause)", restart], 9801, 9803)
+                           ["Action(Pause)", restart])
            + _slide_button(9803, x[2], [("next", None)],
-                           ["Action(NextPicture)", restart], 9802, 9804)
+                           ["Action(NextPicture)", restart])
            + _slide_button(9804, x[3], [("icons24/pictures_info.png", None)],
-                           [stop, "Action(Info)"], 9803, 9805)
+                           [stop, "Action(Info)"])
            + _slide_button(9805, x[4], [("icons24/exit.png", None)],
-                           [stop, "Action(Stop)"], 9804, 9801))
+                           [stop, "Action(Stop)"]))
     return (H + "<window>\n"
       "  <controls>\n"
       "    <!-- Tap anywhere on the picture: show the strip, or hide it again. -->\n"
@@ -2801,7 +3080,8 @@ def player_controls():
                        nav={"up": seek, "down": "202", "left": "201", "right": "9983"},
                        hit=OSD_HIT)
     body += slider(9983, 356, 152, 290, 36, "volume", "Player.Volume",
-                   enable="!Player.Passthrough", nav={"up": seek, "down": "202"})
+                   enable="!Player.Passthrough",
+                   nav={"up": seek, "down": "202", "left": "9982", "right": "201"})
     body += osd_buttons(202, 202, [
         (607, 140, "$LOCALIZE[191]", ["PlayerControl(Random)"], None, "Playlist.IsRandom"),
         (704, 150, "$VAR[OSDRepeatLabelVar]", ["PlayerControl(Repeat)"], None),
@@ -2810,7 +3090,7 @@ def player_controls():
                                      ("!Player.HasVideo", "ActivateWindow(MusicPlaylist)")], None),
         (9951, 100, "$LOCALIZE[15067]", ["Dialog.Close(PlayerControls)"], None),
     ], "201", seek[:1] + [(None, "201")], left=13, width=W - 26)
-    return dialog("PlayerControls", W, H_, body, default="602", default_always=True,
+    return dialog("PlayerControls", W, H_, body, default="602", default_always=True, outside="602",
                   icon="icons24/audio.png", heading=False, title="$LOCALIZE[31907]")
 
 # ====================================================== generic fallbacks
@@ -3341,13 +3621,15 @@ def screen_calibration():
     on touch a long press (touchscreen.xml: longpress = RightClick, which
     CGUIWindow::OnMouseEvent turns into ACTION_PREVIOUS_MENU when no control
     takes it) or a two-finger swipe left (Back). Label 31834 says so."""
-    def mover(cid, kind, w, h, tex, events, speed="acceleration=\"180\" maxvelocity=\"300\" resettimeout=\"200\" delta=\"1\""):
+    def mover(cid, kind, w, h, tex, events, speed="acceleration=\"180\" maxvelocity=\"300\" resettimeout=\"200\" delta=\"1\"",
+              border=None):
         ev = "".join(f'<eventconfig type="{e}" />' for e in events)
         ms = f"\n      <movingspeed {speed}>{ev}</movingspeed>" if events else ""
+        bd = f' border="{border}"' if border else ""
         return (f'    <control type="{kind}" id="{cid}">\n'
                 f"      <left>0</left><top>0</top><width>{w}</width><height>{h}</height>\n"
-                f'      <texturefocus colordiffuse="select">{tex}</texturefocus>\n'
-                f"      <texturenofocus>{tex}</texturenofocus>{ms}\n"
+                f'      <texturefocus{bd} colordiffuse="select">{tex}</texturefocus>\n'
+                f"      <texturenofocus{bd}>{tex}</texturenofocus>{ms}\n"
                 "    </control>\n")
     lab = lambda cid, t, font, label="", h=26, wrap=False: (
         f'    <control type="label"' + (f' id="{cid}"' if cid else "") + ">\n"
@@ -3365,7 +3647,8 @@ def screen_calibration():
     s += mover(8, "mover", 96, 96, "calibrate/cal_tl.png", ("up", "down", "left", "right"))
     s += mover(9, "mover", 96, 96, "calibrate/cal_br.png", ("up", "down", "left", "right"))
     s += mover(11, "resize", 500, 500, "calibrate/cal_ratio.png", ("left", "right"),
-               speed="acceleration=\"140\" maxvelocity=\"300\" resettimeout=\"180\" delta=\"1\"")
+               speed="acceleration=\"140\" maxvelocity=\"300\" resettimeout=\"180\" delta=\"1\"",
+               border=36)   # 9-slice: the ring's outline keeps its width (mkmedia)
     s += mover(10, "mover", 380, 90, "calibrate/cal_sub.png", ("up", "down"))
     s += mover(12, "mover", 100, 100, "calibrate/cal_reset.png", ())
     s += lab(None, 40, "bigbold", "$LOCALIZE[214]")
@@ -3515,6 +3798,7 @@ def subtitles_dialog():
       </control>
       <control type="button" id="160">
         <left>18</left><top>414</top><width>264</width><height>34</height>
+        <hitrect x="14" y="410" w="272" h="42" />
         <align>center</align><label>$LOCALIZE[137]</label>
         <onup>150</onup><ondown>150</ondown><onright>120</onright>
       </control>
@@ -3666,7 +3950,7 @@ def pvr_channels_osd():
     b += outside_taps(900, 500, "11")
     return dialog("DialogPVRChannelsOSD", 900, 500, b, default="11", dim=False,
                   icon="icons24/pvr_channels.png",
-                  title="$LOCALIZE[19019]$INFO[VideoPlayer.ChannelGroup, - ,]")
+                  title="$LOCALIZE[19019]$VAR[PVRGroupVar]")
 
 # ====================================================== TV / radio guide
 # Taller rows in Extra large fonts or Touch mode (sizepass.XLC). The epggrid is
@@ -3763,16 +4047,22 @@ def guide_window():
     because touch has no keys for them."""
     meta = INV["MyPVRGuide"]
     ids = {int(k): v for k, v in meta["ids"].items()}
-    CHW, GX, GY, GW, GH = 180, 171, 37, 812, 362     # grid inside its well
+    # The strip is 190 wide: Kodi relabels 28 "Group: <name>"
+    # (GUIWindowPVRBase.cpp UpdateButtons), and at 144 px a typical
+    # "Group: All channels" was cut off; 178 px in chromesmall holds 20+
+    # characters in every fontset. The grid gives up the 34 px.
+    SW = 190
+    CHW, GX, GY, GW, GH = 180, SW + 15, 37, 812 - (SW - 156), 362     # grid inside its well
     placed = {28, 50, 60}
-    b  = well(6, 34, 156, 494, "panel_sunken_grey.png")
+    b  = well(6, 34, SW, 494, "panel_sunken_grey.png")
     b += ("      <control type=\"grouplist\" id=\"9480\">\n"
-          "        <left>12</left><top>40</top><width>144</width><height>482</height>\n"
+          f"        <left>12</left><top>40</top><width>{SW - 12}</width><height>482</height>\n"
           "        <orientation>vertical</orientation><itemgap>2</itemgap>\n"
           "        <onup>9100</onup><ondown>9100</ondown><onleft>50</onleft><onright>50</onright>\n")
     for cid, lab, clicks in GUIDE_STRIP:
+        font = "chromesmall" if cid == 28 else "chrome"
         b += (f"        <control type=\"button\" id=\"{cid}\">\n"
-              f"          <width>144</width><height>30</height><font>chrome</font>\n"
+              f"          <width>{SW - 12}</width><height>30</height><font>{font}</font>\n"
               f"          <align>left</align><textoffsetx>6</textoffsetx>\n"
               f"          <label>{lab}</label>\n"
               + "".join(f"          <onclick>{a}</onclick>\n" for a in clicks) +
@@ -3977,24 +4267,10 @@ def pvr_guide_controls():
     s = dialog("DialogPVRGuideControls", WD, HT, b, default="602", heading=False,
                icon="icons24/pvr_controls.png", default_always=True, dim=False,
                anchor="bottom")
-    # the frame in two heights; Kodi keeps only the include whose condition
-    # holds when the window loads (CGUIIncludes), and a font or Touch mode
-    # change reloads the skin. The group (hung from the bottom edge) takes
-    # the same two heights, so the box sits on the screen's bottom edge in
-    # normal mode too instead of floating 48 px above it.
-    grp = f"      <width>{WD}</width><height>{HT}</height>\n"
-    assert s.count(grp) == 1
-    s = s.replace(grp, f"      <width>{WD}</width>\n" + "".join(
-        f'      <include content="Size_Height" condition="{cond}"><param name="v" value="{h}" /></include>\n'
-        for cond, (h, _) in sizes.items()))
-    i = s.index('      <include content="Dialog_Box">\n')
-    j = s.index("      </include>\n", i) + len("      </include>\n")
-    box = s[i:j]
-    pair = ""
-    for cond, (h, _) in sizes.items():
-        pair += (box.replace('<include content="Dialog_Box">', f'<include content="Dialog_Box" condition="{cond}">', 1)
-                    .replace(f'<param name="height" value="{HT}" />', f'<param name="height" value="{h}" />', 1))
-    return s[:i] + pair + s[j:]
+    # the frame in two heights. The group (hung from the bottom edge)
+    # takes the same two heights, so the box sits on the screen's bottom
+    # edge in normal mode too instead of floating 48 px above it.
+    return box_heights(s, WD, HT, {cond: h for cond, (h, _) in sizes.items()})
 
 # ====================================================== game controllers
 def _game_box(wd, ht, title, body, heading_id=None, boxes="dialog", down="3"):
@@ -4012,10 +4288,11 @@ def _game_box(wd, ht, title, body, heading_id=None, boxes="dialog", down="3"):
         s += f"        <param name=\"title\" value=\"{title}\" />\n"
     s += "      </include>\n"
     if heading_id:
-        s += (f"      <control type=\"label\" id=\"{heading_id}\">\n"
-              f"        <left>29</left><top>3</top><width>{inner-100}</width><height>26</height>\n"
-              "        <font>chromebold</font><textcolor>titletext</textcolor><aligny>center</aligny>\n"
-              "      </control>\n")
+        lab = (f"      <control type=\"label\" id=\"{heading_id}\">\n"
+               f"        <left>29</left><top>3</top><width>{inner-100}</width><height>26</height>\n"
+               "        <font>chromebold</font><textcolor>titletext</textcolor><aligny>center</aligny>\n"
+               "      </control>\n")
+        s += touch_headings(lab, wd) if boxes == "dialog" else lab
     return s + body + "    </control>\n"
 
 def game_controllers():
@@ -4127,6 +4404,7 @@ def game_controllers():
 """
     agents = f"""      <control type="button" id="3">
         <left>10</left><top>36</top><width>260</width><height>32</height>
+        <hitrect x="6" y="32" w="268" h="40" />
         <align>center</align><label>$LOCALIZE[35110]</label>
         <onclick>ActivateWindow(GamePorts)</onclick>
         <onright>7</onright><ondown>7</ondown><onup>18</onup>
@@ -4153,6 +4431,7 @@ def game_controllers():
       </control>
       <control type="button" id="18">
         <left>320</left><top>376</top><width>260</width><height>32</height>
+        <hitrect x="316" y="372" w="268" h="40" />
         <align>center</align><label>$LOCALIZE[186]</label>
         <onup>7</onup><ondown>3</ondown>
       </control>

@@ -34,19 +34,19 @@
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
       <control type="list" id="52">
-        <left>9</left><top>97</top><width>976</width><height>374</height>
+        <left>9</left><top>97</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="964" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="976" /></include><height>374</height>
         <onup>9000</onup><ondown>9000</ondown><onleft>52</onleft><onright>60</onright>
         <pagecontrol>60</pagecontrol>
-        <itemlayout height="72" width="976" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+        <itemlayout height="72" width="964" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image"><left>6</left><top>12</top><width>48</width><height>48</height><texture fallback="icons/person.png">$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>
           <control type="label"><left>66</left><top>12</top><width>900</width><height>26</height><font>bigbold</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
           <control type="label"><left>66</left><top>38</top><width>900</width><height>22</height><font>small</font><textcolor>textdim</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label2]</label></control>
         </itemlayout>
-        <focusedlayout height="72" width="976" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <control type="image"><left>0</left><top>0</top><width>976</width><height>72</height><texture colordiffuse="select">fill.png</texture></control>
+        <focusedlayout height="72" width="964" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image"><left>0</left><top>0</top><width>964</width><height>72</height><texture colordiffuse="select">fill.png</texture></control>
           <control type="image"><left>6</left><top>12</top><width>48</width><height>48</height><texture fallback="icons/person.png">$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>
-          <control type="label"><left>66</left><top>12</top><width>900</width><height>26</height><font>bigbold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
-          <control type="label"><left>66</left><top>38</top><width>900</width><height>22</height><font>small</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label2]</label></control>
+          <control type="label"><left>66</left><top>12</top><width>900</width><height>26</height><font>bigbold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>66</left><top>38</top><width>900</width><height>22</height><font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny><label>$INFO[ListItem.Label2]</label></control>
         </focusedlayout>
       <itemlayout height="56" width="976">
           <control type="image"><left>6</left><top>4</top><width>48</width><height>48</height><texture fallback="icons/person.png">$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>
@@ -56,12 +56,12 @@
         <focusedlayout height="56" width="976">
           <control type="image"><left>0</left><top>0</top><width>976</width><height>56</height><texture colordiffuse="select">fill.png</texture></control>
           <control type="image"><left>6</left><top>4</top><width>48</width><height>48</height><texture fallback="icons/person.png">$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>
-          <control type="label"><left>66</left><top>4</top><width>900</width><height>26</height><font>bigbold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
-          <control type="label"><left>66</left><top>30</top><width>900</width><height>22</height><font>small</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label2]</label></control>
+          <control type="label"><left>66</left><top>4</top><width>900</width><height>26</height><font>bigbold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>66</left><top>30</top><width>900</width><height>22</height><font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny><label>$INFO[ListItem.Label2]</label></control>
         </focusedlayout>
       </control>
       <control type="scrollbar" id="60">
-        <left>985</left><top>97</top><width>18</width><height>374</height>
+        <include content="Size_Left" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="973" /></include><include content="Size_Left" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="985" /></include><top>97</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="18" /></include><height>374</height>
         <onleft>52</onleft><onright>52</onright>
       </control>
       <control type="grouplist" id="9000">

@@ -6,6 +6,14 @@
       <left>0</left><top>0</top><width>1024</width><height>768</height>
       <texture>dim.png</texture>
     </control>
+    <control type="button" id="9989">
+      <left>0</left><top>0</top><width>1024</width><height>768</height>
+      <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>
+      <label/>
+      <onclick>Action(Back)</onclick>
+      <onup>9000</onup><ondown>9000</ondown>
+      <onleft>9000</onleft><onright>9000</onright>
+    </control>
     <control type="group">
       <right>4</right><top>736</top><width>116</width><height>32</height>
       <visible>Skin.HasSetting(touchmode)</visible>
@@ -32,7 +40,7 @@
       </control>
       <control type="label">
         <left>30</left><top>0</top><width>80</width><height>32</height>
-        <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+        <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
         <label>$LOCALIZE[31994]</label>
         <visible>Control.HasFocus(9108)</visible>
       </control>
@@ -211,7 +219,7 @@
           </control>
           <control type="label">
             <left>30</left><top>0</top><width>368</width><height>50</height>
-            <font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+            <font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
             <label>$INFO[ListItem.Label]</label>
           </control>
         </focusedlayout>
@@ -237,7 +245,7 @@
           </control>
           <control type="label">
             <left>30</left><top>0</top><width>368</width><height>34</height>
-            <font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+            <font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
             <label>$INFO[ListItem.Label]</label>
           </control>
         </focusedlayout>

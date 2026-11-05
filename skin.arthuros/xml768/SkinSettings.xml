@@ -26,7 +26,7 @@
         <left>27</left><top>0</top><width>520</width><height>26</height>
         <font>chromebold</font><textcolor>text</textcolor>
         <align>left</align><aligny>center</aligny>
-        <label>Kodi $INFO[System.BuildVersionShort] - ArthurOS 1.2 (v0.9.6)</label>
+        <label>Kodi $INFO[System.BuildVersionShort] - ArthurOS 1.2 (v0.9.7)</label>
       </control>
 
       <!-- right-hand status cluster, anchored to the right edge -->
@@ -237,7 +237,7 @@
       <control type="label">
         <left>20</left><top>72</top><width>960</width><height>22</height>
         <font>small</font><textcolor>textdim</textcolor>
-        <label>v0.9.6  -  1024x768  -  $VAR[SkinFontVar]  -  $LOCALIZE[31948]</label>
+        <label>v0.9.7  -  1024x768  -  $VAR[SkinFontVar]  -  $LOCALIZE[31948]</label>
       </control>
       <control type="image">
         <left>20</left><top>102</top><width>960</width><height>1</height>
@@ -288,8 +288,13 @@
           <onclick>Skin.ToggleSetting(hideclock)</onclick>
           <selected>Skin.HasSetting(hideclock)</selected>
         </control>
-        <!-- the only reader of autoscroll is the textbox default in Defaults.xml:
-             long descriptions scroll by themselves (list labels never did) -->
+        <!-- autoscroll is read by the textbox default in Defaults.xml and by
+             every long description that sets its own <autoscroll> (plots in
+             the info dialogs, the browser info panel, add-on info, System
+             information: "Skin.HasSetting(autoscroll) + ..."). Only a
+             confirmation message (DialogConfirm) and this page's help
+             scroll regardless: they must be readable whatever the setting.
+             List labels never scroll. -->
         <control type="radiobutton" id="103">
           <width>530</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
@@ -451,7 +456,7 @@
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>72</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
           <label>$LOCALIZE[335]</label>
           <visible>Control.HasFocus(9100)</visible>
         </control>
@@ -481,7 +486,7 @@
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>68</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
           <label>$LOCALIZE[33060]</label>
           <visible>Control.HasFocus(9106)</visible>
         </control>
@@ -515,7 +520,7 @@
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>168</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
           <label>$VAR[NowPlayingVar]</label>
           <visible>Control.HasFocus(9101)</visible>
         </control>
@@ -544,7 +549,7 @@
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>118</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
           <label>$LOCALIZE[31907]</label>
           <visible>Control.HasFocus(9102)</visible>
         </control>
@@ -577,7 +582,7 @@
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>150</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
           <label>$INFO[Skin.String(arthur.mintitle)]</label>
           <visible>Control.HasFocus(9104)</visible>
         </control>
@@ -605,7 +610,7 @@
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>108</width><height>24</height>
-          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
           <label>$LOCALIZE[5]</label>
           <visible>Control.HasFocus(9103)</visible>
         </control>
@@ -637,7 +642,7 @@
       </control>
       <control type="label">
         <left>30</left><top>0</top><width>80</width><height>32</height>
-        <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+        <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
         <label>$LOCALIZE[31994]</label>
         <visible>Control.HasFocus(9105)</visible>
       </control>
@@ -667,6 +672,7 @@
       </control>
       <control type="button" id="9107">
         <left>0</left><top>0</top><width>116</width><height>32</height>
+        <hitrect x="-2" y="0" w="122" h="32"/>
         <label/>
         <onup>100</onup><onleft>100</onleft>
         <!-- also the way out of the menu bar's volume button: 9109 -> hidden
@@ -686,7 +692,7 @@
       </control>
       <control type="label">
         <left>30</left><top>0</top><width>80</width><height>32</height>
-        <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+        <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
         <label>$LOCALIZE[31994]</label>
         <visible>Control.HasFocus(9107)</visible>
       </control>

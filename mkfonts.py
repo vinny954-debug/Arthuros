@@ -16,7 +16,7 @@ Tamzen covers Latin-1 only (U+0020-00FF, minus a few signs). Kodi has no
 per-glyph fallback (GUIFontTTF looks every letter up in the one face), so
 anything else draws as nothing. This script therefore also patches the shipped
 Tamzen*.ttf in place (idempotent, see patch_face): curly quotes, dashes,
-ellipsis and bullet now draw in every Tamzen fontset. Polish, Greek, Cyrillic,
+ellipsis, bullet, euro and trademark now draw in every Tamzen fontset. Polish, Greek, Cyrillic,
 CJK still need the extra "Unicode" fontset, which maps every name onto
 Kodi's own arial.ttf (DejaVu Sans plus a CJK fallback). The skin does not ship it: GUIFontManager::LoadTTF
 looks for a font file in the skin's fonts/ folder, then special://home/media/
@@ -62,7 +62,8 @@ for cp in (0x201C, 0x201D, 0x201E, 0x201F, 0x2033):
     ALIAS[cp] = '"'                      # double quotes, double prime
 ALIAS.update({0x201A: ",", 0x2039: "<", 0x203A: ">", 0x2016: "|", 0x2017: "_",
               0x2002: " ", 0x2003: " ", 0x2009: " ", 0x202F: " "})
-DRAWN = {0x2026: "uni2026", 0x2022: "uni2022"}   # drawn below
+DRAWN = {0x2026: "uni2026", 0x2022: "uni2022",   # drawn below
+         0x20AC: "Euro", 0x2122: "trademark"}     # from the face's own C / at cap height
 DRAWN_ALIAS = {0x00B7: 0x2022}                    # middle dot -> bullet glyph
 
 def _tables(data):
@@ -168,6 +169,59 @@ def _draw(t, m, upem, cellh):
     bul = [(bx * px, by * px, (bx + b) * px, (by + b) * px)]
     return {0x2026: ell, 0x2022: bul}
 
+def _pixels(path, cellh, ch):
+    """The face's own glyph as {(x, row)} pixels at its native size, row 0
+    the pixel row just above the baseline, counting up (Pillow renders the
+    outline squares exactly at ppem = cell height)."""
+    from PIL import Image, ImageDraw, ImageFont
+    f = ImageFont.truetype(path, cellh)
+    im = Image.new("L", (cellh * 2, cellh * 2), 0)
+    ImageDraw.Draw(im).text((0, cellh), ch, font=f, fill=255, anchor="ls")
+    return {(x, cellh - 1 - y) for y in range(im.height) for x in range(im.width)
+            if im.getpixel((x, y)) > 127}
+
+def _runs(pix, px):
+    """Pixels -> one rectangle per horizontal run (font units)."""
+    rects = []
+    for r in sorted({y for _, y in pix}):
+        xs = sorted(x for x, y in pix if y == r)
+        start = prev = xs[0]
+        for x in xs[1:] + [None]:
+            if x is not None and x == prev + 1:
+                prev = x
+                continue
+            rects.append((start * px, r * px, (prev + 1) * px, (r + 1) * px))
+            if x is not None:
+                start = prev = x
+    return rects
+
+def _letters(path, upem, cellw, cellh):
+    """C-5: the euro and trademark signs (YouTube / Plex titles), drawn in
+    pixels so they stay exact at every size.
+    Euro: the face's own C moved one pixel right, with two bars through
+    the middle that start at the left edge of the cell.
+    TM: a 3 px T and a 5 px M at the top of the capitals, 4 rows high
+    (5 from the 16 px cell up); 10 px advance (a narrow cell holds no
+    readable TM)."""
+    px = upem // cellh
+    c = _pixels(path, cellh, "C")
+    x0, x1 = min(x for x, _ in c), max(x for x, _ in c)
+    shift = 1 if x1 + 1 < cellw else 0
+    c = {(x + shift, y) for x, y in c}
+    lo, hi = min(y for _, y in c), max(y for _, y in c)
+    h = hi - lo + 1
+    stem = max(x for x, y in c if y == lo + h // 2)    # right edge of the stem, mid-height
+    end = stem + (2 if cellw >= 8 else 1)
+    bars = {hi - (h // 2 - 1 - (h >= 10)), hi - (h // 2 + 1)}   # rows from the top, mirrored
+    euro = c | {(x, y) for y in bars for x in range(0, end + 1)}
+    t = _pixels(path, cellh, "T")
+    top = max(y for _, y in t)
+    n = 4 if cellh <= 14 else 5
+    T = ["###", ".#.", ".#.", ".#.", ".#."][:n]
+    M = ["#...#", "##.##", "#.#.#", "#...#", "#...#"][:n]
+    tm = {(x, top - r) for r in range(n) for x, ch in enumerate(T[r] + "." + M[r]) if ch == "#"}
+    return {0x20AC: (_runs(euro, px), None), 0x2122: (_runs(tm, px), 10 * px)}
+
 def patch_face(path):
     data = open(path, "rb").read()
     t = _tables(data)
@@ -175,15 +229,18 @@ def patch_face(path):
     new = dict(m)
     upem = struct.unpack(">H", t["head"][18:20])[0]
     cellh = int(os.path.basename(path)[6:-5].split("x")[1])
-    drawn = _draw(t, m, upem, cellh)
+    drawn = {cp: (r, None) for cp, r in _draw(t, m, upem, cellh).items()}
+    cellw = int(os.path.basename(path)[6:-5].split("x")[0])
+    drawn.update(_letters(path, upem, cellw, cellh))
     ng = struct.unpack(">H", t["maxp"][4:6])[0]
     nhm = struct.unpack(">H", t["hhea"][34:36])[0]
     assert nhm == ng and struct.unpack(">h", t["head"][50:52])[0] == 1, path
     for cp, name in DRAWN.items():
         if cp in new:
             continue
-        g, lsb = _rects_glyph(drawn[cp])
-        adv = _adv(t, m[ord(".")])
+        rects, adv = drawn[cp]
+        g, lsb = _rects_glyph(rects)
+        adv = adv or _adv(t, m[ord(".")])
         end = struct.unpack(">I", t["loca"][4 * ng:4 * ng + 4])[0]
         t["glyf"] = t["glyf"][:end] + g
         t["loca"] = t["loca"][:4 * ng + 4] + struct.pack(">I", len(t["glyf"]))

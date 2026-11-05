@@ -39,7 +39,7 @@
       <include content="WinTitle_Right_Touch" condition="Skin.HasSetting(touchmode)"/><top>0</top><height>26</height>
           <align>left</align><aligny>center</aligny>
           <font>chromebold</font><textcolor>titletext</textcolor>
-          <label>$LOCALIZE[19019]$INFO[VideoPlayer.ChannelGroup, - ,]</label>
+          <label>$LOCALIZE[19019]$VAR[PVRGroupVar]</label>
         </control>
 
         <control type="label">
@@ -150,10 +150,10 @@
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
       <control type="list" id="11">
-        <left>13</left><top>39</top><width>856</width><height>346</height>
+        <left>13</left><top>39</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="844"/></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="856"/></include><height>346</height>
         <onleft>11</onleft><onright>60</onright><onup>11</onup><ondown>11</ondown>
         <pagecontrol>60</pagecontrol><scrolltime tween="linear">0</scrolltime>
-        <itemlayout height="64" width="856" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+        <itemlayout height="64" width="844" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image"><left>92</left><top>8</top><width>48</width><height>48</height><texture fallback="DefaultTVShows.png">$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>
           <control type="progress"><left>596</left><top>12</top><width>250</width><height>12</height><info>ListItem.Progress</info><visible>!String.IsEmpty(ListItem.Title)</visible></control>
           <control type="label"><left>4</left><top>0</top><width>76</width><height>64</height><font>normal</font><align>right</align><aligny>center</aligny><textcolor>text</textcolor><label>$INFO[ListItem.ChannelNumberLabel]</label></control>
@@ -161,9 +161,9 @@
           <control type="label"><left>148</left><top>33</top><width>432</width><height>28</height><font>small</font><aligny>center</aligny><textcolor>textdim</textcolor><label>$INFO[ListItem.Title]</label></control>
           <control type="label"><left>596</left><top>33</top><width>250</width><height>28</height><font>small</font><align>right</align><aligny>center</aligny><textcolor>textdim</textcolor><label>$INFO[ListItem.StartTime]$INFO[ListItem.EndTime, - ,]</label></control>
         </itemlayout>
-        <focusedlayout height="64" width="856" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <control type="image"><left>0</left><top>0</top><width>856</width><height>64</height><texture colordiffuse="select">fill.png</texture><visible>Control.HasFocus(11)</visible></control>
-          <control type="image"><left>0</left><top>0</top><width>856</width><height>64</height><texture border="4" colordiffuse="select">select_ring.png</texture><visible>!Control.HasFocus(11)</visible></control>
+        <focusedlayout height="64" width="844" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image"><left>0</left><top>0</top><width>844</width><height>64</height><texture colordiffuse="select">fill.png</texture><visible>Control.HasFocus(11)</visible></control>
+          <control type="image"><left>0</left><top>0</top><width>844</width><height>64</height><texture border="4" colordiffuse="select">select_ring.png</texture><visible>!Control.HasFocus(11)</visible></control>
           <control type="image"><left>92</left><top>8</top><width>48</width><height>48</height><texture fallback="DefaultTVShows.png">$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>
           <control type="progress"><left>596</left><top>12</top><width>250</width><height>12</height><info>ListItem.Progress</info><visible>!String.IsEmpty(ListItem.Title)</visible></control>
           <control type="label"><left>4</left><top>0</top><width>76</width><height>64</height><font>bold</font><align>right</align><aligny>center</aligny><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><label>$INFO[ListItem.ChannelNumberLabel]</label><visible>Control.HasFocus(11)</visible></control>
@@ -199,7 +199,7 @@
         </focusedlayout>
       </control>
       <control type="scrollbar" id="60">
-        <left>869</left><top>39</top><width>18</width><height>346</height>
+        <include content="Size_Left" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="857"/></include><include content="Size_Left" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="869"/></include><top>39</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30"/></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="18"/></include><height>346</height>
         <onleft>11</onleft><onright>9811</onright>
       </control>
       <control type="image">

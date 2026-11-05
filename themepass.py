@@ -64,6 +64,29 @@ for p in sorted(glob.glob(XML + "/*.xml")):
     if n != s:
         open(p, "w").write(n); changed += 1
 
+# C-1: a list label drawn in textinv (on the select bar) needs its own
+# selectedcolor. Kodi switches a list item's labels to selectedcolor while
+# the item is selected OR playing (CGUIListItemLayout::Process ->
+# SetState(IsSelected || m_isPlaying)), and Defaults.xml's is "marked":
+# the playing channel in the guide, the item being moved in the PVR group
+# manager, the profile under a context menu... read dark red on the select
+# colour. Every label/fadelabel/textbox whose textcolor is textinv and that
+# names no selectedcolor gets selectedcolor textinv (outside a list it has
+# no effect). Labels hold no child controls, so a block ends at the first
+# </control>.
+INV = re.compile(r'(<control type="(?:label|fadelabel|textbox)"[^>]*>)(.*?)(</control>)', re.S)
+def inv(m):
+    body = m.group(2)
+    if "<textcolor>textinv</textcolor>" not in body or "<selectedcolor>" in body:
+        return m.group(0)
+    return m.group(1) + body.replace("<textcolor>textinv</textcolor>",
+                                     "<textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>", 1) + m.group(3)
+for p in sorted(glob.glob(XML + "/*.xml")):
+    s = open(p).read()
+    n = INV.sub(inv, s)
+    if n != s:
+        open(p, "w").write(n); changed += 1
+
 # anything still pointing at a baked-colour bar is a miss worth knowing about
 left = []
 for p in sorted(glob.glob(XML + "/*.xml")):

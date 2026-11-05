@@ -15,7 +15,7 @@
         <param name="title" value="$VAR[InfoTitleVar]" />
       </include>
       <control type="image">
-        <left>10</left><top>36</top><width>500</width><height>260</height>
+        <left>10</left><top>36</top><width>500</width><height>388</height>
         <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
       </control>
       <control type="image">
@@ -35,89 +35,63 @@
       <control type="label">
         <left>184</left><top>104</top><width>316</width><height>22</height>
         <font>small</font><textcolor>textdim</textcolor>
-        <label>$INFO[ListItem.Year]  $INFO[ListItem.Duration]</label>
+        <label>$INFO[ListItem.ChannelNumberLabel,,  ]$INFO[ListItem.ChannelName]</label>
       </control>
       <control type="label">
         <left>184</left><top>128</top><width>316</width><height>22</height>
         <font>small</font><textcolor>textdim</textcolor>
-        <label>$INFO[ListItem.Genre]</label>
+        <label>$INFO[ListItem.StartDate,,  ]$INFO[ListItem.StartTime]$INFO[ListItem.EndTime, - ,]</label>
       </control>
       <control type="label">
         <left>184</left><top>152</top><width>316</width><height>22</height>
         <font>small</font><textcolor>textdim</textcolor>
-        <label>$INFO[ListItem.Rating]  $INFO[ListItem.Studio]$INFO[ListItem.Artist]</label>
+        <label>$INFO[ListItem.EpisodeName]</label>
+      </control>
+      <control type="label">
+        <left>184</left><top>176</top><width>316</width><height>22</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$INFO[ListItem.Genre]</label>
+      </control>
+      <control type="label">
+        <left>184</left><top>200</top><width>316</width><height>22</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$INFO[ListItem.Duration]</label>
       </control>
       <control type="image">
-        <left>520</left><top>36</top><width>370</width><height>260</height>
+        <left>520</left><top>36</top><width>370</width><height>388</height>
         <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
       </control>
       <control type="textbox">
-        <left>528</left><top>44</top><width>322</width><height>244</height>
+        <left>528</left><top>44</top><width>322</width><height>372</height>
         <font>small</font>
         <pagecontrol>61</pagecontrol>
-        <autoscroll delay="6000" time="4000" repeat="8000">!Control.HasFocus(61)</autoscroll>
+        <autoscroll delay="6000" time="4000" repeat="8000">Skin.HasSetting(autoscroll) + !Control.HasFocus(61)</autoscroll>
         <label>$INFO[ListItem.Plot]$INFO[ListItem.Comment]</label>
       </control>
       <control type="scrollbar" id="61">
-        <right>14</right><top>44</top><height>244</height>
+        <right>14</right><top>44</top><height>372</height>
         <include content="Media_SBWidth_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
         <include content="Media_SBWidth" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
-        <onup>9002</onup><ondown>50</ondown>
-        <onleft>50</onleft><onright>50</onright>
-      </control>
-      <control type="image">
-        <left>10</left><top>304</top><width>880</width><height>120</height>
-        <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
-      </control>
-      <control type="panel" id="50">
-        <left>16</left><top>310</top><width>868</width><height>108</height>
-        <onup>61</onup><ondown>9001</ondown>
-        <itemlayout height="108" width="90">
-          <control type="image">
-            <left>4</left><top>2</top><width>80</width><height>80</height>
-            <texture fallback="DefaultActor.png">$INFO[ListItem.Icon]</texture>
-            <aspectratio>keep</aspectratio>
-          </control>
-          <control type="label">
-            <left>0</left><top>84</top><width>88</width><height>22</height>
-            <font>tiny</font><align>center</align>
-            <label>$INFO[ListItem.Label]</label>
-          </control>
-        </itemlayout>
-        <focusedlayout height="108" width="90">
-          <control type="image">
-            <left>0</left><top>0</top><width>88</width><height>106</height>
-            <texture border="4" colordiffuse="select">select_ring.png</texture>
-          </control>
-          <control type="image">
-            <left>4</left><top>2</top><width>80</width><height>80</height>
-            <texture fallback="DefaultActor.png">$INFO[ListItem.Icon]</texture>
-            <aspectratio>keep</aspectratio>
-          </control>
-          <control type="label">
-            <left>0</left><top>84</top><width>88</width><height>22</height>
-            <font>tiny</font><align>center</align>
-            <label>$INFO[ListItem.Label]</label>
-          </control>
-        </focusedlayout>
+        <onup>9002</onup><ondown>9001</ondown>
+        <onleft>9001</onleft><onright>9001</onright>
       </control>
       <control type="grouplist" id="9001">
         <left>13</left><top>434</top><width>874</width><height>30</height>
         <orientation>horizontal</orientation><align>center</align><itemgap>6</itemgap>
-        <onup>50</onup><ondown>9002</ondown>
-        <control type="button" id="10"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[19190]</label><visible>Window.IsActive(PVRGuideInfo)</visible></control>
-        <control type="button" id="8"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[19687]</label></control>
-        <control type="button" id="5"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[19000]</label><visible>Window.IsActive(PVRGuideInfo)</visible></control>
-        <control type="button" id="6"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[264]</label><visible>Window.IsActive(PVRGuideInfo)</visible></control>
+        <onup>61</onup><ondown>9002</ondown>
+        <control type="button" id="10"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34" /><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[19190]</label><visible>Window.IsActive(PVRGuideInfo)</visible></control>
+        <control type="button" id="8"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34" /><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[19687]</label></control>
+        <control type="button" id="5"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34" /><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[19000]</label><visible>Window.IsActive(PVRGuideInfo)</visible></control>
+        <control type="button" id="6"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34" /><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[264]</label><visible>Window.IsActive(PVRGuideInfo)</visible></control>
       </control>
       <control type="grouplist" id="9002">
         <left>13</left><top>468</top><width>874</width><height>30</height>
         <orientation>horizontal</orientation><align>center</align><itemgap>6</itemgap>
         <onup>9001</onup><ondown>61</ondown>
-        <control type="button" id="9"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[19061]</label><visible>Window.IsActive(PVRGuideInfo)</visible></control>
-        <control type="button" id="11"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[826]</label><visible>Window.IsActive(PVRGuideInfo)</visible></control>
-        <control type="button" id="4"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[19003]</label></control>
-        <control type="button" id="7"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[186]</label></control>
+        <control type="button" id="9"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34" /><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[19061]</label><visible>Window.IsActive(PVRGuideInfo)</visible></control>
+        <control type="button" id="11"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34" /><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[826]</label><visible>Window.IsActive(PVRGuideInfo)</visible></control>
+        <control type="button" id="4"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34" /><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[19003]</label></control>
+        <control type="button" id="7"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34" /><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[186]</label></control>
       </control>
     </control>
   </controls>

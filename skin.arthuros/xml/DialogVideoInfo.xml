@@ -55,7 +55,7 @@
         <left>528</left><top>44</top><width>322</width><height>244</height>
         <font>small</font>
         <pagecontrol>61</pagecontrol>
-        <autoscroll delay="6000" time="4000" repeat="8000">!Control.HasFocus(61)</autoscroll>
+        <autoscroll delay="6000" time="4000" repeat="8000">Skin.HasSetting(autoscroll) + !Control.HasFocus(61)</autoscroll>
         <label>$INFO[ListItem.Plot]$INFO[ListItem.Comment]</label>
       </control>
       <control type="scrollbar" id="61">
@@ -105,28 +105,28 @@
         <left>13</left><top>434</top><width>874</width><height>30</height>
         <orientation>horizontal</orientation><align>center</align><itemgap>6</itemgap>
         <onup>50</onup><ondown>9002</ondown>
-        <control type="button" id="8"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$VAR[InfoPlayLabelVar]</label></control>
-        <control type="button" id="9"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[13404]</label><visible>Control.IsEnabled(9)</visible></control>
-        <control type="button" id="6"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[184]</label><visible>Control.IsEnabled(6)</visible></control>
-        <control type="button" id="7"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[38023]</label><visible>Control.IsEnabled(7)</visible></control>
+        <control type="button" id="8"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34" /><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$VAR[InfoPlayLabelVar]</label></control>
+        <control type="button" id="9"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34" /><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[13404]</label><visible>Control.IsEnabled(9)</visible></control>
+        <control type="button" id="6"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34" /><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[184]</label><visible>Control.IsEnabled(6)</visible></control>
+        <control type="button" id="7"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34" /><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[38023]</label><visible>Control.IsEnabled(7)</visible></control>
       </control>
       <control type="grouplist" id="9002">
         <left>13</left><top>468</top><width>874</width><height>30</height>
         <orientation>horizontal</orientation><align>center</align><itemgap>6</itemgap>
         <onup>9001</onup><ondown>9003</ondown>
         <visible>[!String.IsEmpty(ListItem.Trailer)] | [!String.IsEmpty(ListItem.Director)] | [String.IsEqual(ListItem.DBType,movie)]</visible>
-        <control type="button" id="11"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[20410]</label><visible>!String.IsEmpty(ListItem.Trailer)</visible></control>
-        <control type="button" id="13"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[20339]</label><visible>!String.IsEmpty(ListItem.Director)</visible></control>
-        <control type="button" id="14"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[40001]</label><visible>String.IsEqual(ListItem.DBType,movie)</visible></control>
-        <control type="button" id="15"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[40211]</label><visible>String.IsEqual(ListItem.DBType,movie)</visible></control>
+        <control type="button" id="11"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34" /><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[20410]</label><visible>!String.IsEmpty(ListItem.Trailer)</visible></control>
+        <control type="button" id="13"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34" /><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[20339]</label><visible>!String.IsEmpty(ListItem.Director)</visible></control>
+        <control type="button" id="14"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34" /><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[40001]</label><visible>String.IsEqual(ListItem.DBType,movie)</visible></control>
+        <control type="button" id="15"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34" /><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[40211]</label><visible>String.IsEqual(ListItem.DBType,movie)</visible></control>
       </control>
       <control type="grouplist" id="9003">
         <left>13</left><top>502</top><width>874</width><height>30</height>
         <orientation>horizontal</orientation><align>center</align><itemgap>6</itemgap>
         <onup>9002</onup><ondown>61</ondown>
         <visible>[Control.IsEnabled(10)] | [Control.IsEnabled(12)]</visible>
-        <control type="button" id="10"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[13511]</label><visible>Control.IsEnabled(10)</visible></control>
-        <control type="button" id="12"><width>212</width><height>30</height><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[20413]</label><visible>Control.IsEnabled(12)</visible></control>
+        <control type="button" id="10"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34" /><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[13511]</label><visible>Control.IsEnabled(10)</visible></control>
+        <control type="button" id="12"><width>212</width><height>30</height><hitrect x="-3" y="-2" w="218" h="34" /><font>chrome</font><textoffsetx>4</textoffsetx><align>center</align><label>$LOCALIZE[20413]</label><visible>Control.IsEnabled(12)</visible></control>
       </control>
       <control type="group" id="140"><left>-3000</left><top>0</top><width>10</width><height>10</height></control>
     </control>

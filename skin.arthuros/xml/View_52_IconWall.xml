@@ -76,7 +76,7 @@
              or playing tile keeps textinv on the selection bar -->
         <control type="textbox">
           <left>4</left><top>114</top><width>142</width><height>32</height>
-          <font>tiny</font><textcolor>textinv</textcolor>
+          <font>tiny</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
           <align>center</align>
           <autoscroll>false</autoscroll>
           <label>$INFO[ListItem.Label]</label>
@@ -85,7 +85,7 @@
     </control>
 
     <control type="scrollbar" id="62">
-      <left>611</left><top>3</top><width>18</width><height>$PARAM[inner]</height>
+      <left>611</left><top>3</top><width>18</width><include content="Size_Hit" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="599" /><param name="y" value="3" /><param name="w" value="30" /><param name="h" value="$PARAM[inner]" /></include><height>$PARAM[inner]</height>
       <onleft>52</onleft>
       <onright>9490</onright>
       <visible>Control.IsVisible(52)</visible>

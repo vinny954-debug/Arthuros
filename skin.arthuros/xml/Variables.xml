@@ -49,6 +49,19 @@
     <value></value>
   </variable>
 
+  <!-- Live TV / radio: the group and channel being played, for the channel
+       OSD and channel-guide titles. PVRGUIInfo answers the VideoPlayer and
+       MusicPlayer channel labels from the same channel tag, so only one of
+       each pair is used: radio plays through the music player. -->
+  <variable name="PVRGroupVar">
+    <value condition="MusicPlayer.Content(LiveTV)">$INFO[MusicPlayer.ChannelGroup, - ,]</value>
+    <value>$INFO[VideoPlayer.ChannelGroup, - ,]</value>
+  </variable>
+  <variable name="PVRChannelVar">
+    <value condition="MusicPlayer.Content(LiveTV)">$INFO[MusicPlayer.ChannelName, - ,]</value>
+    <value>$INFO[VideoPlayer.ChannelName, - ,]</value>
+  </variable>
+
   <!-- Pointer style, chosen in Skin settings. Empty string = Arthur. -->
   <variable name="PointerTex">
     <!-- Touch mode: no pointer at all when Skin settings say "Pointer:

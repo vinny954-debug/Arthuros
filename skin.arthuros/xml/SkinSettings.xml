@@ -38,7 +38,7 @@
       <control type="label">
         <left>20</left><top>72</top><width>960</width><height>22</height>
         <font>small</font><textcolor>textdim</textcolor>
-        <label>v0.9.6  -  1024x600  -  $VAR[SkinFontVar]  -  $LOCALIZE[31948]</label>
+        <label>v0.9.7  -  1024x600  -  $VAR[SkinFontVar]  -  $LOCALIZE[31948]</label>
       </control>
       <control type="image">
         <left>20</left><top>102</top><width>960</width><height>1</height>
@@ -89,8 +89,13 @@
           <onclick>Skin.ToggleSetting(hideclock)</onclick>
           <selected>Skin.HasSetting(hideclock)</selected>
         </control>
-        <!-- the only reader of autoscroll is the textbox default in Defaults.xml:
-             long descriptions scroll by themselves (list labels never did) -->
+        <!-- autoscroll is read by the textbox default in Defaults.xml and by
+             every long description that sets its own <autoscroll> (plots in
+             the info dialogs, the browser info panel, add-on info, System
+             information: "Skin.HasSetting(autoscroll) + ..."). Only a
+             confirmation message (DialogConfirm) and this page's help
+             scroll regardless: they must be readable whatever the setting.
+             List labels never scroll. -->
         <control type="radiobutton" id="103">
           <width>530</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
           <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />

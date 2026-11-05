@@ -18,18 +18,18 @@
     <control type="list" id="50">
       <!-- the name Kodi shows on the View button ("View: List") -->
       <viewtype label="535">list</viewtype>
-      <left>3</left><top>3</top><width>604</width><height>$PARAM[inner]</height>
+      <left>3</left><top>3</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="592" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="604" /></include><height>$PARAM[inner]</height>
       <onleft>9490</onleft>
       <onright>60</onright>
       <onup>$PARAM[up]</onup>
       <ondown>9100</ondown>
       <pagecontrol>60</pagecontrol>
       <scrolltime tween="linear">0</scrolltime>
-      <itemlayout height="40" width="604" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-        <include content="Arthur_ItemLayout_XL"><param name="width" value="596" /></include>
+      <itemlayout height="40" width="592" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+        <include content="Arthur_ItemLayout_XL"><param name="width" value="584" /></include>
       </itemlayout>
-      <focusedlayout height="40" width="604" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-        <include content="Arthur_FocusedLayout_XL"><param name="width" value="604" /></include>
+      <focusedlayout height="40" width="592" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+        <include content="Arthur_FocusedLayout_XL"><param name="width" value="592" /></include>
       </focusedlayout>
       <itemlayout height="24" width="604">
         <include content="Arthur_ItemLayout"><param name="width" value="596" /></include>
@@ -40,7 +40,7 @@
     </control>
 
     <control type="scrollbar" id="60">
-      <left>611</left><top>3</top><width>18</width><height>$PARAM[inner]</height>
+      <include content="Size_Left" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="599" /></include><include content="Size_Left" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="611" /></include><top>3</top><include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="30" /></include><include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="18" /></include><height>$PARAM[inner]</height>
       <onleft>50</onleft>
       <onright>9490</onright>
       <visible>Control.IsVisible(50)</visible>

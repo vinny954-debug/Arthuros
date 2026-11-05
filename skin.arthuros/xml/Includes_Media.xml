@@ -450,7 +450,7 @@
         <left>14</left><top>200</top><width>332</width><height>248</height>
         <font>small</font><textcolor>text</textcolor>
         <label>$INFO[ListItem.Plot]$INFO[ListItem.Comment]$INFO[ListItem.AddonDescription]</label>
-        <autoscroll delay="6000" time="4000" repeat="8000">true</autoscroll>
+        <autoscroll delay="6000" time="4000" repeat="8000">Skin.HasSetting(autoscroll)</autoscroll>
       </control>
     </control>
   </include>

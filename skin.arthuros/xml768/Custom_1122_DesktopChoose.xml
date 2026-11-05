@@ -28,7 +28,7 @@
       </control>
       <control type="label">
         <left>30</left><top>0</top><width>80</width><height>32</height>
-        <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+        <font>chromebold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny>
         <label>$LOCALIZE[31994]</label>
         <visible>Control.HasFocus(9108)</visible>
       </control>
@@ -189,7 +189,7 @@
         <focusedlayout width="236" height="44" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image"><left>0</left><top>0</top><width>236</width><height>44</height><texture colordiffuse="select">fill.png</texture></control>
           <control type="image"><left>6</left><top>6</top><width>32</width><height>32</height><texture>$INFO[ListItem.Icon]</texture></control>
-          <control type="label"><left>46</left><top>0</top><width>184</width><height>44</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>46</left><top>0</top><width>184</width><height>44</height><font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
         </focusedlayout>
         <itemlayout width="236" height="28">
           <control type="image"><left>6</left><top>6</top><width>16</width><height>16</height><texture>$INFO[ListItem.Icon]</texture></control>
@@ -198,7 +198,7 @@
         <focusedlayout width="236" height="28">
           <control type="image"><left>0</left><top>0</top><width>236</width><height>28</height><texture colordiffuse="select">fill.png</texture></control>
           <control type="image"><left>6</left><top>6</top><width>16</width><height>16</height><texture>$INFO[ListItem.Icon]</texture></control>
-          <control type="label"><left>30</left><top>0</top><width>200</width><height>28</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>30</left><top>0</top><width>200</width><height>28</height><font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
         </focusedlayout>
         <content>
           <item><label>$LOCALIZE[31971]</label><icon>icons24/folder.png</icon>
@@ -284,7 +284,7 @@
         <focusedlayout width="442" height="44" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image"><left>0</left><top>0</top><width>442</width><height>44</height><texture colordiffuse="select">fill.png</texture></control>
           <control type="image"><left>6</left><top>6</top><width>32</width><height>32</height><texture>$INFO[ListItem.Icon]</texture></control>
-          <control type="label"><left>46</left><top>0</top><width>390</width><height>44</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>46</left><top>0</top><width>390</width><height>44</height><font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
         </focusedlayout>
         <itemlayout width="442" height="28">
           <control type="image"><left>6</left><top>6</top><width>16</width><height>16</height><texture>$INFO[ListItem.Icon]</texture></control>
@@ -293,7 +293,7 @@
         <focusedlayout width="442" height="28">
           <control type="image"><left>0</left><top>0</top><width>442</width><height>28</height><texture colordiffuse="select">fill.png</texture></control>
           <control type="image"><left>6</left><top>6</top><width>16</width><height>16</height><texture>$INFO[ListItem.Icon]</texture></control>
-          <control type="label"><left>30</left><top>0</top><width>406</width><height>28</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label"><left>30</left><top>0</top><width>406</width><height>28</height><font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
         </focusedlayout>
         <content>
           <item><label>$LOCALIZE[342]</label><icon>icons24/movies.png</icon>

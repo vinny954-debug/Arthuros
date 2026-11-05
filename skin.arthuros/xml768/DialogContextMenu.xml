@@ -9,6 +9,7 @@
       <label/>
       <onclick>Action(close)</onclick>
       <onup>996</onup><ondown>996</ondown><onleft>996</onleft><onright>996</onright>
+      <visible>Skin.HasSetting(touchmode)</visible>
     </control>
     <control type="button" id="9972">
       <left>380</left><top>-2048</top><width>2048</width><height>4096</height>
@@ -16,6 +17,7 @@
       <label/>
       <onclick>Action(close)</onclick>
       <onup>996</onup><ondown>996</ondown><onleft>996</onleft><onright>996</onright>
+      <visible>Skin.HasSetting(touchmode)</visible>
     </control>
     <control type="button" id="9973">
       <left>0</left><top>-2048</top><width>380</width><height>2048</height>
@@ -23,6 +25,7 @@
       <label/>
       <onclick>Action(close)</onclick>
       <onup>996</onup><ondown>996</ondown><onleft>996</onleft><onright>996</onright>
+      <visible>Skin.HasSetting(touchmode)</visible>
     </control>
     <control type="button" id="9974">
       <left>0</left><top>38</top><width>380</width><height>2048</height>
@@ -30,6 +33,7 @@
       <label/>
       <onclick>Action(close)</onclick>
       <onup>996</onup><ondown>996</ondown><onleft>996</onleft><onright>996</onright>
+      <visible>Skin.HasSetting(touchmode)</visible>
     </control>
     <control type="image" id="999">
       <left>0</left><top>0</top><width>380</width><height>736</height>
@@ -182,6 +186,8 @@
         <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
         <include content="Size_Width" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="326"/></include>
         <include content="Size_Width" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="v" value="360"/></include>
+        <include content="Size_Hit" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="0"/><param name="y" value="-1"/><param name="w" value="360"/><param name="h" value="48"/></include>
+        <include content="Size_Hit" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"><param name="x" value="0"/><param name="y" value="-1"/><param name="w" value="360"/><param name="h" value="32"/></include>
         <align>left</align><textoffsetx>12</textoffsetx>
       </control>
     </control>

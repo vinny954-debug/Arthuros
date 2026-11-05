@@ -24,6 +24,7 @@
         <orientation>horizontal</orientation><align>center</align><itemgap>12</itemgap>
         <control type="button" id="1127">
           <width>150</width><height>34</height>
+          <hitrect x="-6" y="-4" w="162" h="42" />
           <align>center</align><label>$LOCALIZE[107]</label>
           <onclick condition="!String.IsEmpty(Skin.String(tile.1.pre))">Skin.Reset(tile.1.pre)</onclick>
           <onclick condition="!String.IsEmpty(Skin.String(tile.1.name))">Skin.Reset(tile.1.name)</onclick>
@@ -319,6 +320,7 @@
         </control>
         <control type="button" id="1128">
           <width>150</width><height>34</height>
+          <hitrect x="-6" y="-4" w="162" h="42" />
           <align>center</align><label>$LOCALIZE[106]</label>
           <onclick>Dialog.Close(1125)</onclick>
         </control>
