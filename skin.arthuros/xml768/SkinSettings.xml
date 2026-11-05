@@ -36,6 +36,34 @@
         <visible>System.InternetState</visible>
       </control>
 
+      <!-- The speaker and gauge are a button: a tap opens the mini player
+           (PlayerControls), which has the volume slider and mute. Drawn
+           under them, flat until pointed at, then pressed in like the tray.
+           Its hit rect reaches down to the window frame (y 30), so a finger
+           at the top edge of the screen finds it. Nothing navigates here;
+           Down leaves for the task bar. With the task bar hidden, Kodi
+           follows the hidden Start button's Down to the floating Back
+           (Touch mode) and, when that is hidden too, on to the window's own
+           list (the task bar's "up" param), so the keyboard is never stuck.
+           The pressed-in look is drawn only while there is a pointer: a
+           finger tap leaves focus here when the mini player closes, and
+           the cluster would otherwise stay pressed in. Not on the login
+           screen. -->
+      <control type="image">
+        <right>24</right><top>0</top><width>96</width><height>26</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_chrome.png</texture>
+        <visible>Control.HasFocus(9109) + !$EXP[ArthurNoPointer]</visible>
+      </control>
+      <control type="button" id="9109">
+        <right>24</right><top>0</top><width>96</width><height>26</height>
+        <hitrect x="120r" y="0" w="96" h="30"/>
+        <texturenofocus>-</texturenofocus>
+        <texturefocus>-</texturefocus>
+        <label/>
+        <ondown>9100</ondown>
+        <onclick>ActivateWindow(PlayerControls)</onclick>
+        <visible>!Window.IsVisible(loginscreen)</visible>
+      </control>
       <control type="image">
         <right>100</right><top>5</top><width>16</width><height>16</height>
         <texture>$VAR[VolumeIconVar]</texture>
@@ -393,8 +421,10 @@
           <label/>
           <onup>100</onup>
           <onright>9106</onright>
-          <!-- with the task bar hidden, Down carries on to the floating Back -->
-          <ondown>9107</ondown>
+          <!-- With the task bar hidden, Down carries on to the floating Back
+               (and through it, when that is hidden too, to the "up" param).
+               The condition keeps Down a no-op on the visible task bar. -->
+          <ondown condition="Skin.HasSetting(hidetaskbar)">9107</ondown>
           <onclick>ActivateWindow(Home)</onclick>
         </control>
         <control type="image">
@@ -404,13 +434,13 @@
         <control type="label">
           <left>26</left><top>0</top><width>72</width><height>24</height>
           <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
-          <label>Start</label>
+          <label>$LOCALIZE[335]</label>
           <visible>!Control.HasFocus(9100)</visible>
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>72</width><height>24</height>
           <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
-          <label>Start</label>
+          <label>$LOCALIZE[335]</label>
           <visible>Control.HasFocus(9100)</visible>
         </control>
       </control>
@@ -627,6 +657,9 @@
         <left>0</left><top>0</top><width>116</width><height>32</height>
         <label/>
         <onup>100</onup><onleft>100</onleft>
+        <!-- also the way out of the menu bar's volume button: 9109 -> hidden
+             9100 -> this (hidden unless Touch mode) -> the window's list -->
+        <ondown>100</ondown>
         <onclick>Action(Back)</onclick>
       </control>
       <control type="image">

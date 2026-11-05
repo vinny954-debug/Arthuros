@@ -46,6 +46,34 @@
         <visible>System.InternetState</visible>
       </control>
 
+      <!-- The speaker and gauge are a button: a tap opens the mini player
+           (PlayerControls), which has the volume slider and mute. Drawn
+           under them, flat until pointed at, then pressed in like the tray.
+           Its hit rect reaches down to the window frame (y 30), so a finger
+           at the top edge of the screen finds it. Nothing navigates here;
+           Down leaves for the task bar. With the task bar hidden, Kodi
+           follows the hidden Start button's Down to the floating Back
+           (Touch mode) and, when that is hidden too, on to the window's own
+           list (the task bar's "up" param), so the keyboard is never stuck.
+           The pressed-in look is drawn only while there is a pointer: a
+           finger tap leaves focus here when the mini player closes, and
+           the cluster would otherwise stay pressed in. Not on the login
+           screen. -->
+      <control type="image">
+        <right>24</right><top>0</top><width>96</width><height>26</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_chrome.png</texture>
+        <visible>Control.HasFocus(9109) + !$EXP[ArthurNoPointer]</visible>
+      </control>
+      <control type="button" id="9109">
+        <right>24</right><top>0</top><width>96</width><height>26</height>
+        <hitrect x="120r" y="0" w="96" h="30" />
+        <texturenofocus>-</texturenofocus>
+        <texturefocus>-</texturefocus>
+        <label></label>
+        <ondown>9100</ondown>
+        <onclick>ActivateWindow(PlayerControls)</onclick>
+        <visible>!Window.IsVisible(loginscreen)</visible>
+      </control>
       <control type="image">
         <right>100</right><top>5</top><width>16</width><height>16</height>
         <texture>$VAR[VolumeIconVar]</texture>
@@ -106,8 +134,10 @@
           <label></label>
           <onup>$PARAM[up]</onup>
           <onright>9106</onright>
-          <!-- with the task bar hidden, Down carries on to the floating Back -->
-          <ondown>9107</ondown>
+          <!-- With the task bar hidden, Down carries on to the floating Back
+               (and through it, when that is hidden too, to the "up" param).
+               The condition keeps Down a no-op on the visible task bar. -->
+          <ondown condition="Skin.HasSetting(hidetaskbar)">9107</ondown>
           <onclick>ActivateWindow(Home)</onclick>
         </control>
         <control type="image">
@@ -117,13 +147,13 @@
         <control type="label">
           <left>26</left><top>0</top><width>72</width><height>24</height>
           <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
-          <label>Start</label>
+          <label>$LOCALIZE[335]</label>
           <visible>!Control.HasFocus(9100)</visible>
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>72</width><height>24</height>
           <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
-          <label>Start</label>
+          <label>$LOCALIZE[335]</label>
           <visible>Control.HasFocus(9100)</visible>
         </control>
       </control>
@@ -328,6 +358,9 @@
         <left>0</left><top>0</top><width>116</width><height>32</height>
         <label></label>
         <onup>$PARAM[up]</onup><onleft>$PARAM[up]</onleft>
+        <!-- also the way out of the menu bar's volume button: 9109 -> hidden
+             9100 -> this (hidden unless Touch mode) -> the window's list -->
+        <ondown>$PARAM[up]</ondown>
         <onclick>Action(Back)</onclick>
       </control>
       <include content="Chrome_BackFace"><param name="id" value="9107" /></include>
@@ -597,30 +630,46 @@
     </definition>
   </include>
 
-  <!-- A dialog. _ closes every dialog and shows the desktop; × closes this one. -->
+  <!-- A dialog. _ closes every dialog and shows the desktop; × closes this one.
+       Over the login screen (the incorrect-password box, a profile choice)
+       _ would open the master profile's desktop without the password, since
+       skin onclicks bypass CGUIWindowLoginScreen::OnAction: there it is
+       greyed out, as on the desktop's own panel, and its ActivateWindow is
+       conditional as well (logincheck.py). -->
   <include name="Win_Boxes_dialog">
     <param name="down" default="" />
     <definition>
     <control type="group">
+      <control type="image">
+        <include content="WinBox"><param name="n" value="1" /></include>
+        <texture border="4" colordiffuse="facetint">wc_face.png</texture>
+        <visible>Window.IsVisible(loginscreen)</visible>
+      </control>
+      <control type="image">
+        <include content="WinGlyph"><param name="n" value="1" /></include>
+        <texture colordiffuse="textdim">wc_min_dg.png</texture>
+        <visible>Window.IsVisible(loginscreen)</visible>
+      </control>
       <control type="button" id="9901">
         <include content="WinBox"><param name="n" value="1" /></include>
         <texturenofocus border="4" colordiffuse="facetint">wc_face.png</texturenofocus>
         <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
         <label></label>
         <onclick>Dialog.Close(all,true)</onclick>
-        <onclick>ActivateWindow(Home)</onclick>
+        <onclick condition="!Window.IsVisible(loginscreen)">ActivateWindow(Home)</onclick>
         <onright>9902</onright>
         <ondown>$PARAM[down]</ondown>
+        <visible>!Window.IsVisible(loginscreen)</visible>
       </control>
       <control type="image">
         <include content="WinGlyph"><param name="n" value="1" /></include>
         <texture colordiffuse="text">wc_min_g.png</texture>
-        <visible>!Control.HasFocus(9901)</visible>
+        <visible>!Control.HasFocus(9901) + !Window.IsVisible(loginscreen)</visible>
       </control>
       <control type="image">
         <include content="WinGlyph"><param name="n" value="1" /></include>
         <texture colordiffuse="titletext">wc_min_g.png</texture>
-        <visible>Control.HasFocus(9901)</visible>
+        <visible>Control.HasFocus(9901) + !Window.IsVisible(loginscreen)</visible>
       </control>
       <include content="WinBox_Max">
         <param name="down" value="$PARAM[down]" />

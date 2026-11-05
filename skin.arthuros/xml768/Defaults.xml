@@ -154,6 +154,11 @@
 
   <default type="slider">
     <height>24</height>
+    <!-- Kodi's own default is VERTICAL (GUIControlFactory::Create), which
+         turns a drag or a tap along the bar into nothing; every slider in
+         this skin lies flat. A control that says otherwise keeps its own
+         (Kodi reads the first <orientation>; defaults are appended). -->
+    <orientation>horizontal</orientation>
     <texturesliderbar border="2" colordiffuse="facetint">progress_back.png</texturesliderbar>
     <textureslidernib border="2" colordiffuse="facetint">button_up.png</textureslidernib>
     <textureslidernibfocus border="2" colordiffuse="select">select_bevel.png</textureslidernibfocus>

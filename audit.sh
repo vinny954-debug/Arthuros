@@ -51,7 +51,7 @@ chk "Startup hands over on load"       'grep -q "<onload>ReplaceWindow(\$INFO\[S
 chk "Startup has no clickable boxes"   '! grep -q "Dialog_Box\|Win_Title" $S/xml/Startup.xml'
 chk "four title-bar box modes"         'test $(grep -c "<include name=\"Win_Boxes_" $S/xml/Includes_Chrome.xml) -eq 4'
 chk "_ parks windows on the task bar"  'grep -q "arthur.minwin" $S/xml/Includes_Chrome.xml && grep -q "id=\"9104\"" $S/xml/Includes_Chrome.xml'
-chk "now-playing recall kept"          'grep -A6 "id=\"9101\"" $S/xml/Includes_Chrome.xml | grep -q "ActivateWindow(Visualisation)"'
+chk "now-playing recall kept (music branch of 9101)" 'grep -A8 "id=\"9101\"" $S/xml/Includes_Chrome.xml | grep -q "<onclick condition=\"!Player.HasVideo + !Player.HasGame\">ActivateWindow(Visualisation)</onclick>" && grep -A8 "id=\"9101\"" $S/xml768/Home.xml | grep -q "<onclick condition=\"!Player.HasVideo + !Player.HasGame\">ActivateWindow(Visualisation)</onclick>"'
 chk "icon registry wired in"           'test -f $S/media/icons64/power.png && test -f $S/media/DefaultAddonsZip.png'
 chk "box glyphs follow the text colour" 'grep -q "colordiffuse=\"text\">wc_min_g.png" $S/xml/Includes_Chrome.xml'
 chk "skin settings heading has an id"  'grep -q "type=\"label\" id=\"105\"" $S/xml/SkinSettings.xml'
@@ -277,6 +277,33 @@ assert r.xpath(\"//onclick[text()=\\\"Action(close)\\\"]\")
 :
 :
 # ===== P5 touch chrome & controls =====
+chk "V-2b volume button never traps the remote with the task bar hidden; no stuck pressed look after a tap" 'for d in xml xml768; do F=$S/$d/Includes_Chrome.xml; grep -A12 "type=\"button\" id=\"9100\"" $F | grep -q "<ondown condition=\"Skin.HasSetting(hidetaskbar)\">9107</ondown>" && grep -A8 "type=\"button\" id=\"9107\"" $F | grep -q "<ondown>\$PARAM\[up\]</ondown>" && grep -B6 "type=\"button\" id=\"9109\"" $F | grep -q "<visible>Control.HasFocus(9109) + !\$EXP\[ArthurNoPointer\]</visible>" && grep -A6 "type=\"button\" id=\"9109\"" $F | grep -q "<texturefocus>-</texturefocus>" && grep -q "<expression name=\"ArthurNoPointer\">Skin.HasSetting(touchmode) + !Skin.HasSetting(touch.pointer.show)" $S/$d/Variables.xml || exit 1; done; for w in $(grep -l "<include>Chrome_Menubar</include>" $S/xml/*.xml); do b=$(basename $w); test "$b" = LoginScreen.xml && continue; grep -q "<include content=\"Chrome_Taskbar\"><param name=\"up\" value=\"[0-9]*\" /></include>" $w || exit 1; done'
+chk "S-9 task-bar Start uses Kodi's string 335" '! grep -q "<label>Start</label>" $S/xml/Includes_Chrome.xml && test $(grep -c "<label>\$LOCALIZE\[335\]</label>" $S/xml/Includes_Chrome.xml) -eq 2'
+chk "V-2 menu-bar volume opens the mini player, not on the login screen" 'B=$(sed -n "/<include name=\"Chrome_Menubar\">/,/<\/include>/p" $S/xml/Includes_Chrome.xml | grep -A10 "type=\"button\" id=\"9109\""); echo "$B" | grep -q "<onclick>ActivateWindow(PlayerControls)</onclick>" && echo "$B" | grep -q "<visible>!Window.IsVisible(loginscreen)</visible>" && echo "$B" | grep -q "<ondown>9100</ondown>" && grep -q "id=\"9109\"" $S/xml768/Home.xml && grep -q "<action>volume</action>" $S/xml/PlayerControls.xml && grep -q "<onclick>Mute</onclick>" $S/xml/PlayerControls.xml'
+chk "C-2 dialog _ box cannot open Home over the login screen (DialogConfirm/DialogSelect)" 'grep -A40 "<include name=\"Win_Boxes_dialog\">" $S/xml/Includes_Chrome.xml | grep -q "<onclick condition=\"!Window.IsVisible(loginscreen)\">ActivateWindow(Home)</onclick>" && (for d in xml768; do for w in DialogConfirm DialogSelect; do python3 -c "
+import re,sys
+from lxml import etree
+G=\"!window.isvisible(loginscreen)\"
+r=etree.parse(sys.argv[1]).getroot()
+def ok(a):
+    if G in (a.get(\"condition\") or \"\").replace(\" \",\"\").lower(): return True
+    c=a.getparent()
+    while c is not None:
+        if c.tag==\"control\" and any(G in (v.text or \"\").replace(\" \",\"\").lower() for v in c.findall(\"visible\")): return True
+        c=c.getparent()
+    return False
+bad=[a for a in r.iter() if isinstance(a.tag,str) and a.tag.startswith(\"on\") and re.search(r\"(Activate|Replace)Window\((?!ShutdownMenu)\",a.text or \"\",re.I) and not ok(a)]
+sys.exit(1 if bad else 0)" $S/$d/$w.xml || exit 1; done; done)'
+chk "X-7 pointer obeys touch.pointer.show/hide at once" 'test $(grep -c "<value condition=\"Skin.HasSetting(touchmode) + !Skin.HasSetting(touch.pointer.show) + \[Skin.HasSetting(touch.pointer.hide) | String.IsEmpty(Window(Home).Property(arthuros.mouse))\]\"></value>" $S/xml/Variables.xml) -eq 2'
+chk "V-2 sliders lie flat by default (Kodi defaults to vertical)" 'grep -A8 "<default type=\"slider\">" $S/xml/Defaults.xml | grep -q "<orientation>horizontal</orientation>" && grep -A8 "<default type=\"slider\">" $S/xml768/Defaults.xml | grep -q "<orientation>horizontal</orientation>"'
+chk "T-6 media toolbar buttons get a 34 px touch hit rect" 'python3 -c "
+import sys
+from lxml import etree
+r=etree.parse(sys.argv[1]).getroot()
+g=r.xpath(\"//control[@type=\x27grouplist\x27][@id=\x279490\x27]\")[0]
+b=[c for c in g if c.tag==\"control\"]
+sys.exit(not b or any(not c.xpath(\"include[@content=\x27Size_Hit\x27][@condition=\x27Skin.HasSetting(touchmode)\x27]/param[@name=\x27h\x27][@value=\x2734\x27]\") for c in b))" $S/xml/Includes_Media.xml && grep -q "<include name=\"Size_Hit\">.*<hitrect x=\"\$PARAM\[x\]\" y=\"\$PARAM\[y\]\" w=\"\$PARAM\[w\]\" h=\"\$PARAM\[h\]\" />" $S/xml/Includes_Size.xml && grep -q "Size_Hit" $S/xml768/Includes_Media.xml'
+chk "T-8 heading comment names the keyboard (311) and slider (10) ids" 'grep -q "label 311" $S/xml/Includes_Dialogs.xml && grep -q "label 10 (CONTROL_HEADING" $S/xml/Includes_Dialogs.xml'
 chk "T-2 now playing picks game/video/music once" 'B=$(grep -A8 "id=\"9101\"" $S/xml/Includes_Chrome.xml); echo "$B" | grep -q "condition=\"Player.HasGame\">ActivateWindow(FullscreenGame)" && echo "$B" | grep -q "condition=\"Player.HasVideo + !Player.HasGame\">ActivateWindow(FullscreenVideo)" && ! echo "$B" | grep -q "<onclick>ActivateWindow"'
 chk "T-3 dialogs carry a touch Back at the task bar" 'grep -A30 "<include name=\"Dialog_Dim\">" $S/xml/Includes_Dialogs.xml | grep -q "id=\"9108\"" && (for f in $(grep -l "<include>Dialog_Dim</include>" $S/xml/*.xml); do grep -q "id=\"9108\"" $S/xml768/$(basename $f) || exit 1; done) && grep -B12 "id=\"9108\"" $S/xml768/DialogConfirm.xml | grep -q "<top>736</top>"'
 chk "T-4 text viewer scrolls (pagecontrol 60, default 60)" 'grep -q "<pagecontrol>60</pagecontrol>" $S/xml/DialogTextViewer.xml && grep -q "<defaultcontrol>60</defaultcontrol>" $S/xml/DialogTextViewer.xml && grep -q "<pagecontrol>60</pagecontrol>" $S/xml768/DialogTextViewer.xml'
@@ -288,7 +315,7 @@ chk "T-6 dialog button rows grow in touch mode" 'grep -q "DialogButton_XL" $S/xm
 chk "T-7 every spin and settings slider grows in touch mode" '(for f in $S/xml/*.xml; do python3 -c "import sys,xml.etree.ElementTree as E;r=E.parse(sys.argv[1]).getroot();need={\"spincontrol\":\"SpinSize_XL\",\"spincontrolex\":\"SpinSize_XL\",\"sliderex\":\"SliderSize_XL\"};sys.exit(any(c.get(\"type\") in need and not any(i.get(\"content\")==need[c.get(\"type\")] for i in c.findall(\"include\")) for c in r.iter(\"control\")))" $f || exit 1; done) && grep -q "<include name=\"SpinSize_XL\">" $S/xml/Includes_Size.xml && grep -q "<include name=\"SliderSize_XL\">" $S/xml/Includes_Size.xml'
 chk "T-7 text viewer / confirm textboxes are paged by a real scrollbar" '(for w in DialogTextViewer DialogConfirm; do for d in xml xml768; do python3 -c "import sys,xml.etree.ElementTree as E;r=E.parse(sys.argv[1]).getroot();sb={c.get(\"id\") for c in r.iter(\"control\") if c.get(\"type\")==\"scrollbar\"};tb=[c for c in r.iter(\"control\") if c.get(\"type\")==\"textbox\"];sys.exit(not tb or any((t.findtext(\"pagecontrol\") or \"\").strip() not in sb for t in tb))" $S/$d/$w.xml || exit 1; done; done)'
 chk "T-9 context menu scrolls with a scrollbar" 'grep -q "<pagecontrol>997</pagecontrol>" $S/xml/DialogContextMenu.xml && grep -q "type=\"scrollbar\" id=\"997\"" $S/xml/DialogContextMenu.xml && grep -A1 "id=\"999\"" $S/xml/DialogContextMenu.xml | grep -q "<height>568</height>"'
-chk "T-11 dialog fullscreen box closes dialogs first, never over a player" 'grep -A12 "<include name=\"WinBox_Max\">" $S/xml/Includes_Chrome.xml | grep -q "condition=\"\$PARAM\[close\]\">Dialog.Close(all,true)" && grep -A40 "<include name=\"Win_Boxes_dialog\">" $S/xml/Includes_Chrome.xml | grep -q "<param name=\"close\" value=\"true\" />" && grep -q "<expression name=\"ArthurCanShowPlayer\">Player.HasMedia + !Window.IsActive(fullscreenvideo)" $S/xml/Variables.xml && ! grep -q "<expression " $S/xml/Includes_Chrome.xml'
+chk "T-11 dialog fullscreen box closes dialogs first, never over a player" 'grep -A12 "<include name=\"WinBox_Max\">" $S/xml/Includes_Chrome.xml | grep -q "condition=\"\$PARAM\[close\]\">Dialog.Close(all,true)" && grep -A60 "<include name=\"Win_Boxes_dialog\">" $S/xml/Includes_Chrome.xml | grep -q "<param name=\"close\" value=\"true\" />" && grep -q "<expression name=\"ArthurCanShowPlayer\">Player.HasMedia + !Window.IsActive(fullscreenvideo)" $S/xml/Variables.xml && ! grep -q "<expression " $S/xml/Includes_Chrome.xml'
 chk "T-12 touch Back floats when the task bar is hidden" 'grep -B2 "id=\"9107\"" $S/xml/Includes_Chrome.xml | grep -q "Skin.HasSetting(touchmode) + Skin.HasSetting(hidetaskbar)" || grep -B8 "id=\"9107\"" $S/xml/Includes_Chrome.xml | grep -q "Skin.HasSetting(touchmode) + Skin.HasSetting(hidetaskbar)"'
 chk "D-1 task bar Power button in the nav chain, next to Start" 'grep -A8 "id=\"9106\"" $S/xml/Includes_Chrome.xml | grep -q "ActivateWindow(ShutdownMenu)" && grep -A8 "id=\"9100\"" $S/xml/Includes_Chrome.xml | grep -q "<onright>9106</onright>" && grep -A8 "id=\"9106\"" $S/xml/Includes_Chrome.xml | grep -q "<onleft>9100</onleft><onright>9101</onright>" && grep -A8 "id=\"9101\"" $S/xml/Includes_Chrome.xml | grep -q "<onleft>9106</onleft>" && grep -q "id=\"9106\"" $S/xml768/Home.xml'
 chk "D-8 every clock label honours hideclock" 'python3 -c "import sys,xml.etree.ElementTree as E;r=E.parse(sys.argv[1]).getroot();sys.exit(any(\"System.Time\" in (c.findtext(\"label\") or \"\") and \"hideclock\" not in (c.findtext(\"visible\") or \"\") for c in r.iter(\"control\")))" $S/xml/Includes_Chrome.xml'

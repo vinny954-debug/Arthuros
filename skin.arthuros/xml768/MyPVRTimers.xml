@@ -38,6 +38,34 @@
         <visible>System.InternetState</visible>
       </control>
 
+      <!-- The speaker and gauge are a button: a tap opens the mini player
+           (PlayerControls), which has the volume slider and mute. Drawn
+           under them, flat until pointed at, then pressed in like the tray.
+           Its hit rect reaches down to the window frame (y 30), so a finger
+           at the top edge of the screen finds it. Nothing navigates here;
+           Down leaves for the task bar. With the task bar hidden, Kodi
+           follows the hidden Start button's Down to the floating Back
+           (Touch mode) and, when that is hidden too, on to the window's own
+           list (the task bar's "up" param), so the keyboard is never stuck.
+           The pressed-in look is drawn only while there is a pointer: a
+           finger tap leaves focus here when the mini player closes, and
+           the cluster would otherwise stay pressed in. Not on the login
+           screen. -->
+      <control type="image">
+        <right>24</right><top>0</top><width>96</width><height>26</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_chrome.png</texture>
+        <visible>Control.HasFocus(9109) + !$EXP[ArthurNoPointer]</visible>
+      </control>
+      <control type="button" id="9109">
+        <right>24</right><top>0</top><width>96</width><height>26</height>
+        <hitrect x="120r" y="0" w="96" h="30"/>
+        <texturenofocus>-</texturenofocus>
+        <texturefocus>-</texturefocus>
+        <label/>
+        <ondown>9100</ondown>
+        <onclick>ActivateWindow(PlayerControls)</onclick>
+        <visible>!Window.IsVisible(loginscreen)</visible>
+      </control>
       <control type="image">
         <right>100</right><top>5</top><width>16</width><height>16</height>
         <texture>$VAR[VolumeIconVar]</texture>
@@ -208,33 +236,33 @@
       <ondown>9491</ondown>
 
       <control type="button" id="9500">
-        <width>76</width><height>26</height><font>chrome</font>
+        <width>76</width><height>26</height><include content="Size_Hit" condition="Skin.HasSetting(touchmode)"><param name="x" value="-2"/><param name="y" value="-4"/><param name="w" value="80"/><param name="h" value="34"/></include><font>chrome</font>
         <label>$LOCALIZE[31901]</label>
         <onclick>ParentDir</onclick>
       </control>
       <control type="button" id="2">
-        <width>150</width><height>26</height><font>chrome</font>
+        <width>150</width><height>26</height><include content="Size_Hit" condition="Skin.HasSetting(touchmode)"><param name="x" value="-2"/><param name="y" value="-4"/><param name="w" value="154"/><param name="h" value="34"/></include><font>chrome</font>
         <label>$LOCALIZE[31902]</label>
       </control>
       <control type="button" id="3">
-        <width>230</width><height>26</height><font>chrome</font>
+        <width>230</width><height>26</height><include content="Size_Hit" condition="Skin.HasSetting(touchmode)"><param name="x" value="-2"/><param name="y" value="-4"/><param name="w" value="234"/><param name="h" value="34"/></include><font>chrome</font>
         <label>$LOCALIZE[31903]</label>
       </control>
       <!-- Kodi only marks this button selected when descending and never
            labels it, so the label says which way the list is sorted -->
       <control type="button" id="4">
-        <width>120</width><height>26</height><font>chrome</font>
+        <width>120</width><height>26</height><include content="Size_Hit" condition="Skin.HasSetting(touchmode)"><param name="x" value="-2"/><param name="y" value="-4"/><param name="w" value="124"/><param name="h" value="34"/></include><font>chrome</font>
         <label>$VAR[MediaSortOrderVar]</label>
       </control>
       <control type="button" id="19">
-        <width>100</width><height>26</height><font>chrome</font>
+        <width>100</width><height>26</height><include content="Size_Hit" condition="Skin.HasSetting(touchmode)"><param name="x" value="-2"/><param name="y" value="-4"/><param name="w" value="104"/><param name="h" value="34"/></include><font>chrome</font>
         <label>$LOCALIZE[587]</label>
       </control>
       <!-- Action(ContextMenu) goes to the focused control, which is this
            button; focus the view first (Kodi redirects 50 to whichever
            view is showing) so the menu is the selected item's -->
       <control type="button" id="9501">
-        <width>110</width><height>26</height><font>chrome</font>
+        <width>110</width><height>26</height><include content="Size_Hit" condition="Skin.HasSetting(touchmode)"><param name="x" value="-2"/><param name="y" value="-4"/><param name="w" value="114"/><param name="h" value="34"/></include><font>chrome</font>
         <label>$LOCALIZE[31906]</label>
         <onclick>SetFocus(50)</onclick>
         <onclick>Action(ContextMenu)</onclick>
@@ -242,7 +270,7 @@
       <!-- inside an add-on (YouTube, Plex...): its own settings - quality,
            sign-in, subtitles - one click away instead of only in Options -->
       <control type="button" id="9502">
-        <width>180</width><height>26</height><font>chrome</font>
+        <width>180</width><height>26</height><include content="Size_Hit" condition="Skin.HasSetting(touchmode)"><param name="x" value="-2"/><param name="y" value="-4"/><param name="w" value="184"/><param name="h" value="34"/></include><font>chrome</font>
         <label>$LOCALIZE[10140]</label>
         <onclick>Addon.OpenSettings($INFO[Container.PluginName])</onclick>
         <visible>!String.IsEmpty(Container.PluginName)</visible>
@@ -805,8 +833,10 @@
           <label/>
           <onup>50</onup>
           <onright>9106</onright>
-          <!-- with the task bar hidden, Down carries on to the floating Back -->
-          <ondown>9107</ondown>
+          <!-- With the task bar hidden, Down carries on to the floating Back
+               (and through it, when that is hidden too, to the "up" param).
+               The condition keeps Down a no-op on the visible task bar. -->
+          <ondown condition="Skin.HasSetting(hidetaskbar)">9107</ondown>
           <onclick>ActivateWindow(Home)</onclick>
         </control>
         <control type="image">
@@ -816,13 +846,13 @@
         <control type="label">
           <left>26</left><top>0</top><width>72</width><height>24</height>
           <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
-          <label>Start</label>
+          <label>$LOCALIZE[335]</label>
           <visible>!Control.HasFocus(9100)</visible>
         </control>
         <control type="label">
           <left>26</left><top>0</top><width>72</width><height>24</height>
           <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
-          <label>Start</label>
+          <label>$LOCALIZE[335]</label>
           <visible>Control.HasFocus(9100)</visible>
         </control>
       </control>
@@ -1039,6 +1069,9 @@
         <left>0</left><top>0</top><width>116</width><height>32</height>
         <label/>
         <onup>50</onup><onleft>50</onleft>
+        <!-- also the way out of the menu bar's volume button: 9109 -> hidden
+             9100 -> this (hidden unless Touch mode) -> the window's list -->
+        <ondown>50</ondown>
         <onclick>Action(Back)</onclick>
       </control>
       <control type="image">

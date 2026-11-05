@@ -291,6 +291,20 @@
             <texture colordiffuse="textdim">wc_min_dg.png</texture>
             <visible>Window.IsVisible(loginscreen)</visible>
           </control>
+          <control type="image">
+            <include content="WinBox">
+              <param name="n" value="1" />
+            </include>
+            <texture border="4" colordiffuse="facetint">wc_face.png</texture>
+            <visible>Window.IsVisible(loginscreen)</visible>
+          </control>
+          <control type="image">
+            <include content="WinGlyph">
+              <param name="n" value="1" />
+            </include>
+            <texture colordiffuse="textdim">wc_min_dg.png</texture>
+            <visible>Window.IsVisible(loginscreen)</visible>
+          </control>
           <control type="button" id="9901">
             <include content="WinBox">
               <param name="n" value="1" />
@@ -299,9 +313,10 @@
             <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
             <label />
             <onclick>Dialog.Close(all,true)</onclick>
-            <onclick condition="!Window.IsVisible(loginscreen)">ActivateWindow(Home)</onclick>
+            <onclick condition="!Window.IsVisible(loginscreen) + [!Window.IsVisible(loginscreen)]">ActivateWindow(Home)</onclick>
             <onright>9902</onright>
             <ondown>300</ondown>
+            <visible>!Window.IsVisible(loginscreen)</visible>
             <visible>!Window.IsVisible(loginscreen)</visible>
           </control>
           <control type="image">
@@ -309,14 +324,14 @@
               <param name="n" value="1" />
             </include>
             <texture colordiffuse="text">wc_min_g.png</texture>
-            <visible>!Control.HasFocus(9901) + !Window.IsVisible(loginscreen)</visible>
+            <visible>!Control.HasFocus(9901) + !Window.IsVisible(loginscreen) + !Window.IsVisible(loginscreen)</visible>
           </control>
           <control type="image">
             <include content="WinGlyph">
               <param name="n" value="1" />
             </include>
             <texture colordiffuse="titletext">wc_min_g.png</texture>
-            <visible>Control.HasFocus(9901) + !Window.IsVisible(loginscreen)</visible>
+            <visible>Control.HasFocus(9901) + !Window.IsVisible(loginscreen) + !Window.IsVisible(loginscreen)</visible>
           </control>
           <include content="WinBox_Max">
             <param name="down" value="$PARAM[down]" />
