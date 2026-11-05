@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<window>
+  <onload>ReplaceWindow($INFO[System.StartupWindow])</onload>
+  <backgroundcolor>desktop</backgroundcolor>
+  <controls>
+    <control type="image">
+      <left>0</left><top>0</top><width>1024</width><height>768</height>
+      <texture colordiffuse="desktop">fill.png</texture>
+    </control>
+  </controls>
+</window>

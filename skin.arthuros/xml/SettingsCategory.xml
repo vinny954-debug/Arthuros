@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <defaultcontrol always="false">3</defaultcontrol>
+  <backgroundcolor>desktop</backgroundcolor>
+  <controls>
+    <include>Chrome_Desktop</include>
+    <include>Chrome_Menubar</include>
+    <control type="group">
+      <left>6</left><top>30</top><width>1012</width><height>534</height>
+      <include content="Win_Frame">
+        <param name="width" value="1012" /><param name="height" value="534" />
+      </include>
+      <control type="group">
+        <left>3</left><top>3</top>
+        <include content="Win_Title">
+          <param name="width" value="1006" />
+          <param name="colour" value="accent1" />
+          <param name="icon" value="$VAR[ArthurWindowIcon]" />
+          <param name="label" value="$LOCALIZE[5]" />
+          <param name="down" value="3" />
+          <param name="boxes" value="window" />
+        </include>
+      </control>
+      <control type="image">
+        <left>6</left><top>34</top><width>300</width><height>494</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      </control>
+      <control type="button" id="10">
+        <left>-2000</left><top>0</top><width>288</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <align>left</align><textoffsetx>12</textoffsetx>
+      </control>
+      <control type="grouplist" id="3">
+        <left>12</left><top>40</top><width>288</width><height>404</height>
+        <orientation>vertical</orientation><itemgap>2</itemgap>
+        <onleft>3</onleft><onright>5</onright>
+        <onup>20</onup><ondown>20</ondown>
+      </control>
+      <!-- Settings level: Kodi's own button 20 (GUIWindowSettingsCategory.cpp).
+           Kodi writes Basic / Standard / Advanced / Expert on it and cycles
+           the level when it is clicked. -->
+      <!-- hung from the bottom, so the taller Touch mode / Extra large button
+           (50 px, sizepass.py) still ends inside the panel -->
+      <control type="label">
+        <left>14</left><bottom>48</bottom><width>284</width><height>20</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor>
+        <label>$LOCALIZE[31950]</label>
+        <visible>![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]</visible>
+      </control>
+      <control type="label">
+        <left>14</left><bottom>64</bottom><width>284</width><height>20</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor>
+        <label>$LOCALIZE[31950]</label>
+        <visible>[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]</visible>
+      </control>
+      <control type="button" id="20">
+        <left>12</left><bottom>12</bottom><width>288</width><include content="Height_34_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_34" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <align>center</align>
+        <onup>3</onup><ondown>9100</ondown><onright>5</onright>
+      </control>
+      <control type="image">
+        <left>312</left><top>34</top><width>694</width><height>400</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+      </control>
+      <control type="label" id="2">
+        <left>322</left><top>38</top><width>654</width><height>26</height>
+        <font>bigbold</font>
+      </control>
+      <control type="grouplist" id="5">
+        <left>322</left><top>68</top><width>650</width><height>360</height>
+        <orientation>vertical</orientation><itemgap>3</itemgap>
+        <onleft>3</onleft><onright>60</onright>
+        <onup>9100</onup><ondown>9100</ondown>
+        <pagecontrol>60</pagecontrol>
+      </control>
+      <control type="scrollbar" id="60">
+        <left>982</left><top>68</top><width>18</width><height>360</height>
+        <onleft>5</onleft><onright>3</onright>
+      </control>
+      <control type="image">
+        <left>312</left><top>442</top><width>694</width><height>86</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      </control>
+      <control type="textbox" id="6">
+        <left>320</left><top>448</top><width>678</width><height>74</height>
+        <font>small</font><textcolor>textdim</textcolor>
+      </control>
+
+      <!-- Templates. Kodi clones these into grouplist 5; they are never
+           shown where they sit, only their size and styling matter. -->
+      <control type="button" id="7">
+        <left>-2000</left><top>0</top><width>600</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <align>left</align><textoffsetx>12</textoffsetx>
+      </control>
+      <control type="radiobutton" id="8">
+        <left>-2000</left><top>0</top><width>600</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <align>left</align><textoffsetx>12</textoffsetx>
+      </control>
+      <control type="spincontrolex" id="9">
+        <left>-2000</left><top>0</top><width>600</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <align>left</align><textoffsetx>12</textoffsetx>
+      </control>
+      <control type="image" id="11">
+        <left>-2000</left><top>0</top><width>600</width><height>2</height>
+        <texture>fill_black.png</texture>
+      </control>
+      <control type="edit" id="12">
+        <left>-2000</left><top>0</top><width>600</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <align>left</align><textoffsetx>12</textoffsetx>
+      </control>
+      <control type="sliderex" id="13">
+        <left>-2000</left><top>0</top><width>600</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <align>left</align><textoffsetx>12</textoffsetx>
+      </control>
+      <control type="label" id="14">
+        <left>-2000</left><top>0</top><width>600</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <font>bold</font><align>left</align>
+      </control>
+      <control type="colorbutton" id="15">
+        <left>-2000</left><top>0</top><width>600</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <align>left</align><textoffsetx>12</textoffsetx>
+      </control>
+    </control>
+    <include content="Chrome_Taskbar"><param name="up" value="3" /></include>
+  </controls>
+</window>

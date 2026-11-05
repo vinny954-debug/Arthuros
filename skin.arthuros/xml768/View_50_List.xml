@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Detailed list. Lives inside the media window's view group (634x462). -->
+<includes>
+  <include name="View_50_List">
+    <control type="group">
+      <visible>Control.IsVisible(50)</visible>
+      <include content="Arthur_ListWell">
+        <param name="width" value="634" />
+        <param name="height" value="462" />
+      </include>
+    </control>
+
+    <control type="list" id="50">
+      <left>3</left><top>3</top><width>604</width><height>456</height>
+      <onleft>9490</onleft>
+      <onright>60</onright>
+      <onup>9490</onup>
+      <ondown>9100</ondown>
+      <pagecontrol>60</pagecontrol>
+      <scrolltime tween="linear">0</scrolltime>
+      <itemlayout height="40" width="604" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+        <include content="Arthur_ItemLayout_XL"><param name="width" value="596" /></include>
+      </itemlayout>
+      <focusedlayout height="40" width="604" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+        <include content="Arthur_FocusedLayout_XL"><param name="width" value="604" /></include>
+      </focusedlayout>
+    <itemlayout height="24" width="604">
+        <include content="Arthur_ItemLayout"><param name="width" value="596" /></include>
+      </itemlayout>
+      <focusedlayout height="24" width="604">
+        <include content="Arthur_FocusedLayout"><param name="width" value="604" /></include>
+      </focusedlayout>
+    </control>
+
+    <control type="scrollbar" id="60">
+      <left>611</left><top>3</top><width>18</width><height>456</height>
+      <onleft>50</onleft>
+      <onright>9490</onright>
+      <visible>Control.IsVisible(50)</visible>
+    </control>
+  </include>
+</includes>

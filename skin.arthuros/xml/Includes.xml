@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+  <include file="Defaults.xml" />
+  <include file="Includes_Chrome.xml" />
+  <include file="Includes_Lists.xml" />
+  <include file="Includes_Home.xml" />
+  <include file="Includes_Media.xml" />
+  <include file="Includes_Dialogs.xml" />
+  <include file="View_50_List.xml" />
+  <include file="View_51_Poster.xml" />
+  <include file="View_52_IconWall.xml" />
+  <include file="Variables.xml" />
+
+  <!-- screen furniture geometry, kept here so it is changed in one place -->
+  <constant name="MenubarHeight">26</constant>
+  <constant name="TaskbarTop">568</constant>
+  <constant name="DeskTop">30</constant>
+  <constant name="DeskHeight">534</constant>
+  <include file="Includes_Size.xml" />
+  <include file="Includes_Games.xml" />
+</includes>

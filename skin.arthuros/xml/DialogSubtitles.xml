@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <defaultcontrol>150</defaultcontrol>
+  <controls>
+    <include>Dialog_Dim</include>
+    <control type="group">
+      <centerleft>50%</centerleft><centertop>50%</centertop>
+      <width>900</width><height>466</height>
+      <include content="Dialog_Box">
+        <param name="width" value="900" /><param name="height" value="466" />
+        <param name="innerwidth" value="894" />
+        <param name="icon" value="icons24/video_subtitles.png" /><param name="colour" value="accent2" />
+        <param name="down" value="150" />
+        <param name="boxes" value="dialog" />
+        <param name="title" value="$LOCALIZE[24012]" />
+      </include>
+      <control type="image">
+        <left>10</left><top>36</top><width>280</width><height>420</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      </control>
+      <control type="image" id="110">
+        <left>18</left><top>44</top><width>40</width><height>40</height>
+        <aspectratio>keep</aspectratio>
+      </control>
+      <control type="label" id="100">
+        <left>64</left><top>44</top><width>218</width><height>40</height>
+        <font>bold</font><aligny>center</aligny>
+      </control>
+      <control type="list" id="150">
+        <left>18</left><top>92</top><width>264</width><height>312</height>
+        <onright>120</onright><onleft>120</onleft><ondown>160</ondown><onup>160</onup>
+        <scrolltime tween="linear">0</scrolltime>
+        <itemlayout height="44" width="264" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image"><left>2</left><top>10</top><width>24</width><height>24</height><texture>$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>
+          <control type="label"><left>32</left><top>0</top><width>228</width><height>44</height><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+        </itemlayout>
+        <focusedlayout height="44" width="264" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image"><left>0</left><top>0</top><width>264</width><height>44</height><texture colordiffuse="select">fill.png</texture><visible>Control.HasFocus(150)</visible></control>
+          <control type="image"><left>2</left><top>10</top><width>24</width><height>24</height><texture>$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>
+          <control type="label"><left>32</left><top>0</top><width>228</width><height>44</height><aligny>center</aligny><textcolor>textinv</textcolor><label>$INFO[ListItem.Label]</label></control>
+        </focusedlayout>
+      <itemlayout height="28" width="264">
+          <control type="image"><left>2</left><top>2</top><width>24</width><height>24</height><texture>$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>
+          <control type="label"><left>32</left><top>0</top><width>228</width><height>28</height><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+        </itemlayout>
+        <focusedlayout height="28" width="264">
+          <control type="image"><left>0</left><top>0</top><width>264</width><height>28</height><texture colordiffuse="select">fill.png</texture><visible>Control.HasFocus(150)</visible></control>
+          <control type="image"><left>2</left><top>2</top><width>24</width><height>24</height><texture>$INFO[ListItem.Icon]</texture><aspectratio>keep</aspectratio></control>
+          <control type="label"><left>32</left><top>0</top><width>228</width><height>28</height><aligny>center</aligny><textcolor>textinv</textcolor><label>$INFO[ListItem.Label]</label></control>
+        </focusedlayout>
+      </control>
+      <control type="button" id="160">
+        <left>18</left><top>414</top><width>264</width><height>34</height>
+        <align>center</align><label>$LOCALIZE[137]</label>
+        <onup>150</onup><ondown>150</ondown><onright>120</onright>
+      </control>
+      <control type="image">
+        <left>296</left><top>36</top><width>594</width><height>420</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+      </control>
+      <control type="label" id="140">
+        <left>304</left><top>42</top><width>540</width><height>24</height>
+        <font>small</font><textcolor>textdim</textcolor>
+      </control>
+      <control type="image" id="130">
+        <left>856</left><top>42</top><width>24</width><height>24</height>
+        <texture>icons24/video_subtitles.png</texture>
+      </control>
+      <control type="list" id="120">
+        <left>304</left><top>70</top><width>556</width><height>378</height>
+        <onleft>150</onleft><onright>73</onright>
+        <pagecontrol>73</pagecontrol><scrolltime tween="linear">0</scrolltime>
+        <itemlayout height="44" width="556" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="label"><left>6</left><top>0</top><width>400</width><height>44</height><aligny>center</aligny><label>$INFO[ListItem.Label2]</label></control>
+          <control type="label"><left>410</left><top>0</top><width>140</width><height>44</height><aligny>center</aligny><align>right</align><font>small</font><textcolor>textdim</textcolor><label>$INFO[ListItem.Label]</label></control>
+        </itemlayout>
+        <focusedlayout height="44" width="556" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image"><left>0</left><top>0</top><width>556</width><height>44</height><texture colordiffuse="select">fill.png</texture><visible>Control.HasFocus(120)</visible></control>
+          <control type="label"><left>6</left><top>0</top><width>400</width><height>44</height><aligny>center</aligny><textcolor>textinv</textcolor><label>$INFO[ListItem.Label2]</label></control>
+          <control type="label"><left>410</left><top>0</top><width>140</width><height>44</height><aligny>center</aligny><align>right</align><font>small</font><textcolor>textinv</textcolor><label>$INFO[ListItem.Label]</label></control>
+        </focusedlayout>
+      <itemlayout height="28" width="556">
+          <control type="label"><left>6</left><top>0</top><width>400</width><height>28</height><aligny>center</aligny><label>$INFO[ListItem.Label2]</label></control>
+          <control type="label"><left>410</left><top>0</top><width>140</width><height>28</height><aligny>center</aligny><align>right</align><font>small</font><textcolor>textdim</textcolor><label>$INFO[ListItem.Label]</label></control>
+        </itemlayout>
+        <focusedlayout height="28" width="556">
+          <control type="image"><left>0</left><top>0</top><width>556</width><height>28</height><texture colordiffuse="select">fill.png</texture><visible>Control.HasFocus(120)</visible></control>
+          <control type="label"><left>6</left><top>0</top><width>400</width><height>28</height><aligny>center</aligny><textcolor>textinv</textcolor><label>$INFO[ListItem.Label2]</label></control>
+          <control type="label"><left>410</left><top>0</top><width>140</width><height>28</height><aligny>center</aligny><align>right</align><font>small</font><textcolor>textinv</textcolor><label>$INFO[ListItem.Label]</label></control>
+        </focusedlayout>
+      </control>
+      <control type="scrollbar" id="73">
+        <left>864</left><top>70</top><width>18</width><height>378</height>
+        <orientation>vertical</orientation><onleft>120</onleft>
+      </control>
+    </control>
+  </controls>
+</window>

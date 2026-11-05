@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <controls>
+    <include>Dialog_Dim</include>
+    <control type="group">
+      <centerleft>50%</centerleft><centertop>50%</centertop>
+      <width>572</width><height>142</height>
+      <include content="Dialog_Box">
+        <param name="width" value="572" /><param name="height" value="142" />
+        <param name="innerwidth" value="566" />
+        <param name="icon" value="icons24/download.png" /><param name="colour" value="accent2" />
+        <param name="down" value="" />
+        <param name="boxes" value="none" />
+      </include>
+      <include content="Dialog_Heading"><param name="width" value="466" /></include>
+      <control type="label" id="30">
+        <left>16</left><top>40</top><width>540</width><height>26</height>
+        <font>bold</font>
+      </control>
+      <control type="label" id="31">
+        <left>16</left><top>68</top><width>540</width><height>22</height>
+        <font>small</font><textcolor>textdim</textcolor>
+      </control>
+      <control type="progress" id="32">
+        <left>16</left><top>98</top><width>540</width><height>22</height>
+      </control>
+    </control>
+  </controls>
+</window>

@@ -1,0 +1,346 @@
+v0.9.6
+- Player settings are back in the on-screen controls. Tap the screen (or
+  press OK) while something plays; the second row reads Settings:
+  - video: Video (picture settings and the Video stream, which is where
+    YouTube and other streaming add-ons offer each resolution), Audio
+    (audio stream / language, volume boost, audio delay), Subtitles,
+    Bookmarks;
+  - music: Audio;
+  - games: Save / Load, Reset, and Filter, Stretch, Rotation, Volume,
+    Advanced (the emulator's own options). The game picture dialogs show
+    live previews of each choice.
+  - Add-on: the settings of the add-on that is playing (YouTube's default
+    quality, Plex's transcoding, and so on), whenever it came from one.
+- An "Add-on settings" button on the browser toolbar whenever you're inside
+  an add-on, so every add-on's settings are one tap away, not only in
+  Options.
+- Record shows only for live TV and radio, and Menu only for discs with a
+  menu; "Subtitles" on the first row is now "Find subtitles".
+
+v0.9.5
+- NEW 4:3 layout, 1024x768, for screens such as an iPad 3 panel
+  (2048x1536). Kodi picks it by itself on a 4:3 screen and draws it at
+  exactly 2x, so the pixel font and icons stay sharp. 16:9 screens keep the
+  1024x600 layout as before.
+  - Every window uses the extra height: lists, panels, text and the desktop
+    show more rows; the task bar stays at the bottom.
+  - Desktop tiles are taller, with bigger icons (96 px on the 3x3 grid, 64 px
+    on 4x3 and 4x4, 48 px on the larger grids).
+  - Dialogs keep their size and stay centred.
+  Works with Touch mode (Skin settings) for a touchscreen.
+
+v0.9.4
+- NEW Network & Bluetooth, for Kodi on plain Linux such as Raspberry Pi OS,
+  where LibreELEC's own settings aren't available. It's in Settings, in the
+  Settings menu on the desktop, and in the Everything menu. It appears only
+  when LibreELEC's settings add-on isn't installed.
+  - Wi-Fi: nearby networks with signal bars, join with a password, hidden
+    networks, forget, disconnect, Wi-Fi on/off.
+  - Bluetooth: paired devices with connect, disconnect and forget; pair a new
+    device (scan, pair, trust and connect in one go, with passkeys shown on
+    screen).
+  - Audio output: pick Kodi's sound device. After a speaker or headphones
+    connect, it offers to switch to them.
+  Uses NetworkManager (nmcli) and BlueZ (bluetoothctl), which Raspberry Pi
+  OS already has. It can also be put on a desktop tile: Customise desktop ->
+  Choose what it opens -> Settings -> Network & Bluetooth.
+
+v0.9.3
+- NEW Touch mode (Skin settings), for touchscreens:
+  - every list, menu and settings row is taller, so each is an easy finger
+    target (the same row heights the Extra large fonts use, with normal-size
+    text);
+  - a Back button on the task bar, full task-bar height, where the clock sat
+    (the menu bar still shows the time);
+  - no mouse pointer. Kodi shows the pointer after every tap; Touch mode hides
+    it, unless a mouse is plugged in, checked every few seconds, so plugging
+    one in brings the pointer back by itself.
+  Turning it on or off reloads the skin.
+
+v0.9.2
+- NEW "Everything" menu for the desktop: every top-level menu Estuary and
+  Confluence offer, in one list. Movies, TV shows, music videos, the video
+  and music libraries, files and playlists, pictures, TV channels, guide,
+  recordings, timers, radio, games, the add-on browser, programs, favorites,
+  weather, file manager, settings, system information, events, profiles,
+  LibreELEC settings, the power menu. Add it with Customise desktop ->
+  Choose what it opens -> Menus -> Everything.
+- Back now climbs through Kodi's own menus. Shortcuts used to open with
+  Kodi's "return" option, so Back from My add-ons or Install from repository
+  jumped straight to the desktop and the add-on browser's main menu was
+  unreachable. Now Back goes up a level at a time: My add-ons -> Add-ons ->
+  desktop, Movies -> Video library -> desktop. Tiles made earlier are updated
+  automatically the first time 0.9.2 starts.
+- Add-ons menu: the add-on browser itself, and Game add-ons.
+- Settings menu: All settings, Services, TV, Games, Profiles, Events and
+  LibreELEC (when installed), alongside the existing pages.
+
+v0.9.1
+- FIXED Customise desktop showing the wrong icons. Choosing an icon didn't
+  change the picture in the editor, and moving a tile showed the icon of
+  whatever tile first lived in that place. Kodi treats a list-item property
+  called "icon" as the item's picture and never updates it; the skin now uses
+  a different name. The desktop itself was always right.
+- FIXED the tile numbers in Customise desktop showing words ("Mu...",
+  "Vi..."). Kodi reads a bare number in a list item as a string id, so tile
+  3 showed string 3, "Videos". The numbers now show as numbers.
+- Tile names now wrap onto two or three lines instead of ending in "...".
+  Icons are a size smaller to make room: 80 pixels on 3-row grids, 48 on 4
+  rows, 32 on 5 and 6 rows. They are still drawn at exact pixel multiples.
+- The Tile dialog's preview wraps long names too.
+- NEW ArthurOS-style icons for add-on tiles: online video, media server,
+  game launcher, radio and system tools. An add-on tile gets one
+  automatically, picked from the kind of add-on it is: YouTube gets online
+  video, Plex, Jellyfin and Emby get media server, and so on. The icons are
+  also in Choose an icon...
+- NEW "Add-on's own picture" in the Tile dialog, to use the add-on's own
+  artwork instead.
+- NEW Back up skin settings... and Restore skin settings... in Skin settings.
+  A backup is one small file holding the desktop, grid size, pointer, bar and
+  clock choices, plus the skin's colors, fonts and zoom. Restore asks first,
+  changes only what differs, and reloads the desktop.
+
+v0.9.0
+- NEW Customise desktop (Settings > Customise desktop..., or Skin settings).
+  - Grid size: 3x3, 4x3, 4x4, 5x4, 5x5, 6x5 or 6x6. The panel on the right
+    widens or narrows to use the space the grid leaves.
+  - Any tile can open a whole menu (Movies, Add-ons, Live TV...), one thing
+    directly (Weather, Favorites, the power menu), one shortcut from any menu
+    (Install from zip file, Install from repository, System settings...), or
+    any add-on you have installed (YouTube, Plex...).
+  - Each tile's icon can be any of the skin's 180 icons, or a picture file.
+    Add-on tiles use the add-on's own icon.
+  - Rename tiles, and move them earlier or later. Tiles fill the grid left to
+    right, then top to bottom.
+  - Reset desktop puts the original twelve tiles back, after asking.
+- Bigger desktop tiles: 96-pixel icons and 20-pixel captions on 3-row grids,
+  scaling down cleanly for 4, 5 and 6 rows. Icons are drawn at whole-pixel
+  multiples so they stay sharp.
+- NEW Live TV menu for the desktop: Channels, Guide, Recordings, Timers,
+  Search and Radio. It isn't on the desktop by default; add it with
+  Customise desktop.
+- NEW Settings level button in Kodi's settings (Basic, Standard, Advanced,
+  Expert), bottom left, under the list of categories. It changes which
+  settings Kodi shows.
+- The first time 0.9 starts it lays out the same twelve tiles as before, so
+  nothing moves until you change it.
+
+v0.8.2
+- FIXED add-on settings showing only the first page. Kodi puts each page
+  (YouTube's General, Accounts, Subtitles, and so on) as a button in a page
+  list, and the skin had that list parked off screen. It now sits on the
+  left of add-on settings; Left and Right move between the pages and the
+  settings. The dialog's title (the add-on's name) shows on the title bar.
+
+v0.8.1
+- Volume: Kodi reports volume in decibels ("-31.4 dB"), which read as an odd
+  negative number and was cut off with the bigger fonts. The volume pop-up
+  and the menu bar now show a gauge instead, plus "Muted" and a crossed-out
+  speaker when muted.
+- Menu bar date is short ("Wed Sep 23") so it no longer truncates.
+
+v0.8.0
+- FIXED the spin arrows being cut off on the right of settings rows (Wait
+  time and others). Kodi measures spinposx in from the right edge; the skin
+  had -6, which pushed the up arrow past the edge. validate.py now rejects
+  negative values.
+- FIXED empty game controller setup. DialogGameControllers.xml is shared by
+  three windows (controllers, ports, players), each with its own controls;
+  it now picks the right layout the way Estuary does, and the controller
+  list, button list, controller picture and Help/Reset/Get more buttons are
+  where Kodi expects them.
+- FIXED blank add-on descriptions. Kodi 21 exposes add-on details as
+  ListItem.Addon* labels; the skin used names from older Kodi that are always
+  empty. The add-on window now shows version, author, summary, origin, size
+  and the full description, and the add-on browser's side panel shows them too.
+- FIXED missing buttons across less-used windows. The tool that reads which
+  controls a window needs skipped any id passed in through an include, so,
+  for example, the video info screen had no Play, Resume or Trailer, the
+  playlist editors had no OK or Cancel, and the version manager and bookmarks
+  had no buttons. The video, music and TV info screens now carry all of Kodi's
+  buttons; subtitle search has its services list back.
+- New fonts: Large bold, Extra large and Extra large bold. Extra large is the
+  bitmap font at exactly twice its size (still crisp), and lists, settings
+  and menus switch to taller rows while it is active.
+- New colors: Colorblind-Safe and Colorblind-Safe-Dark (Okabe-Ito blue and
+  vermillion), High-Contrast-Light and High-Contrast-Dark (7:1 on every
+  pairing). Every palette now meets 4.5:1; palettecheck.py measures it.
+- My add-ons icon carries a heart, so it no longer depends on orange vs green.
+- US English: the skin's own words have US spellings when Kodi's language is
+  English (US), matching Kodi's own (Colors, Favorites).
+- Weather and Favorites tiles open directly, as they hold only one entry.
+- Chrome text (menu bar, task bar, title bars) has its own font names, so
+  bigger fontsets no longer overflow the bars.
+
+v0.7.2
+- FIXED the weather flashing a second, raw forecast (Celsius shown as
+  "27 °C°F", lower-case text, ISO dates, placeholder icons) whenever it
+  refreshed. The weather add-on writes its raw values into the same window
+  properties Kodi later overwrites with converted ones, and the skin was
+  reading those properties. It now uses the labels Kodi fills from its own
+  converted data, which only change once a refresh has finished.
+- Weather: a Refresh button, and a Next location button that appears only
+  when more than one location is set up. The location name and last update
+  time moved to the bottom panel.
+- FIXED the Options (context) menu opening half off the right edge with its
+  dimmed backdrop shifted across the screen. Kodi places this menu itself by
+  moving the whole window next to the focused list; the skin had centred the
+  menu inside the window as well, so it was pushed off by the same amount.
+  validate.py now checks for this.
+- FIXED a file-manager item losing its name after you open Options on it.
+  Kodi marks that item, and draws marked items in the label's "selected"
+  colour, which defaults to fully transparent. Marked items now show in a
+  palette colour (red on the light palettes).
+
+v0.7.1
+- FIXED the keyboard stopping at "Scroll list labels" in Skin settings.
+  Kodi chains a grouplist's Up/Down by control id, and the "Pointer" heading
+  had no id (id 0 means "nowhere"), so Down went no further. The same fault
+  was hiding in the player controls and the video, music and game OSDs: the
+  Playlists-style icon button, Subtitles and Close were unreachable by
+  keyboard. validate.py now rejects any id-less control inside a grouplist.
+- FIXED the _ / fullscreen / x boxes turning into dark squares in Amber,
+  Phosphor and Midnight. The whole box, glyph included, was tinted by the
+  palette's face colour, so a black glyph stayed black on a dark face. The
+  face and glyph are now separate: the face follows the palette, the glyph
+  uses the palette's text colour, and pointing at a box fills it with the
+  selection colour. Greyed-out boxes use a stippled glyph so they still show.
+
+v0.7.0
+- FIXED the "Please wait" start-up screen that never went away. Kodi counts
+  Startup.xml as part of its own start-up and waits for the skin to hand over
+  to the Home screen. ArthurOS never did, so Kodi sat there: the UI was never
+  marked ready, colour and font changes were silently refused, the remote
+  (CEC) waited, and the window ignores the mouse by design - which is why its
+  _ and x boxes did nothing. Pressing Esc left Kodi on an empty screen, where
+  the pointer trails came from. Startup now replaces itself immediately, like
+  Estuary's. validate.py rejects a Startup.xml without the hand-over.
+- Title-bar boxes, rethought:
+  _ on a window parks it on the task bar and shows the desktop. The task-bar
+    button brings it back to the folder it was showing.
+  x on a window closes it and returns to the desktop.
+  On a dialog, _ closes every dialog and x closes that one.
+  The fullscreen box is greyed out when nothing is playing, and on the
+  desktop's own panel _ and x are greyed out, since the desktop cannot close.
+  Busy, progress, seek and notification panels have no boxes at all, and
+  the login screen cannot be minimised past.
+- Every icon is now unique: 177 drawings from one registry (iconset.py),
+  instead of 125 Kodi fallbacks shared among 25 pictures. Related icons share
+  a picture plus a corner badge: Movies, Recently added movies and Movie
+  genres are a film strip with nothing, a star, and a tag. New art for
+  Videos, Player, Media, Interface, Skin, Services, System, Games, Live TV,
+  Profiles, Events, albums, the power menu, warnings and errors.
+  iconcheck.py fails the build if two different icons share pixels, if two
+  Kodi fallbacks share an icon without being declared synonyms, or if any
+  submenu or tile panel repeats an icon.
+- Every window's title bar shows its own icon; Settings categories and the
+  desktop panel follow what they are showing.
+- The now-playing task-bar button is unchanged.
+
+v0.6.0
+- FIXED empty add-on lists (and Pictures, Programs, Favourites, Playlists,
+  Games, PVR). Those windows listed only some views in <views>; Kodi only
+  hides containers it manages, so the unlisted poster view stayed visible and
+  its white panel covered the live list. validate.py now rejects this.
+- FIXED System information: section buttons now have labels, and Kodi's
+  twelve info lines, heading and build labels actually have somewhere to go.
+- FIXED radio circles hanging off the left edge of every setting.
+  Defaults.xml had radioposx -10, which Kodi measures from the left edge.
+- FIXED text cut short to "S..." under larger fonts. The task bar charged its
+  icon inset twice; the player controls tried to fit words into icon-sized
+  buttons; the keyboard's Caps Lock never fit. textfit.py now measures every
+  fixed label in every fontset.
+- Title-bar boxes work: minimise to the desktop, maximise to fullscreen
+  playback, close to go back. Mouse only - the keyboard cannot land on them.
+- Colour palettes: Acorn, Paper, Amber, Phosphor and Midnight, alongside the
+  default. Title bars, selections, focus rings, desktop and every bevel follow
+  the palette.
+- Fonts: Compact and Bold added to Default and Large.
+- Pointer: an Arthur-palette pointer is the default, with Classic and Inverse
+  selectable in Skin settings.
+- Add-ons panel gains Install from zip file, Available updates, Recently
+  updated and Check for updates.
+- The desktop's side panel caption now describes each section.
+- build.sh runs every step in order; README rewritten.
+
+v0.5.0
+- New mouse pointer: a chunkier 1-bit era arrow drawn on a 14x22 grid and
+  doubled, so the staircase reads as deliberate. The pressed cursor inverts to
+  solid black, the way 1-bit systems showed a click.
+- Every Default*.png Kodi can ask for is now supplied - all 113 of them, up
+  from 70. Kodi no longer substitutes its own modern artwork mid-browse.
+  Two new shapes were needed: an optical disc and an add-source folder.
+- Hand-designed the power menu (DialogButtonMenu), the file browser
+  (FileBrowser) and the source editor (DialogMediaSource), which were all on
+  the generic template. Their control ids were read from Kodi's source: my
+  first pass at FileBrowser had 411 and 412 as buttons when they are actually
+  the heading and path labels.
+
+v0.4.0
+- Enter (or a click) on a home icon now moves focus into the context panel on
+  the right instead of opening the window straight away, so you scroll the
+  sub-menu and pick from there. SetFocus(9010,0) also snaps to the first row,
+  so switching icons never leaves the selection stranded on an old position.
+- Fixed getting stuck on the task bar with a keyboard. Its buttons had no
+  <onup> and relied on Kodi's geometric fallback, which does not reliably find
+  its way back into a large panel. Chrome_Taskbar now takes an "up" parameter
+  and every window passes its own main control.
+- My add-ons has its own amber icon, so it no longer looks identical to the
+  green Add-ons one.
+- The boot splash no longer draws a task bar it cannot focus.
+
+v0.3.1
+- THE CURSOR FIX FINALLY SHIPS. Pointer.xml is generated by genwindows.py, and
+  the id fix had been applied by hand to the generated file twice, then wiped
+  both times by the next generator run. v0.2.0 and v0.3.0 both went out with
+  the original id-less Pointer.xml, which is why there was never a cursor.
+  Fixed in the generator, checked by validate.py, and covered by audit.sh.
+- Removed <itemlayout>/<focusedlayout> from Defaults.xml. Kodi's SetDefaults
+  appends every child of a <default> block unconditionally, so those were
+  landing on top of the layout each list already had. The reference skin
+  defines no container defaults at all.
+- Added a "Large" fontset, so Settings > Interface > Skin > Fonts is a real
+  choice (16px -> 20px body text) instead of one row.
+- validate.py now checks: Pointer has cursor ids 1-4, fontset idloc resolves
+  to a real string, every $LOCALIZE exists, no Window(Busy), and every
+  container declares its own layouts.
+- audit.sh confirms each fix is present in the built tree before packaging.
+
+v0.3.0
+- Bevel textures were 6x6; with border="2" the 2x2 centre bled under Kodi's
+  bilinear filtering so every "flat" panel rendered as a gradient. Now 24x24
+  with a 20-texel flat centre, so panels and buttons are crisp.
+- Font.xml carried idloc="31390", a string that does not exist, so Kodi's
+  font picker showed one blank row. Now points at a real string.
+- DialogBusy still said Window(Busy); the generator was overwriting the fix.
+- Weather rebuilt: Kodi never fills a list there, so the five-day forecast now
+  reads Window(Weather) properties directly. Weather label strings corrected.
+- DialogSelect layouts written out inline instead of via includes.
+- Build version shown in the menu bar and on the skin settings page.
+
+v0.2.0
+- FIXED the bug behind nearly all the bad sizing: Defaults.xml set
+  <aspectratio>keep</aspectratio> on every image control. Because every bevel
+  and fill texture is square, Kodi letterboxed each one into a centred square,
+  so full-width panels collapsed into a column down the middle of the screen.
+  Kodi's own default is "stretch"; that is now set explicitly, and the real
+  artwork (posters, thumbs, weather icons) asks for "keep" individually.
+- FIXED the missing mouse cursor. Pointer.xml had one unidentified image;
+  Kodi selects the cursor by control id, so ids 1-4 (normal, focus, drag,
+  click) are now present, with a separate pressed-state texture.
+- FIXED the add-on info dialog, which had no Open / Install / Configure
+  buttons. Only id 7 was laid out; 6, 8, 9, 10, 12, 13 and 14 were stubbed
+  off-screen. All eight are now real buttons.
+- FIXED ActivateWindow(Favourites), which is not a window name Kodi knows.
+  It is "favouritesbrowser". Every ActivateWindow target is now checked
+  against Kodi's own table by validate.py.
+- FIXED DialogBusy referring to Window(Busy); the name is "busydialog".
+- Home is now a 4x3 grid of twelve tiles, adding My add-ons, Programs and
+  Favourites alongside the original nine.
+- Added Video / Music / Picture / Program add-on entries to the context panel,
+  and a My add-ons tile listing everything installed bar dependency modules.
+- preview.py now honours aspectratio, so this class of bug shows up in a
+  render instead of on the panel.
+
+v0.1.0
+- First build. Arthur 1.2 desktop for Kodi 21 Omega at 1024x600.

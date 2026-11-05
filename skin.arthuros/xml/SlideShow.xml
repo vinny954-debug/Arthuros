@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <controls>
+    <control type="image">
+      <left>0</left><top>0</top><width>1024</width><height>600</height>
+      <texture>bar_dgrey.png</texture>
+    </control>
+    <!-- Kodi renders the picture itself; the skin only adds the caption. -->
+    <control type="group">
+      <left>6</left><top>568</top><width>1012</width><height>26</height>
+      <visible>!Slideshow.IsPaused + Player.ShowInfo</visible>
+      <include content="Win_Frame"><param name="width" value="1012" /><param name="height" value="26" /></include>
+      <control type="label"><left>10</left><top>0</top><width>990</width><height>26</height>
+        <font>small</font><label>$INFO[Slideshow.Filename]</label></control>
+    </control>
+  </controls>
+</window>

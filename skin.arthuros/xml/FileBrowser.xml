@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <defaultcontrol>450</defaultcontrol>
+  <controls>
+    <include>Dialog_Dim</include>
+    <control type="group">
+      <centerleft>50%</centerleft><centertop>50%</centertop>
+      <width>900</width><height>452</height>
+      <include content="Dialog_Box">
+        <param name="width" value="900" /><param name="height" value="452" />
+        <param name="innerwidth" value="894" />
+        <param name="icon" value="icons24/folder.png" /><param name="colour" value="accent2" />
+        <param name="down" value="450" />
+        <param name="boxes" value="dialog" />
+      </include>
+      <control type="label" id="411">
+        <left>29</left><top>3</top><width>760</width><height>26</height>
+        <font>bold</font><textcolor>titletext</textcolor><aligny>center</aligny>
+      </control>
+      <control type="image">
+        <left>10</left><top>36</top><width>880</width><height>26</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_chrome.png</texture>
+      </control>
+      <control type="label" id="412">
+        <left>18</left><top>36</top><width>864</width><height>26</height>
+        <font>small</font><textcolor>textdim</textcolor><aligny>center</aligny>
+      </control>
+      <control type="image">
+        <left>10</left><top>68</top><width>880</width><height>328</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+      </control>
+      <control type="list" id="450">
+        <left>16</left><top>74</top><width>848</width><height>316</height>
+        <onleft>413</onleft><onright>60</onright>
+        <onup>450</onup><ondown>413</ondown>
+        <pagecontrol>60</pagecontrol>
+        <scrolltime tween="linear">0</scrolltime>
+        <itemlayout height="42" width="848" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image">
+            <left>4</left><top>13</top><width>16</width><height>16</height>
+            <texture fallback="DefaultFolder.png">$INFO[ListItem.Icon]</texture>
+            <aspectratio>keep</aspectratio>
+          </control>
+          <control type="label">
+            <left>28</left><top>0</top><width>640</width><height>42</height>
+            <aligny>center</aligny><label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <left>28</left><top>0</top><width>816</width><height>42</height>
+            <align>right</align><aligny>center</aligny><font>small</font>
+            <textcolor>textdim</textcolor><label>$INFO[ListItem.Label2]</label>
+          </control>
+        </itemlayout>
+        <focusedlayout height="42" width="848" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image">
+            <left>0</left><top>0</top><width>848</width><height>42</height>
+            <texture colordiffuse="select">fill.png</texture>
+          </control>
+          <control type="image">
+            <left>4</left><top>13</top><width>16</width><height>16</height>
+            <texture fallback="DefaultFolder.png">$INFO[ListItem.Icon]</texture>
+            <aspectratio>keep</aspectratio>
+          </control>
+          <control type="label">
+            <left>28</left><top>0</top><width>640</width><height>42</height>
+            <font>bold</font><textcolor>textinv</textcolor>
+            <aligny>center</aligny><label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <left>28</left><top>0</top><width>816</width><height>42</height>
+            <align>right</align><aligny>center</aligny><font>small</font>
+            <textcolor>textinv</textcolor><label>$INFO[ListItem.Label2]</label>
+          </control>
+        </focusedlayout>
+      <itemlayout height="26" width="848">
+          <control type="image">
+            <left>4</left><top>5</top><width>16</width><height>16</height>
+            <texture fallback="DefaultFolder.png">$INFO[ListItem.Icon]</texture>
+            <aspectratio>keep</aspectratio>
+          </control>
+          <control type="label">
+            <left>28</left><top>0</top><width>640</width><height>26</height>
+            <aligny>center</aligny><label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <left>28</left><top>0</top><width>816</width><height>26</height>
+            <align>right</align><aligny>center</aligny><font>small</font>
+            <textcolor>textdim</textcolor><label>$INFO[ListItem.Label2]</label>
+          </control>
+        </itemlayout>
+        <focusedlayout height="26" width="848">
+          <control type="image">
+            <left>0</left><top>0</top><width>848</width><height>26</height>
+            <texture colordiffuse="select">fill.png</texture>
+          </control>
+          <control type="image">
+            <left>4</left><top>5</top><width>16</width><height>16</height>
+            <texture fallback="DefaultFolder.png">$INFO[ListItem.Icon]</texture>
+            <aspectratio>keep</aspectratio>
+          </control>
+          <control type="label">
+            <left>28</left><top>0</top><width>640</width><height>26</height>
+            <font>bold</font><textcolor>textinv</textcolor>
+            <aligny>center</aligny><label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <left>28</left><top>0</top><width>816</width><height>26</height>
+            <align>right</align><aligny>center</aligny><font>small</font>
+            <textcolor>textinv</textcolor><label>$INFO[ListItem.Label2]</label>
+          </control>
+        </focusedlayout>
+      </control>
+      <control type="panel" id="451">
+        <left>16</left><top>74</top><width>848</width><height>316</height>
+        <onleft>413</onleft><onright>60</onright>
+        <onup>451</onup><ondown>413</ondown>
+        <pagecontrol>60</pagecontrol>
+        <scrolltime tween="linear">0</scrolltime>
+        <itemlayout height="26" width="848">
+          <control type="image">
+            <left>4</left><top>5</top><width>16</width><height>16</height>
+            <texture fallback="DefaultFolder.png">$INFO[ListItem.Icon]</texture>
+            <aspectratio>keep</aspectratio>
+          </control>
+          <control type="label">
+            <left>28</left><top>0</top><width>640</width><height>26</height>
+            <aligny>center</aligny><label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <left>28</left><top>0</top><width>816</width><height>26</height>
+            <align>right</align><aligny>center</aligny><font>small</font>
+            <textcolor>textdim</textcolor><label>$INFO[ListItem.Label2]</label>
+          </control>
+        </itemlayout>
+        <focusedlayout height="26" width="848">
+          <control type="image">
+            <left>0</left><top>0</top><width>848</width><height>26</height>
+            <texture colordiffuse="select">fill.png</texture>
+          </control>
+          <control type="image">
+            <left>4</left><top>5</top><width>16</width><height>16</height>
+            <texture fallback="DefaultFolder.png">$INFO[ListItem.Icon]</texture>
+            <aspectratio>keep</aspectratio>
+          </control>
+          <control type="label">
+            <left>28</left><top>0</top><width>640</width><height>26</height>
+            <font>bold</font><textcolor>textinv</textcolor>
+            <aligny>center</aligny><label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <left>28</left><top>0</top><width>816</width><height>26</height>
+            <align>right</align><aligny>center</aligny><font>small</font>
+            <textcolor>textinv</textcolor><label>$INFO[ListItem.Label2]</label>
+          </control>
+        </focusedlayout>
+      </control>
+      <control type="scrollbar" id="60">
+        <left>868</left><top>74</top><width>18</width><height>316</height>
+        <onleft>450</onleft><onright>413</onright>
+      </control>
+      <control type="grouplist">
+        <left>13</left><top>404</top><width>874</width><height>32</height>
+        <orientation>horizontal</orientation><align>center</align><itemgap>6</itemgap>
+        <onup>450</onup>
+        <control type="button" id="413"><width>200</width><height>32</height><label>$LOCALIZE[186]</label></control>
+        <control type="button" id="414"><width>200</width><height>32</height><label>$LOCALIZE[222]</label></control>
+        <control type="button" id="415"><width>230</width><height>32</height><label>$LOCALIZE[20309]</label></control>
+        <control type="togglebutton" id="416"><width>200</width><height>32</height></control>
+      </control>
+    </control>
+  </controls>
+</window>

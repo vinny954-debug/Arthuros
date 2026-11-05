@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <defaultcontrol>11</defaultcontrol>
+  <controls>
+    <include>Dialog_Dim</include>
+    <control type="group">
+      <centerleft>50%</centerleft><centertop>50%</centertop>
+      <width>900</width><height>500</height>
+      <include content="Dialog_Box">
+        <param name="width" value="900" /><param name="height" value="500" />
+        <param name="innerwidth" value="894" />
+        <param name="icon" value="icons24/pvr_groups.png" /><param name="colour" value="accent2" />
+        <param name="down" value="11" />
+        <param name="boxes" value="dialog" />
+      </include>
+      <include content="Dialog_Heading"><param name="width" value="794" /></include>
+      <control type="image">
+        <left>10</left><top>36</top><width>300</width><height>420</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      </control>
+      <control type="grouplist">
+        <left>18</left><top>42</top><width>284</width><height>408</height>
+        <orientation>vertical</orientation><itemgap>3</itemgap>
+        <onup>9100</onup><ondown>9100</ondown>
+        <control type="radiobutton" id="25">
+          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+        </control>
+        <control type="button" id="26">
+          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+        </control>
+        <control type="button" id="27">
+          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+        </control>
+        <control type="button" id="28">
+          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+        </control>
+        <control type="button" id="29">
+          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+        </control>
+        <control type="togglebutton" id="34">
+          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+        </control>
+        <control type="button" id="35">
+          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+        </control>
+      </control>
+      <control type="image">
+        <left>316</left><top>36</top><width>574</width><height>320</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+      </control>
+      <control type="list" id="11">
+        <left>319</left><top>39</top><width>550</width><height>314</height>
+        <onleft>25</onleft><onright>71</onright>
+        <onup>11</onup><ondown>11</ondown>
+        <pagecontrol>71</pagecontrol>
+        <itemlayout height="44" width="550" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_ItemLayout_XL"><param name="width" value="542" /></include>
+        </itemlayout>
+        <focusedlayout height="44" width="550" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_FocusedLayout_XL"><param name="width" value="550" /></include>
+        </focusedlayout>
+      <itemlayout height="28" width="550">
+          <include content="Arthur_ItemLayout"><param name="width" value="542" /></include>
+        </itemlayout>
+        <focusedlayout height="28" width="550">
+          <include content="Arthur_FocusedLayout"><param name="width" value="550" /></include>
+        </focusedlayout>
+      </control>
+      <control type="scrollbar" id="71">
+        <left>869</left><top>39</top><width>18</width><height>314</height>
+        <onleft>11</onleft><onright>25</onright>
+      </control>
+      <control type="image">
+        <left>316</left><top>362</top><width>574</width><height>94</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      </control>
+      <control type="label" id="20">
+        <left>326</left><top>368</top><width>554</width><height>24</height>
+        <font>small</font>
+      </control>
+      <control type="label" id="21">
+        <left>326</left><top>394</top><width>554</width><height>24</height>
+        <font>small</font>
+      </control>
+      <control type="label" id="22">
+        <left>326</left><top>420</top><width>554</width><height>24</height>
+        <font>small</font>
+      </control>
+      <control type="list" id="12">
+        <left>-3000</left><top>0</top><width>200</width><height>24</height>
+        <itemlayout height="36" width="100" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><focusedlayout height="36" width="100" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+      <itemlayout height="20" width="100" /><focusedlayout height="20" width="100" />
+      </control>
+      <control type="list" id="13">
+        <left>-3000</left><top>0</top><width>200</width><height>24</height>
+        <itemlayout height="36" width="100" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><focusedlayout height="36" width="100" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+      <itemlayout height="20" width="100" /><focusedlayout height="20" width="100" />
+      </control>
+      <control type="scrollbar" id="72">
+        <left>-3000</left><top>0</top><width>200</width><height>24</height>
+      </control>
+      <control type="scrollbar" id="73">
+        <left>-3000</left><top>0</top><width>200</width><height>24</height>
+      </control>
+    </control>
+  </controls>
+</window>

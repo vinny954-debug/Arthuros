@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <zorder>5</zorder>
+  <controls>
+    <include>Dialog_Dim</include>
+    <control type="group">
+      <centerleft>50%</centerleft><centertop>50%</centertop>
+      <width>360</width><height>120</height>
+      <include content="Dialog_Box">
+        <param name="width" value="360" /><param name="height" value="120" />
+        <param name="innerwidth" value="354" /><param name="icon" value="icons24/clock.png" />
+        <param name="title" value="$LOCALIZE[503]" />
+        <param name="boxes" value="none" />
+      </include>
+      <control type="label">
+        <left>12</left><top>40</top><width>336</width><height>26</height>
+        <align>center</align><font>bold</font><label>$LOCALIZE[20186]</label>
+      </control>
+      <control type="progress">
+        <left>16</left><top>74</top><width>328</width><height>22</height>
+        <info>Window(busydialog).Property(Busy.Progress)</info>
+      </control>
+    </control>
+  </controls>
+</window>

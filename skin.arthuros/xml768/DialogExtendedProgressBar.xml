@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<window>
+  <controls>
+    <control type="image">
+      <left>0</left><top>0</top><width>1024</width><height>768</height>
+      <texture>dim.png</texture>
+    </control>
+    <control type="group">
+      <centerleft>50%</centerleft><centertop>50%</centertop>
+      <width>572</width><height>142</height>
+      <control type="image">
+        <left>0</left><top>0</top>
+        <width>572</width><height>142</height>
+        <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+      </control>
+      <control type="group">
+        <left>3</left><top>3</top>
+        <control type="group">
+        <width>566</width><height>26</height>
+
+        <control type="image">
+          <left>0</left><top>0</top>
+          <width>566</width><height>26</height>
+          <texture colordiffuse="accent2">fill.png</texture>
+        </control>
+        <!-- hard 1px rule under the bar, the way Arthur draws it -->
+        <control type="image">
+          <left>0</left><bottom>0</bottom>
+          <width>566</width><height>1</height>
+          <texture>fill_black.png</texture>
+        </control>
+
+        <control type="image">
+          <left>4</left><top>5</top><width>16</width><height>16</height>
+          <texture>icons24/download.png</texture>
+        </control>
+
+        <!-- left + right with no width: Kodi derives the width, so the title
+             stops before the window boxes instead of running underneath them -->
+        <control type="label">
+          <left>26</left><right>100</right><top>0</top><height>26</height>
+          <align>left</align><aligny>center</aligny>
+          <font>chromebold</font><textcolor>titletext</textcolor>
+          <label></label>
+        </control>
+
+        <control type="label">
+          <right>100</right><top>0</top><width>460</width><height>26</height>
+          <align>right</align><aligny>center</aligny>
+          <font>chromesmall</font><textcolor>titletext</textcolor>
+          <label></label>
+        </control>
+
+        <!-- The window boxes. Which set a title bar gets is chosen by the
+             "boxes" parameter: window, dialog, home or none. -->
+        <control type="group"/>
+      </control>
+      </control>
+      <control type="label" id="1">
+        <left>29</left><top>3</top><width>466</width><height>26</height>
+        <font>chromebold</font><textcolor>titletext</textcolor>
+        <align>left</align><aligny>center</aligny>
+      </control>
+      <control type="label" id="30">
+        <left>16</left><top>40</top><width>540</width><height>26</height>
+        <font>bold</font>
+      </control>
+      <control type="label" id="31">
+        <left>16</left><top>68</top><width>540</width><height>22</height>
+        <font>small</font><textcolor>textdim</textcolor>
+      </control>
+      <control type="progress" id="32">
+        <left>16</left><top>98</top><width>540</width><height>22</height>
+      </control>
+    </control>
+  </controls>
+</window>

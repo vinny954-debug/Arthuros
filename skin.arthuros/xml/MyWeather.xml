@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <defaultcontrol always="false">2</defaultcontrol>
+  <backgroundcolor>desktop</backgroundcolor>
+  <controls>
+    <include>Chrome_Desktop</include>
+    <include>Chrome_Menubar</include>
+    <control type="group">
+      <left>6</left><top>30</top><width>1012</width><height>534</height>
+      <include content="Win_Frame">
+        <param name="width" value="1012" /><param name="height" value="534" />
+      </include>
+      <control type="group">
+        <left>3</left><top>3</top>
+        <include content="Win_Title">
+          <param name="width" value="1006" />
+          <param name="colour" value="accent2" />
+          <param name="icon" value="icons24/weather.png" />
+          <param name="label" value="$LOCALIZE[8]" />
+          <param name="down" value="2" />
+          <param name="boxes" value="window" />
+        </include>
+      </control>
+      <control type="image">
+        <left>6</left><top>34</top><width>1000</width><height>138</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      </control>
+      <control type="image" id="21">
+        <left>18</left><top>44</top><width>118</width><height>118</height>
+        <aspectratio>keep</aspectratio>
+      </control>
+      <control type="label" id="23">
+        <left>150</left><top>44</top><width>130</width><height>36</height>
+        <font>bigbold</font><align>left</align>
+      </control>
+      <control type="label" id="22">
+        <left>286</left><top>44</top><width>330</width><height>36</height>
+        <font>bigbold</font><align>left</align>
+      </control>
+      <control type="label">
+        <left>150</left><top>84</top><width>150</width><height>24</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$LOCALIZE[404]:</label>
+      </control>
+      <control type="label" id="26">
+        <left>302</left><top>84</top><width>330</width><height>24</height>
+        <font>small</font><align>left</align>
+      </control>
+      <control type="label">
+        <left>150</left><top>108</top><width>150</width><height>24</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$LOCALIZE[406]:</label>
+      </control>
+      <control type="label" id="28">
+        <left>302</left><top>108</top><width>70</width><height>24</height>
+        <font>small</font><align>left</align>
+      </control>
+      <control type="label">
+        <left>380</left><top>108</top><width>150</width><height>24</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$LOCALIZE[402]:</label>
+      </control>
+      <control type="label" id="24">
+        <left>532</left><top>108</top><width>100</width><height>24</height>
+        <font>small</font><align>left</align>
+      </control>
+      <control type="label">
+        <left>150</left><top>132</top><width>150</width><height>24</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$LOCALIZE[405]:</label>
+      </control>
+      <control type="label" id="27">
+        <left>302</left><top>132</top><width>70</width><height>24</height>
+        <font>small</font><align>left</align>
+      </control>
+      <control type="label">
+        <left>380</left><top>132</top><width>150</width><height>24</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$LOCALIZE[403]:</label>
+      </control>
+      <control type="label" id="25">
+        <left>532</left><top>132</top><width>100</width><height>24</height>
+        <font>small</font><align>left</align>
+      </control>
+      <control type="button" id="2">
+        <right>14</right><top>46</top><width>150</width><height>32</height>
+        <align>center</align>
+        <onleft>20</onleft><onright>20</onright>
+        <ondown>9100</ondown><onup>9100</onup>
+      </control>
+      <control type="button" id="20">
+        <right>172</right><top>46</top><width>220</width><height>32</height>
+        <align>center</align>
+        <label>$LOCALIZE[31944]</label>
+        <visible>Integer.IsGreater(Window(Weather).Property(Locations),1)</visible>
+        <onclick>Weather.LocationNext</onclick>
+        <onleft>2</onleft><onright>2</onright>
+        <ondown>9100</ondown><onup>9100</onup>
+      </control>
+      <control type="label">
+        <right>14</right><top>92</top><width>358</width><height>24</height>
+        <font>small</font><textcolor>textdim</textcolor><align>right</align>
+        <label>$INFO[Window(Weather).Property(WeatherProvider)]</label>
+      </control>
+      <control type="group" id="567"><left>-3000</left><top>0</top><width>10</width><height>10</height></control>
+      <control type="image">
+        <left>8</left><top>180</top><width>192</width><height>214</height>
+        <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+      </control>
+      <control type="label" id="31">
+        <left>14</left><top>186</top><width>180</width><height>26</height>
+        <font>bold</font><align>center</align>
+      </control>
+      <control type="image" id="35">
+        <left>72</left><top>216</top><width>64</width><height>64</height>
+        <aspectratio>keep</aspectratio>
+      </control>
+      <control type="label" id="32">
+        <left>14</left><top>286</top><width>80</width><height>26</height>
+        <font>bold</font><align>right</align>
+      </control>
+      <control type="label">
+        <left>94</left><top>286</top><width>20</width><height>26</height>
+        <font>bold</font><align>center</align><label>/</label>
+      </control>
+      <control type="label" id="33">
+        <left>114</left><top>286</top><width>80</width><height>26</height>
+        <font>bold</font><align>left</align>
+      </control>
+      <control type="label" id="34">
+        <left>14</left><top>314</top><width>180</width><height>70</height>
+        <font>small</font><textcolor>textdim</textcolor><align>center</align><aligny>top</aligny>
+        <wrapmultiline>true</wrapmultiline>
+      </control>
+      <control type="image">
+        <left>208</left><top>180</top><width>192</width><height>214</height>
+        <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+      </control>
+      <control type="label" id="41">
+        <left>214</left><top>186</top><width>180</width><height>26</height>
+        <font>bold</font><align>center</align>
+      </control>
+      <control type="image" id="45">
+        <left>272</left><top>216</top><width>64</width><height>64</height>
+        <aspectratio>keep</aspectratio>
+      </control>
+      <control type="label" id="42">
+        <left>214</left><top>286</top><width>80</width><height>26</height>
+        <font>bold</font><align>right</align>
+      </control>
+      <control type="label">
+        <left>294</left><top>286</top><width>20</width><height>26</height>
+        <font>bold</font><align>center</align><label>/</label>
+      </control>
+      <control type="label" id="43">
+        <left>314</left><top>286</top><width>80</width><height>26</height>
+        <font>bold</font><align>left</align>
+      </control>
+      <control type="label" id="44">
+        <left>214</left><top>314</top><width>180</width><height>70</height>
+        <font>small</font><textcolor>textdim</textcolor><align>center</align><aligny>top</aligny>
+        <wrapmultiline>true</wrapmultiline>
+      </control>
+      <control type="image">
+        <left>408</left><top>180</top><width>192</width><height>214</height>
+        <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+      </control>
+      <control type="label" id="51">
+        <left>414</left><top>186</top><width>180</width><height>26</height>
+        <font>bold</font><align>center</align>
+      </control>
+      <control type="image" id="55">
+        <left>472</left><top>216</top><width>64</width><height>64</height>
+        <aspectratio>keep</aspectratio>
+      </control>
+      <control type="label" id="52">
+        <left>414</left><top>286</top><width>80</width><height>26</height>
+        <font>bold</font><align>right</align>
+      </control>
+      <control type="label">
+        <left>494</left><top>286</top><width>20</width><height>26</height>
+        <font>bold</font><align>center</align><label>/</label>
+      </control>
+      <control type="label" id="53">
+        <left>514</left><top>286</top><width>80</width><height>26</height>
+        <font>bold</font><align>left</align>
+      </control>
+      <control type="label" id="54">
+        <left>414</left><top>314</top><width>180</width><height>70</height>
+        <font>small</font><textcolor>textdim</textcolor><align>center</align><aligny>top</aligny>
+        <wrapmultiline>true</wrapmultiline>
+      </control>
+      <control type="image">
+        <left>608</left><top>180</top><width>192</width><height>214</height>
+        <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+      </control>
+      <control type="label" id="61">
+        <left>614</left><top>186</top><width>180</width><height>26</height>
+        <font>bold</font><align>center</align>
+      </control>
+      <control type="image" id="65">
+        <left>672</left><top>216</top><width>64</width><height>64</height>
+        <aspectratio>keep</aspectratio>
+      </control>
+      <control type="label" id="62">
+        <left>614</left><top>286</top><width>80</width><height>26</height>
+        <font>bold</font><align>right</align>
+      </control>
+      <control type="label">
+        <left>694</left><top>286</top><width>20</width><height>26</height>
+        <font>bold</font><align>center</align><label>/</label>
+      </control>
+      <control type="label" id="63">
+        <left>714</left><top>286</top><width>80</width><height>26</height>
+        <font>bold</font><align>left</align>
+      </control>
+      <control type="label" id="64">
+        <left>614</left><top>314</top><width>180</width><height>70</height>
+        <font>small</font><textcolor>textdim</textcolor><align>center</align><aligny>top</aligny>
+        <wrapmultiline>true</wrapmultiline>
+      </control>
+      <control type="image">
+        <left>808</left><top>180</top><width>192</width><height>214</height>
+        <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+      </control>
+      <control type="label" id="71">
+        <left>814</left><top>186</top><width>180</width><height>26</height>
+        <font>bold</font><align>center</align>
+      </control>
+      <control type="image" id="75">
+        <left>872</left><top>216</top><width>64</width><height>64</height>
+        <aspectratio>keep</aspectratio>
+      </control>
+      <control type="label" id="72">
+        <left>814</left><top>286</top><width>80</width><height>26</height>
+        <font>bold</font><align>right</align>
+      </control>
+      <control type="label">
+        <left>894</left><top>286</top><width>20</width><height>26</height>
+        <font>bold</font><align>center</align><label>/</label>
+      </control>
+      <control type="label" id="73">
+        <left>914</left><top>286</top><width>80</width><height>26</height>
+        <font>bold</font><align>left</align>
+      </control>
+      <control type="label" id="74">
+        <left>814</left><top>314</top><width>180</width><height>70</height>
+        <font>small</font><textcolor>textdim</textcolor><align>center</align><aligny>top</aligny>
+        <wrapmultiline>true</wrapmultiline>
+      </control>
+      <control type="image">
+        <left>6</left><top>402</top><width>1000</width><height>126</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      </control>
+      <control type="label">
+        <left>18</left><top>414</top><width>160</width><height>24</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$LOCALIZE[31943]:</label>
+      </control>
+      <control type="label" id="10">
+        <left>180</left><top>414</top><width>810</width><height>24</height>
+        <font>bold</font><align>left</align>
+      </control>
+      <control type="label">
+        <left>18</left><top>444</top><width>160</width><height>24</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$LOCALIZE[12014]:</label>
+      </control>
+      <control type="label" id="11">
+        <left>180</left><top>444</top><width>810</width><height>24</height>
+        <font>small</font><align>left</align>
+      </control>
+    </control>
+    <include content="Chrome_Taskbar"><param name="up" value="2" /></include>
+  </controls>
+</window>

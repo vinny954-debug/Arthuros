@@ -1,0 +1,273 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<window>
+  <defaultcontrol>602</defaultcontrol>
+  <controls>
+    <control type="group">
+      <centerleft>50%</centerleft><centertop>50%</centertop>
+      <width>892</width><height>288</height>
+      <control type="image">
+        <left>0</left><top>0</top>
+        <width>892</width><height>288</height>
+        <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+      </control>
+      <control type="group">
+        <left>3</left><top>3</top>
+        <control type="group">
+        <width>886</width><height>26</height>
+
+        <control type="image">
+          <left>0</left><top>0</top>
+          <width>886</width><height>26</height>
+          <texture colordiffuse="accent2">fill.png</texture>
+        </control>
+        <!-- hard 1px rule under the bar, the way Arthur draws it -->
+        <control type="image">
+          <left>0</left><bottom>0</bottom>
+          <width>886</width><height>1</height>
+          <texture>fill_black.png</texture>
+        </control>
+
+        <control type="image">
+          <left>4</left><top>5</top><width>16</width><height>16</height>
+          <texture>icons24/osd_music.png</texture>
+        </control>
+
+        <!-- left + right with no width: Kodi derives the width, so the title
+             stops before the window boxes instead of running underneath them -->
+        <control type="label">
+          <left>26</left><right>100</right><top>0</top><height>26</height>
+          <align>left</align><aligny>center</aligny>
+          <font>chromebold</font><textcolor>titletext</textcolor>
+          <label></label>
+        </control>
+
+        <control type="label">
+          <right>100</right><top>0</top><width>460</width><height>26</height>
+          <align>right</align><aligny>center</aligny>
+          <font>chromesmall</font><textcolor>titletext</textcolor>
+          <label></label>
+        </control>
+
+        <!-- The window boxes. Which set a title bar gets is chosen by the
+             "boxes" parameter: window, dialog, home or none. -->
+        <control type="group">
+      <control type="button" id="9901">
+        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label/>
+        <onclick>Dialog.Close(all,true)</onclick>
+        <onclick>ActivateWindow(Home)</onclick>
+        <onright>9902</onright>
+        <ondown>602</ondown>
+      </control>
+      <control type="image">
+        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="text">wc_min_g.png</texture>
+        <visible>!Control.HasFocus(9901)</visible>
+      </control>
+      <control type="image">
+        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="titletext">wc_min_g.png</texture>
+        <visible>Control.HasFocus(9901)</visible>
+      </control>
+      <control type="button" id="9902">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label/>
+        <enable>Player.HasMedia</enable>
+        <onclick>Action(FullScreen)</onclick>
+        <onleft>9901</onleft>
+        <onright>9903</onright>
+        <ondown>602</ondown>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="text">wc_max_g.png</texture>
+        <visible>!Control.HasFocus(9902) + Player.HasMedia</visible>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="titletext">wc_max_g.png</texture>
+        <visible>Control.HasFocus(9902)</visible>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="textdim">wc_max_dg.png</texture>
+        <visible>!Player.HasMedia</visible>
+      </control>
+      <control type="button" id="9903">
+        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label/>
+        <onclick>Action(Back)</onclick>
+        <onleft>9902</onleft>
+        <ondown>602</ondown>
+      </control>
+      <control type="image">
+        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="text">wc_close_g.png</texture>
+        <visible>!Control.HasFocus(9903)</visible>
+      </control>
+      <control type="image">
+        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="titletext">wc_close_g.png</texture>
+        <visible>Control.HasFocus(9903)</visible>
+      </control>
+    </control>
+      </control>
+      </control>
+      <control type="group" id="200">
+        <left>0</left><top>0</top><width>892</width><height>240</height>
+      </control>
+      <control type="group" id="698">
+        <left>0</left><top>0</top><width>892</width><height>240</height>
+      </control>
+      <control type="group" id="699">
+        <left>0</left><top>0</top><width>892</width><height>240</height>
+      </control>
+      <control type="image">
+        <left>13</left><top>36</top><width>120</width><height>120</height>
+        <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+      </control>
+      <control type="image">
+        <left>19</left><top>42</top><width>108</width><height>108</height>
+        <texture fallback="DefaultVideo.png">$INFO[Player.Art(thumb)]</texture>
+        <aspectratio>keep</aspectratio>
+      </control>
+      <control type="label">
+        <left>146</left><top>38</top><width>730</width><height>26</height>
+        <font>bigbold</font>
+        <label>$VAR[NowPlayingVar]</label>
+      </control>
+      <control type="label">
+        <left>146</left><top>68</top><width>730</width><height>22</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$INFO[Player.Time] / $INFO[Player.Duration]</label>
+      </control>
+      <control type="progress">
+        <left>146</left><top>96</top><width>730</width><height>18</height>
+        <info>Player.Progress</info>
+      </control>
+      <control type="grouplist" id="201">
+        <left>13</left><top>166</top><width>560</width><height>36</height>
+        <orientation>horizontal</orientation><itemgap>6</itemgap>
+        <onup>203</onup><ondown>202</ondown>
+        <control type="radiobutton" id="600">
+          <width>86</width><height>36</height>
+          <label/>
+          <textureradioonfocus>icons16/prev.png</textureradioonfocus>
+          <textureradioonnofocus>icons16/prev.png</textureradioonnofocus>
+          <textureradioofffocus>icons16/prev.png</textureradioofffocus>
+          <textureradiooffnofocus colordiffuse="textdim">icons16/prev.png</textureradiooffnofocus>
+          <radiowidth>16</radiowidth><radioheight>16</radioheight>
+          <radioposx>35</radioposx><radioposy>10</radioposy>
+          <onclick>PlayerControl(Previous)</onclick>
+        </control>
+        <control type="radiobutton" id="601">
+          <width>86</width><height>36</height>
+          <label/>
+          <textureradioonfocus>icons16/rew.png</textureradioonfocus>
+          <textureradioonnofocus>icons16/rew.png</textureradioonnofocus>
+          <textureradioofffocus>icons16/rew.png</textureradioofffocus>
+          <textureradiooffnofocus colordiffuse="textdim">icons16/rew.png</textureradiooffnofocus>
+          <radiowidth>16</radiowidth><radioheight>16</radioheight>
+          <radioposx>35</radioposx><radioposy>10</radioposy>
+          <onclick>PlayerControl(Play)</onclick>
+          <onclick>PlayerControl(Rewind)</onclick>
+        </control>
+        <control type="group" id="9602">
+          <width>86</width><height>36</height>
+          <control type="button" id="602">
+            <left>0</left><top>0</top><width>86</width><height>36</height>
+            <label/>
+            <onclick>PlayerControl(Play)</onclick>
+          </control>
+          <control type="image">
+            <left>35</left><top>10</top><width>16</width><height>16</height>
+            <texture>icons16/play.png</texture>
+          </control>
+        </control>
+        <control type="radiobutton" id="603">
+          <width>86</width><height>36</height>
+          <label/>
+          <textureradioonfocus>icons16/stop.png</textureradioonfocus>
+          <textureradioonnofocus>icons16/stop.png</textureradioonnofocus>
+          <textureradioofffocus>icons16/stop.png</textureradioofffocus>
+          <textureradiooffnofocus colordiffuse="textdim">icons16/stop.png</textureradiooffnofocus>
+          <radiowidth>16</radiowidth><radioheight>16</radioheight>
+          <radioposx>35</radioposx><radioposy>10</radioposy>
+          <onclick>PlayerControl(Stop)</onclick>
+        </control>
+        <control type="radiobutton" id="606">
+          <width>86</width><height>36</height>
+          <label/>
+          <textureradioonfocus>icons16/ffwd.png</textureradioonfocus>
+          <textureradioonnofocus>icons16/ffwd.png</textureradioonnofocus>
+          <textureradioofffocus>icons16/ffwd.png</textureradioofffocus>
+          <textureradiooffnofocus colordiffuse="textdim">icons16/ffwd.png</textureradiooffnofocus>
+          <radiowidth>16</radiowidth><radioheight>16</radioheight>
+          <radioposx>35</radioposx><radioposy>10</radioposy>
+          <onclick>PlayerControl(Play)</onclick>
+          <onclick>PlayerControl(Forward)</onclick>
+        </control>
+        <control type="radiobutton" id="607">
+          <width>86</width><height>36</height>
+          <label/>
+          <textureradioonfocus>icons16/next.png</textureradioonfocus>
+          <textureradioonnofocus>icons16/next.png</textureradioonnofocus>
+          <textureradioofffocus>icons16/next.png</textureradioofffocus>
+          <textureradiooffnofocus colordiffuse="textdim">icons16/next.png</textureradiooffnofocus>
+          <radiowidth>16</radiowidth><radioheight>16</radioheight>
+          <radioposx>35</radioposx><radioposy>10</radioposy>
+          <onclick>PlayerControl(Next)</onclick>
+        </control>
+      </control>
+      <control type="grouplist" id="202">
+        <left>13</left><top>210</top><width>866</width><height>30</height>
+        <orientation>horizontal</orientation><itemgap>6</itemgap>
+        <onup>201</onup><ondown>203</ondown>
+        <control type="button" id="87">
+          <width>150</width><height>30</height>
+          <label>$LOCALIZE[136]</label>
+          <onclick>ActivateWindow(PlayerControls)</onclick>
+        </control>
+        <control type="radiobutton" id="608">
+          <width>150</width><height>30</height>
+          <label>$LOCALIZE[264]</label>
+          <onclick>PVR.ToggleRecordPlayingChannel</onclick>
+          <visible>[PVR.IsPlayingTV | PVR.IsPlayingRadio]</visible>
+        </control>
+        <control type="button" id="9951">
+          <width>140</width><height>30</height>
+          <label>$LOCALIZE[15067]</label>
+          <onclick>Dialog.Close(all,true)</onclick>
+          <onclick>Action(FullScreen)</onclick>
+        </control>
+      </control>
+      <control type="label">
+        <left>13</left><top>246</top><width>110</width><height>30</height>
+        <font>chromesmall</font><textcolor>textdim</textcolor><aligny>center</aligny>
+        <label>$LOCALIZE[5]:</label>
+      </control>
+      <control type="grouplist" id="203">
+        <left>129</left><top>246</top><width>750</width><height>30</height>
+        <orientation>horizontal</orientation><itemgap>6</itemgap>
+        <onup>202</onup><ondown>201</ondown>
+        <control type="button" id="9962">
+          <width>100</width><height>30</height>
+          <label>$LOCALIZE[292]</label>
+          <onclick>ActivateWindow(OSDAudioSettings)</onclick>
+        </control>
+        <control type="button" id="9960">
+          <width>120</width><height>30</height>
+          <label>$LOCALIZE[24000]</label>
+          <onclick>Addon.OpenSettings($INFO[Window(Home).Property(arthuros.plugin)])</onclick>
+          <visible>!String.IsEmpty(Window(Home).Property(arthuros.plugin))</visible>
+        </control>
+      </control>
+    </control>
+  </controls>
+</window>

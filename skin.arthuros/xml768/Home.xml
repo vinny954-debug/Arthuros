@@ -1,0 +1,1243 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<window>
+  <defaultcontrol always="true">9000</defaultcontrol>
+  <backgroundcolor>desktop</backgroundcolor>
+  <!-- first run (or after Reset skin settings): lay out the shipped desktop -->
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.1.id,movies)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.1.lid,342)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.1.icon,movies)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.2.id,tvshows)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.2.lid,20343)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.2.icon,tvshows)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.3.id,music)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.3.lid,2)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.3.icon,music)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.4.id,videos)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.4.lid,3)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.4.icon,video)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.5.id,pictures)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.5.lid,1)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.5.icon,pictures)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.6.id,addons)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.6.lid,24001)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.6.icon,addons)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.7.id,myaddons)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.7.lid,24998)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.7.icon,addons_user)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.8.id,programs)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.8.lid,0)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.8.icon,program)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.9.lid,1036)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.9.icon,favourites)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.9.action,"ActivateWindow(favouritesbrowser)")</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.10.lid,8)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.10.icon,weather)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.10.action,"ActivateWindow(Weather)")</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.11.id,files)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.11.lid,7)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.11.icon,harddisk)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.12.id,settings)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.12.lid,5)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetString(tile.12.icon,settings)</onload>
+  <onload condition="!Skin.HasSetting(home.init)">Skin.SetBool(home.init)</onload>
+  <!-- Touch mode: watch for a mouse, so the pointer shows only when one is plugged in -->
+  <onload condition="Skin.HasSetting(touchmode) + String.IsEmpty(Window(Home).Property(arthuros.mousewatch))">RunScript(special://skin/scripts/mousewatch.py)</onload>
+  <!-- the add-on the OSD offers settings for (media browsers set it as they close) -->
+  <onload condition="!Player.HasMedia">ClearProperty(arthuros.plugin,home)</onload>
+  <!-- once, after upgrading from 0.9.1: update shortcut tiles (see migrate_dialog) -->
+  <onload condition="!Skin.HasSetting(home.v092)">ActivateWindow(1126)</onload>
+  <controls>
+    <control type="image">
+      <left>0</left><top>0</top><width>1024</width><height>768</height>
+      <texture colordiffuse="desktop">fill.png</texture>
+    </control>
+    <control type="group">
+      <left>0</left><top>0</top><width>1024</width><height>26</height>
+      <visible>!Skin.HasSetting(hidemenubar)</visible>
+
+      <control type="image">
+        <left>0</left><top>0</top><width>1024</width><height>26</height>
+        <texture border="2" colordiffuse="facetint">panel_chrome.png</texture>
+      </control>
+
+      <control type="image">
+        <left>5</left><top>5</top><width>16</width><height>16</height>
+        <texture>logo.png</texture>
+      </control>
+
+      <control type="label">
+        <left>27</left><top>0</top><width>520</width><height>26</height>
+        <font>chromebold</font><textcolor>text</textcolor>
+        <align>left</align><aligny>center</aligny>
+        <label>Kodi $INFO[System.BuildVersionShort] - ArthurOS 1.2 (v0.9.6)</label>
+      </control>
+
+      <!-- right-hand status cluster, anchored to the right edge -->
+      <control type="image">
+        <right>6</right><top>5</top><width>16</width><height>16</height>
+        <texture>icons24/network.png</texture>
+        <visible>System.InternetState</visible>
+      </control>
+
+      <control type="image">
+        <right>100</right><top>5</top><width>16</width><height>16</height>
+        <texture>$VAR[VolumeIconVar]</texture>
+      </control>
+      <!-- a small volume gauge instead of Kodi's decibel figure -->
+      <control type="progress">
+        <right>28</right><top>8</top><width>66</width><height>10</height>
+        <info>Player.Volume</info>
+        <visible>!Player.Muted</visible>
+      </control>
+      <control type="label">
+        <right>28</right><top>0</top><width>66</width><height>26</height>
+        <font>chromesmall</font><textcolor>marked</textcolor>
+        <align>center</align><aligny>center</aligny>
+        <label>$LOCALIZE[31949]</label>
+        <visible>Player.Muted</visible>
+      </control>
+
+      <control type="label">
+        <right>124</right><top>0</top><width>300</width><height>26</height>
+        <font>chromebold</font><textcolor>text</textcolor>
+        <align>right</align><aligny>center</aligny>
+        <label>$INFO[System.Date(ddd mmm d)]  $INFO[System.Time]</label>
+        <visible>!Skin.HasSetting(hideclock)</visible>
+      </control>
+    </control>
+
+    <!-- the frames for the chosen grid size (Customise desktop) -->
+    <include condition="String.IsEqual(Skin.String(home.layout),3x3)">Home_Frame_3x3</include>
+    <include condition="!String.IsEqual(Skin.String(home.layout),3x3) + !String.IsEqual(Skin.String(home.layout),4x4) + !String.IsEqual(Skin.String(home.layout),5x4) + !String.IsEqual(Skin.String(home.layout),5x5) + !String.IsEqual(Skin.String(home.layout),6x5) + !String.IsEqual(Skin.String(home.layout),6x6)">Home_Frame_4x3</include>
+    <include condition="String.IsEqual(Skin.String(home.layout),4x4)">Home_Frame_4x4</include>
+    <include condition="String.IsEqual(Skin.String(home.layout),5x4)">Home_Frame_5x4</include>
+    <include condition="String.IsEqual(Skin.String(home.layout),5x5)">Home_Frame_5x5</include>
+    <include condition="String.IsEqual(Skin.String(home.layout),6x5)">Home_Frame_6x5</include>
+    <include condition="String.IsEqual(Skin.String(home.layout),6x6)">Home_Frame_6x6</include>
+    <!-- Customise desktop flips home.flip when it closes: a changed include
+         condition makes Kodi reload this window, so the tiles are read afresh
+         instead of showing their old names for a second -->
+    <include condition="Skin.HasSetting(home.flip)">Home_Refresh</include>
+
+    <!-- left: the program filer window -->
+    <control type="panel" id="9000">
+      <include condition="String.IsEqual(Skin.String(home.layout),3x3)">Home_Panel_3x3</include>
+      <include condition="!String.IsEqual(Skin.String(home.layout),3x3) + !String.IsEqual(Skin.String(home.layout),4x4) + !String.IsEqual(Skin.String(home.layout),5x4) + !String.IsEqual(Skin.String(home.layout),5x5) + !String.IsEqual(Skin.String(home.layout),6x5) + !String.IsEqual(Skin.String(home.layout),6x6)">Home_Panel_4x3</include>
+      <include condition="String.IsEqual(Skin.String(home.layout),4x4)">Home_Panel_4x4</include>
+      <include condition="String.IsEqual(Skin.String(home.layout),5x4)">Home_Panel_5x4</include>
+      <include condition="String.IsEqual(Skin.String(home.layout),5x5)">Home_Panel_5x5</include>
+      <include condition="String.IsEqual(Skin.String(home.layout),6x5)">Home_Panel_6x5</include>
+      <include condition="String.IsEqual(Skin.String(home.layout),6x6)">Home_Panel_6x6</include>
+      <onleft>9000</onleft>
+      <onright>9010</onright>
+      <ondown>9100</ondown>
+      <scrolltime tween="linear">0</scrolltime>
+      <pagecontrol>-</pagecontrol>
+      <content>
+        <item id="1">
+          <label>$INFO[Skin.String(tile.1.name)]</label>
+          <property name="slot">$NUMBER[1]</property>
+          <property name="id">$INFO[Skin.String(tile.1.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.1.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.1.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.1.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.1.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.1.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.1.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.1.addon)]</property>
+          <property name="bar">accent1</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.1.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.1.id))">$INFO[Skin.String(tile.1.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.1.name)) | !String.IsEmpty(Skin.String(tile.1.lid))]</visible>
+        </item>
+        <item id="2">
+          <label>$INFO[Skin.String(tile.2.name)]</label>
+          <property name="slot">$NUMBER[2]</property>
+          <property name="id">$INFO[Skin.String(tile.2.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.2.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.2.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.2.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.2.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.2.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.2.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.2.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.2.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.2.id))">$INFO[Skin.String(tile.2.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.2.name)) | !String.IsEmpty(Skin.String(tile.2.lid))]</visible>
+        </item>
+        <item id="3">
+          <label>$INFO[Skin.String(tile.3.name)]</label>
+          <property name="slot">$NUMBER[3]</property>
+          <property name="id">$INFO[Skin.String(tile.3.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.3.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.3.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.3.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.3.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.3.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.3.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.3.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.3.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.3.id))">$INFO[Skin.String(tile.3.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.3.name)) | !String.IsEmpty(Skin.String(tile.3.lid))]</visible>
+        </item>
+        <item id="4">
+          <label>$INFO[Skin.String(tile.4.name)]</label>
+          <property name="slot">$NUMBER[4]</property>
+          <property name="id">$INFO[Skin.String(tile.4.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.4.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.4.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.4.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.4.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.4.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.4.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.4.addon)]</property>
+          <property name="bar">accent1</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.4.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.4.id))">$INFO[Skin.String(tile.4.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.4.name)) | !String.IsEmpty(Skin.String(tile.4.lid))]</visible>
+        </item>
+        <item id="5">
+          <label>$INFO[Skin.String(tile.5.name)]</label>
+          <property name="slot">$NUMBER[5]</property>
+          <property name="id">$INFO[Skin.String(tile.5.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.5.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.5.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.5.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.5.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.5.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.5.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.5.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.5.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.5.id))">$INFO[Skin.String(tile.5.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.5.name)) | !String.IsEmpty(Skin.String(tile.5.lid))]</visible>
+        </item>
+        <item id="6">
+          <label>$INFO[Skin.String(tile.6.name)]</label>
+          <property name="slot">$NUMBER[6]</property>
+          <property name="id">$INFO[Skin.String(tile.6.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.6.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.6.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.6.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.6.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.6.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.6.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.6.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.6.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.6.id))">$INFO[Skin.String(tile.6.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.6.name)) | !String.IsEmpty(Skin.String(tile.6.lid))]</visible>
+        </item>
+        <item id="7">
+          <label>$INFO[Skin.String(tile.7.name)]</label>
+          <property name="slot">$NUMBER[7]</property>
+          <property name="id">$INFO[Skin.String(tile.7.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.7.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.7.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.7.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.7.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.7.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.7.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.7.addon)]</property>
+          <property name="bar">accent1</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.7.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.7.id))">$INFO[Skin.String(tile.7.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.7.name)) | !String.IsEmpty(Skin.String(tile.7.lid))]</visible>
+        </item>
+        <item id="8">
+          <label>$INFO[Skin.String(tile.8.name)]</label>
+          <property name="slot">$NUMBER[8]</property>
+          <property name="id">$INFO[Skin.String(tile.8.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.8.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.8.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.8.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.8.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.8.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.8.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.8.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.8.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.8.id))">$INFO[Skin.String(tile.8.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.8.name)) | !String.IsEmpty(Skin.String(tile.8.lid))]</visible>
+        </item>
+        <item id="9">
+          <label>$INFO[Skin.String(tile.9.name)]</label>
+          <property name="slot">$NUMBER[9]</property>
+          <property name="id">$INFO[Skin.String(tile.9.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.9.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.9.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.9.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.9.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.9.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.9.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.9.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.9.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.9.id))">$INFO[Skin.String(tile.9.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.9.name)) | !String.IsEmpty(Skin.String(tile.9.lid))]</visible>
+        </item>
+        <item id="10">
+          <label>$INFO[Skin.String(tile.10.name)]</label>
+          <property name="slot">$NUMBER[10]</property>
+          <property name="id">$INFO[Skin.String(tile.10.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.10.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.10.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.10.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.10.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.10.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.10.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.10.addon)]</property>
+          <property name="bar">accent1</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.10.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.10.id))">$INFO[Skin.String(tile.10.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.10.name)) | !String.IsEmpty(Skin.String(tile.10.lid))] + !String.IsEqual(Skin.String(home.layout),3x3)</visible>
+        </item>
+        <item id="11">
+          <label>$INFO[Skin.String(tile.11.name)]</label>
+          <property name="slot">$NUMBER[11]</property>
+          <property name="id">$INFO[Skin.String(tile.11.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.11.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.11.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.11.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.11.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.11.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.11.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.11.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.11.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.11.id))">$INFO[Skin.String(tile.11.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.11.name)) | !String.IsEmpty(Skin.String(tile.11.lid))] + !String.IsEqual(Skin.String(home.layout),3x3)</visible>
+        </item>
+        <item id="12">
+          <label>$INFO[Skin.String(tile.12.name)]</label>
+          <property name="slot">$NUMBER[12]</property>
+          <property name="id">$INFO[Skin.String(tile.12.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.12.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.12.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.12.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.12.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.12.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.12.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.12.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.12.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.12.id))">$INFO[Skin.String(tile.12.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.12.name)) | !String.IsEmpty(Skin.String(tile.12.lid))] + !String.IsEqual(Skin.String(home.layout),3x3)</visible>
+        </item>
+        <item id="13">
+          <label>$INFO[Skin.String(tile.13.name)]</label>
+          <property name="slot">$NUMBER[13]</property>
+          <property name="id">$INFO[Skin.String(tile.13.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.13.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.13.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.13.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.13.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.13.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.13.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.13.addon)]</property>
+          <property name="bar">accent1</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.13.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.13.id))">$INFO[Skin.String(tile.13.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.13.name)) | !String.IsEmpty(Skin.String(tile.13.lid))] + [String.IsEqual(Skin.String(home.layout),4x4) | String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="14">
+          <label>$INFO[Skin.String(tile.14.name)]</label>
+          <property name="slot">$NUMBER[14]</property>
+          <property name="id">$INFO[Skin.String(tile.14.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.14.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.14.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.14.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.14.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.14.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.14.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.14.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.14.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.14.id))">$INFO[Skin.String(tile.14.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.14.name)) | !String.IsEmpty(Skin.String(tile.14.lid))] + [String.IsEqual(Skin.String(home.layout),4x4) | String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="15">
+          <label>$INFO[Skin.String(tile.15.name)]</label>
+          <property name="slot">$NUMBER[15]</property>
+          <property name="id">$INFO[Skin.String(tile.15.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.15.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.15.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.15.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.15.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.15.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.15.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.15.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.15.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.15.id))">$INFO[Skin.String(tile.15.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.15.name)) | !String.IsEmpty(Skin.String(tile.15.lid))] + [String.IsEqual(Skin.String(home.layout),4x4) | String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="16">
+          <label>$INFO[Skin.String(tile.16.name)]</label>
+          <property name="slot">$NUMBER[16]</property>
+          <property name="id">$INFO[Skin.String(tile.16.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.16.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.16.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.16.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.16.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.16.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.16.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.16.addon)]</property>
+          <property name="bar">accent1</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.16.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.16.id))">$INFO[Skin.String(tile.16.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.16.name)) | !String.IsEmpty(Skin.String(tile.16.lid))] + [String.IsEqual(Skin.String(home.layout),4x4) | String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="17">
+          <label>$INFO[Skin.String(tile.17.name)]</label>
+          <property name="slot">$NUMBER[17]</property>
+          <property name="id">$INFO[Skin.String(tile.17.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.17.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.17.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.17.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.17.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.17.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.17.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.17.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.17.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.17.id))">$INFO[Skin.String(tile.17.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.17.name)) | !String.IsEmpty(Skin.String(tile.17.lid))] + [String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="18">
+          <label>$INFO[Skin.String(tile.18.name)]</label>
+          <property name="slot">$NUMBER[18]</property>
+          <property name="id">$INFO[Skin.String(tile.18.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.18.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.18.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.18.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.18.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.18.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.18.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.18.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.18.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.18.id))">$INFO[Skin.String(tile.18.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.18.name)) | !String.IsEmpty(Skin.String(tile.18.lid))] + [String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="19">
+          <label>$INFO[Skin.String(tile.19.name)]</label>
+          <property name="slot">$NUMBER[19]</property>
+          <property name="id">$INFO[Skin.String(tile.19.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.19.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.19.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.19.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.19.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.19.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.19.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.19.addon)]</property>
+          <property name="bar">accent1</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.19.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.19.id))">$INFO[Skin.String(tile.19.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.19.name)) | !String.IsEmpty(Skin.String(tile.19.lid))] + [String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="20">
+          <label>$INFO[Skin.String(tile.20.name)]</label>
+          <property name="slot">$NUMBER[20]</property>
+          <property name="id">$INFO[Skin.String(tile.20.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.20.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.20.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.20.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.20.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.20.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.20.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.20.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.20.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.20.id))">$INFO[Skin.String(tile.20.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.20.name)) | !String.IsEmpty(Skin.String(tile.20.lid))] + [String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="21">
+          <label>$INFO[Skin.String(tile.21.name)]</label>
+          <property name="slot">$NUMBER[21]</property>
+          <property name="id">$INFO[Skin.String(tile.21.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.21.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.21.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.21.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.21.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.21.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.21.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.21.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.21.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.21.id))">$INFO[Skin.String(tile.21.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.21.name)) | !String.IsEmpty(Skin.String(tile.21.lid))] + [String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="22">
+          <label>$INFO[Skin.String(tile.22.name)]</label>
+          <property name="slot">$NUMBER[22]</property>
+          <property name="id">$INFO[Skin.String(tile.22.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.22.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.22.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.22.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.22.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.22.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.22.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.22.addon)]</property>
+          <property name="bar">accent1</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.22.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.22.id))">$INFO[Skin.String(tile.22.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.22.name)) | !String.IsEmpty(Skin.String(tile.22.lid))] + [String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="23">
+          <label>$INFO[Skin.String(tile.23.name)]</label>
+          <property name="slot">$NUMBER[23]</property>
+          <property name="id">$INFO[Skin.String(tile.23.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.23.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.23.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.23.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.23.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.23.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.23.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.23.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.23.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.23.id))">$INFO[Skin.String(tile.23.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.23.name)) | !String.IsEmpty(Skin.String(tile.23.lid))] + [String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="24">
+          <label>$INFO[Skin.String(tile.24.name)]</label>
+          <property name="slot">$NUMBER[24]</property>
+          <property name="id">$INFO[Skin.String(tile.24.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.24.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.24.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.24.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.24.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.24.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.24.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.24.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.24.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.24.id))">$INFO[Skin.String(tile.24.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.24.name)) | !String.IsEmpty(Skin.String(tile.24.lid))] + [String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="25">
+          <label>$INFO[Skin.String(tile.25.name)]</label>
+          <property name="slot">$NUMBER[25]</property>
+          <property name="id">$INFO[Skin.String(tile.25.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.25.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.25.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.25.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.25.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.25.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.25.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.25.addon)]</property>
+          <property name="bar">accent1</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.25.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.25.id))">$INFO[Skin.String(tile.25.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.25.name)) | !String.IsEmpty(Skin.String(tile.25.lid))] + [String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="26">
+          <label>$INFO[Skin.String(tile.26.name)]</label>
+          <property name="slot">$NUMBER[26]</property>
+          <property name="id">$INFO[Skin.String(tile.26.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.26.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.26.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.26.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.26.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.26.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.26.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.26.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.26.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.26.id))">$INFO[Skin.String(tile.26.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.26.name)) | !String.IsEmpty(Skin.String(tile.26.lid))] + [String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="27">
+          <label>$INFO[Skin.String(tile.27.name)]</label>
+          <property name="slot">$NUMBER[27]</property>
+          <property name="id">$INFO[Skin.String(tile.27.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.27.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.27.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.27.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.27.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.27.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.27.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.27.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.27.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.27.id))">$INFO[Skin.String(tile.27.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.27.name)) | !String.IsEmpty(Skin.String(tile.27.lid))] + [String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="28">
+          <label>$INFO[Skin.String(tile.28.name)]</label>
+          <property name="slot">$NUMBER[28]</property>
+          <property name="id">$INFO[Skin.String(tile.28.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.28.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.28.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.28.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.28.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.28.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.28.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.28.addon)]</property>
+          <property name="bar">accent1</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.28.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.28.id))">$INFO[Skin.String(tile.28.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.28.name)) | !String.IsEmpty(Skin.String(tile.28.lid))] + [String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="29">
+          <label>$INFO[Skin.String(tile.29.name)]</label>
+          <property name="slot">$NUMBER[29]</property>
+          <property name="id">$INFO[Skin.String(tile.29.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.29.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.29.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.29.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.29.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.29.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.29.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.29.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.29.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.29.id))">$INFO[Skin.String(tile.29.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.29.name)) | !String.IsEmpty(Skin.String(tile.29.lid))] + [String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="30">
+          <label>$INFO[Skin.String(tile.30.name)]</label>
+          <property name="slot">$NUMBER[30]</property>
+          <property name="id">$INFO[Skin.String(tile.30.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.30.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.30.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.30.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.30.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.30.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.30.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.30.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.30.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.30.id))">$INFO[Skin.String(tile.30.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.30.name)) | !String.IsEmpty(Skin.String(tile.30.lid))] + [String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="31">
+          <label>$INFO[Skin.String(tile.31.name)]</label>
+          <property name="slot">$NUMBER[31]</property>
+          <property name="id">$INFO[Skin.String(tile.31.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.31.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.31.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.31.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.31.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.31.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.31.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.31.addon)]</property>
+          <property name="bar">accent1</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.31.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.31.id))">$INFO[Skin.String(tile.31.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.31.name)) | !String.IsEmpty(Skin.String(tile.31.lid))] + [String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="32">
+          <label>$INFO[Skin.String(tile.32.name)]</label>
+          <property name="slot">$NUMBER[32]</property>
+          <property name="id">$INFO[Skin.String(tile.32.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.32.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.32.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.32.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.32.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.32.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.32.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.32.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.32.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.32.id))">$INFO[Skin.String(tile.32.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.32.name)) | !String.IsEmpty(Skin.String(tile.32.lid))] + [String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="33">
+          <label>$INFO[Skin.String(tile.33.name)]</label>
+          <property name="slot">$NUMBER[33]</property>
+          <property name="id">$INFO[Skin.String(tile.33.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.33.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.33.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.33.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.33.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.33.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.33.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.33.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.33.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.33.id))">$INFO[Skin.String(tile.33.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.33.name)) | !String.IsEmpty(Skin.String(tile.33.lid))] + [String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="34">
+          <label>$INFO[Skin.String(tile.34.name)]</label>
+          <property name="slot">$NUMBER[34]</property>
+          <property name="id">$INFO[Skin.String(tile.34.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.34.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.34.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.34.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.34.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.34.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.34.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.34.addon)]</property>
+          <property name="bar">accent1</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.34.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.34.id))">$INFO[Skin.String(tile.34.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.34.name)) | !String.IsEmpty(Skin.String(tile.34.lid))] + [String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="35">
+          <label>$INFO[Skin.String(tile.35.name)]</label>
+          <property name="slot">$NUMBER[35]</property>
+          <property name="id">$INFO[Skin.String(tile.35.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.35.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.35.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.35.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.35.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.35.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.35.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.35.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.35.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.35.id))">$INFO[Skin.String(tile.35.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.35.name)) | !String.IsEmpty(Skin.String(tile.35.lid))] + [String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+        <item id="36">
+          <label>$INFO[Skin.String(tile.36.name)]</label>
+          <property name="slot">$NUMBER[36]</property>
+          <property name="id">$INFO[Skin.String(tile.36.id)]</property>
+          <property name="lid">$INFO[Skin.String(tile.36.lid)]</property>
+          <property name="pre">$INFO[Skin.String(tile.36.pre)]</property>
+          <property name="name">$INFO[Skin.String(tile.36.name)]</property>
+          <property name="ico">$INFO[Skin.String(tile.36.icon)]</property>
+          <property name="image">$INFO[Skin.String(tile.36.image)]</property>
+          <property name="action">$INFO[Skin.String(tile.36.action)]</property>
+          <property name="addon">$INFO[Skin.String(tile.36.addon)]</property>
+          <property name="bar">accent2</property>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.36.id))">SetFocus(9010,0)</onclick>
+          <onclick condition="String.IsEmpty(Skin.String(tile.36.id))">$INFO[Skin.String(tile.36.action)]</onclick>
+          <visible>[!String.IsEmpty(Skin.String(tile.36.name)) | !String.IsEmpty(Skin.String(tile.36.lid))] + [String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+        </item>
+      </content>
+    </control>
+
+    <!-- right: the context panel for the focused tile -->
+    <control type="list" id="9010">
+      <include condition="String.IsEqual(Skin.String(home.layout),3x3)">Home_List_3x3</include>
+      <include condition="!String.IsEqual(Skin.String(home.layout),3x3) + !String.IsEqual(Skin.String(home.layout),4x4) + !String.IsEqual(Skin.String(home.layout),5x4) + !String.IsEqual(Skin.String(home.layout),5x5) + !String.IsEqual(Skin.String(home.layout),6x5) + !String.IsEqual(Skin.String(home.layout),6x6)">Home_List_4x3</include>
+      <include condition="String.IsEqual(Skin.String(home.layout),4x4)">Home_List_4x4</include>
+      <include condition="String.IsEqual(Skin.String(home.layout),5x4)">Home_List_5x4</include>
+      <include condition="String.IsEqual(Skin.String(home.layout),5x5)">Home_List_5x5</include>
+      <include condition="String.IsEqual(Skin.String(home.layout),6x5)">Home_List_6x5</include>
+      <include condition="String.IsEqual(Skin.String(home.layout),6x6)">Home_List_6x6</include>
+      <onleft>9000</onleft>
+      <onright>9011</onright>
+      <ondown>9010</ondown>
+      <onup>9010</onup>
+      <onback>9000</onback>
+      <pagecontrol>9011</pagecontrol>
+      <scrolltime tween="linear">0</scrolltime>
+      <content>
+        <item><label>$LOCALIZE[31952]</label><icon>$VAR[HomeTileIcon24]</icon>
+          <onclick>SetFocus(9000)</onclick><onclick>Action(Select)</onclick>
+          <visible>String.IsEmpty(Container(9000).ListItem.Property(id))</visible></item>
+        <!-- movies -->
+        <item><label>$LOCALIZE[369]</label><icon>icons24/movies_titles.png</icon>
+          <onclick>ActivateWindow(Videos,videodb://movies/titles/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),movies)</visible></item>
+        <item><label>$LOCALIZE[20386]</label><icon>icons24/movies_recent.png</icon>
+          <onclick>ActivateWindow(Videos,videodb://recentlyaddedmovies/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),movies)</visible></item>
+        <item><label>$LOCALIZE[135]</label><icon>icons24/movies_genres.png</icon>
+          <onclick>ActivateWindow(Videos,videodb://movies/genres/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),movies)</visible></item>
+        <item><label>$LOCALIZE[20434]</label><icon>icons24/movies_sets.png</icon>
+          <onclick>ActivateWindow(Videos,videodb://movies/sets/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),movies)</visible></item>
+        <item><label>$LOCALIZE[652]</label><icon>icons24/movies_years.png</icon>
+          <onclick>ActivateWindow(Videos,videodb://movies/years/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),movies)</visible></item>
+        <!-- tvshows -->
+        <item><label>$LOCALIZE[369]</label><icon>icons24/tvshows_titles.png</icon>
+          <onclick>ActivateWindow(Videos,videodb://tvshows/titles/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),tvshows)</visible></item>
+        <item><label>$LOCALIZE[20387]</label><icon>icons24/tvshows_recent.png</icon>
+          <onclick>ActivateWindow(Videos,videodb://recentlyaddedepisodes/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),tvshows)</visible></item>
+        <item><label>$LOCALIZE[626]</label><icon>icons24/tvshows_inprogress.png</icon>
+          <onclick>ActivateWindow(Videos,videodb://inprogresstvshows/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),tvshows)</visible></item>
+        <item><label>$LOCALIZE[135]</label><icon>icons24/tvshows_genres.png</icon>
+          <onclick>ActivateWindow(Videos,videodb://tvshows/genres/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),tvshows)</visible></item>
+        <!-- music -->
+        <item><label>$LOCALIZE[133]</label><icon>icons24/music_artists.png</icon>
+          <onclick>ActivateWindow(Music,musicdb://artists/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),music)</visible></item>
+        <item><label>$LOCALIZE[132]</label><icon>icons24/music_albums.png</icon>
+          <onclick>ActivateWindow(Music,musicdb://albums/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),music)</visible></item>
+        <item><label>$LOCALIZE[134]</label><icon>icons24/music_songs.png</icon>
+          <onclick>ActivateWindow(Music,musicdb://songs/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),music)</visible></item>
+        <item><label>$LOCALIZE[135]</label><icon>icons24/music_genres.png</icon>
+          <onclick>ActivateWindow(Music,musicdb://genres/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),music)</visible></item>
+        <item><label>$LOCALIZE[136]</label><icon>icons24/playlist_music.png</icon>
+          <onclick>ActivateWindow(Music,special://musicplaylists/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),music)</visible></item>
+        <item><label>$LOCALIZE[1038]</label><icon>icons24/addons_music.png</icon>
+          <onclick>ActivateWindow(Music,addons://sources/audio/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),music)</visible></item>
+        <!-- videos -->
+        <item><label>$LOCALIZE[744]</label><icon>icons24/video_files.png</icon>
+          <onclick>ActivateWindow(Videos,sources://video/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),videos)</visible></item>
+        <item><label>$LOCALIZE[136]</label><icon>icons24/playlist_video.png</icon>
+          <onclick>ActivateWindow(Videos,special://videoplaylists/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),videos)</visible></item>
+        <item><label>$LOCALIZE[1037]</label><icon>icons24/addons_video.png</icon>
+          <onclick>ActivateWindow(Videos,addons://sources/video/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),videos)</visible></item>
+        <item><label>$LOCALIZE[1036]</label><icon>icons24/favourites.png</icon>
+          <onclick>ActivateWindow(favouritesbrowser)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),videos)</visible></item>
+        <!-- pictures -->
+        <item><label>$LOCALIZE[744]</label><icon>icons24/pictures_files.png</icon>
+          <onclick>ActivateWindow(Pictures,sources://pictures/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),pictures)</visible></item>
+        <item><label>$LOCALIZE[1039]</label><icon>icons24/addons_pictures.png</icon>
+          <onclick>ActivateWindow(Pictures,addons://sources/image/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),pictures)</visible></item>
+        <!-- livetv -->
+        <item><label>$LOCALIZE[19019]</label><icon>icons24/pvr_channels.png</icon>
+          <onclick>ActivateWindow(TVChannels)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),livetv)</visible></item>
+        <item><label>$LOCALIZE[22020]</label><icon>icons24/pvr_guide.png</icon>
+          <onclick>ActivateWindow(TVGuide)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),livetv)</visible></item>
+        <item><label>$LOCALIZE[19017]</label><icon>icons24/pvr_recordings.png</icon>
+          <onclick>ActivateWindow(TVRecordings)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),livetv)</visible></item>
+        <item><label>$LOCALIZE[19040]</label><icon>icons24/pvr_timers.png</icon>
+          <onclick>ActivateWindow(TVTimers)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),livetv)</visible></item>
+        <item><label>$LOCALIZE[137]</label><icon>icons24/pvr_search.png</icon>
+          <onclick>ActivateWindow(TVSearch)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),livetv)</visible></item>
+        <item><label>$LOCALIZE[19021]</label><icon>icons24/pvr_radio.png</icon>
+          <onclick>ActivateWindow(RadioChannels)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),livetv)</visible></item>
+        <!-- addons -->
+        <item><label>$LOCALIZE[10040]</label><icon>icons24/addons.png</icon>
+          <onclick>ActivateWindow(AddonBrowser)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),addons)</visible></item>
+        <item><label>$LOCALIZE[24998]</label><icon>icons24/addons_user.png</icon>
+          <onclick>ActivateWindow(AddonBrowser,addons://user/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),addons)</visible></item>
+        <item><label>$LOCALIZE[24033]</label><icon>icons24/addons_repo.png</icon>
+          <onclick>ActivateWindow(AddonBrowser,addons://repos/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),addons)</visible></item>
+        <item><label>$LOCALIZE[137]</label><icon>icons24/addons_search.png</icon>
+          <onclick>ActivateWindow(AddonBrowser,addons://search/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),addons)</visible></item>
+        <item><label>$LOCALIZE[24041]</label><icon>icons24/addons_zip.png</icon>
+          <onclick>InstallFromZip</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),addons)</visible></item>
+        <item><label>$LOCALIZE[24043]</label><icon>icons24/addons_updates.png</icon>
+          <onclick>ActivateWindow(AddonBrowser,addons://outdated/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),addons)</visible></item>
+        <item><label>$LOCALIZE[24004]</label><icon>icons24/addons_recent.png</icon>
+          <onclick>ActivateWindow(AddonBrowser,addons://recently_updated/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),addons)</visible></item>
+        <item><label>$LOCALIZE[24034]</label><icon>icons24/addons_check.png</icon>
+          <onclick>UpdateAddonRepos</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),addons)</visible></item>
+        <item><label>$LOCALIZE[35049]</label><icon>icons24/addons_game.png</icon>
+          <onclick>ActivateWindow(AddonBrowser,addons://sources/game/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),addons)</visible></item>
+        <!-- myaddons -->
+        <item><label>$LOCALIZE[593]</label><icon>icons24/addons_all.png</icon>
+          <onclick>ActivateWindow(AddonBrowser,addons://user/all/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),myaddons)</visible></item>
+        <item><label>$LOCALIZE[1037]</label><icon>icons24/addons_video.png</icon>
+          <onclick>ActivateWindow(Videos,addons://sources/video/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),myaddons)</visible></item>
+        <item><label>$LOCALIZE[1038]</label><icon>icons24/addons_music.png</icon>
+          <onclick>ActivateWindow(Music,addons://sources/audio/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),myaddons)</visible></item>
+        <item><label>$LOCALIZE[1039]</label><icon>icons24/addons_pictures.png</icon>
+          <onclick>ActivateWindow(Pictures,addons://sources/image/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),myaddons)</visible></item>
+        <item><label>$LOCALIZE[1043]</label><icon>icons24/addons_program.png</icon>
+          <onclick>ActivateWindow(Programs,addons://sources/executable/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),myaddons)</visible></item>
+        <!-- programs -->
+        <item><label>$LOCALIZE[1043]</label><icon>icons24/addons_program.png</icon>
+          <onclick>ActivateWindow(Programs,addons://sources/executable/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),programs)</visible></item>
+        <item><label>$LOCALIZE[744]</label><icon>icons24/programs_files.png</icon>
+          <onclick>ActivateWindow(Programs,sources://programs/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),programs)</visible></item>
+        <!-- files -->
+        <item><label>$LOCALIZE[7]</label><icon>icons24/harddisk.png</icon>
+          <onclick>ActivateWindow(FileManager)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),files)</visible></item>
+        <item><label>$LOCALIZE[1036]</label><icon>icons24/favourites.png</icon>
+          <onclick>ActivateWindow(favouritesbrowser)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),files)</visible></item>
+        <!-- settings -->
+        <item><label>$LOCALIZE[13000]</label><icon>icons24/system.png</icon>
+          <onclick>ActivateWindow(SystemSettings)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),settings)</visible></item>
+        <item><label>$LOCALIZE[14206]</label><icon>icons24/interface.png</icon>
+          <onclick>ActivateWindow(InterfaceSettings)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),settings)</visible></item>
+        <item><label>$LOCALIZE[14200]</label><icon>icons24/player.png</icon>
+          <onclick>ActivateWindow(PlayerSettings)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),settings)</visible></item>
+        <item><label>$LOCALIZE[14211]</label><icon>icons24/media.png</icon>
+          <onclick>ActivateWindow(MediaSettings)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),settings)</visible></item>
+        <item><label>$LOCALIZE[20077]</label><icon>icons24/skin.png</icon>
+          <onclick>ActivateWindow(SkinSettings)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),settings)</visible></item>
+        <item><label>$LOCALIZE[10007]</label><icon>icons24/info.png</icon>
+          <onclick>ActivateWindow(SystemInfo)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),settings)</visible></item>
+        <item><label>$LOCALIZE[31992]</label><icon>icons24/settings.png</icon>
+          <onclick>ActivateWindow(Settings)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),settings)</visible></item>
+        <item><label>$LOCALIZE[14036]</label><icon>icons24/services.png</icon>
+          <onclick>ActivateWindow(ServiceSettings)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),settings)</visible></item>
+        <item><label>$LOCALIZE[19020]</label><icon>icons24/pvr_client.png</icon>
+          <onclick>ActivateWindow(PVRSettings)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),settings)</visible></item>
+        <item><label>$LOCALIZE[15016]</label><icon>icons24/controllers.png</icon>
+          <onclick>ActivateWindow(GameSettings)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),settings)</visible></item>
+        <item><label>$LOCALIZE[13200]</label><icon>icons24/user.png</icon>
+          <onclick>ActivateWindow(Profiles)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),settings)</visible></item>
+        <item><label>$LOCALIZE[14111]</label><icon>icons24/events.png</icon>
+          <onclick>ActivateWindow(EventLog)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),settings)</visible></item>
+        <item><label>$LOCALIZE[31993]</label><icon>icons24/tools.png</icon>
+          <onclick>RunAddon(service.libreelec.settings)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),settings) + System.HasAddon(service.libreelec.settings)</visible></item>
+        <item><label>$LOCALIZE[31996]</label><icon>icons24/network.png</icon>
+          <onclick>RunScript(special://skin/scripts/netbt.py)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),settings) + !System.HasAddon(service.libreelec.settings) + System.Platform.Linux + !System.Platform.Android</visible></item>
+        <item><label>$LOCALIZE[31953]</label><icon>icons24/desktop_edit.png</icon>
+          <onclick>ActivateWindow(1120)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),settings)</visible></item>
+        <!-- all -->
+        <item><label>$LOCALIZE[342]</label><icon>icons24/movies.png</icon>
+          <onclick>ActivateWindow(Videos,videodb://movies/titles/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[20343]</label><icon>icons24/tvshows.png</icon>
+          <onclick>ActivateWindow(Videos,videodb://tvshows/titles/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[20389]</label><icon>icons24/musicvideos.png</icon>
+          <onclick>ActivateWindow(Videos,videodb://musicvideos/titles/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[3] - $LOCALIZE[14022]</label><icon>icons24/video_cover.png</icon>
+          <onclick>ActivateWindow(Videos,library://video/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[3] - $LOCALIZE[744]</label><icon>icons24/video_files.png</icon>
+          <onclick>ActivateWindow(Videos,sources://video/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[3] - $LOCALIZE[136]</label><icon>icons24/playlist_video.png</icon>
+          <onclick>ActivateWindow(Videos,special://videoplaylists/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[2] - $LOCALIZE[14022]</label><icon>icons24/music.png</icon>
+          <onclick>ActivateWindow(Music,library://music/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[2] - $LOCALIZE[744]</label><icon>icons24/music_files.png</icon>
+          <onclick>ActivateWindow(Music,sources://music/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[2] - $LOCALIZE[136]</label><icon>icons24/playlist_music.png</icon>
+          <onclick>ActivateWindow(Music,special://musicplaylists/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[1]</label><icon>icons24/pictures.png</icon>
+          <onclick>ActivateWindow(Pictures)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[19020] - $LOCALIZE[19019]</label><icon>icons24/pvr_channels.png</icon>
+          <onclick>ActivateWindow(TVChannels)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[19020] - $LOCALIZE[22020]</label><icon>icons24/pvr_guide.png</icon>
+          <onclick>ActivateWindow(TVGuide)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[19020] - $LOCALIZE[19017]</label><icon>icons24/pvr_recordings.png</icon>
+          <onclick>ActivateWindow(TVRecordings)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[19020] - $LOCALIZE[19040]</label><icon>icons24/pvr_timers.png</icon>
+          <onclick>ActivateWindow(TVTimers)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[19021]</label><icon>icons24/pvr_radio.png</icon>
+          <onclick>ActivateWindow(RadioChannels)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[15016]</label><icon>icons24/games.png</icon>
+          <onclick>ActivateWindow(Games)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[10040]</label><icon>icons24/addons.png</icon>
+          <onclick>ActivateWindow(AddonBrowser)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[24998]</label><icon>icons24/addons_user.png</icon>
+          <onclick>ActivateWindow(AddonBrowser,addons://user/)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[0]</label><icon>icons24/program.png</icon>
+          <onclick>ActivateWindow(Programs)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[1036]</label><icon>icons24/favourites.png</icon>
+          <onclick>ActivateWindow(favouritesbrowser)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[8]</label><icon>icons24/weather.png</icon>
+          <onclick>ActivateWindow(Weather)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[7]</label><icon>icons24/harddisk.png</icon>
+          <onclick>ActivateWindow(FileManager)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[5]</label><icon>icons24/settings.png</icon>
+          <onclick>ActivateWindow(Settings)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[20077]</label><icon>icons24/skin.png</icon>
+          <onclick>ActivateWindow(SkinSettings)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[10007]</label><icon>icons24/info.png</icon>
+          <onclick>ActivateWindow(SystemInfo)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[14111]</label><icon>icons24/events.png</icon>
+          <onclick>ActivateWindow(EventLog)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[13200]</label><icon>icons24/user.png</icon>
+          <onclick>ActivateWindow(Profiles)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[31993]</label><icon>icons24/tools.png</icon>
+          <onclick>RunAddon(service.libreelec.settings)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all) + System.HasAddon(service.libreelec.settings)</visible></item>
+        <item><label>$LOCALIZE[31996]</label><icon>icons24/network.png</icon>
+          <onclick>RunScript(special://skin/scripts/netbt.py)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all) + !System.HasAddon(service.libreelec.settings) + System.Platform.Linux + !System.Platform.Android</visible></item>
+        <item><label>$LOCALIZE[31953]</label><icon>icons24/desktop_edit.png</icon>
+          <onclick>ActivateWindow(1120)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+        <item><label>$LOCALIZE[31976]</label><icon>icons24/power.png</icon>
+          <onclick>ActivateWindow(ShutdownMenu)</onclick>
+          <visible>String.IsEqual(Container(9000).ListItem.Property(id),all)</visible></item>
+      </content>
+    </control>
+    <control type="scrollbar" id="9011">
+      <include condition="String.IsEqual(Skin.String(home.layout),3x3)">Home_Scroll_3x3</include>
+      <include condition="!String.IsEqual(Skin.String(home.layout),3x3) + !String.IsEqual(Skin.String(home.layout),4x4) + !String.IsEqual(Skin.String(home.layout),5x4) + !String.IsEqual(Skin.String(home.layout),5x5) + !String.IsEqual(Skin.String(home.layout),6x5) + !String.IsEqual(Skin.String(home.layout),6x6)">Home_Scroll_4x3</include>
+      <include condition="String.IsEqual(Skin.String(home.layout),4x4)">Home_Scroll_4x4</include>
+      <include condition="String.IsEqual(Skin.String(home.layout),5x4)">Home_Scroll_5x4</include>
+      <include condition="String.IsEqual(Skin.String(home.layout),5x5)">Home_Scroll_5x5</include>
+      <include condition="String.IsEqual(Skin.String(home.layout),6x5)">Home_Scroll_6x5</include>
+      <include condition="String.IsEqual(Skin.String(home.layout),6x6)">Home_Scroll_6x6</include>
+      <onleft>9010</onleft>
+      <onright>9000</onright>
+    </control>
+
+    <control type="group">
+      <left>0</left><top>736</top><width>1024</width><height>32</height>
+      <visible>!Skin.HasSetting(hidetaskbar)</visible>
+
+      <control type="image">
+        <left>0</left><top>0</top><width>1024</width><height>32</height>
+        <texture border="2" colordiffuse="facetint">panel_chrome.png</texture>
+      </control>
+
+      <!-- Kodi pads button text by textoffsetx on BOTH sides, so an icon inset
+           used to be charged twice and "Start" truncated under larger fonts.
+           The label is a separate control now, sized to the space it really has. -->
+      <control type="group">
+        <left>4</left><top>4</top><width>104</width><height>24</height>
+        <control type="button" id="9100">
+          <left>0</left><top>0</top><width>104</width><height>24</height>
+          <label/>
+          <onup>9000</onup>
+          <onright>9101</onright>
+          <onclick>ActivateWindow(Home)</onclick>
+        </control>
+        <control type="image">
+          <left>6</left><top>4</top><width>16</width><height>16</height>
+          <texture>logo.png</texture>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>72</width><height>24</height>
+          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+          <label>Start</label>
+          <visible>!Control.HasFocus(9100)</visible>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>72</width><height>24</height>
+          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <label>Start</label>
+          <visible>Control.HasFocus(9100)</visible>
+        </control>
+      </control>
+      <!-- Kodi pads button text by textoffsetx on BOTH sides, so an icon inset
+           used to be charged twice and "Start" truncated under larger fonts.
+           The label is a separate control now, sized to the space it really has. -->
+      <control type="group">
+        <left>112</left><top>4</top><width>200</width><height>24</height>
+        <visible>Player.HasMedia</visible>
+        <control type="button" id="9101">
+          <left>0</left><top>0</top><width>200</width><height>24</height>
+          <label/>
+          <onup>9000</onup>
+          <onleft>9100</onleft><onright>9102</onright>
+          <onclick>ActivateWindow(FullscreenVideo)</onclick>
+          <onclick>ActivateWindow(Visualisation)</onclick>
+        </control>
+        <control type="image">
+          <left>6</left><top>4</top><width>16</width><height>16</height>
+          <texture>icons24/audio.png</texture>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>168</width><height>24</height>
+          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+          <label>$VAR[NowPlayingVar]</label>
+          <visible>!Control.HasFocus(9101)</visible>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>168</width><height>24</height>
+          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <label>$VAR[NowPlayingVar]</label>
+          <visible>Control.HasFocus(9101)</visible>
+        </control>
+      </control>
+      <!-- Kodi pads button text by textoffsetx on BOTH sides, so an icon inset
+           used to be charged twice and "Start" truncated under larger fonts.
+           The label is a separate control now, sized to the space it really has. -->
+      <control type="group">
+        <left>316</left><top>4</top><width>150</width><height>24</height>
+        <visible>Player.HasMedia</visible>
+        <control type="button" id="9102">
+          <left>0</left><top>0</top><width>150</width><height>24</height>
+          <label/>
+          <onup>9000</onup>
+          <onleft>9101</onleft><onright>9104</onright>
+          <onclick>ActivateWindow(PlayerControls)</onclick>
+        </control>
+        <control type="image">
+          <left>6</left><top>4</top><width>16</width><height>16</height>
+          <texture>icons24/playlist.png</texture>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>118</width><height>24</height>
+          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+          <label>$LOCALIZE[136]</label>
+          <visible>!Control.HasFocus(9102)</visible>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>118</width><height>24</height>
+          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <label>$LOCALIZE[136]</label>
+          <visible>Control.HasFocus(9102)</visible>
+        </control>
+      </control>
+      <!-- Kodi pads button text by textoffsetx on BOTH sides, so an icon inset
+           used to be charged twice and "Start" truncated under larger fonts.
+           The label is a separate control now, sized to the space it really has. -->
+      <!-- A window parked by its title-bar "_" box. Click to bring it back
+           to the folder it was showing; the button then goes away. -->
+      <control type="group">
+        <right>268</right><top>4</top><width>182</width><height>24</height>
+        <visible>!String.IsEmpty(Skin.String(arthur.minwin)) + !String.IsEqual(Skin.String(arthur.minwin),home)</visible>
+        <control type="button" id="9104">
+          <left>0</left><top>0</top><width>182</width><height>24</height>
+          <label/>
+          <onup>9000</onup>
+          <onleft>9102</onleft><onright>9103</onright>
+          <onclick condition="String.IsEmpty(Skin.String(arthur.minpath))">ActivateWindow($INFO[Skin.String(arthur.minwin)])</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(arthur.minpath))">ActivateWindow($INFO[Skin.String(arthur.minwin)],$ESCINFO[Skin.String(arthur.minpath)])</onclick>
+          <onclick>Skin.Reset(arthur.minwin)</onclick>
+          <onclick>Skin.Reset(arthur.minpath)</onclick>
+        </control>
+        <control type="image">
+          <left>6</left><top>4</top><width>16</width><height>16</height>
+          <texture>$INFO[Skin.String(arthur.minicon)]</texture>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>150</width><height>24</height>
+          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+          <label>$INFO[Skin.String(arthur.mintitle)]</label>
+          <visible>!Control.HasFocus(9104)</visible>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>150</width><height>24</height>
+          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <label>$INFO[Skin.String(arthur.mintitle)]</label>
+          <visible>Control.HasFocus(9104)</visible>
+        </control>
+      </control>
+
+      <control type="group">
+        <right>124</right><top>4</top><width>140</width><height>24</height>
+        <control type="button" id="9103">
+          <left>0</left><top>0</top><width>140</width><height>24</height>
+          <label/>
+          <onup>9000</onup>
+          <onleft>9104</onleft><onright>9105</onright>
+          <onclick>ActivateWindow(Settings)</onclick>
+        </control>
+        <control type="image">
+          <left>6</left><top>4</top><width>16</width><height>16</height>
+          <texture>icons24/settings.png</texture>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>108</width><height>24</height>
+          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+          <label>$LOCALIZE[5]</label>
+          <visible>!Control.HasFocus(9103)</visible>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>108</width><height>24</height>
+          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <label>$LOCALIZE[5]</label>
+          <visible>Control.HasFocus(9103)</visible>
+        </control>
+      </control>
+
+      <!-- Touch mode: a Back button where the clock sits (the menu bar keeps
+           the time). It fills the full height of the task bar so a finger
+           can find it. -->
+      <control type="group">
+        <right>4</right><top>0</top><width>116</width><height>32</height>
+        <visible>Skin.HasSetting(touchmode)</visible>
+        <control type="button" id="9105">
+          <left>0</left><top>0</top><width>116</width><height>32</height>
+          <label/>
+          <onup>9000</onup>
+          <onleft>9103</onleft>
+          <onclick>Action(Back)</onclick>
+        </control>
+        <control type="image">
+          <left>8</left><top>8</top><width>16</width><height>16</height>
+          <texture>icons24/parent.png</texture>
+        </control>
+        <control type="label">
+          <left>30</left><top>0</top><width>80</width><height>32</height>
+          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+          <label>$LOCALIZE[31994]</label>
+          <visible>!Control.HasFocus(9105)</visible>
+        </control>
+        <control type="label">
+          <left>30</left><top>0</top><width>80</width><height>32</height>
+          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <label>$LOCALIZE[31994]</label>
+          <visible>Control.HasFocus(9105)</visible>
+        </control>
+      </control>
+
+      <!-- tray -->
+      <control type="image">
+        <right>4</right><top>4</top><width>116</width><height>24</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_chrome.png</texture>
+        <visible>!Skin.HasSetting(touchmode)</visible>
+      </control>
+      <control type="label">
+        <visible>!Skin.HasSetting(touchmode)</visible>
+        <right>10</right><top>4</top><width>104</width><height>24</height>
+        <font>chromebold</font><textcolor>text</textcolor>
+        <align>center</align><aligny>center</aligny>
+        <label>$INFO[System.Time]</label>
+      </control>
+    </control>
+  </controls>
+</window>

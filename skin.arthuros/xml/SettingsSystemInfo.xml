@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <defaultcontrol always="false">95</defaultcontrol>
+  <backgroundcolor>desktop</backgroundcolor>
+  <controls>
+    <include>Chrome_Desktop</include>
+    <include>Chrome_Menubar</include>
+    <control type="group">
+      <left>6</left><top>30</top><width>1012</width><height>534</height>
+      <include content="Win_Frame">
+        <param name="width" value="1012" /><param name="height" value="534" />
+      </include>
+      <control type="group">
+        <left>3</left><top>3</top>
+        <include content="Win_Title">
+          <param name="width" value="1006" />
+          <param name="colour" value="accent1" />
+          <param name="icon" value="icons24/info.png" />
+          <param name="label" value="$LOCALIZE[10007]" />
+          <param name="down" value="95" />
+          <param name="boxes" value="window" />
+        </include>
+      </control>
+      <control type="image">
+        <left>6</left><top>34</top><width>300</width><height>494</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      </control>
+      <control type="grouplist">
+        <left>12</left><top>40</top><width>288</width><height>482</height>
+        <orientation>vertical</orientation><itemgap>3</itemgap>
+        <onup>9100</onup><ondown>9100</ondown>
+        <control type="button" id="95">
+          <width>288</width><include content="Height_34_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_34" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <label>$LOCALIZE[20037]</label>
+          <align>left</align><textoffsetx>14</textoffsetx>
+        </control>
+        <control type="button" id="94">
+          <width>288</width><include content="Height_34_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_34" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <label>$LOCALIZE[13277]</label>
+          <align>left</align><textoffsetx>14</textoffsetx>
+        </control>
+        <control type="button" id="96">
+          <width>288</width><include content="Height_34_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_34" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <label>$LOCALIZE[13279]</label>
+          <align>left</align><textoffsetx>14</textoffsetx>
+        </control>
+        <control type="button" id="97">
+          <width>288</width><include content="Height_34_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_34" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <label>$LOCALIZE[13280]</label>
+          <align>left</align><textoffsetx>14</textoffsetx>
+        </control>
+        <control type="button" id="98">
+          <width>288</width><include content="Height_34_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_34" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <label>$LOCALIZE[13281]</label>
+          <align>left</align><textoffsetx>14</textoffsetx>
+        </control>
+        <control type="button" id="99">
+          <width>288</width><include content="Height_34_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_34" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <label>$LOCALIZE[19191]</label>
+          <align>left</align><textoffsetx>14</textoffsetx>
+        </control>
+        <control type="button" id="100">
+          <width>288</width><include content="Height_34_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_34" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <label>$LOCALIZE[12389]</label>
+          <align>left</align><textoffsetx>14</textoffsetx>
+        </control>
+        <control type="button" id="101">
+          <width>288</width><include content="Height_34_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_34" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <label>$LOCALIZE[12396]</label>
+          <align>left</align><textoffsetx>14</textoffsetx>
+        </control>
+      </control>
+      <control type="image">
+        <left>312</left><top>34</top><width>694</width><height>440</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+      </control>
+      <control type="label" id="40">
+        <left>324</left><top>40</top><width>670</width><height>28</height>
+        <font>bigbold</font>
+      </control>
+      <control type="image">
+        <left>324</left><top>70</top><width>670</width><height>1</height>
+        <texture>fill_black.png</texture>
+      </control>
+      <control type="label" id="2">
+        <left>324</left><top>76</top><width>670</width><height>30</height>
+      </control>
+      <control type="label" id="3">
+        <left>324</left><top>108</top><width>670</width><height>30</height>
+      </control>
+      <control type="label" id="4">
+        <left>324</left><top>140</top><width>670</width><height>30</height>
+      </control>
+      <control type="label" id="5">
+        <left>324</left><top>172</top><width>670</width><height>30</height>
+      </control>
+      <control type="label" id="6">
+        <left>324</left><top>204</top><width>670</width><height>30</height>
+      </control>
+      <control type="label" id="7">
+        <left>324</left><top>236</top><width>670</width><height>30</height>
+      </control>
+      <control type="label" id="8">
+        <left>324</left><top>268</top><width>670</width><height>30</height>
+      </control>
+      <control type="label" id="9">
+        <left>324</left><top>300</top><width>670</width><height>30</height>
+      </control>
+      <control type="label" id="10">
+        <left>324</left><top>332</top><width>670</width><height>30</height>
+      </control>
+      <control type="label" id="11">
+        <left>324</left><top>364</top><width>670</width><height>30</height>
+      </control>
+      <control type="label" id="12">
+        <left>324</left><top>396</top><width>670</width><height>30</height>
+      </control>
+      <control type="label" id="13">
+        <left>324</left><top>428</top><width>670</width><height>30</height>
+      </control>
+      <control type="textbox" id="30">
+        <left>324</left><top>76</top><width>670</width><height>390</height>
+        <font>small</font>
+      </control>
+      <control type="image">
+        <left>312</left><top>480</top><width>694</width><height>48</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      </control>
+      <control type="label" id="52">
+        <left>324</left><top>482</top><width>670</width><height>22</height>
+        <font>bold</font>
+      </control>
+      <control type="label" id="53">
+        <left>324</left><top>504</top><width>670</width><height>22</height>
+        <font>small</font><textcolor>textdim</textcolor>
+      </control>
+    </control>
+    <include content="Chrome_Taskbar"><param name="up" value="95" /></include>
+  </controls>
+</window>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Colorblind safe: the Okabe-Ito blue and vermillion, which stay distinct
+     for red-green (protan, deutan) and blue-yellow (tritan) color vision.
+     Nothing relies on red against green. Every text color meets WCAG AA
+     (4.5:1) against what it sits on; see tools/palettecheck.py. -->
+<colors>
+  <color name="accent1">FFA33F00</color>
+  <color name="accent2">FF005A8F</color>
+  <color name="select">FF005A8F</color>
+  <color name="desktop">FF8C8C8C</color>
+  <color name="text">FF000000</color>
+  <color name="textdim">FF3C3C3C</color>
+  <color name="textdisabled">FF5E5E5E</color>
+  <color name="marked">FF8A3A00</color>
+  <color name="titletext">FFFFFFFF</color>
+</colors>

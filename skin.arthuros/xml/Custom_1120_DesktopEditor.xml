@@ -1,0 +1,673 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window id="1120">
+  <onunload>Skin.ToggleSetting(home.flip)</onunload>
+  <defaultcontrol always="false">320</defaultcontrol>
+  <backgroundcolor>desktop</backgroundcolor>
+  <controls>
+    <include>Chrome_Desktop</include>
+    <include>Chrome_Menubar</include>
+    <control type="group">
+      <left>6</left><top>30</top><width>1012</width><height>534</height>
+      <include content="Win_Frame">
+        <param name="width" value="1012" /><param name="height" value="534" />
+      </include>
+      <control type="group">
+        <left>3</left><top>3</top>
+        <include content="Win_Title">
+          <param name="width" value="1006" />
+          <param name="colour" value="accent2" />
+          <param name="icon" value="icons24/desktop_edit.png" />
+          <param name="label" value="$LOCALIZE[31954]" />
+          <param name="down" value="320" />
+          <param name="boxes" value="dialog" />
+        </include>
+      </control>
+      <control type="label"><left>16</left><top>40</top><width>220</width><height>26</height><font>bold</font><textcolor>text</textcolor><label>$LOCALIZE[31956]</label></control>
+      <control type="grouplist" id="300">
+        <left>16</left><top>70</top><width>220</width><height>450</height>
+        <orientation>vertical</orientation><itemgap>4</itemgap>
+        <onright>320</onright><onup>300</onup><ondown>9100</ondown>
+        <control type="radiobutton" id="301">
+          <width>220</width><include content="Height_34_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_34" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <label>3 x 3  (9)</label>
+          <onclick>Skin.SetString(home.layout,3x3)</onclick>
+          <selected>String.IsEqual(Skin.String(home.layout),3x3)</selected>
+        </control>
+        <control type="radiobutton" id="302">
+          <width>220</width><include content="Height_34_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_34" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <label>4 x 3  (12)</label>
+          <onclick>Skin.SetString(home.layout,4x3)</onclick>
+          <selected>[String.IsEmpty(Skin.String(home.layout)) | String.IsEqual(Skin.String(home.layout),4x3)]</selected>
+        </control>
+        <control type="radiobutton" id="303">
+          <width>220</width><include content="Height_34_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_34" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <label>4 x 4  (16)</label>
+          <onclick>Skin.SetString(home.layout,4x4)</onclick>
+          <selected>String.IsEqual(Skin.String(home.layout),4x4)</selected>
+        </control>
+        <control type="radiobutton" id="304">
+          <width>220</width><include content="Height_34_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_34" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <label>5 x 4  (20)</label>
+          <onclick>Skin.SetString(home.layout,5x4)</onclick>
+          <selected>String.IsEqual(Skin.String(home.layout),5x4)</selected>
+        </control>
+        <control type="radiobutton" id="305">
+          <width>220</width><include content="Height_34_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_34" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <label>5 x 5  (25)</label>
+          <onclick>Skin.SetString(home.layout,5x5)</onclick>
+          <selected>String.IsEqual(Skin.String(home.layout),5x5)</selected>
+        </control>
+        <control type="radiobutton" id="306">
+          <width>220</width><include content="Height_34_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_34" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <label>6 x 5  (30)</label>
+          <onclick>Skin.SetString(home.layout,6x5)</onclick>
+          <selected>String.IsEqual(Skin.String(home.layout),6x5)</selected>
+        </control>
+        <control type="radiobutton" id="307">
+          <width>220</width><include content="Height_34_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_34" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <label>6 x 6  (36)</label>
+          <onclick>Skin.SetString(home.layout,6x6)</onclick>
+          <selected>String.IsEqual(Skin.String(home.layout),6x6)</selected>
+        </control>
+        <control type="button" id="310">
+          <width>220</width><include content="Height_34_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_34" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <label>$LOCALIZE[31957]</label>
+          <onclick>ActivateWindow(1125)</onclick>
+        </control>
+        <control type="button" id="311">
+          <width>220</width><include content="Height_34_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_34" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <label>$LOCALIZE[31958]</label>
+          <onclick>ActivateWindow(Home)</onclick>
+        </control>
+      </control>
+      <control type="label"><left>256</left><top>40</top><width>400</width><height>26</height><font>bold</font><textcolor>text</textcolor><label>$LOCALIZE[31959]</label></control>
+      <control type="image"><left>256</left><top>70</top><width>436</width><height>450</height><texture border="2" colordiffuse="facetint">panel_sunken.png</texture></control>
+      <control type="list" id="320">
+        <left>259</left><top>73</top><width>406</width><height>444</height>
+        <onleft>300</onleft><onright>321</onright><ondown>9100</ondown>
+        <pagecontrol>321</pagecontrol>
+        <scrolltime tween="linear">0</scrolltime>
+        <itemlayout width="406" height="48" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="label"><left>8</left><top>0</top><width>40</width><height>48</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><align>right</align><label>$INFO[ListItem.Property(slot)].</label></control>
+          <control type="image"><left>56</left><top>8</top><width>32</width><height>32</height><texture>icons24/$INFO[ListItem.Property(ico)].png</texture><visible>String.IsEmpty(ListItem.Property(image))</visible></control>
+          <control type="image"><left>56</left><top>8</top><width>32</width><height>32</height><aspectratio>keep</aspectratio><texture>$INFO[ListItem.Property(image)]</texture><visible>!String.IsEmpty(ListItem.Property(image))</visible></control>
+          <control type="label"><left>98</left><top>0</top><width>302</width><height>48</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
+        </itemlayout>
+        <focusedlayout width="406" height="48" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image"><left>0</left><top>0</top><width>406</width><height>48</height><texture colordiffuse="select">fill.png</texture></control>
+          <control type="label"><left>8</left><top>0</top><width>40</width><height>48</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><align>right</align><label>$INFO[ListItem.Property(slot)].</label></control>
+          <control type="image"><left>56</left><top>8</top><width>32</width><height>32</height><texture>icons24/$INFO[ListItem.Property(ico)].png</texture><visible>String.IsEmpty(ListItem.Property(image))</visible></control>
+          <control type="image"><left>56</left><top>8</top><width>32</width><height>32</height><aspectratio>keep</aspectratio><texture>$INFO[ListItem.Property(image)]</texture><visible>!String.IsEmpty(ListItem.Property(image))</visible></control>
+          <control type="label"><left>98</left><top>0</top><width>302</width><height>48</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
+        </focusedlayout>
+        <itemlayout width="406" height="38">
+          <control type="label"><left>8</left><top>0</top><width>40</width><height>38</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><align>right</align><label>$INFO[ListItem.Property(slot)].</label></control>
+          <control type="image"><left>56</left><top>3</top><width>32</width><height>32</height><texture>icons24/$INFO[ListItem.Property(ico)].png</texture><visible>String.IsEmpty(ListItem.Property(image))</visible></control>
+          <control type="image"><left>56</left><top>3</top><width>32</width><height>32</height><aspectratio>keep</aspectratio><texture>$INFO[ListItem.Property(image)]</texture><visible>!String.IsEmpty(ListItem.Property(image))</visible></control>
+          <control type="label"><left>98</left><top>0</top><width>302</width><height>38</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
+        </itemlayout>
+        <focusedlayout width="406" height="38">
+          <control type="image"><left>0</left><top>0</top><width>406</width><height>38</height><texture colordiffuse="select">fill.png</texture></control>
+          <control type="label"><left>8</left><top>0</top><width>40</width><height>38</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><align>right</align><label>$INFO[ListItem.Property(slot)].</label></control>
+          <control type="image"><left>56</left><top>3</top><width>32</width><height>32</height><texture>icons24/$INFO[ListItem.Property(ico)].png</texture><visible>String.IsEmpty(ListItem.Property(image))</visible></control>
+          <control type="image"><left>56</left><top>3</top><width>32</width><height>32</height><aspectratio>keep</aspectratio><texture>$INFO[ListItem.Property(image)]</texture><visible>!String.IsEmpty(ListItem.Property(image))</visible></control>
+          <control type="label"><left>98</left><top>0</top><width>302</width><height>38</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$VAR[HomeTileName]</label></control>
+        </focusedlayout>
+        <content>
+          <item id="1">
+            <label>$INFO[Skin.String(tile.1.name)]</label>
+            <property name="slot">$NUMBER[1]</property>
+            <property name="id">$INFO[Skin.String(tile.1.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.1.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.1.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.1.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.1.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.1.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.1.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.1.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,1)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+          </item>
+          <item id="2">
+            <label>$INFO[Skin.String(tile.2.name)]</label>
+            <property name="slot">$NUMBER[2]</property>
+            <property name="id">$INFO[Skin.String(tile.2.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.2.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.2.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.2.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.2.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.2.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.2.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.2.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,2)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+          </item>
+          <item id="3">
+            <label>$INFO[Skin.String(tile.3.name)]</label>
+            <property name="slot">$NUMBER[3]</property>
+            <property name="id">$INFO[Skin.String(tile.3.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.3.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.3.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.3.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.3.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.3.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.3.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.3.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,3)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+          </item>
+          <item id="4">
+            <label>$INFO[Skin.String(tile.4.name)]</label>
+            <property name="slot">$NUMBER[4]</property>
+            <property name="id">$INFO[Skin.String(tile.4.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.4.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.4.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.4.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.4.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.4.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.4.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.4.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,4)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+          </item>
+          <item id="5">
+            <label>$INFO[Skin.String(tile.5.name)]</label>
+            <property name="slot">$NUMBER[5]</property>
+            <property name="id">$INFO[Skin.String(tile.5.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.5.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.5.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.5.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.5.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.5.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.5.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.5.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,5)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+          </item>
+          <item id="6">
+            <label>$INFO[Skin.String(tile.6.name)]</label>
+            <property name="slot">$NUMBER[6]</property>
+            <property name="id">$INFO[Skin.String(tile.6.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.6.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.6.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.6.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.6.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.6.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.6.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.6.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,6)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+          </item>
+          <item id="7">
+            <label>$INFO[Skin.String(tile.7.name)]</label>
+            <property name="slot">$NUMBER[7]</property>
+            <property name="id">$INFO[Skin.String(tile.7.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.7.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.7.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.7.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.7.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.7.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.7.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.7.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,7)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+          </item>
+          <item id="8">
+            <label>$INFO[Skin.String(tile.8.name)]</label>
+            <property name="slot">$NUMBER[8]</property>
+            <property name="id">$INFO[Skin.String(tile.8.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.8.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.8.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.8.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.8.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.8.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.8.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.8.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,8)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+          </item>
+          <item id="9">
+            <label>$INFO[Skin.String(tile.9.name)]</label>
+            <property name="slot">$NUMBER[9]</property>
+            <property name="id">$INFO[Skin.String(tile.9.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.9.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.9.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.9.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.9.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.9.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.9.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.9.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,9)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+          </item>
+          <item id="10">
+            <label>$INFO[Skin.String(tile.10.name)]</label>
+            <property name="slot">$NUMBER[10]</property>
+            <property name="id">$INFO[Skin.String(tile.10.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.10.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.10.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.10.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.10.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.10.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.10.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.10.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,10)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>!String.IsEqual(Skin.String(home.layout),3x3)</visible>
+          </item>
+          <item id="11">
+            <label>$INFO[Skin.String(tile.11.name)]</label>
+            <property name="slot">$NUMBER[11]</property>
+            <property name="id">$INFO[Skin.String(tile.11.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.11.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.11.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.11.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.11.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.11.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.11.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.11.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,11)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>!String.IsEqual(Skin.String(home.layout),3x3)</visible>
+          </item>
+          <item id="12">
+            <label>$INFO[Skin.String(tile.12.name)]</label>
+            <property name="slot">$NUMBER[12]</property>
+            <property name="id">$INFO[Skin.String(tile.12.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.12.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.12.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.12.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.12.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.12.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.12.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.12.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,12)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>!String.IsEqual(Skin.String(home.layout),3x3)</visible>
+          </item>
+          <item id="13">
+            <label>$INFO[Skin.String(tile.13.name)]</label>
+            <property name="slot">$NUMBER[13]</property>
+            <property name="id">$INFO[Skin.String(tile.13.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.13.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.13.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.13.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.13.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.13.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.13.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.13.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,13)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),4x4) | String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="14">
+            <label>$INFO[Skin.String(tile.14.name)]</label>
+            <property name="slot">$NUMBER[14]</property>
+            <property name="id">$INFO[Skin.String(tile.14.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.14.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.14.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.14.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.14.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.14.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.14.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.14.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,14)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),4x4) | String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="15">
+            <label>$INFO[Skin.String(tile.15.name)]</label>
+            <property name="slot">$NUMBER[15]</property>
+            <property name="id">$INFO[Skin.String(tile.15.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.15.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.15.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.15.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.15.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.15.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.15.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.15.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,15)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),4x4) | String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="16">
+            <label>$INFO[Skin.String(tile.16.name)]</label>
+            <property name="slot">$NUMBER[16]</property>
+            <property name="id">$INFO[Skin.String(tile.16.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.16.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.16.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.16.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.16.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.16.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.16.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.16.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,16)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),4x4) | String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="17">
+            <label>$INFO[Skin.String(tile.17.name)]</label>
+            <property name="slot">$NUMBER[17]</property>
+            <property name="id">$INFO[Skin.String(tile.17.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.17.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.17.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.17.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.17.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.17.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.17.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.17.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,17)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="18">
+            <label>$INFO[Skin.String(tile.18.name)]</label>
+            <property name="slot">$NUMBER[18]</property>
+            <property name="id">$INFO[Skin.String(tile.18.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.18.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.18.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.18.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.18.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.18.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.18.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.18.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,18)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="19">
+            <label>$INFO[Skin.String(tile.19.name)]</label>
+            <property name="slot">$NUMBER[19]</property>
+            <property name="id">$INFO[Skin.String(tile.19.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.19.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.19.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.19.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.19.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.19.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.19.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.19.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,19)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="20">
+            <label>$INFO[Skin.String(tile.20.name)]</label>
+            <property name="slot">$NUMBER[20]</property>
+            <property name="id">$INFO[Skin.String(tile.20.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.20.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.20.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.20.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.20.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.20.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.20.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.20.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,20)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),5x4) | String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="21">
+            <label>$INFO[Skin.String(tile.21.name)]</label>
+            <property name="slot">$NUMBER[21]</property>
+            <property name="id">$INFO[Skin.String(tile.21.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.21.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.21.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.21.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.21.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.21.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.21.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.21.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,21)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="22">
+            <label>$INFO[Skin.String(tile.22.name)]</label>
+            <property name="slot">$NUMBER[22]</property>
+            <property name="id">$INFO[Skin.String(tile.22.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.22.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.22.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.22.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.22.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.22.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.22.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.22.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,22)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="23">
+            <label>$INFO[Skin.String(tile.23.name)]</label>
+            <property name="slot">$NUMBER[23]</property>
+            <property name="id">$INFO[Skin.String(tile.23.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.23.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.23.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.23.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.23.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.23.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.23.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.23.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,23)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="24">
+            <label>$INFO[Skin.String(tile.24.name)]</label>
+            <property name="slot">$NUMBER[24]</property>
+            <property name="id">$INFO[Skin.String(tile.24.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.24.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.24.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.24.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.24.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.24.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.24.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.24.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,24)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="25">
+            <label>$INFO[Skin.String(tile.25.name)]</label>
+            <property name="slot">$NUMBER[25]</property>
+            <property name="id">$INFO[Skin.String(tile.25.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.25.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.25.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.25.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.25.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.25.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.25.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.25.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,25)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),5x5) | String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="26">
+            <label>$INFO[Skin.String(tile.26.name)]</label>
+            <property name="slot">$NUMBER[26]</property>
+            <property name="id">$INFO[Skin.String(tile.26.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.26.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.26.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.26.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.26.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.26.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.26.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.26.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,26)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="27">
+            <label>$INFO[Skin.String(tile.27.name)]</label>
+            <property name="slot">$NUMBER[27]</property>
+            <property name="id">$INFO[Skin.String(tile.27.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.27.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.27.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.27.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.27.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.27.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.27.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.27.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,27)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="28">
+            <label>$INFO[Skin.String(tile.28.name)]</label>
+            <property name="slot">$NUMBER[28]</property>
+            <property name="id">$INFO[Skin.String(tile.28.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.28.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.28.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.28.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.28.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.28.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.28.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.28.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,28)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="29">
+            <label>$INFO[Skin.String(tile.29.name)]</label>
+            <property name="slot">$NUMBER[29]</property>
+            <property name="id">$INFO[Skin.String(tile.29.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.29.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.29.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.29.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.29.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.29.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.29.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.29.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,29)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="30">
+            <label>$INFO[Skin.String(tile.30.name)]</label>
+            <property name="slot">$NUMBER[30]</property>
+            <property name="id">$INFO[Skin.String(tile.30.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.30.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.30.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.30.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.30.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.30.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.30.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.30.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,30)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),6x5) | String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="31">
+            <label>$INFO[Skin.String(tile.31.name)]</label>
+            <property name="slot">$NUMBER[31]</property>
+            <property name="id">$INFO[Skin.String(tile.31.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.31.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.31.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.31.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.31.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.31.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.31.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.31.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,31)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="32">
+            <label>$INFO[Skin.String(tile.32.name)]</label>
+            <property name="slot">$NUMBER[32]</property>
+            <property name="id">$INFO[Skin.String(tile.32.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.32.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.32.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.32.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.32.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.32.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.32.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.32.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,32)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="33">
+            <label>$INFO[Skin.String(tile.33.name)]</label>
+            <property name="slot">$NUMBER[33]</property>
+            <property name="id">$INFO[Skin.String(tile.33.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.33.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.33.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.33.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.33.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.33.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.33.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.33.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,33)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="34">
+            <label>$INFO[Skin.String(tile.34.name)]</label>
+            <property name="slot">$NUMBER[34]</property>
+            <property name="id">$INFO[Skin.String(tile.34.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.34.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.34.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.34.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.34.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.34.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.34.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.34.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,34)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="35">
+            <label>$INFO[Skin.String(tile.35.name)]</label>
+            <property name="slot">$NUMBER[35]</property>
+            <property name="id">$INFO[Skin.String(tile.35.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.35.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.35.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.35.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.35.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.35.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.35.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.35.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,35)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+          <item id="36">
+            <label>$INFO[Skin.String(tile.36.name)]</label>
+            <property name="slot">$NUMBER[36]</property>
+            <property name="id">$INFO[Skin.String(tile.36.id)]</property>
+            <property name="lid">$INFO[Skin.String(tile.36.lid)]</property>
+            <property name="pre">$INFO[Skin.String(tile.36.pre)]</property>
+            <property name="name">$INFO[Skin.String(tile.36.name)]</property>
+            <property name="ico">$INFO[Skin.String(tile.36.icon)]</property>
+            <property name="image">$INFO[Skin.String(tile.36.image)]</property>
+            <property name="action">$INFO[Skin.String(tile.36.action)]</property>
+            <property name="addon">$INFO[Skin.String(tile.36.addon)]</property>
+            <onclick>Skin.SetString(edit.slot,36)</onclick>
+            <onclick>ActivateWindow(1121)</onclick>
+            <visible>[String.IsEqual(Skin.String(home.layout),6x6)]</visible>
+          </item>
+        </content>
+      </control>
+      <control type="scrollbar" id="321">
+        <left>668</left><top>73</top><width>18</width><height>444</height>
+        <onleft>320</onleft>
+        <onright>300</onright>
+      </control>
+      <control type="image"><left>708</left><top>70</top><width>288</width><height>450</height><texture border="2" colordiffuse="facetint">panel_sunken.png</texture></control>
+      <control type="textbox">
+        <left>720</left><top>80</top><width>264</width><height>430</height>
+        <font>small</font>
+        <label>$LOCALIZE[31960]</label>
+      </control>
+    </control>
+    <include content="Chrome_Taskbar"><param name="up" value="320" /></include>
+  </controls>
+</window>

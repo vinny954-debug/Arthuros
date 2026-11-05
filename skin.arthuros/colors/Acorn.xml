@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Acorn: cool blues on pale steel, closer to the later RISC OS desktop. -->
+<colors>
+  <color name="accent1">FF004499</color>
+  <color name="accent2">FF2277BB</color>
+  <color name="select">FF2277BB</color>
+  <color name="desktop">FF6688AA</color>
+  <color name="facetint">FFF0F4FF</color>
+</colors>

@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<window>
+  <defaultcontrol>996</defaultcontrol>
+  <coordinates><left>0</left><top>0</top></coordinates>
+  <controls>
+    <control type="image" id="999">
+      <left>0</left><top>0</top><width>380</width><height>440</height>
+      <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+    </control>
+    <control type="group">
+      <left>3</left><top>3</top>
+      <control type="group">
+        <width>374</width><height>26</height>
+
+        <control type="image">
+          <left>0</left><top>0</top>
+          <width>374</width><height>26</height>
+          <texture colordiffuse="accent1">fill.png</texture>
+        </control>
+        <!-- hard 1px rule under the bar, the way Arthur draws it -->
+        <control type="image">
+          <left>0</left><bottom>0</bottom>
+          <width>374</width><height>1</height>
+          <texture>fill_black.png</texture>
+        </control>
+
+        <control type="image">
+          <left>4</left><top>5</top><width>16</width><height>16</height>
+          <texture>icons24/file_list.png</texture>
+        </control>
+
+        <!-- left + right with no width: Kodi derives the width, so the title
+             stops before the window boxes instead of running underneath them -->
+        <control type="label">
+          <left>26</left><right>100</right><top>0</top><height>26</height>
+          <align>left</align><aligny>center</aligny>
+          <font>chromebold</font><textcolor>titletext</textcolor>
+          <label>$LOCALIZE[31906]</label>
+        </control>
+
+        <control type="label">
+          <right>100</right><top>0</top><width>460</width><height>26</height>
+          <align>right</align><aligny>center</aligny>
+          <font>chromesmall</font><textcolor>titletext</textcolor>
+          <label></label>
+        </control>
+
+        <!-- The window boxes. Which set a title bar gets is chosen by the
+             "boxes" parameter: window, dialog, home or none. -->
+        <control type="group">
+      <control type="button" id="9901">
+        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label/>
+        <onclick>Dialog.Close(all,true)</onclick>
+        <onclick>ActivateWindow(Home)</onclick>
+        <onright>9902</onright>
+        <ondown></ondown>
+      </control>
+      <control type="image">
+        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="text">wc_min_g.png</texture>
+        <visible>!Control.HasFocus(9901)</visible>
+      </control>
+      <control type="image">
+        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="titletext">wc_min_g.png</texture>
+        <visible>Control.HasFocus(9901)</visible>
+      </control>
+      <control type="button" id="9902">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label/>
+        <enable>Player.HasMedia</enable>
+        <onclick>Action(FullScreen)</onclick>
+        <onleft>9901</onleft>
+        <onright>9903</onright>
+        <ondown></ondown>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="text">wc_max_g.png</texture>
+        <visible>!Control.HasFocus(9902) + Player.HasMedia</visible>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="titletext">wc_max_g.png</texture>
+        <visible>Control.HasFocus(9902)</visible>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="textdim">wc_max_dg.png</texture>
+        <visible>!Player.HasMedia</visible>
+      </control>
+      <control type="button" id="9903">
+        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label/>
+        <onclick>Action(Back)</onclick>
+        <onleft>9902</onleft>
+        <ondown></ondown>
+      </control>
+      <control type="image">
+        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="text">wc_close_g.png</texture>
+        <visible>!Control.HasFocus(9903)</visible>
+      </control>
+      <control type="image">
+        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="titletext">wc_close_g.png</texture>
+        <visible>Control.HasFocus(9903)</visible>
+      </control>
+    </control>
+      </control>
+    </control>
+    <control type="grouplist" id="996">
+      <left>10</left><top>38</top><width>360</width><height>392</height>
+      <orientation>vertical</orientation><itemgap>2</itemgap>
+      <control type="button" id="1000">
+        <width>360</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+        <align>left</align><textoffsetx>12</textoffsetx>
+      </control>
+    </control>
+  </controls>
+</window>

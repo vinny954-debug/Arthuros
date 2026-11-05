@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- High contrast, light: black text on white, a dark blue selection with
+     white text, and black title bars. For low vision. -->
+<colors>
+  <color name="accent1">FF000000</color>
+  <color name="accent2">FF00007A</color>
+  <color name="select">FF0000B0</color>
+  <color name="desktop">FFFFFFFF</color>
+  <color name="facetint">FFFFFFFF</color>
+  <color name="text">FF000000</color>
+  <color name="textdim">FF1A1A1A</color>
+  <color name="textinv">FFFFFFFF</color>
+  <color name="textdisabled">FF4A4A4A</color>
+  <color name="marked">FF7A0000</color>
+  <color name="titletext">FFFFFFFF</color>
+</colors>

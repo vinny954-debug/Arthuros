@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <defaultcontrol>996</defaultcontrol>
+  <coordinates><left>0</left><top>0</top></coordinates>
+  <controls>
+    <control type="image" id="999">
+      <left>0</left><top>0</top><width>380</width><height>440</height>
+      <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+    </control>
+    <control type="group">
+      <left>3</left><top>3</top>
+      <include content="Win_Title">
+        <param name="width" value="374" />
+        <param name="colour" value="accent1" />
+        <param name="icon" value="icons24/file_list.png" />
+        <param name="label" value="$LOCALIZE[31906]" />
+      </include>
+    </control>
+    <control type="grouplist" id="996">
+      <left>10</left><top>38</top><width>360</width><height>392</height>
+      <orientation>vertical</orientation><itemgap>2</itemgap>
+      <control type="button" id="1000">
+        <width>360</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <align>left</align><textoffsetx>12</textoffsetx>
+      </control>
+    </control>
+  </controls>
+</window>

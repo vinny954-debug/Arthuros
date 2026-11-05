@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+  <!-- One line of "what am I looking at", shown in media window title bars. -->
+  <variable name="BreadcrumbVar">
+    <value condition="!String.IsEmpty(Container.FolderName)">$INFO[Container.FolderName]</value>
+    <value condition="!String.IsEmpty(Container.FolderPath)">$INFO[Container.FolderPath]</value>
+    <value></value>
+  </variable>
+
+  <!-- Item count for the status strip. -->
+  <variable name="ItemCountVar">
+    <value condition="Container.NumItems">$INFO[Container.NumItems] $LOCALIZE[127]</value>
+    <value>$LOCALIZE[2080]</value>
+  </variable>
+
+  <!-- Right hand info panel heading. -->
+  <variable name="InfoTitleVar">
+    <value condition="!String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
+    <value>$INFO[ListItem.Label]</value>
+  </variable>
+
+  <!-- Now playing line for the taskbar and OSDs. -->
+  <variable name="NowPlayingVar">
+    <value condition="Player.HasVideo">$INFO[VideoPlayer.Title]</value>
+    <value condition="Player.HasAudio">$INFO[MusicPlayer.Artist] - $INFO[MusicPlayer.Title]</value>
+    <value></value>
+  </variable>
+
+  <!-- Pointer style, chosen in Skin settings. Empty string = Arthur. -->
+  <variable name="PointerTex">
+    <!-- Touch mode with no mouse plugged in: no pointer at all -->
+    <value condition="Skin.HasSetting(touchmode) + String.IsEmpty(Window(Home).Property(arthuros.mouse))"></value>
+    <value condition="String.IsEqual(Skin.String(pointer),classic)">pointer_classic.png</value>
+    <value condition="String.IsEqual(Skin.String(pointer),inverse)">pointer_inverse.png</value>
+    <value>pointer_arthur.png</value>
+  </variable>
+  <variable name="PointerClickTex">
+    <!-- Touch mode with no mouse plugged in: no pointer at all -->
+    <value condition="Skin.HasSetting(touchmode) + String.IsEmpty(Window(Home).Property(arthuros.mouse))"></value>
+    <value condition="String.IsEqual(Skin.String(pointer),classic)">pointer_classic_click.png</value>
+    <value condition="String.IsEqual(Skin.String(pointer),inverse)">pointer_inverse_click.png</value>
+    <value>pointer_arthur_click.png</value>
+  </variable>
+
+  <!-- The window the title-bar "_" box parks on the task bar: its name as
+       ActivateWindow() understands it, and its icon. "home" means there is
+       nothing that can be brought back, so the task bar shows no button. -->
+  <variable name="ArthurWindowName">
+    <value condition="Window.IsActive(videos)">videos</value>
+    <value condition="Window.IsActive(music)">music</value>
+    <value condition="Window.IsActive(pictures)">pictures</value>
+    <value condition="Window.IsActive(programs)">programs</value>
+    <value condition="Window.IsActive(games)">games</value>
+    <value condition="Window.IsActive(addonbrowser)">addonbrowser</value>
+    <value condition="Window.IsActive(favouritesbrowser)">favouritesbrowser</value>
+    <value condition="Window.IsActive(videoplaylist)">videoplaylist</value>
+    <value condition="Window.IsActive(musicplaylist)">musicplaylist</value>
+    <value condition="Window.IsActive(tvchannels)">tvchannels</value>
+    <value condition="Window.IsActive(radiochannels)">radiochannels</value>
+    <value condition="Window.IsActive(tvguide)">tvguide</value>
+    <value condition="Window.IsActive(radioguide)">radioguide</value>
+    <value condition="Window.IsActive(tvrecordings)">tvrecordings</value>
+    <value condition="Window.IsActive(radiorecordings)">radiorecordings</value>
+    <value condition="Window.IsActive(tvtimers)">tvtimers</value>
+    <value condition="Window.IsActive(radiotimers)">radiotimers</value>
+    <value condition="Window.IsActive(tvtimerrules)">tvtimerrules</value>
+    <value condition="Window.IsActive(radiotimerrules)">radiotimerrules</value>
+    <value condition="Window.IsActive(tvsearch)">tvsearch</value>
+    <value condition="Window.IsActive(radiosearch)">radiosearch</value>
+    <value condition="Window.IsActive(weather)">weather</value>
+    <value condition="Window.IsActive(filemanager)">filemanager</value>
+    <value condition="Window.IsActive(systeminfo)">systeminfo</value>
+    <value condition="Window.IsActive(settings)">settings</value>
+    <value condition="Window.IsActive(systemsettings)">systemsettings</value>
+    <value condition="Window.IsActive(playersettings)">playersettings</value>
+    <value condition="Window.IsActive(mediasettings)">mediasettings</value>
+    <value condition="Window.IsActive(interfacesettings)">interfacesettings</value>
+    <value condition="Window.IsActive(servicesettings)">servicesettings</value>
+    <value condition="Window.IsActive(pvrsettings)">pvrsettings</value>
+    <value condition="Window.IsActive(gamesettings)">gamesettings</value>
+    <value condition="Window.IsActive(skinsettings)">skinsettings</value>
+    <value condition="Window.IsActive(profiles)">profiles</value>
+    <value condition="Window.IsActive(eventlog)">eventlog</value>
+    <value>home</value>
+  </variable>
+  <variable name="ArthurWindowIcon">
+    <value condition="Window.IsActive(videos)">icons24/video.png</value>
+    <value condition="Window.IsActive(music)">icons24/music.png</value>
+    <value condition="Window.IsActive(pictures)">icons24/pictures.png</value>
+    <value condition="Window.IsActive(programs)">icons24/program.png</value>
+    <value condition="Window.IsActive(games)">icons24/games.png</value>
+    <value condition="Window.IsActive(addonbrowser)">icons24/addons.png</value>
+    <value condition="Window.IsActive(favouritesbrowser)">icons24/favourites.png</value>
+    <value condition="Window.IsActive(videoplaylist)">icons24/playlist_video.png</value>
+    <value condition="Window.IsActive(musicplaylist)">icons24/playlist_music.png</value>
+    <value condition="Window.IsActive(tvchannels)">icons24/pvr_channels.png</value>
+    <value condition="Window.IsActive(radiochannels)">icons24/pvr_channels.png</value>
+    <value condition="Window.IsActive(tvguide)">icons24/pvr_guide.png</value>
+    <value condition="Window.IsActive(radioguide)">icons24/pvr_guide.png</value>
+    <value condition="Window.IsActive(tvrecordings)">icons24/pvr_recordings.png</value>
+    <value condition="Window.IsActive(radiorecordings)">icons24/pvr_recordings.png</value>
+    <value condition="Window.IsActive(tvtimers)">icons24/pvr_timers.png</value>
+    <value condition="Window.IsActive(radiotimers)">icons24/pvr_timers.png</value>
+    <value condition="Window.IsActive(tvtimerrules)">icons24/pvr_timerrules.png</value>
+    <value condition="Window.IsActive(radiotimerrules)">icons24/pvr_timerrules.png</value>
+    <value condition="Window.IsActive(tvsearch)">icons24/pvr_search.png</value>
+    <value condition="Window.IsActive(radiosearch)">icons24/pvr_search.png</value>
+    <value condition="Window.IsActive(weather)">icons24/weather.png</value>
+    <value condition="Window.IsActive(filemanager)">icons24/harddisk.png</value>
+    <value condition="Window.IsActive(systeminfo)">icons24/info.png</value>
+    <value condition="Window.IsActive(settings)">icons24/settings.png</value>
+    <value condition="Window.IsActive(systemsettings)">icons24/system.png</value>
+    <value condition="Window.IsActive(playersettings)">icons24/player.png</value>
+    <value condition="Window.IsActive(mediasettings)">icons24/media.png</value>
+    <value condition="Window.IsActive(interfacesettings)">icons24/interface.png</value>
+    <value condition="Window.IsActive(servicesettings)">icons24/services.png</value>
+    <value condition="Window.IsActive(pvrsettings)">icons24/livetv.png</value>
+    <value condition="Window.IsActive(gamesettings)">icons24/games.png</value>
+    <value condition="Window.IsActive(skinsettings)">icons24/skin.png</value>
+    <value condition="Window.IsActive(profiles)">icons24/person.png</value>
+    <value condition="Window.IsActive(eventlog)">icons24/events.png</value>
+    <value>icons24/interface.png</value>
+  </variable>
+
+  <!-- speaker, or speaker with a cross when muted -->
+  <variable name="VolumeIconVar">
+    <value condition="Player.Muted">icons24/audio_muted.png</value>
+    <value>icons24/audio.png</value>
+  </variable>
+</includes>

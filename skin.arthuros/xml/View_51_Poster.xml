@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Poster wall: 5 across, 100x150 art in a bevelled tile. -->
+<includes>
+  <include name="View_51_Poster">
+    <control type="group">
+      <visible>Control.IsVisible(51)</visible>
+      <include content="Arthur_ListWell">
+        <param name="width" value="634" />
+        <param name="height" value="462" />
+      </include>
+    </control>
+
+    <control type="panel" id="51">
+      <left>6</left><top>6</top><width>604</width><height>450</height>
+      <onleft>9490</onleft>
+      <onright>61</onright>
+      <onup>9490</onup>
+      <ondown>9100</ondown>
+      <pagecontrol>61</pagecontrol>
+      <scrolltime tween="linear">0</scrolltime>
+      <itemlayout height="222" width="120">
+        <control type="image">
+          <left>4</left><top>0</top><width>112</width><height>172</height>
+          <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+        </control>
+        <control type="image">
+          <left>10</left><top>6</top><width>100</width><height>160</height>
+          <texture fallback="DefaultVideo.png">$INFO[ListItem.Art(poster)]</texture>
+          <aspectratio>stretch</aspectratio>
+        </control>
+        <control type="label">
+          <left>4</left><top>174</top><width>112</width><height>44</height>
+          <font>tiny</font><textcolor>text</textcolor>
+          <align>center</align><aligny>top</aligny>
+          <label>$INFO[ListItem.Label]</label>
+          <wrapmultiline>true</wrapmultiline>
+        </control>
+      </itemlayout>
+      <focusedlayout height="222" width="120">
+        <control type="image">
+          <left>4</left><top>0</top><width>112</width><height>172</height>
+          <texture border="2" colordiffuse="select">select_bevel.png</texture>
+        </control>
+        <control type="image">
+          <left>10</left><top>6</top><width>100</width><height>160</height>
+          <texture fallback="DefaultVideo.png">$INFO[ListItem.Art(poster)]</texture>
+          <aspectratio>stretch</aspectratio>
+        </control>
+        <control type="image">
+          <left>4</left><top>174</top><width>112</width><height>44</height>
+          <texture colordiffuse="select">fill.png</texture>
+        </control>
+        <control type="label">
+          <left>4</left><top>174</top><width>112</width><height>44</height>
+          <font>tiny</font><textcolor>textinv</textcolor>
+          <align>center</align><aligny>top</aligny>
+          <label>$INFO[ListItem.Label]</label>
+          <wrapmultiline>true</wrapmultiline>
+        </control>
+      </focusedlayout>
+    </control>
+
+    <control type="scrollbar" id="61">
+      <left>611</left><top>3</top><width>18</width><height>456</height>
+      <onleft>51</onleft>
+      <onright>9490</onright>
+      <visible>Control.IsVisible(51)</visible>
+    </control>
+  </include>
+</includes>

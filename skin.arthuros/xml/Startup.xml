@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <onload>ReplaceWindow($INFO[System.StartupWindow])</onload>
+  <backgroundcolor>desktop</backgroundcolor>
+  <controls>
+    <include>Chrome_Desktop</include>
+  </controls>
+</window>

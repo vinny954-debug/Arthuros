@@ -1,0 +1,437 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<window type="dialog" id="1125">
+  <defaultcontrol>1128</defaultcontrol>
+  <controls>
+    <control type="image">
+      <left>0</left><top>0</top><width>1024</width><height>768</height>
+      <texture>dim.png</texture>
+    </control>
+    <control type="group">
+      <centerleft>50%</centerleft><centertop>50%</centertop>
+      <width>480</width><height>200</height>
+      <control type="image">
+        <left>0</left><top>0</top>
+        <width>480</width><height>200</height>
+        <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+      </control>
+      <control type="group">
+        <left>3</left><top>3</top>
+        <control type="group">
+        <width>474</width><height>26</height>
+
+        <control type="image">
+          <left>0</left><top>0</top>
+          <width>474</width><height>26</height>
+          <texture colordiffuse="accent2">fill.png</texture>
+        </control>
+        <!-- hard 1px rule under the bar, the way Arthur draws it -->
+        <control type="image">
+          <left>0</left><bottom>0</bottom>
+          <width>474</width><height>1</height>
+          <texture>fill_black.png</texture>
+        </control>
+
+        <control type="image">
+          <left>4</left><top>5</top><width>16</width><height>16</height>
+          <texture>icons24/desktop_edit.png</texture>
+        </control>
+
+        <!-- left + right with no width: Kodi derives the width, so the title
+             stops before the window boxes instead of running underneath them -->
+        <control type="label">
+          <left>26</left><right>100</right><top>0</top><height>26</height>
+          <align>left</align><aligny>center</aligny>
+          <font>chromebold</font><textcolor>titletext</textcolor>
+          <label>$LOCALIZE[31957]</label>
+        </control>
+
+        <control type="label">
+          <right>100</right><top>0</top><width>460</width><height>26</height>
+          <align>right</align><aligny>center</aligny>
+          <font>chromesmall</font><textcolor>titletext</textcolor>
+          <label></label>
+        </control>
+
+        <!-- The window boxes. Which set a title bar gets is chosen by the
+             "boxes" parameter: window, dialog, home or none. -->
+        <control type="group">
+      <control type="button" id="9901">
+        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label/>
+        <onclick>Dialog.Close(all,true)</onclick>
+        <onclick>ActivateWindow(Home)</onclick>
+        <onright>9902</onright>
+        <ondown>1128</ondown>
+      </control>
+      <control type="image">
+        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="text">wc_min_g.png</texture>
+        <visible>!Control.HasFocus(9901)</visible>
+      </control>
+      <control type="image">
+        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="titletext">wc_min_g.png</texture>
+        <visible>Control.HasFocus(9901)</visible>
+      </control>
+      <control type="button" id="9902">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label/>
+        <enable>Player.HasMedia</enable>
+        <onclick>Action(FullScreen)</onclick>
+        <onleft>9901</onleft>
+        <onright>9903</onright>
+        <ondown>1128</ondown>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="text">wc_max_g.png</texture>
+        <visible>!Control.HasFocus(9902) + Player.HasMedia</visible>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="titletext">wc_max_g.png</texture>
+        <visible>Control.HasFocus(9902)</visible>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="textdim">wc_max_dg.png</texture>
+        <visible>!Player.HasMedia</visible>
+      </control>
+      <control type="button" id="9903">
+        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label/>
+        <onclick>Action(Back)</onclick>
+        <onleft>9902</onleft>
+        <ondown>1128</ondown>
+      </control>
+      <control type="image">
+        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="text">wc_close_g.png</texture>
+        <visible>!Control.HasFocus(9903)</visible>
+      </control>
+      <control type="image">
+        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="titletext">wc_close_g.png</texture>
+        <visible>Control.HasFocus(9903)</visible>
+      </control>
+    </control>
+      </control>
+      </control>
+      <control type="textbox">
+        <left>20</left><top>44</top><width>440</width><height>80</height>
+        <font>normal</font>
+        <label>$LOCALIZE[31978]</label>
+      </control>
+      <control type="grouplist" id="1126">
+        <left>20</left><top>150</top><width>440</width><height>34</height>
+        <orientation>horizontal</orientation><align>center</align><itemgap>12</itemgap>
+        <control type="button" id="1127">
+          <width>150</width><height>34</height>
+          <align>center</align><label>$LOCALIZE[107]</label>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.1.pre))">Skin.Reset(tile.1.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.1.name))">Skin.Reset(tile.1.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.1.image))">Skin.Reset(tile.1.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.1.action))">Skin.Reset(tile.1.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.1.addon))">Skin.Reset(tile.1.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.2.pre))">Skin.Reset(tile.2.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.2.name))">Skin.Reset(tile.2.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.2.image))">Skin.Reset(tile.2.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.2.action))">Skin.Reset(tile.2.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.2.addon))">Skin.Reset(tile.2.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.3.pre))">Skin.Reset(tile.3.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.3.name))">Skin.Reset(tile.3.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.3.image))">Skin.Reset(tile.3.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.3.action))">Skin.Reset(tile.3.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.3.addon))">Skin.Reset(tile.3.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.4.pre))">Skin.Reset(tile.4.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.4.name))">Skin.Reset(tile.4.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.4.image))">Skin.Reset(tile.4.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.4.action))">Skin.Reset(tile.4.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.4.addon))">Skin.Reset(tile.4.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.5.pre))">Skin.Reset(tile.5.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.5.name))">Skin.Reset(tile.5.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.5.image))">Skin.Reset(tile.5.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.5.action))">Skin.Reset(tile.5.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.5.addon))">Skin.Reset(tile.5.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.6.pre))">Skin.Reset(tile.6.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.6.name))">Skin.Reset(tile.6.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.6.image))">Skin.Reset(tile.6.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.6.action))">Skin.Reset(tile.6.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.6.addon))">Skin.Reset(tile.6.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.7.pre))">Skin.Reset(tile.7.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.7.name))">Skin.Reset(tile.7.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.7.image))">Skin.Reset(tile.7.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.7.action))">Skin.Reset(tile.7.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.7.addon))">Skin.Reset(tile.7.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.8.pre))">Skin.Reset(tile.8.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.8.name))">Skin.Reset(tile.8.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.8.image))">Skin.Reset(tile.8.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.8.action))">Skin.Reset(tile.8.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.8.addon))">Skin.Reset(tile.8.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.9.id))">Skin.Reset(tile.9.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.9.pre))">Skin.Reset(tile.9.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.9.name))">Skin.Reset(tile.9.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.9.image))">Skin.Reset(tile.9.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.9.addon))">Skin.Reset(tile.9.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.10.id))">Skin.Reset(tile.10.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.10.pre))">Skin.Reset(tile.10.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.10.name))">Skin.Reset(tile.10.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.10.image))">Skin.Reset(tile.10.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.10.addon))">Skin.Reset(tile.10.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.11.pre))">Skin.Reset(tile.11.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.11.name))">Skin.Reset(tile.11.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.11.image))">Skin.Reset(tile.11.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.11.action))">Skin.Reset(tile.11.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.11.addon))">Skin.Reset(tile.11.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.12.pre))">Skin.Reset(tile.12.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.12.name))">Skin.Reset(tile.12.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.12.image))">Skin.Reset(tile.12.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.12.action))">Skin.Reset(tile.12.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.12.addon))">Skin.Reset(tile.12.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.13.id))">Skin.Reset(tile.13.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.13.lid))">Skin.Reset(tile.13.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.13.pre))">Skin.Reset(tile.13.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.13.name))">Skin.Reset(tile.13.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.13.icon))">Skin.Reset(tile.13.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.13.image))">Skin.Reset(tile.13.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.13.action))">Skin.Reset(tile.13.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.13.addon))">Skin.Reset(tile.13.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.14.id))">Skin.Reset(tile.14.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.14.lid))">Skin.Reset(tile.14.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.14.pre))">Skin.Reset(tile.14.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.14.name))">Skin.Reset(tile.14.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.14.icon))">Skin.Reset(tile.14.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.14.image))">Skin.Reset(tile.14.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.14.action))">Skin.Reset(tile.14.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.14.addon))">Skin.Reset(tile.14.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.15.id))">Skin.Reset(tile.15.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.15.lid))">Skin.Reset(tile.15.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.15.pre))">Skin.Reset(tile.15.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.15.name))">Skin.Reset(tile.15.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.15.icon))">Skin.Reset(tile.15.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.15.image))">Skin.Reset(tile.15.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.15.action))">Skin.Reset(tile.15.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.15.addon))">Skin.Reset(tile.15.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.16.id))">Skin.Reset(tile.16.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.16.lid))">Skin.Reset(tile.16.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.16.pre))">Skin.Reset(tile.16.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.16.name))">Skin.Reset(tile.16.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.16.icon))">Skin.Reset(tile.16.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.16.image))">Skin.Reset(tile.16.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.16.action))">Skin.Reset(tile.16.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.16.addon))">Skin.Reset(tile.16.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.17.id))">Skin.Reset(tile.17.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.17.lid))">Skin.Reset(tile.17.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.17.pre))">Skin.Reset(tile.17.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.17.name))">Skin.Reset(tile.17.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.17.icon))">Skin.Reset(tile.17.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.17.image))">Skin.Reset(tile.17.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.17.action))">Skin.Reset(tile.17.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.17.addon))">Skin.Reset(tile.17.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.18.id))">Skin.Reset(tile.18.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.18.lid))">Skin.Reset(tile.18.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.18.pre))">Skin.Reset(tile.18.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.18.name))">Skin.Reset(tile.18.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.18.icon))">Skin.Reset(tile.18.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.18.image))">Skin.Reset(tile.18.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.18.action))">Skin.Reset(tile.18.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.18.addon))">Skin.Reset(tile.18.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.19.id))">Skin.Reset(tile.19.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.19.lid))">Skin.Reset(tile.19.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.19.pre))">Skin.Reset(tile.19.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.19.name))">Skin.Reset(tile.19.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.19.icon))">Skin.Reset(tile.19.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.19.image))">Skin.Reset(tile.19.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.19.action))">Skin.Reset(tile.19.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.19.addon))">Skin.Reset(tile.19.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.20.id))">Skin.Reset(tile.20.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.20.lid))">Skin.Reset(tile.20.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.20.pre))">Skin.Reset(tile.20.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.20.name))">Skin.Reset(tile.20.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.20.icon))">Skin.Reset(tile.20.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.20.image))">Skin.Reset(tile.20.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.20.action))">Skin.Reset(tile.20.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.20.addon))">Skin.Reset(tile.20.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.21.id))">Skin.Reset(tile.21.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.21.lid))">Skin.Reset(tile.21.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.21.pre))">Skin.Reset(tile.21.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.21.name))">Skin.Reset(tile.21.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.21.icon))">Skin.Reset(tile.21.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.21.image))">Skin.Reset(tile.21.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.21.action))">Skin.Reset(tile.21.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.21.addon))">Skin.Reset(tile.21.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.22.id))">Skin.Reset(tile.22.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.22.lid))">Skin.Reset(tile.22.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.22.pre))">Skin.Reset(tile.22.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.22.name))">Skin.Reset(tile.22.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.22.icon))">Skin.Reset(tile.22.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.22.image))">Skin.Reset(tile.22.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.22.action))">Skin.Reset(tile.22.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.22.addon))">Skin.Reset(tile.22.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.23.id))">Skin.Reset(tile.23.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.23.lid))">Skin.Reset(tile.23.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.23.pre))">Skin.Reset(tile.23.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.23.name))">Skin.Reset(tile.23.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.23.icon))">Skin.Reset(tile.23.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.23.image))">Skin.Reset(tile.23.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.23.action))">Skin.Reset(tile.23.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.23.addon))">Skin.Reset(tile.23.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.24.id))">Skin.Reset(tile.24.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.24.lid))">Skin.Reset(tile.24.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.24.pre))">Skin.Reset(tile.24.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.24.name))">Skin.Reset(tile.24.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.24.icon))">Skin.Reset(tile.24.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.24.image))">Skin.Reset(tile.24.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.24.action))">Skin.Reset(tile.24.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.24.addon))">Skin.Reset(tile.24.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.25.id))">Skin.Reset(tile.25.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.25.lid))">Skin.Reset(tile.25.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.25.pre))">Skin.Reset(tile.25.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.25.name))">Skin.Reset(tile.25.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.25.icon))">Skin.Reset(tile.25.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.25.image))">Skin.Reset(tile.25.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.25.action))">Skin.Reset(tile.25.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.25.addon))">Skin.Reset(tile.25.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.26.id))">Skin.Reset(tile.26.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.26.lid))">Skin.Reset(tile.26.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.26.pre))">Skin.Reset(tile.26.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.26.name))">Skin.Reset(tile.26.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.26.icon))">Skin.Reset(tile.26.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.26.image))">Skin.Reset(tile.26.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.26.action))">Skin.Reset(tile.26.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.26.addon))">Skin.Reset(tile.26.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.27.id))">Skin.Reset(tile.27.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.27.lid))">Skin.Reset(tile.27.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.27.pre))">Skin.Reset(tile.27.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.27.name))">Skin.Reset(tile.27.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.27.icon))">Skin.Reset(tile.27.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.27.image))">Skin.Reset(tile.27.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.27.action))">Skin.Reset(tile.27.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.27.addon))">Skin.Reset(tile.27.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.28.id))">Skin.Reset(tile.28.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.28.lid))">Skin.Reset(tile.28.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.28.pre))">Skin.Reset(tile.28.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.28.name))">Skin.Reset(tile.28.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.28.icon))">Skin.Reset(tile.28.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.28.image))">Skin.Reset(tile.28.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.28.action))">Skin.Reset(tile.28.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.28.addon))">Skin.Reset(tile.28.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.29.id))">Skin.Reset(tile.29.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.29.lid))">Skin.Reset(tile.29.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.29.pre))">Skin.Reset(tile.29.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.29.name))">Skin.Reset(tile.29.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.29.icon))">Skin.Reset(tile.29.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.29.image))">Skin.Reset(tile.29.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.29.action))">Skin.Reset(tile.29.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.29.addon))">Skin.Reset(tile.29.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.30.id))">Skin.Reset(tile.30.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.30.lid))">Skin.Reset(tile.30.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.30.pre))">Skin.Reset(tile.30.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.30.name))">Skin.Reset(tile.30.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.30.icon))">Skin.Reset(tile.30.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.30.image))">Skin.Reset(tile.30.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.30.action))">Skin.Reset(tile.30.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.30.addon))">Skin.Reset(tile.30.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.31.id))">Skin.Reset(tile.31.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.31.lid))">Skin.Reset(tile.31.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.31.pre))">Skin.Reset(tile.31.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.31.name))">Skin.Reset(tile.31.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.31.icon))">Skin.Reset(tile.31.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.31.image))">Skin.Reset(tile.31.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.31.action))">Skin.Reset(tile.31.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.31.addon))">Skin.Reset(tile.31.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.32.id))">Skin.Reset(tile.32.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.32.lid))">Skin.Reset(tile.32.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.32.pre))">Skin.Reset(tile.32.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.32.name))">Skin.Reset(tile.32.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.32.icon))">Skin.Reset(tile.32.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.32.image))">Skin.Reset(tile.32.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.32.action))">Skin.Reset(tile.32.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.32.addon))">Skin.Reset(tile.32.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.33.id))">Skin.Reset(tile.33.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.33.lid))">Skin.Reset(tile.33.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.33.pre))">Skin.Reset(tile.33.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.33.name))">Skin.Reset(tile.33.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.33.icon))">Skin.Reset(tile.33.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.33.image))">Skin.Reset(tile.33.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.33.action))">Skin.Reset(tile.33.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.33.addon))">Skin.Reset(tile.33.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.34.id))">Skin.Reset(tile.34.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.34.lid))">Skin.Reset(tile.34.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.34.pre))">Skin.Reset(tile.34.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.34.name))">Skin.Reset(tile.34.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.34.icon))">Skin.Reset(tile.34.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.34.image))">Skin.Reset(tile.34.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.34.action))">Skin.Reset(tile.34.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.34.addon))">Skin.Reset(tile.34.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.35.id))">Skin.Reset(tile.35.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.35.lid))">Skin.Reset(tile.35.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.35.pre))">Skin.Reset(tile.35.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.35.name))">Skin.Reset(tile.35.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.35.icon))">Skin.Reset(tile.35.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.35.image))">Skin.Reset(tile.35.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.35.action))">Skin.Reset(tile.35.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.35.addon))">Skin.Reset(tile.35.addon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.36.id))">Skin.Reset(tile.36.id)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.36.lid))">Skin.Reset(tile.36.lid)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.36.pre))">Skin.Reset(tile.36.pre)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.36.name))">Skin.Reset(tile.36.name)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.36.icon))">Skin.Reset(tile.36.icon)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.36.image))">Skin.Reset(tile.36.image)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.36.action))">Skin.Reset(tile.36.action)</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(tile.36.addon))">Skin.Reset(tile.36.addon)</onclick>
+          <onclick>Skin.SetString(tile.1.id,movies)</onclick>
+          <onclick>Skin.SetString(tile.1.lid,342)</onclick>
+          <onclick>Skin.SetString(tile.1.icon,movies)</onclick>
+          <onclick>Skin.SetString(tile.2.id,tvshows)</onclick>
+          <onclick>Skin.SetString(tile.2.lid,20343)</onclick>
+          <onclick>Skin.SetString(tile.2.icon,tvshows)</onclick>
+          <onclick>Skin.SetString(tile.3.id,music)</onclick>
+          <onclick>Skin.SetString(tile.3.lid,2)</onclick>
+          <onclick>Skin.SetString(tile.3.icon,music)</onclick>
+          <onclick>Skin.SetString(tile.4.id,videos)</onclick>
+          <onclick>Skin.SetString(tile.4.lid,3)</onclick>
+          <onclick>Skin.SetString(tile.4.icon,video)</onclick>
+          <onclick>Skin.SetString(tile.5.id,pictures)</onclick>
+          <onclick>Skin.SetString(tile.5.lid,1)</onclick>
+          <onclick>Skin.SetString(tile.5.icon,pictures)</onclick>
+          <onclick>Skin.SetString(tile.6.id,addons)</onclick>
+          <onclick>Skin.SetString(tile.6.lid,24001)</onclick>
+          <onclick>Skin.SetString(tile.6.icon,addons)</onclick>
+          <onclick>Skin.SetString(tile.7.id,myaddons)</onclick>
+          <onclick>Skin.SetString(tile.7.lid,24998)</onclick>
+          <onclick>Skin.SetString(tile.7.icon,addons_user)</onclick>
+          <onclick>Skin.SetString(tile.8.id,programs)</onclick>
+          <onclick>Skin.SetString(tile.8.lid,0)</onclick>
+          <onclick>Skin.SetString(tile.8.icon,program)</onclick>
+          <onclick>Skin.SetString(tile.9.lid,1036)</onclick>
+          <onclick>Skin.SetString(tile.9.icon,favourites)</onclick>
+          <onclick>Skin.SetString(tile.9.action,"ActivateWindow(favouritesbrowser)")</onclick>
+          <onclick>Skin.SetString(tile.10.lid,8)</onclick>
+          <onclick>Skin.SetString(tile.10.icon,weather)</onclick>
+          <onclick>Skin.SetString(tile.10.action,"ActivateWindow(Weather)")</onclick>
+          <onclick>Skin.SetString(tile.11.id,files)</onclick>
+          <onclick>Skin.SetString(tile.11.lid,7)</onclick>
+          <onclick>Skin.SetString(tile.11.icon,harddisk)</onclick>
+          <onclick>Skin.SetString(tile.12.id,settings)</onclick>
+          <onclick>Skin.SetString(tile.12.lid,5)</onclick>
+          <onclick>Skin.SetString(tile.12.icon,settings)</onclick>
+          <onclick>Skin.Reset(home.layout)</onclick>
+          <onclick>Skin.SetBool(home.init)</onclick>
+          <onclick>Dialog.Close(1125)</onclick>
+        </control>
+        <control type="button" id="1128">
+          <width>150</width><height>34</height>
+          <align>center</align><label>$LOCALIZE[106]</label>
+          <onclick>Dialog.Close(1125)</onclick>
+        </control>
+      </control>
+    </control>
+  </controls>
+</window>

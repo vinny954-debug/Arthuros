@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Paper: warm off-white chrome, oxblood and slate bars. -->
+<colors>
+  <color name="accent1">FF8B2E16</color>
+  <color name="accent2">FF2E4A6B</color>
+  <color name="select">FF2E4A6B</color>
+  <color name="desktop">FFB9A98A</color>
+  <color name="facetint">FFFFF3DC</color>
+  <color name="text">FF1A1208</color>
+</colors>

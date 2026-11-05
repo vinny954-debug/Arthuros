@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <defaultcontrol>3</defaultcontrol>
+  <controls>
+    <include>Dialog_Dim</include>
+    <control type="group">
+      <centerleft>50%</centerleft><centertop>50%</centertop>
+      <width>900</width><height>486</height>
+      <include content="Dialog_Box">
+        <param name="width" value="900" /><param name="height" value="486" />
+        <param name="innerwidth" value="894" />
+        <param name="icon" value="icons24/addons_helper.png" /><param name="colour" value="accent1" />
+        <param name="down" value="3" />
+        <param name="boxes" value="dialog" />
+      </include>
+      <control type="label" id="2">
+        <left>29</left><top>3</top><width>790</width><height>26</height>
+        <font>chromebold</font><textcolor>titletext</textcolor><aligny>center</aligny>
+      </control>
+      <control type="image">
+        <left>10</left><top>36</top><width>230</width><height>320</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      </control>
+      <control type="grouplist" id="3">
+        <left>16</left><top>42</top><width>218</width><height>308</height>
+        <orientation>vertical</orientation><itemgap>3</itemgap>
+        <onright>5</onright><onleft>5</onleft><ondown>9001</ondown><onup>9001</onup>
+      </control>
+      <control type="button" id="10">
+        <left>-2000</left><top>0</top><width>218</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <align>left</align><textoffsetx>10</textoffsetx>
+      </control>
+      <control type="image">
+        <left>246</left><top>36</top><width>644</width><height>320</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+      </control>
+      <control type="grouplist" id="5">
+        <left>256</left><top>44</top><width>606</width><height>304</height>
+        <orientation>vertical</orientation><itemgap>3</itemgap>
+        <onright>60</onright><onleft>3</onleft>
+        <ondown>9001</ondown><onup>9001</onup>
+        <pagecontrol>60</pagecontrol>
+      </control>
+      <control type="scrollbar" id="60">
+        <left>870</left><top>44</top><width>18</width><height>304</height>
+        <onleft>5</onleft><onright>3</onright>
+      </control>
+      <control type="image">
+        <left>10</left><top>364</top><width>880</width><height>70</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      </control>
+      <control type="textbox" id="6">
+        <left>18</left><top>370</top><width>864</width><height>58</height>
+        <font>small</font><textcolor>textdim</textcolor>
+      </control>
+
+      <!-- Templates. Kodi clones these into grouplist 5; they are never
+           shown where they sit, only their size and styling matter. -->
+      <control type="button" id="7">
+        <left>-2000</left><top>0</top><width>606</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <align>left</align><textoffsetx>12</textoffsetx>
+      </control>
+      <control type="radiobutton" id="8">
+        <left>-2000</left><top>0</top><width>606</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <align>left</align><textoffsetx>12</textoffsetx>
+      </control>
+      <control type="spincontrolex" id="9">
+        <left>-2000</left><top>0</top><width>606</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <align>left</align><textoffsetx>12</textoffsetx>
+      </control>
+      <control type="image" id="11">
+        <left>-2000</left><top>0</top><width>606</width><height>2</height>
+        <texture>fill_black.png</texture>
+      </control>
+      <control type="edit" id="12">
+        <left>-2000</left><top>0</top><width>606</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <align>left</align><textoffsetx>12</textoffsetx>
+      </control>
+      <control type="sliderex" id="13">
+        <left>-2000</left><top>0</top><width>606</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <align>left</align><textoffsetx>12</textoffsetx>
+      </control>
+      <control type="label" id="14">
+        <left>-2000</left><top>0</top><width>606</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <font>bold</font><align>left</align>
+      </control>
+      <control type="colorbutton" id="15">
+        <left>-2000</left><top>0</top><width>606</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+        <align>left</align><textoffsetx>12</textoffsetx>
+      </control>
+      <control type="grouplist" id="9001">
+        <left>13</left><top>444</top><width>874</width><height>30</height>
+        <orientation>horizontal</orientation><align>center</align><itemgap>8</itemgap>
+        <onup>5</onup><ondown>3</ondown>
+        <control type="button" id="28"><width>180</width><height>30</height><align>center</align></control>
+        <control type="button" id="29"><width>180</width><height>30</height><align>center</align></control>
+        <control type="button" id="30"><width>180</width><height>30</height><align>center</align></control>
+      </control>
+    </control>
+  </controls>
+</window>

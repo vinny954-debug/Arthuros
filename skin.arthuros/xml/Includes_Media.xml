@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ===================================================================
+     The media browser window. Every library and file window is this
+     template with a different title and icon, so behaviour stays
+     identical wherever you are.
+
+     Control ids 2, 3, 4 and 19 are fixed by Kodi (view / sort by /
+     sort order / filter) and must keep those numbers.
+     Geometry is relative to a group placed at 6,30 sized 1012x534.
+     =================================================================== -->
+<includes>
+
+  <include name="Media_Toolbar">
+    <control type="grouplist" id="9490">
+      <left>6</left><top>34</top><width>1000</width><height>26</height>
+      <orientation>horizontal</orientation>
+      <itemgap>4</itemgap>
+      <align>left</align>
+      <onup>9100</onup>
+      <ondown>50</ondown>
+
+      <control type="button" id="9500">
+        <width>76</width><height>26</height><font>chrome</font>
+        <label>$LOCALIZE[31901]</label>
+        <onclick>ParentDir</onclick>
+      </control>
+      <control type="button" id="2">
+        <width>150</width><height>26</height><font>chrome</font>
+        <label>$LOCALIZE[31902]</label>
+      </control>
+      <control type="button" id="3">
+        <width>190</width><height>26</height><font>chrome</font>
+        <label>$LOCALIZE[31903]</label>
+      </control>
+      <control type="button" id="4">
+        <width>110</width><height>26</height><font>chrome</font>
+        <label>$LOCALIZE[31904]</label>
+      </control>
+      <control type="button" id="19">
+        <width>100</width><height>26</height><font>chrome</font>
+        <label>$LOCALIZE[587]</label>
+      </control>
+      <control type="button" id="9501">
+        <width>110</width><height>26</height><font>chrome</font>
+        <label>$LOCALIZE[31906]</label>
+        <onclick>Action(ContextMenu)</onclick>
+      </control>
+      <!-- inside an add-on (YouTube, Plex...): its own settings - quality,
+           sign-in, subtitles - one click away instead of only in Options -->
+      <control type="button" id="9502">
+        <width>180</width><height>26</height><font>chrome</font>
+        <label>$LOCALIZE[10140]</label>
+        <onclick>Addon.OpenSettings($INFO[Container.PluginName])</onclick>
+        <visible>!String.IsEmpty(Container.PluginName)</visible>
+      </control>
+    </control>
+
+    <!-- item count, right hand end of the toolbar strip -->
+    <control type="label" id="12">
+      <left>770</left><top>34</top><width>236</width><height>26</height>
+      <font>small</font><textcolor>textdim</textcolor>
+      <align>right</align><aligny>center</aligny>
+      <label>$VAR[ItemCountVar]</label>
+      <visible>String.IsEmpty(Container.PluginName)</visible>
+    </control>
+  </include>
+
+  <include name="Media_InfoPanel">
+    <control type="group">
+      <left>646</left><top>66</top><width>360</width><height>462</height>
+
+      <control type="image">
+        <left>0</left><top>0</top><width>360</width><height>462</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      </control>
+
+      <control type="image">
+        <left>8</left><top>8</top><width>120</width><height>170</height>
+        <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+      </control>
+      <control type="image">
+        <left>14</left><top>14</top><width>108</width><height>158</height>
+        <texture fallback="DefaultFolder.png">$INFO[ListItem.Art(thumb)]</texture>
+        <aspectratio>keep</aspectratio>
+      </control>
+
+      <control type="label">
+        <left>136</left><top>10</top><width>216</width><height>52</height>
+        <font>bold</font><textcolor>text</textcolor>
+        <align>left</align><aligny>top</aligny>
+        <label>$VAR[InfoTitleVar]</label>
+        <wrapmultiline>true</wrapmultiline>
+      </control>
+
+      <control type="label">
+        <left>136</left><top>66</top><width>216</width><height>20</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$INFO[ListItem.Year]$INFO[ListItem.Duration,  ,]$INFO[ListItem.AddonVersion]</label>
+      </control>
+      <control type="label">
+        <left>136</left><top>88</top><width>216</width><height>20</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$INFO[ListItem.Genre]</label>
+      </control>
+      <control type="label">
+        <left>136</left><top>110</top><width>216</width><height>20</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$INFO[ListItem.Studio]$INFO[ListItem.Artist]$INFO[ListItem.AddonCreator]</label>
+      </control>
+      <control type="label">
+        <left>136</left><top>132</top><width>216</width><height>20</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$INFO[ListItem.Rating]$INFO[ListItem.Size]</label>
+      </control>
+      <control type="label">
+        <left>136</left><top>154</top><width>216</width><height>20</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$INFO[ListItem.FileNameAndPath]</label>
+      </control>
+
+      <control type="image">
+        <left>8</left><top>186</top><width>344</width><height>1</height>
+        <texture>fill_black.png</texture>
+      </control>
+
+      <control type="image">
+        <left>8</left><top>194</top><width>344</width><height>260</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+      </control>
+      <control type="textbox">
+        <left>14</left><top>200</top><width>332</width><height>248</height>
+        <font>small</font><textcolor>text</textcolor>
+        <label>$INFO[ListItem.Plot]$INFO[ListItem.Comment]$INFO[ListItem.AddonDescription]</label>
+        <autoscroll delay="6000" time="4000" repeat="8000">true</autoscroll>
+      </control>
+    </control>
+  </include>
+
+  <!-- The whole browser window. Place inside a group at 6,30. -->
+  <include name="Media_Window">
+    <param name="icon" default="icons24/folder.png" />
+    <param name="colour" default="accent2" />
+    <definition>
+      <include content="Win_Frame">
+        <param name="width" value="1012" />
+        <param name="height" value="534" />
+      </include>
+
+      <control type="group">
+        <left>3</left><top>3</top>
+        <include content="Win_Title">
+          <param name="width" value="1006" />
+          <param name="colour" value="$PARAM[colour]" />
+          <param name="icon" value="$PARAM[icon]" />
+          <param name="label" value="$VAR[BreadcrumbVar]" />
+          <param name="label2" value="$INFO[Container.FolderPath]" />
+          <param name="down" value="50" />
+          <param name="boxes" value="window" />
+        </include>
+      </control>
+
+      <include>Media_Toolbar</include>
+
+      <control type="group">
+        <left>6</left><top>66</top><width>634</width><height>462</height>
+        <include>View_50_List</include>
+        <include>View_51_Poster</include>
+        <include>View_52_IconWall</include>
+      </control>
+
+      <include>Media_InfoPanel</include>
+    </definition>
+  </include>
+
+</includes>

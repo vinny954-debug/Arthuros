@@ -1,0 +1,1350 @@
+{
+ "AddonBrowser": {
+  "ids": {
+   "3": "button",
+   "4": "button",
+   "5": "button",
+   "7": "radiobutton",
+   "8": "button",
+   "9": "button",
+   "19": "button",
+   "50": "fixedlist",
+   "52": "panel",
+   "55": "fixedlist",
+   "199": "button",
+   "200": "label",
+   "201": "label",
+   "531": "scrollbar",
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "50,52,55",
+  "default": "50"
+ },
+ "Custom_1100_AddonLauncher": {
+  "ids": {
+   "400": "group",
+   "500": "group",
+   "501": "group",
+   "502": "group",
+   "503": "group",
+   "506": "group",
+   "507": "group",
+   "508": "group",
+   "509": "group",
+   "700": "grouplist",
+   "799": "radiobutton",
+   "801": "radiobutton",
+   "802": "radiobutton",
+   "803": "radiobutton",
+   "804": "label"
+  },
+  "views": "",
+  "default": "9000"
+ },
+ "Custom_1101_SettingsList": {
+  "ids": {
+   "1": "label",
+   "7": "button"
+  },
+  "views": "",
+  "default": "11000"
+ },
+ "Custom_1102_TextViewer": {
+  "ids": {
+   "1": "label"
+  },
+  "views": "",
+  "default": "1000"
+ },
+ "Custom_1103_VolumeSlider": {
+  "ids": {},
+  "views": "",
+  "default": "11"
+ },
+ "Custom_1104_Fanart": {
+  "ids": {},
+  "views": "",
+  "default": "3000"
+ },
+ "Custom_1105_MusicOSDSettings": {
+  "ids": {},
+  "views": "",
+  "default": "5000"
+ },
+ "Custom_1107_SearchDialog": {
+  "ids": {},
+  "views": "",
+  "default": "9000"
+ },
+ "Custom_1109_TopBarOverlay": {
+  "ids": {},
+  "views": "",
+  "default": ""
+ },
+ "Custom_1110_TempoControl": {
+  "ids": {
+   "11": "button",
+   "12": "button"
+  },
+  "views": "",
+  "default": "11"
+ },
+ "DialogAddonInfo": {
+  "ids": {
+   "6": "radiobutton",
+   "7": "radiobutton",
+   "8": "radiobutton",
+   "9": "radiobutton",
+   "10": "radiobutton",
+   "12": "radiobutton",
+   "13": "radiobutton",
+   "14": "radiobutton",
+   "50": "panel",
+   "799": "radiobutton"
+  },
+  "views": "",
+  "default": "9000"
+ },
+ "DialogAddonSettings": {
+  "ids": {
+   "2": "label",
+   "3": "grouplist",
+   "5": "grouplist",
+   "6": "textbox",
+   "7": "button",
+   "8": "radiobutton",
+   "9": "spincontrolex",
+   "10": "button",
+   "11": "image",
+   "12": "edit",
+   "13": "sliderex",
+   "14": "label",
+   "15": "colorbutton",
+   "20": "radiobutton",
+   "28": "button",
+   "29": "button",
+   "30": "button",
+   "60": "scrollbar"
+  },
+  "views": "",
+  "default": "5"
+ },
+ "DialogBusy": {
+  "ids": {},
+  "views": "",
+  "default": ""
+ },
+ "DialogButtonMenu": {
+  "ids": {
+   "2": "label"
+  },
+  "views": "",
+  "default": "9000"
+ },
+ "DialogColorPicker": {
+  "ids": {
+   "1": "label",
+   "6": "panel",
+   "7": "button",
+   "61": "scrollbar"
+  },
+  "views": "",
+  "default": "6"
+ },
+ "DialogConfirm": {
+  "ids": {
+   "1": "label",
+   "9": "textbox",
+   "10": "button",
+   "11": "button",
+   "12": "button",
+   "20": "progress"
+  },
+  "views": "",
+  "default": ""
+ },
+ "DialogContextMenu": {
+  "ids": {
+   "996": "grouplist",
+   "999": "image"
+  },
+  "views": "",
+  "default": "996"
+ },
+ "DialogExtendedProgressBar": {
+  "ids": {
+   "30": "label",
+   "31": "label",
+   "32": "progress"
+  },
+  "views": "",
+  "default": ""
+ },
+ "DialogFullScreenInfo": {
+  "ids": {
+   "999": "button"
+  },
+  "views": "",
+  "default": "999"
+ },
+ "DialogGameControllers": {
+  "ids": {
+   "2": "label",
+   "3": "grouplist",
+   "4": "gamecontrollerlist",
+   "5": "grouplist",
+   "7": "button",
+   "8": "label",
+   "9": "image",
+   "10": "button",
+   "17": "button",
+   "18": "button",
+   "19": "button",
+   "20": "button",
+   "21": "button",
+   "22": "button",
+   "31": "gamecontroller",
+   "32": "textbox",
+   "61": "scrollbar",
+   "62": "scrollbar"
+  },
+  "views": "",
+  "default": "3"
+ },
+ "DialogKeyboard": {
+  "ids": {
+   "8": "radiobutton",
+   "32": "radiobutton",
+   "100": "button",
+   "101": "button",
+   "102": "button",
+   "103": "button",
+   "104": "button",
+   "105": "button",
+   "106": "button",
+   "107": "button",
+   "108": "button",
+   "109": "button",
+   "110": "button",
+   "111": "button",
+   "112": "button",
+   "120": "button",
+   "121": "button",
+   "122": "button",
+   "123": "button",
+   "124": "button",
+   "125": "button",
+   "126": "button",
+   "127": "button",
+   "128": "button",
+   "129": "button",
+   "130": "button",
+   "131": "button",
+   "132": "button",
+   "140": "button",
+   "141": "button",
+   "142": "button",
+   "143": "button",
+   "144": "button",
+   "145": "button",
+   "146": "button",
+   "147": "button",
+   "148": "button",
+   "149": "button",
+   "150": "button",
+   "151": "button",
+   "152": "button",
+   "160": "button",
+   "161": "button",
+   "162": "button",
+   "163": "button",
+   "164": "button",
+   "165": "button",
+   "166": "button",
+   "167": "button",
+   "168": "button",
+   "169": "button",
+   "170": "button",
+   "171": "button",
+   "172": "button",
+   "300": "button",
+   "301": "button",
+   "302": "radiobutton",
+   "303": "radiobutton",
+   "304": "radiobutton",
+   "305": "radiobutton",
+   "306": "radiobutton",
+   "307": "button",
+   "309": "button",
+   "310": "button",
+   "311": "label",
+   "312": "edit",
+   "313": "label",
+   "314": "label"
+  },
+  "views": "",
+  "default": "300"
+ },
+ "DialogMediaSource": {
+  "ids": {
+   "2": "label",
+   "10": "list",
+   "11": "button",
+   "12": "edit",
+   "13": "button",
+   "14": "button",
+   "18": "button",
+   "19": "button",
+   "60": "scrollbar"
+  },
+  "views": "",
+  "default": "10"
+ },
+ "DialogMusicInfo": {
+  "ids": {
+   "6": "radiobutton",
+   "7": "button",
+   "8": "radiobutton",
+   "10": "radiobutton",
+   "12": "radiobutton",
+   "41": "list",
+   "50": "panel",
+   "120": "radiobutton",
+   "130": "button",
+   "400": "label",
+   "420": "group",
+   "799": "radiobutton"
+  },
+  "views": "",
+  "default": "9000"
+ },
+ "DialogNotification": {
+  "ids": {
+   "400": "image",
+   "401": "fadelabel",
+   "402": "fadelabel"
+  },
+  "views": "",
+  "default": ""
+ },
+ "DialogNumeric": {
+  "ids": {
+   "1": "textbox",
+   "4": "label",
+   "10": "button",
+   "11": "button",
+   "12": "button",
+   "13": "button",
+   "14": "button",
+   "15": "button",
+   "16": "button",
+   "17": "button",
+   "18": "button",
+   "19": "button",
+   "20": "radiobutton",
+   "21": "button",
+   "22": "radiobutton",
+   "23": "button"
+  },
+  "views": "",
+  "default": "21"
+ },
+ "DialogPVRChannelGuide": {
+  "ids": {
+   "2": "label",
+   "11": "fixedlist",
+   "60": "scrollbar"
+  },
+  "views": "",
+  "default": "11"
+ },
+ "DialogPVRChannelManager": {
+  "ids": {
+   "2": "label",
+   "4": "button",
+   "5": "button",
+   "6": "button",
+   "7": "radiobutton",
+   "8": "edit",
+   "9": "button",
+   "12": "radiobutton",
+   "13": "spincontrolex",
+   "14": "radiobutton",
+   "20": "list",
+   "30": "button",
+   "31": "button",
+   "34": "togglebutton",
+   "35": "button",
+   "60": "scrollbar"
+  },
+  "views": "",
+  "default": "4"
+ },
+ "DialogPVRChannelsOSD": {
+  "ids": {
+   "2": "label",
+   "11": "fixedlist",
+   "60": "scrollbar"
+  },
+  "views": "",
+  "default": "11"
+ },
+ "DialogPVRGroupManager": {
+  "ids": {
+   "1": "label",
+   "11": "list",
+   "12": "list",
+   "13": "list",
+   "20": "label",
+   "21": "label",
+   "22": "label",
+   "25": "radiobutton",
+   "26": "button",
+   "27": "button",
+   "28": "button",
+   "29": "button",
+   "34": "togglebutton",
+   "35": "button",
+   "71": "scrollbar",
+   "72": "scrollbar",
+   "73": "scrollbar"
+  },
+  "views": "",
+  "default": "29"
+ },
+ "DialogPVRGuideControls": {
+  "ids": {
+   "200": "group",
+   "201": "grouplist",
+   "202": "grouplist",
+   "203": "grouplist",
+   "600": "radiobutton",
+   "601": "radiobutton",
+   "602": "radiobutton",
+   "603": "radiobutton",
+   "604": "radiobutton",
+   "605": "radiobutton"
+  },
+  "views": "",
+  "default": "602"
+ },
+ "DialogPVRGuideSearch": {
+  "ids": {
+   "2": "label",
+   "9": "edit",
+   "10": "radiobutton",
+   "11": "radiobutton",
+   "12": "spincontrolex",
+   "13": "spincontrolex",
+   "14": "edit",
+   "15": "edit",
+   "16": "edit",
+   "17": "edit",
+   "18": "spincontrolex",
+   "19": "radiobutton",
+   "20": "radiobutton",
+   "21": "spincontrolex",
+   "22": "radiobutton",
+   "23": "spincontrolex",
+   "24": "radiobutton",
+   "25": "button",
+   "26": "button",
+   "27": "radiobutton",
+   "28": "button",
+   "29": "button",
+   "30": "radiobutton",
+   "31": "radiobutton"
+  },
+  "views": "",
+  "default": "9"
+ },
+ "DialogPVRInfo": {
+  "ids": {
+   "4": "radiobutton",
+   "5": "radiobutton",
+   "6": "radiobutton",
+   "8": "radiobutton",
+   "9": "radiobutton",
+   "10": "radiobutton",
+   "11": "radiobutton",
+   "61": "button",
+   "400": "textbox",
+   "799": "radiobutton"
+  },
+  "views": "",
+  "default": "9000"
+ },
+ "DialogPVRRadioRDSInfo": {
+  "ids": {
+   "799": "radiobutton"
+  },
+  "views": "",
+  "default": "9000"
+ },
+ "DialogPictureInfo": {
+  "ids": {
+   "5": "list",
+   "60": "scrollbar",
+   "799": "radiobutton"
+  },
+  "views": "",
+  "default": "9000"
+ },
+ "DialogPlayerProcessInfo": {
+  "ids": {},
+  "views": "",
+  "default": "5553"
+ },
+ "DialogSeekBar": {
+  "ids": {
+   "401": "slider",
+   "403": "slider"
+  },
+  "views": "",
+  "default": ""
+ },
+ "DialogSelect": {
+  "ids": {
+   "1": "label",
+   "3": "list",
+   "5": "button",
+   "6": "list",
+   "7": "button",
+   "8": "button",
+   "61": "scrollbar"
+  },
+  "views": "",
+  "default": "3"
+ },
+ "DialogSettings": {
+  "ids": {
+   "2": "label",
+   "5": "grouplist",
+   "7": "button",
+   "8": "radiobutton",
+   "9": "spincontrolex",
+   "11": "image",
+   "12": "edit",
+   "13": "sliderex",
+   "14": "label",
+   "28": "button",
+   "29": "button",
+   "30": "button",
+   "60": "scrollbar"
+  },
+  "views": "",
+  "default": "5"
+ },
+ "DialogSlider": {
+  "ids": {
+   "10": "label",
+   "11": "slider",
+   "12": "label",
+   "13": "button",
+   "14": "button"
+  },
+  "views": "",
+  "default": "11"
+ },
+ "DialogSubtitles": {
+  "ids": {
+   "73": "scrollbar",
+   "100": "label",
+   "110": "image",
+   "120": "list",
+   "130": "grouplist",
+   "140": "label",
+   "150": "list",
+   "160": "button",
+   "250": "group"
+  },
+  "views": "",
+  "default": ""
+ },
+ "DialogTextViewer": {
+  "ids": {
+   "1": "label",
+   "5": "textbox"
+  },
+  "views": "",
+  "default": "1000"
+ },
+ "DialogVideoInfo": {
+  "ids": {
+   "6": "radiobutton",
+   "7": "button",
+   "8": "radiobutton",
+   "10": "radiobutton",
+   "11": "radiobutton",
+   "13": "radiobutton",
+   "14": "radiobutton",
+   "15": "radiobutton",
+   "50": "panel",
+   "101": "radiobutton",
+   "102": "radiobutton",
+   "138": "button",
+   "139": "button",
+   "140": "group",
+   "146": "togglebutton",
+   "147": "togglebutton",
+   "148": "togglebutton",
+   "149": "togglebutton",
+   "150": "togglebutton",
+   "152": "togglebutton",
+   "153": "togglebutton",
+   "154": "togglebutton",
+   "155": "togglebutton",
+   "156": "togglebutton",
+   "157": "togglebutton",
+   "158": "togglebutton",
+   "159": "togglebutton",
+   "160": "togglebutton",
+   "161": "togglebutton",
+   "163": "togglebutton",
+   "164": "togglebutton",
+   "165": "togglebutton",
+   "400": "group",
+   "441": "radiobutton",
+   "443": "radiobutton",
+   "799": "radiobutton",
+   "999": "radiobutton"
+  },
+  "views": "",
+  "default": "8"
+ },
+ "DialogVideoManager": {
+  "ids": {
+   "2": "label",
+   "21": "button",
+   "22": "button",
+   "23": "button",
+   "24": "button",
+   "25": "button",
+   "26": "button",
+   "27": "button",
+   "28": "button",
+   "50": "list",
+   "60": "scrollbar",
+   "100": "group",
+   "101": "grouplist"
+  },
+  "views": "",
+  "default": ""
+ },
+ "DialogVolumeBar": {
+  "ids": {},
+  "views": "",
+  "default": ""
+ },
+ "EventLog": {
+  "ids": {
+   "4": "togglebutton",
+   "20": "button",
+   "21": "button",
+   "22": "radiobutton",
+   "50": "fixedlist",
+   "60": "scrollbar",
+   "501": "button",
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "50",
+  "default": "50"
+ },
+ "FileBrowser": {
+  "ids": {
+   "60": "scrollbar",
+   "411": "label",
+   "412": "label",
+   "413": "button",
+   "414": "button",
+   "415": "button",
+   "416": "button",
+   "450": "panel",
+   "451": "panel"
+  },
+  "views": "",
+  "default": "450"
+ },
+ "FileManager": {
+  "ids": {
+   "20": "fixedlist",
+   "21": "fixedlist",
+   "60": "scrollbar",
+   "61": "scrollbar",
+   "101": "label",
+   "102": "label",
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "",
+  "default": "20"
+ },
+ "GameOSD": {
+  "ids": {
+   "1": "group",
+   "2": "label",
+   "3": "label",
+   "10": "group",
+   "20": "group"
+  },
+  "views": "",
+  "default": "1103"
+ },
+ "Home": {
+  "ids": {
+   "700": "grouplist",
+   "799": "radiobutton",
+   "801": "radiobutton",
+   "802": "radiobutton",
+   "803": "radiobutton",
+   "804": "radiobutton",
+   "805": "radiobutton"
+  },
+  "views": "",
+  "default": "9000"
+ },
+ "LoginScreen": {
+  "ids": {
+   "20": "button",
+   "52": "fixedlist",
+   "799": "radiobutton"
+  },
+  "views": "",
+  "default": "52"
+ },
+ "MusicOSD": {
+  "ids": {
+   "87": "button",
+   "200": "group",
+   "201": "grouplist",
+   "202": "grouplist",
+   "600": "radiobutton",
+   "601": "radiobutton",
+   "602": "button",
+   "603": "radiobutton",
+   "606": "radiobutton",
+   "607": "radiobutton",
+   "608": "radiobutton",
+   "698": "group",
+   "699": "group",
+   "799": "radiobutton"
+  },
+  "views": "",
+  "default": "602"
+ },
+ "MusicVisualisation": {
+  "ids": {
+   "2": "visualisation"
+  },
+  "views": "",
+  "default": ""
+ },
+ "MyFavourites": {
+  "ids": {
+   "3": "button",
+   "4": "button",
+   "8": "button",
+   "19": "button",
+   "50": "fixedlist",
+   "52": "panel",
+   "53": "fixedlist",
+   "55": "fixedlist",
+   "199": "button",
+   "200": "label",
+   "500": "panel",
+   "531": "scrollbar",
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "50,52,53,55,500",
+  "default": "500"
+ },
+ "MyGames": {
+  "ids": {
+   "3": "button",
+   "4": "button",
+   "8": "button",
+   "19": "button",
+   "50": "fixedlist",
+   "51": "fixedlist",
+   "52": "panel",
+   "53": "fixedlist",
+   "54": "panel",
+   "55": "fixedlist",
+   "199": "button",
+   "200": "label",
+   "203": "label",
+   "500": "panel",
+   "531": "scrollbar",
+   "621": "button",
+   "624": "button",
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "55,51,52,53,54,500,50",
+  "default": "50"
+ },
+ "MyMusicNav": {
+  "ids": {
+   "3": "button",
+   "4": "button",
+   "8": "button",
+   "16": "radiobutton",
+   "19": "button",
+   "50": "fixedlist",
+   "52": "panel",
+   "53": "fixedlist",
+   "54": "panel",
+   "55": "fixedlist",
+   "199": "button",
+   "200": "label",
+   "203": "label",
+   "500": "panel",
+   "531": "scrollbar",
+   "612": "button",
+   "619": "togglebutton",
+   "621": "button",
+   "622": "button",
+   "624": "button",
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "50,52,53,54,55,500",
+  "default": "50"
+ },
+ "MyMusicPlaylistEditor": {
+  "ids": {
+   "6": "button",
+   "7": "button",
+   "8": "button",
+   "50": "fixedlist",
+   "60": "scrollbar",
+   "61": "scrollbar",
+   "100": "fixedlist",
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "50",
+  "default": "6"
+ },
+ "MyPVRChannels": {
+  "ids": {
+   "3": "button",
+   "4": "button",
+   "5": "radiobutton",
+   "6": "radiobutton",
+   "7": "radiobutton",
+   "8": "radiobutton",
+   "10": "button",
+   "28": "button",
+   "29": "label",
+   "30": "label",
+   "31": "radiobutton",
+   "50": "fixedlist",
+   "51": "fixedlist",
+   "73": "scrollbar",
+   "100": "radiobutton",
+   "101": "radiobutton",
+   "102": "radiobutton",
+   "103": "radiobutton",
+   "104": "radiobutton",
+   "105": "radiobutton",
+   "200": "label",
+   "300": "label",
+   "301": "label",
+   "302": "button",
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "50,51",
+  "default": "50"
+ },
+ "MyPVRGuide": {
+  "ids": {
+   "1": "label",
+   "2": "image",
+   "3": "button",
+   "4": "button",
+   "5": "radiobutton",
+   "6": "radiobutton",
+   "7": "radiobutton",
+   "8": "radiobutton",
+   "10": "button",
+   "11": "fixedlist",
+   "28": "button",
+   "29": "label",
+   "30": "label",
+   "31": "radiobutton",
+   "50": "epggrid",
+   "51": "epggrid",
+   "52": "epggrid",
+   "53": "epggrid",
+   "60": "scrollbar",
+   "63": "group",
+   "100": "radiobutton",
+   "101": "radiobutton",
+   "102": "radiobutton",
+   "103": "radiobutton",
+   "104": "radiobutton",
+   "105": "radiobutton",
+   "200": "label",
+   "300": "label",
+   "301": "label",
+   "302": "button",
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "50,51,52,53",
+  "default": "50"
+ },
+ "MyPVRRecordings": {
+  "ids": {
+   "3": "button",
+   "4": "button",
+   "5": "radiobutton",
+   "6": "radiobutton",
+   "7": "radiobutton",
+   "8": "radiobutton",
+   "10": "button",
+   "28": "button",
+   "29": "label",
+   "30": "label",
+   "31": "radiobutton",
+   "50": "fixedlist",
+   "73": "scrollbar",
+   "100": "radiobutton",
+   "101": "radiobutton",
+   "102": "radiobutton",
+   "103": "radiobutton",
+   "104": "radiobutton",
+   "105": "radiobutton",
+   "200": "label",
+   "300": "label",
+   "301": "label",
+   "302": "button",
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "50",
+  "default": "50"
+ },
+ "MyPVRSearch": {
+  "ids": {
+   "3": "button",
+   "4": "button",
+   "5": "radiobutton",
+   "6": "radiobutton",
+   "7": "radiobutton",
+   "8": "radiobutton",
+   "10": "button",
+   "28": "button",
+   "29": "label",
+   "30": "label",
+   "31": "radiobutton",
+   "50": "fixedlist",
+   "73": "scrollbar",
+   "100": "radiobutton",
+   "101": "radiobutton",
+   "102": "radiobutton",
+   "103": "radiobutton",
+   "104": "radiobutton",
+   "105": "radiobutton",
+   "200": "label",
+   "300": "label",
+   "301": "label",
+   "302": "button",
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "50",
+  "default": "50"
+ },
+ "MyPVRTimers": {
+  "ids": {
+   "3": "button",
+   "4": "button",
+   "5": "radiobutton",
+   "6": "radiobutton",
+   "7": "radiobutton",
+   "8": "radiobutton",
+   "10": "button",
+   "28": "button",
+   "29": "label",
+   "30": "label",
+   "31": "radiobutton",
+   "50": "fixedlist",
+   "73": "scrollbar",
+   "100": "radiobutton",
+   "101": "radiobutton",
+   "102": "radiobutton",
+   "103": "radiobutton",
+   "104": "radiobutton",
+   "105": "radiobutton",
+   "200": "label",
+   "300": "label",
+   "301": "label",
+   "302": "button",
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "50",
+  "default": "50"
+ },
+ "MyPics": {
+  "ids": {
+   "3": "button",
+   "4": "button",
+   "6": "button",
+   "7": "button",
+   "8": "button",
+   "9": "radiobutton",
+   "19": "button",
+   "50": "fixedlist",
+   "52": "panel",
+   "53": "fixedlist",
+   "54": "panel",
+   "55": "fixedlist",
+   "199": "button",
+   "200": "label",
+   "203": "label",
+   "500": "panel",
+   "531": "scrollbar",
+   "621": "button",
+   "624": "button",
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "50,52,53,54,55,500",
+  "default": "50"
+ },
+ "MyPlaylist": {
+  "ids": {
+   "3": "button",
+   "4": "button",
+   "8": "button",
+   "19": "button",
+   "20": "radiobutton",
+   "21": "button",
+   "22": "button",
+   "26": "button",
+   "55": "fixedlist",
+   "199": "button",
+   "200": "label",
+   "203": "label",
+   "503": "fixedlist",
+   "531": "scrollbar",
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "55,503",
+  "default": "55"
+ },
+ "MyPrograms": {
+  "ids": {
+   "3": "button",
+   "4": "button",
+   "8": "button",
+   "19": "button",
+   "50": "fixedlist",
+   "52": "panel",
+   "55": "fixedlist",
+   "199": "button",
+   "200": "label",
+   "203": "label",
+   "500": "panel",
+   "531": "scrollbar",
+   "621": "button",
+   "624": "button",
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "50,52,55,500",
+  "default": "52"
+ },
+ "MyVideoNav": {
+  "ids": {
+   "3": "button",
+   "4": "button",
+   "8": "button",
+   "10": "button",
+   "11": "radiobutton",
+   "16": "radiobutton",
+   "19": "button",
+   "50": "fixedlist",
+   "51": "fixedlist",
+   "52": "panel",
+   "53": "fixedlist",
+   "54": "panel",
+   "55": "fixedlist",
+   "199": "button",
+   "200": "label",
+   "203": "label",
+   "500": "panel",
+   "501": "panel",
+   "502": "fixedlist",
+   "531": "scrollbar",
+   "612": "button",
+   "619": "togglebutton",
+   "621": "button",
+   "622": "button",
+   "623": "button",
+   "624": "button",
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "50,51,52,53,54,55,500,501,502",
+  "default": "50"
+ },
+ "MyWeather": {
+  "ids": {
+   "20": "button",
+   "567": "group",
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "",
+  "default": "15100"
+ },
+ "PlayerControls": {
+  "ids": {
+   "23": "progress",
+   "87": "button",
+   "201": "grouplist",
+   "600": "radiobutton",
+   "602": "radiobutton",
+   "603": "radiobutton",
+   "605": "radiobutton",
+   "607": "radiobutton",
+   "699": "group",
+   "704": "button"
+  },
+  "views": "",
+  "default": "201"
+ },
+ "Pointer": {
+  "ids": {
+   "1": "image",
+   "2": "image",
+   "3": "image",
+   "4": "image"
+  },
+  "views": "",
+  "default": ""
+ },
+ "Settings": {
+  "ids": {
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "",
+  "default": "9000"
+ },
+ "SettingsCategory": {
+  "ids": {
+   "2": "label",
+   "3": "grouplist",
+   "5": "grouplist",
+   "6": "textbox",
+   "7": "button",
+   "8": "radiobutton",
+   "9": "spincontrolex",
+   "10": "button",
+   "11": "image",
+   "13": "sliderex",
+   "14": "label",
+   "15": "colorbutton",
+   "20": "radiobutton",
+   "60": "scrollbar",
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "",
+  "default": "3"
+ },
+ "SettingsProfile": {
+  "ids": {
+   "2": "panel",
+   "4": "radiobutton",
+   "5": "button",
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "",
+  "default": "9000"
+ },
+ "SettingsScreenCalibration": {
+  "ids": {
+   "2": "label",
+   "3": "label",
+   "4": "label",
+   "8": "mover",
+   "9": "mover",
+   "10": "mover",
+   "11": "resize",
+   "12": "mover"
+  },
+  "views": "",
+  "default": "8"
+ },
+ "SettingsSystemInfo": {
+  "ids": {
+   "2": "label",
+   "3": "label",
+   "4": "label",
+   "5": "label",
+   "6": "label",
+   "7": "label",
+   "8": "label",
+   "9": "label",
+   "10": "label",
+   "11": "label",
+   "12": "label",
+   "13": "label",
+   "30": "textbox",
+   "53": "label",
+   "60": "scrollbar",
+   "94": "button",
+   "95": "button",
+   "96": "button",
+   "97": "button",
+   "98": "button",
+   "99": "button",
+   "100": "button",
+   "101": "button",
+   "102": "group",
+   "103": "multiimage",
+   "104": "group",
+   "700": "grouplist",
+   "799": "radiobutton"
+  },
+  "views": "",
+  "default": "95"
+ },
+ "SkinSettings": {
+  "ids": {
+   "6": "textbox",
+   "60": "scrollbar",
+   "600": "grouplist",
+   "605": "radiobutton",
+   "607": "button",
+   "608": "button",
+   "609": "button",
+   "610": "grouplist",
+   "611": "radiobutton",
+   "612": "radiobutton",
+   "613": "radiobutton",
+   "614": "radiobutton",
+   "615": "radiobutton",
+   "616": "radiobutton",
+   "617": "radiobutton",
+   "618": "radiobutton",
+   "619": "radiobutton",
+   "620": "radiobutton",
+   "621": "radiobutton",
+   "622": "grouplist",
+   "623": "radiobutton",
+   "624": "button",
+   "625": "button",
+   "626": "button",
+   "627": "button",
+   "700": "grouplist",
+   "701": "radiobutton",
+   "702": "radiobutton",
+   "703": "radiobutton",
+   "704": "radiobutton",
+   "705": "radiobutton",
+   "706": "button",
+   "707": "button",
+   "799": "radiobutton"
+  },
+  "views": "",
+  "default": "9000"
+ },
+ "SlideShow": {
+  "ids": {
+   "13": "radiobutton"
+  },
+  "views": "",
+  "default": ""
+ },
+ "SmartPlaylistEditor": {
+  "ids": {
+   "2": "label",
+   "10": "list",
+   "12": "button",
+   "16": "button",
+   "17": "button",
+   "18": "button",
+   "19": "button",
+   "20": "button",
+   "21": "button",
+   "22": "button",
+   "23": "button",
+   "24": "radiobutton",
+   "500": "grouplist"
+  },
+  "views": "",
+  "default": "22"
+ },
+ "SmartPlaylistRule": {
+  "ids": {
+   "2": "label",
+   "15": "button",
+   "16": "button",
+   "17": "edit",
+   "18": "button",
+   "19": "button",
+   "20": "button"
+  },
+  "views": "",
+  "default": "9001"
+ },
+ "Startup": {
+  "ids": {},
+  "views": "",
+  "default": ""
+ },
+ "VideoFullScreen": {
+  "ids": {
+   "0": "group",
+   "1": "group",
+   "10": "label",
+   "11": "label",
+   "12": "label"
+  },
+  "views": "",
+  "default": ""
+ },
+ "VideoOSD": {
+  "ids": {
+   "87": "button",
+   "200": "group",
+   "201": "grouplist",
+   "202": "grouplist",
+   "600": "radiobutton",
+   "601": "radiobutton",
+   "602": "button",
+   "603": "radiobutton",
+   "606": "radiobutton",
+   "607": "radiobutton",
+   "608": "radiobutton",
+   "698": "group",
+   "799": "radiobutton",
+   "804": "radiobutton"
+  },
+  "views": "",
+  "default": "602"
+ },
+ "VideoOSDBookmarks": {
+  "ids": {
+   "2": "button",
+   "3": "button",
+   "4": "button",
+   "11": "panel"
+  },
+  "views": "",
+  "default": "2"
+ }
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <controls>
+    <control type="visualisation">
+      <left>0</left><top>0</top><width>1024</width><height>600</height>
+    </control>
+    <control type="group">
+      <left>6</left><top>480</top><width>1012</width><height>84</height>
+      <visible>Player.ShowInfo</visible>
+      <include content="Win_Frame"><param name="width" value="1012" /><param name="height" value="84" /></include>
+      <control type="image"><left>6</left><top>6</top><width>72</width><height>72</height>
+        <texture fallback="DefaultAudio.png">$INFO[Player.Art(thumb)]</texture>
+        <aspectratio>keep</aspectratio></control>
+      <control type="label"><left>90</left><top>6</top><width>910</width><height>26</height>
+        <font>bigbold</font><label>$INFO[MusicPlayer.Title]</label></control>
+      <control type="label"><left>90</left><top>34</top><width>910</width><height>22</height>
+        <font>small</font><label>$INFO[MusicPlayer.Artist] - $INFO[MusicPlayer.Album]</label></control>
+      <control type="progress"><left>90</left><top>58</top><width>910</width><height>18</height>
+        <info>Player.Progress</info></control>
+    </control>
+  </controls>
+</window>

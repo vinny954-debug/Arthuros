@@ -1,0 +1,422 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<window>
+  <defaultcontrol>3</defaultcontrol>
+  <controls>
+    <control type="image">
+      <left>0</left><top>0</top><width>1024</width><height>768</height>
+      <texture>dim.png</texture>
+    </control>
+    <control type="group">
+      <centerleft>50%</centerleft><centertop>50%</centertop>
+      <width>660</width><height>480</height>
+
+      <control type="image">
+        <left>0</left><top>0</top>
+        <width>660</width><height>480</height>
+        <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+      </control>
+      <control type="group">
+        <left>3</left><top>3</top>
+        <control type="group">
+        <width>654</width><height>26</height>
+
+        <control type="image">
+          <left>0</left><top>0</top>
+          <width>654</width><height>26</height>
+          <texture colordiffuse="accent2">fill.png</texture>
+        </control>
+        <!-- hard 1px rule under the bar, the way Arthur draws it -->
+        <control type="image">
+          <left>0</left><bottom>0</bottom>
+          <width>654</width><height>1</height>
+          <texture>fill_black.png</texture>
+        </control>
+
+        <control type="image">
+          <left>4</left><top>5</top><width>16</width><height>16</height>
+          <texture>icons24/playlist.png</texture>
+        </control>
+
+        <!-- left + right with no width: Kodi derives the width, so the title
+             stops before the window boxes instead of running underneath them -->
+        <control type="label">
+          <left>26</left><right>100</right><top>0</top><height>26</height>
+          <align>left</align><aligny>center</aligny>
+          <font>chromebold</font><textcolor>titletext</textcolor>
+          <label></label>
+        </control>
+
+        <control type="label">
+          <right>100</right><top>0</top><width>460</width><height>26</height>
+          <align>right</align><aligny>center</aligny>
+          <font>chromesmall</font><textcolor>titletext</textcolor>
+          <label></label>
+        </control>
+
+        <!-- The window boxes. Which set a title bar gets is chosen by the
+             "boxes" parameter: window, dialog, home or none. -->
+        <control type="group">
+      <control type="button" id="9901">
+        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label/>
+        <onclick>Dialog.Close(all,true)</onclick>
+        <onclick>ActivateWindow(Home)</onclick>
+        <onright>9902</onright>
+        <ondown></ondown>
+      </control>
+      <control type="image">
+        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="text">wc_min_g.png</texture>
+        <visible>!Control.HasFocus(9901)</visible>
+      </control>
+      <control type="image">
+        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="titletext">wc_min_g.png</texture>
+        <visible>Control.HasFocus(9901)</visible>
+      </control>
+      <control type="button" id="9902">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label/>
+        <enable>Player.HasMedia</enable>
+        <onclick>Action(FullScreen)</onclick>
+        <onleft>9901</onleft>
+        <onright>9903</onright>
+        <ondown></ondown>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="text">wc_max_g.png</texture>
+        <visible>!Control.HasFocus(9902) + Player.HasMedia</visible>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="titletext">wc_max_g.png</texture>
+        <visible>Control.HasFocus(9902)</visible>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="textdim">wc_max_dg.png</texture>
+        <visible>!Player.HasMedia</visible>
+      </control>
+      <control type="button" id="9903">
+        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label/>
+        <onclick>Action(Back)</onclick>
+        <onleft>9902</onleft>
+        <ondown></ondown>
+      </control>
+      <control type="image">
+        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="text">wc_close_g.png</texture>
+        <visible>!Control.HasFocus(9903)</visible>
+      </control>
+      <control type="image">
+        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="titletext">wc_close_g.png</texture>
+        <visible>Control.HasFocus(9903)</visible>
+      </control>
+    </control>
+      </control>
+      </control>
+
+      <control type="label" id="1">
+        <left>29</left><top>3</top><width>520</width><height>26</height>
+        <font>chromebold</font><textcolor>titletext</textcolor>
+        <align>left</align><aligny>center</aligny>
+      </control>
+      <control type="label" id="2">
+        <left>10</left><top>36</top><width>640</width><height>22</height>
+        <align>right</align><font>small</font><textcolor>textdim</textcolor>
+      </control>
+
+      <control type="image">
+        <left>10</left><top>60</top><width>640</width><height>346</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+      </control>
+
+      <control type="list" id="3">
+        <visible>![Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
+        <left>13</left><top>63</top><width>612</width><height>340</height>
+        <onleft>7</onleft><onright>61</onright><onup>3</onup><ondown>3</ondown>
+        <pagecontrol>61</pagecontrol>
+        <!-- written out rather than included, so there is no doubt about
+             which layout or which width is in play -->
+        <itemlayout height="44" width="612" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image">
+            <left>4</left><top>14</top><width>16</width><height>16</height>
+            <texture>$INFO[ListItem.Icon]</texture>
+            <aspectratio>keep</aspectratio>
+          </control>
+          <control type="label">
+            <left>26</left><top>0</top><width>500</width><height>44</height>
+            <font>normal</font><textcolor>text</textcolor>
+            <align>left</align><aligny>center</aligny>
+            <label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <left>26</left><top>0</top><width>578</width><height>44</height>
+            <font>small</font><textcolor>textdim</textcolor>
+            <align>right</align><aligny>center</aligny>
+            <label>$INFO[ListItem.Label2]</label>
+          </control>
+        </itemlayout>
+        <focusedlayout height="44" width="612" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image">
+            <left>0</left><top>0</top><width>612</width><height>44</height>
+            <texture colordiffuse="select">fill.png</texture>
+          </control>
+          <control type="image">
+            <left>4</left><top>14</top><width>16</width><height>16</height>
+            <texture>$INFO[ListItem.Icon]</texture>
+            <aspectratio>keep</aspectratio>
+          </control>
+          <control type="label">
+            <left>26</left><top>0</top><width>500</width><height>44</height>
+            <font>bold</font><textcolor>textinv</textcolor>
+            <align>left</align><aligny>center</aligny>
+            <label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <left>26</left><top>0</top><width>578</width><height>44</height>
+            <font>small</font><textcolor>textinv</textcolor>
+            <align>right</align><aligny>center</aligny>
+            <label>$INFO[ListItem.Label2]</label>
+          </control>
+        </focusedlayout>
+      <itemlayout height="28" width="612">
+          <control type="image">
+            <left>4</left><top>6</top><width>16</width><height>16</height>
+            <texture>$INFO[ListItem.Icon]</texture>
+            <aspectratio>keep</aspectratio>
+          </control>
+          <control type="label">
+            <left>26</left><top>0</top><width>500</width><height>28</height>
+            <font>normal</font><textcolor>text</textcolor>
+            <align>left</align><aligny>center</aligny>
+            <label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <left>26</left><top>0</top><width>578</width><height>28</height>
+            <font>small</font><textcolor>textdim</textcolor>
+            <align>right</align><aligny>center</aligny>
+            <label>$INFO[ListItem.Label2]</label>
+          </control>
+        </itemlayout>
+        <focusedlayout height="28" width="612">
+          <control type="image">
+            <left>0</left><top>0</top><width>612</width><height>28</height>
+            <texture colordiffuse="select">fill.png</texture>
+          </control>
+          <control type="image">
+            <left>4</left><top>6</top><width>16</width><height>16</height>
+            <texture>$INFO[ListItem.Icon]</texture>
+            <aspectratio>keep</aspectratio>
+          </control>
+          <control type="label">
+            <left>26</left><top>0</top><width>500</width><height>28</height>
+            <font>bold</font><textcolor>textinv</textcolor>
+            <align>left</align><aligny>center</aligny>
+            <label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <left>26</left><top>0</top><width>578</width><height>28</height>
+            <font>small</font><textcolor>textinv</textcolor>
+            <align>right</align><aligny>center</aligny>
+            <label>$INFO[ListItem.Label2]</label>
+          </control>
+        </focusedlayout>
+      </control>
+
+      <control type="list" id="6">
+        <visible>![Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
+        <left>13</left><top>63</top><width>612</width><height>340</height>
+        <onleft>7</onleft><onright>61</onright><onup>6</onup><ondown>6</ondown>
+        <pagecontrol>61</pagecontrol>
+        <itemlayout height="64" width="612" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image">
+            <left>4</left><top>12</top><width>40</width><height>40</height>
+            <texture fallback="DefaultFile.png">$INFO[ListItem.Icon]</texture>
+          </control>
+          <control type="label">
+            <left>52</left><top>10</top><width>556</width><height>24</height>
+            <label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <left>52</left><top>32</top><width>556</width><height>22</height>
+            <font>small</font><textcolor>textdim</textcolor>
+            <label>$INFO[ListItem.Label2]</label>
+          </control>
+        </itemlayout>
+        <focusedlayout height="64" width="612" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <control type="image">
+            <left>0</left><top>0</top><width>612</width><height>64</height>
+            <texture colordiffuse="select">fill.png</texture>
+          </control>
+          <control type="image">
+            <left>4</left><top>12</top><width>40</width><height>40</height>
+            <texture fallback="DefaultFile.png">$INFO[ListItem.Icon]</texture>
+          </control>
+          <control type="label">
+            <left>52</left><top>10</top><width>556</width><height>24</height>
+            <font>bold</font><textcolor>textinv</textcolor>
+            <label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <left>52</left><top>32</top><width>556</width><height>22</height>
+            <font>small</font><textcolor>textinv</textcolor>
+            <label>$INFO[ListItem.Label2]</label>
+          </control>
+        </focusedlayout>
+      <itemlayout height="48" width="612">
+          <control type="image">
+            <left>4</left><top>4</top><width>40</width><height>40</height>
+            <texture fallback="DefaultFile.png">$INFO[ListItem.Icon]</texture>
+          </control>
+          <control type="label">
+            <left>52</left><top>2</top><width>556</width><height>24</height>
+            <label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <left>52</left><top>24</top><width>556</width><height>22</height>
+            <font>small</font><textcolor>textdim</textcolor>
+            <label>$INFO[ListItem.Label2]</label>
+          </control>
+        </itemlayout>
+        <focusedlayout height="48" width="612">
+          <control type="image">
+            <left>0</left><top>0</top><width>612</width><height>48</height>
+            <texture colordiffuse="select">fill.png</texture>
+          </control>
+          <control type="image">
+            <left>4</left><top>4</top><width>40</width><height>40</height>
+            <texture fallback="DefaultFile.png">$INFO[ListItem.Icon]</texture>
+          </control>
+          <control type="label">
+            <left>52</left><top>2</top><width>556</width><height>24</height>
+            <font>bold</font><textcolor>textinv</textcolor>
+            <label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <left>52</left><top>24</top><width>556</width><height>22</height>
+            <font>small</font><textcolor>textinv</textcolor>
+            <label>$INFO[ListItem.Label2]</label>
+          </control>
+        </focusedlayout>
+      </control>
+
+      <!-- Game dialogs (video filter, stretch mode, rotation, in-game saves)
+           borrow this window but use their own ids (DialogGameDefines.h):
+           10810 heading, 10811 a panel of live previews, 10812 description. -->
+      <control type="label" id="10810">
+        <left>10</left><top>36</top><width>640</width><height>22</height>
+        <font>bold</font><textcolor>text</textcolor>
+        <visible>[Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
+      </control>
+      <control type="panel" id="10811">
+        <left>16</left><top>64</top><width>612</width><height>300</height>
+        <onup>10811</onup><ondown>10811</ondown><onright>10861</onright>
+        <pagecontrol>10861</pagecontrol>
+        <orientation>vertical</orientation>
+        <visible>[Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
+        <itemlayout width="204" height="150">
+            <control type="image">
+              <left>4</left><top>4</top><width>196</width><height>112</height>
+              <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+            </control>
+            <control type="image">
+              <left>6</left><top>6</top><width>192</width><height>108</height>
+              <aspectratio>keep</aspectratio>
+              <texture>$INFO[ListItem.Art(screenshot)]</texture>
+              <visible>!String.IsEmpty(ListItem.Art(screenshot))</visible>
+            </control>
+            <control type="gamewindow">
+              <left>6</left><top>6</top><width>192</width><height>108</height>
+              <videofilter>$INFO[ListItem.Property(game.videofilter)]</videofilter>
+              <stretchmode>$INFO[ListItem.Property(game.stretchmode)]</stretchmode>
+              <rotation>$INFO[ListItem.Property(game.videorotation)]</rotation>
+              <visible>String.IsEmpty(ListItem.Art(screenshot))</visible>
+            </control>
+            <control type="label">
+              <left>8</left><top>118</top><width>188</width><height>28</height>
+              <font>small</font><textcolor>text</textcolor>
+              <align>center</align><aligny>center</aligny>
+              <label>$INFO[ListItem.Label]</label>
+            </control>
+        </itemlayout>
+        <focusedlayout width="204" height="150">
+            <control type="image">
+              <left>4</left><top>4</top><width>196</width><height>112</height>
+              <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+            </control>
+            <control type="image">
+              <left>6</left><top>6</top><width>192</width><height>108</height>
+              <aspectratio>keep</aspectratio>
+              <texture>$INFO[ListItem.Art(screenshot)]</texture>
+              <visible>!String.IsEmpty(ListItem.Art(screenshot))</visible>
+            </control>
+            <control type="gamewindow">
+              <left>6</left><top>6</top><width>192</width><height>108</height>
+              <videofilter>$INFO[ListItem.Property(game.videofilter)]</videofilter>
+              <stretchmode>$INFO[ListItem.Property(game.stretchmode)]</stretchmode>
+              <rotation>$INFO[ListItem.Property(game.videorotation)]</rotation>
+              <visible>String.IsEmpty(ListItem.Art(screenshot))</visible>
+            </control>
+            <control type="image">
+              <left>4</left><top>118</top><width>196</width><height>28</height>
+              <texture colordiffuse="select">fill.png</texture>
+            </control>
+            <control type="label">
+              <left>8</left><top>118</top><width>188</width><height>28</height>
+              <font>small</font><textcolor>textinv</textcolor>
+              <align>center</align><aligny>center</aligny>
+              <label>$INFO[ListItem.Label]</label>
+            </control>
+            <control type="image">
+              <left>0</left><top>0</top><width>204</width><height>150</height>
+              <texture border="4" colordiffuse="select">select_ring.png</texture>
+            </control>
+        </focusedlayout>
+      </control>
+      <control type="scrollbar" id="10861">
+        <left>629</left><top>63</top><width>18</width><height>300</height>
+        <onleft>10811</onleft>
+        <visible>[Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
+      </control>
+      <control type="image">
+        <left>13</left><top>366</top><width>634</width><height>1</height>
+        <texture>fill_black.png</texture>
+        <visible>[Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
+      </control>
+      <control type="textbox" id="10812">
+        <left>18</left><top>370</top><width>624</width><height>34</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$INFO[Container(10811).ListItem.Property(savestate.caption)]</label>
+        <visible>[Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
+      </control>
+
+      <control type="scrollbar" id="61">
+        <visible>![Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
+        <left>629</left><top>63</top><width>18</width><height>340</height>
+        <onleft>3</onleft><onright>7</onright>
+      </control>
+
+      <control type="grouplist">
+        <visible>![Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]</visible>
+        <left>13</left><top>420</top><width>634</width><height>30</height>
+        <orientation>horizontal</orientation><align>center</align><itemgap>8</itemgap>
+        <control type="button" id="5"><width>190</width><height>30</height></control>
+        <control type="button" id="8"><width>190</width><height>30</height></control>
+        <control type="button" id="7">
+          <width>190</width><height>30</height>
+          <label>$LOCALIZE[222]</label>
+        </control>
+      </control>
+    </control>
+  </controls>
+</window>

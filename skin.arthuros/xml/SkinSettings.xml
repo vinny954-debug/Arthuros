@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The skin's own options. Kodi does not populate this window; everything
+     here is ours, driven by Skin.ToggleSetting / Skin.HasSetting. -->
+<window>
+  <defaultcontrol always="false">100</defaultcontrol>
+  <backgroundcolor>desktop</backgroundcolor>
+  <controls>
+    <include>Chrome_Desktop</include>
+    <include>Chrome_Menubar</include>
+
+    <control type="group">
+      <left>6</left><top>30</top><width>1012</width><height>534</height>
+      <include content="Win_Frame">
+        <param name="width" value="1012" /><param name="height" value="534" />
+      </include>
+      <control type="group">
+        <left>3</left><top>3</top>
+        <include content="Win_Title">
+          <param name="width" value="1006" />
+          <param name="colour" value="accent1" />
+          <param name="icon" value="icons24/skin.png" />
+          <param name="label" value="$LOCALIZE[20077]" />
+          <param name="down" value="100" />
+          <param name="boxes" value="window" />
+        </include>
+      </control>
+
+      <control type="image">
+        <left>6</left><top>34</top><width>1000</width><height>494</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      </control>
+
+      <control type="label">
+        <left>20</left><top>44</top><width>960</width><height>26</height>
+        <font>bigbold</font>
+        <label>ArthurOS 1.2</label>
+      </control>
+      <control type="label">
+        <left>20</left><top>72</top><width>960</width><height>22</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>v0.9.6  -  1024x600  -  Tamzen 8x16  -  $LOCALIZE[31948]</label>
+      </control>
+      <control type="image">
+        <left>20</left><top>102</top><width>960</width><height>1</height>
+        <texture>fill_black.png</texture>
+      </control>
+
+      <control type="grouplist">
+        <left>20</left><top>116</top><width>560</width><height>396</height>
+        <orientation>vertical</orientation><itemgap>4</itemgap>
+        <onup>9100</onup><ondown>9100</ondown>
+
+        <control type="radiobutton" id="100">
+          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[31919]</label>
+          <onclick>Skin.ToggleSetting(hidemenubar)</onclick>
+          <selected>Skin.HasSetting(hidemenubar)</selected>
+        </control>
+        <control type="radiobutton" id="101">
+          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[31920]</label>
+          <onclick>Skin.ToggleSetting(hidetaskbar)</onclick>
+          <selected>Skin.HasSetting(hidetaskbar)</selected>
+        </control>
+        <control type="radiobutton" id="102">
+          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[31921]</label>
+          <onclick>Skin.ToggleSetting(hideclock)</onclick>
+          <selected>Skin.HasSetting(hideclock)</selected>
+        </control>
+        <control type="radiobutton" id="103">
+          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[31910]</label>
+          <onclick>Skin.ToggleSetting(autoscroll)</onclick>
+          <selected>Skin.HasSetting(autoscroll)</selected>
+        </control>
+        <control type="radiobutton" id="113">
+          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[31995]</label>
+          <onclick>Skin.ToggleSetting(touchmode)</onclick>
+          <onclick condition="!Skin.HasSetting(touchmode)">RunScript(special://skin/scripts/mousewatch.py)</onclick>
+          <onclick>ReloadSkin()</onclick>
+          <selected>Skin.HasSetting(touchmode)</selected>
+        </control>
+        <!-- a heading, but it still needs an id: the grouplist chains Up/Down
+             by id, and an id-less child stops the keyboard here -->
+        <control type="label" id="105">
+          <width>560</width><include content="Height_28_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_28" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <font>bold</font><label>$LOCALIZE[31924]</label>
+        </control>
+        <control type="radiobutton" id="106">
+          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[31925]</label>
+          <onclick>Skin.Reset(pointer)</onclick>
+          <selected>String.IsEmpty(Skin.String(pointer))</selected>
+        </control>
+        <control type="radiobutton" id="107">
+          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[31926]</label>
+          <onclick>Skin.SetString(pointer,classic)</onclick>
+          <selected>String.IsEqual(Skin.String(pointer),classic)</selected>
+        </control>
+        <control type="radiobutton" id="108">
+          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[31927]</label>
+          <onclick>Skin.SetString(pointer,inverse)</onclick>
+          <selected>String.IsEqual(Skin.String(pointer),inverse)</selected>
+        </control>
+        <control type="button" id="109">
+          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[31928]</label>
+          <onclick>ActivateWindow(InterfaceSettings)</onclick>
+        </control>
+        <control type="button" id="110">
+          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[31953]</label>
+          <onclick>ActivateWindow(1120)</onclick>
+        </control>
+        <control type="button" id="111">
+          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[31979]</label>
+          <onclick>RunScript(special://skin/scripts/backup.py,backup)</onclick>
+        </control>
+        <control type="button" id="112">
+          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[31980]</label>
+          <onclick>RunScript(special://skin/scripts/backup.py,restore)</onclick>
+        </control>
+        <control type="button" id="104">
+          <width>560</width><include content="Height_32_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_32" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+          <label>$LOCALIZE[409]</label>
+          <onclick>Skin.ResetSettings</onclick>
+        </control>
+      </control>
+
+      <control type="image">
+        <left>600</left><top>116</top><width>380</width><height>396</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+      </control>
+      <control type="textbox">
+        <left>612</left><top>126</top><width>356</width><height>376</height>
+        <font>small</font>
+        <label>$LOCALIZE[31922]</label>
+      </control>
+    </control>
+
+    <include content="Chrome_Taskbar"><param name="up" value="100" /></include>
+  </controls>
+</window>

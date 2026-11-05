@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<colors>
+  <!-- Arthur 16-colour palette -->
+  <color name="black">FF000000</color>
+  <color name="white">FFFFFFFF</color>
+  <color name="face">FFDDDDDD</color>
+  <color name="chrome">FFBBBBBB</color>
+  <color name="grey">FF999999</color>
+  <color name="shadow">FF777777</color>
+  <color name="dark">FF555555</color>
+  <color name="darker">FF333333</color>
+
+  <color name="red">FFCC1A1F</color>
+  <color name="darkred">FF881014</color>
+  <color name="blue">FF0044CC</color>
+  <color name="ltblue">FF4488EE</color>
+  <color name="navy">FF002277</color>
+  <color name="cyan">FF22AADD</color>
+  <color name="yellow">FFEEDD00</color>
+  <color name="green">FF22BB44</color>
+  <color name="darkgreen">FF11772A</color>
+  <color name="orange">FFEE8822</color>
+  <color name="purple">FF9358D9</color>
+  <color name="pink">FFDD66CC</color>
+
+  <!-- ==== the themeable layer ====================================
+       Everything a palette can change. The chrome textures are drawn in
+       neutral greys and multiplied by these at render time, so a palette
+       file in colors/ only has to redefine the names it wants to change.
+       ============================================================= -->
+  <color name="accent1">FFCC1A1F</color>     <!-- red title bars -->
+  <color name="accent2">FF0044CC</color>     <!-- blue title bars -->
+  <color name="select">FF0044CC</color>      <!-- selection bars, focused buttons, focus rings -->
+  <color name="desktop">FF999999</color>     <!-- the backdrop behind every window -->
+  <color name="facetint">FFFFFFFF</color>    <!-- multiplies every bevel; white = untouched -->
+
+  <!-- semantic -->
+  <color name="text">FF000000</color>
+  <color name="textdim">FF555555</color>
+  <color name="textinv">FFFFFFFF</color>
+  <color name="textdisabled">FF888888</color>
+  <color name="marked">FFA8141A</color>        <!-- items marked for an operation (file manager, multi-select) -->
+  <color name="titletext">FFFFFFFF</color>
+  <color name="dimmer">A8000000</color>
+</colors>

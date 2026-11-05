@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<window>
+  <zorder>6</zorder>
+  <controls>
+    <control type="group">
+      <right>10</right><top>34</top><width>440</width><height>96</height>
+      <control type="image">
+        <left>0</left><top>0</top>
+        <width>440</width><height>96</height>
+        <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+      </control>
+      <control type="group">
+        <left>3</left><top>3</top>
+        <control type="group">
+        <width>434</width><height>26</height>
+
+        <control type="image">
+          <left>0</left><top>0</top>
+          <width>434</width><height>26</height>
+          <texture colordiffuse="accent2">fill.png</texture>
+        </control>
+        <!-- hard 1px rule under the bar, the way Arthur draws it -->
+        <control type="image">
+          <left>0</left><bottom>0</bottom>
+          <width>434</width><height>1</height>
+          <texture>fill_black.png</texture>
+        </control>
+
+        <control type="image">
+          <left>4</left><top>5</top><width>16</width><height>16</height>
+          <texture></texture>
+        </control>
+
+        <!-- left + right with no width: Kodi derives the width, so the title
+             stops before the window boxes instead of running underneath them -->
+        <control type="label">
+          <left>26</left><right>100</right><top>0</top><height>26</height>
+          <align>left</align><aligny>center</aligny>
+          <font>chromebold</font><textcolor>titletext</textcolor>
+          <label>$INFO[Control.GetLabel(401)]</label>
+        </control>
+
+        <control type="label">
+          <right>100</right><top>0</top><width>460</width><height>26</height>
+          <align>right</align><aligny>center</aligny>
+          <font>chromesmall</font><textcolor>titletext</textcolor>
+          <label></label>
+        </control>
+
+        <!-- The window boxes. Which set a title bar gets is chosen by the
+             "boxes" parameter: window, dialog, home or none. -->
+        <control type="group"/>
+      </control>
+      </control>
+      <control type="image" id="400">
+        <left>12</left><top>38</top><width>48</width><height>48</height>
+      </control>
+      <control type="fadelabel" id="401">
+        <left>-3000</left><top>0</top><width>300</width><height>22</height>
+      </control>
+      <control type="fadelabel" id="402">
+        <left>70</left><top>38</top><width>356</width><height>48</height>
+        <font>small</font>
+      </control>
+    </control>
+  </controls>
+</window>

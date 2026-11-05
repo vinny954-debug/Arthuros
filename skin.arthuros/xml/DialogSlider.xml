@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <defaultcontrol>11</defaultcontrol>
+  <controls>
+    <include>Dialog_Dim</include>
+    <control type="group">
+      <centerleft>50%</centerleft><centertop>50%</centertop>
+      <width>532</width><height>158</height>
+      <include content="Dialog_Box">
+        <param name="width" value="532" /><param name="height" value="158" />
+        <param name="innerwidth" value="526" />
+        <param name="icon" value="icons24/player.png" /><param name="colour" value="accent2" />
+        <param name="down" value="11" />
+        <param name="boxes" value="dialog" />
+      </include>
+      <include content="Dialog_Heading"><param name="width" value="426" /></include>
+      <control type="label" id="10">
+        <left>16</left><top>40</top><width>500</width><height>26</height>
+        <font>bold</font>
+      </control>
+      <control type="label" id="12">
+        <left>16</left><top>40</top><width>500</width><height>26</height>
+        <align>right</align>
+      </control>
+      <control type="slider" id="11">
+        <left>16</left><top>74</top><width>500</width><height>28</height>
+      </control>
+      <control type="grouplist">
+        <left>13</left><top>112</top><width>506</width><height>30</height>
+        <orientation>horizontal</orientation><align>center</align><itemgap>8</itemgap>
+        <control type="button" id="13"><width>200</width><height>30</height></control>
+        <control type="button" id="14"><width>200</width><height>30</height></control>
+      </control>
+    </control>
+  </controls>
+</window>

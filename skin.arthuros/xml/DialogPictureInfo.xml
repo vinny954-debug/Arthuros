@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <defaultcontrol>5</defaultcontrol>
+  <controls>
+    <include>Dialog_Dim</include>
+    <control type="group">
+      <centerleft>50%</centerleft><centertop>50%</centertop>
+      <width>900</width><height>500</height>
+      <include content="Dialog_Box">
+        <param name="width" value="900" /><param name="height" value="500" />
+        <param name="innerwidth" value="894" />
+        <param name="icon" value="icons24/pictures_info.png" /><param name="colour" value="accent2" />
+        <param name="down" value="5" />
+        <param name="boxes" value="dialog" />
+      </include>
+      <include content="Dialog_Heading"><param name="width" value="794" /></include>
+      <control type="image">
+        <left>10</left><top>36</top><width>300</width><height>420</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      </control>
+      <control type="grouplist">
+        <left>18</left><top>42</top><width>284</width><height>408</height>
+        <orientation>vertical</orientation><itemgap>3</itemgap>
+        <onup>9100</onup><ondown>9100</ondown>
+        <control type="radiobutton" id="799">
+          <width>284</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
+          <align>left</align><textoffsetx>12</textoffsetx>
+        </control>
+      </control>
+      <control type="image">
+        <left>316</left><top>36</top><width>574</width><height>420</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+      </control>
+      <control type="list" id="5">
+        <left>319</left><top>39</top><width>550</width><height>414</height>
+        <onleft>799</onleft><onright>60</onright>
+        <onup>5</onup><ondown>5</ondown>
+        <pagecontrol>60</pagecontrol>
+        <itemlayout height="44" width="550" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_ItemLayout_XL"><param name="width" value="542" /></include>
+        </itemlayout>
+        <focusedlayout height="44" width="550" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_FocusedLayout_XL"><param name="width" value="550" /></include>
+        </focusedlayout>
+      <itemlayout height="28" width="550">
+          <include content="Arthur_ItemLayout"><param name="width" value="542" /></include>
+        </itemlayout>
+        <focusedlayout height="28" width="550">
+          <include content="Arthur_FocusedLayout"><param name="width" value="550" /></include>
+        </focusedlayout>
+      </control>
+      <control type="scrollbar" id="60">
+        <left>869</left><top>39</top><width>18</width><height>414</height>
+        <onleft>5</onleft><onright>799</onright>
+      </control>
+    </control>
+  </controls>
+</window>

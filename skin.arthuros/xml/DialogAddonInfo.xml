@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <defaultcontrol>12</defaultcontrol>
+  <controls>
+    <include>Dialog_Dim</include>
+    <control type="group">
+      <centerleft>50%</centerleft><centertop>50%</centertop>
+      <width>900</width><height>452</height>
+      <include content="Dialog_Box">
+        <param name="width" value="900" /><param name="height" value="452" />
+        <param name="innerwidth" value="894" />
+        <param name="icon" value="icons24/addons_info.png" /><param name="colour" value="accent2" />
+        <param name="down" value="12" />
+        <param name="boxes" value="dialog" />
+        <param name="title" value="$INFO[ListItem.AddonName]" />
+      </include>
+      <control type="image">
+        <left>10</left><top>36</top><width>880</width><height>170</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      </control>
+      <control type="image">
+        <left>20</left><top>46</top><width>150</width><height>150</height>
+        <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+      </control>
+      <control type="image">
+        <left>26</left><top>52</top><width>138</width><height>138</height>
+        <texture fallback="DefaultAddon.png">$INFO[ListItem.Art(thumb)]</texture>
+        <aspectratio>keep</aspectratio>
+      </control>
+      <control type="label">
+        <left>186</left><top>46</top><width>690</width><height>30</height>
+        <font>bigbold</font>
+        <label>$INFO[ListItem.AddonName]</label>
+      </control>
+      <control type="label">
+        <left>186</left><top>80</top><width>690</width><height>22</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$INFO[ListItem.AddonVersion]$INFO[ListItem.AddonCreator,  -  ]</label>
+      </control>
+      <control type="label">
+        <left>186</left><top>104</top><width>690</width><height>22</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$INFO[ListItem.AddonSummary]</label>
+      </control>
+      <control type="label">
+        <left>186</left><top>128</top><width>690</width><height>22</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$INFO[ListItem.AddonOrigin]$INFO[ListItem.AddonLastUpdated,  -  ]</label>
+      </control>
+      <control type="label">
+        <left>186</left><top>160</top><width>690</width><height>22</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <label>$INFO[ListItem.AddonType]$INFO[ListItem.AddonSize,  -  ]$INFO[ListItem.AddonLifecycleDesc,  -  ]$INFO[ListItem.AddonBroken,  -  ]</label>
+      </control>
+      <control type="image">
+        <left>10</left><top>212</top><width>880</width><height>150</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+      </control>
+      <control type="textbox">
+        <left>18</left><top>220</top><width>864</width><height>134</height>
+        <font>small</font>
+        <autoscroll delay="6000" time="2500" repeat="6000">true</autoscroll>
+        <!-- Kodi 21 exposes add-on details as ListItem.Addon* info labels;
+             the old Addon.* item properties are always empty. -->
+        <label>$INFO[ListItem.AddonDescription]$INFO[ListItem.AddonDisclaimer,[CR][CR]]$INFO[ListItem.AddonNews,[CR][CR]]</label>
+      </control>
+      <control type="grouplist">
+        <left>13</left><top>370</top><width>874</width><height>32</height>
+        <orientation>horizontal</orientation><align>center</align><itemgap>6</itemgap>
+        <ondown>9</ondown>
+        <control type="button" id="12"><width>210</width><height>32</height><label>$LOCALIZE[502]</label></control>
+        <control type="button" id="6"><width>210</width><height>32</height><label>$LOCALIZE[24038]</label></control>
+        <control type="button" id="7"><width>210</width><height>32</height><label>$LOCALIZE[24022]</label></control>
+        <control type="button" id="8"><width>210</width><height>32</height><label>$LOCALIZE[24138]</label></control>
+      </control>
+      <control type="grouplist">
+        <left>13</left><top>408</top><width>874</width><height>32</height>
+        <orientation>horizontal</orientation><align>center</align><itemgap>6</itemgap>
+        <onup>12</onup>
+        <control type="button" id="9"><width>210</width><height>32</height><label>$LOCALIZE[24020]</label></control>
+        <control type="button" id="14"><width>210</width><height>32</height><label>$LOCALIZE[24069]</label></control>
+        <control type="button" id="10"><width>210</width><height>32</height><label>$LOCALIZE[39024]</label></control>
+        <control type="radiobutton" id="13"><width>210</width><height>32</height><label>$LOCALIZE[21340]</label></control>
+      </control>
+      <control type="panel" id="50">
+        <left>-3000</left><top>0</top><width>200</width><height>100</height>
+        <itemlayout height="20" width="100"/><focusedlayout height="20" width="100"/>
+      </control>
+      <control type="radiobutton" id="20">
+        <left>-3000</left><top>0</top><width>200</width><height>24</height>
+      </control>
+    </control>
+  </controls>
+</window>

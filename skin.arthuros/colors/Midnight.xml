@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Midnight: the same desktop after dark. -->
+<colors>
+  <color name="accent1">FFB8323C</color>
+  <color name="accent2">FF3A5BB0</color>
+  <color name="select">FF3A5BB0</color>
+  <color name="desktop">FF0C0C12</color>
+  <color name="facetint">FF40404C</color>
+  <color name="text">FFE6E6EE</color>
+  <color name="textdim">FFB4B4C4</color>
+  <color name="textdisabled">FF5A5A66</color>
+  <color name="marked">FFFF9090</color>
+  <color name="textinv">FFFFFFFF</color>
+</colors>

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ===================================================================
+     Global control defaults. Anything a window does not style explicitly
+     still comes out looking like Arthur because of this file.
+     Keep it complete - it is what makes the generic windows presentable.
+     =================================================================== -->
+<includes>
+
+  <default type="label">
+    <font>normal</font>
+    <textcolor>text</textcolor>
+    <disabledcolor>textdisabled</disabledcolor>
+    <!-- Kodi's default selectedcolor is fully transparent, so a list item
+         marked for an operation (the file manager marks the item you open
+         a context menu on) lost its text entirely -->
+    <selectedcolor>marked</selectedcolor>
+    <shadowcolor>-</shadowcolor>
+    <align>left</align>
+    <aligny>center</aligny>
+    <scroll>false</scroll>
+  </default>
+
+  <default type="fadelabel">
+    <font>normal</font>
+    <textcolor>text</textcolor>
+    <align>left</align>
+    <aligny>center</aligny>
+    <scroll>true</scroll>
+    <scrollspeed>30</scrollspeed>
+  </default>
+
+  <default type="textbox">
+    <font>normal</font>
+    <textcolor>text</textcolor>
+    <align>left</align>
+    <autoscroll delay="8000" time="3000" repeat="6000">Skin.HasSetting(autoscroll)</autoscroll>
+  </default>
+
+  <default type="button">
+    <height>28</height>
+    <width>220</width>
+    <font>normal</font>
+    <textcolor>text</textcolor>
+    <focusedcolor>textinv</focusedcolor>
+    <disabledcolor>textdisabled</disabledcolor>
+    <invalidcolor>red</invalidcolor>
+    <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+    <texturenofocus border="2" colordiffuse="facetint">button_up.png</texturenofocus>
+    <align>center</align>
+    <aligny>center</aligny>
+    <textoffsetx>10</textoffsetx>
+    <pulseonselect>false</pulseonselect>
+  </default>
+
+  <default type="togglebutton">
+    <height>28</height>
+    <width>220</width>
+    <font>normal</font>
+    <textcolor>text</textcolor>
+    <focusedcolor>textinv</focusedcolor>
+    <disabledcolor>textdisabled</disabledcolor>
+    <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+    <texturenofocus border="2" colordiffuse="facetint">button_up.png</texturenofocus>
+    <usealttexture>true</usealttexture>
+    <align>center</align>
+    <aligny>center</aligny>
+    <textoffsetx>10</textoffsetx>
+    <pulseonselect>false</pulseonselect>
+  </default>
+
+  <default type="radiobutton">
+    <height>28</height>
+    <width>420</width>
+    <font>normal</font>
+    <textcolor>text</textcolor>
+    <focusedcolor>textinv</focusedcolor>
+    <disabledcolor>textdisabled</disabledcolor>
+    <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+    <texturenofocus border="2" colordiffuse="facetint">button_up.png</texturenofocus>
+    <textureradioonfocus>radio_on.png</textureradioonfocus>
+    <textureradioonnofocus>radio_on.png</textureradioonnofocus>
+    <textureradioofffocus>radio_off.png</textureradioofffocus>
+    <textureradiooffnofocus>radio_off.png</textureradiooffnofocus>
+    <radiowidth>18</radiowidth>
+    <radioheight>18</radioheight>
+    <align>left</align>
+    <aligny>center</aligny>
+    <textoffsetx>10</textoffsetx>
+    <pulseonselect>false</pulseonselect>
+  </default>
+
+  <default type="spincontrol">
+    <font>normal</font>
+    <textcolor>text</textcolor>
+    <focusedcolor>textinv</focusedcolor>
+    <disabledcolor>textdisabled</disabledcolor>
+    <textureup colordiffuse="facetint">sb_up.png</textureup>
+    <textureupfocus colordiffuse="facetint">sb_up.png</textureupfocus>
+    <texturedown colordiffuse="facetint">sb_down.png</texturedown>
+    <texturedownfocus colordiffuse="facetint">sb_down.png</texturedownfocus>
+    <spinwidth>18</spinwidth>
+    <spinheight>18</spinheight>
+    <align>right</align>
+    <aligny>center</aligny>
+    <pulseonselect>false</pulseonselect>
+  </default>
+
+  <default type="spincontrolex">
+    <height>28</height>
+    <width>420</width>
+    <font>normal</font>
+    <textcolor>text</textcolor>
+    <focusedcolor>textinv</focusedcolor>
+    <disabledcolor>textdisabled</disabledcolor>
+    <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+    <texturenofocus border="2" colordiffuse="facetint">button_up.png</texturenofocus>
+    <textureup colordiffuse="facetint">sb_up.png</textureup>
+    <textureupfocus colordiffuse="facetint">sb_up.png</textureupfocus>
+    <texturedown colordiffuse="facetint">sb_down.png</texturedown>
+    <texturedownfocus colordiffuse="facetint">sb_down.png</texturedownfocus>
+    <spinwidth>18</spinwidth>
+    <spinheight>18</spinheight>
+    <!-- Kodi measures spinposx in from the RIGHT edge: the arrows start at
+         right - 2*spinwidth - spinposx. A negative value pushed the up
+         arrow past the edge of the row, where it was cut off. -->
+    <spinposx>8</spinposx>
+    <align>left</align>
+    <aligny>center</aligny>
+    <textoffsetx>10</textoffsetx>
+    <pulseonselect>false</pulseonselect>
+    <reverse>true</reverse>
+  </default>
+
+  <default type="edit">
+    <height>28</height>
+    <width>420</width>
+    <font>normal</font>
+    <textcolor>text</textcolor>
+    <focusedcolor>text</focusedcolor>
+    <disabledcolor>textdisabled</disabledcolor>
+    <texturefocus border="2" colordiffuse="facetint">panel_sunken.png</texturefocus>
+    <texturenofocus border="2" colordiffuse="facetint">panel_sunken.png</texturenofocus>
+    <align>left</align>
+    <aligny>center</aligny>
+    <textoffsetx>8</textoffsetx>
+    <pulseonselect>false</pulseonselect>
+  </default>
+
+  <default type="slider">
+    <height>24</height>
+    <texturesliderbar border="2" colordiffuse="facetint">progress_back.png</texturesliderbar>
+    <textureslidernib border="2" colordiffuse="facetint">button_up.png</textureslidernib>
+    <textureslidernibfocus border="2" colordiffuse="select">select_bevel.png</textureslidernibfocus>
+    <pulseonselect>false</pulseonselect>
+  </default>
+
+  <default type="sliderex">
+    <height>28</height>
+    <width>420</width>
+    <font>normal</font>
+    <textcolor>text</textcolor>
+    <disabledcolor>textdisabled</disabledcolor>
+    <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+    <texturenofocus border="2" colordiffuse="facetint">button_up.png</texturenofocus>
+    <textoffsetx>10</textoffsetx>
+    <pulseonselect>false</pulseonselect>
+  </default>
+
+  <default type="progress">
+    <height>18</height>
+    <texturebg border="2" colordiffuse="facetint">progress_back.png</texturebg>
+    <lefttexture>-</lefttexture>
+    <righttexture>-</righttexture>
+    <overlaytexture>-</overlaytexture>
+    <midtexture border="2" colordiffuse="select">select_bevel.png</midtexture>
+  </default>
+
+  <default type="scrollbar">
+    <width>18</width>
+    <texturesliderbackground border="2" colordiffuse="facetint">sb_back.png</texturesliderbackground>
+    <texturesliderbar border="2" colordiffuse="facetint">sb_nub.png</texturesliderbar>
+    <texturesliderbarfocus border="2" colordiffuse="select">select_bevel.png</texturesliderbarfocus>
+    <textureslidernib>-</textureslidernib>
+    <textureslidernibfocus>-</textureslidernibfocus>
+    <showonepage>true</showonepage>
+    <orientation>vertical</orientation>
+    <pulseonselect>false</pulseonselect>
+  </default>
+
+  <!-- No <default> for list / panel / fixedlist / wraplist on purpose.
+       Kodi's SetDefaults appends every child of a <default> block to the
+       control unconditionally - it does not check whether the control already
+       has one - so a default <itemlayout> lands on top of the layout each list
+       already declares, and the duplicates pile up every time the window tree
+       is resolved. Each container declares its own layouts instead. -->
+
+  <default type="group">
+    <pulseonselect>false</pulseonselect>
+  </default>
+
+  <!-- Do NOT set this to "keep". Every bevel and fill texture in this skin is
+       square, so "keep" makes Kodi letterbox them into a centred square and
+       the whole layout collapses into a column down the middle of the screen.
+       Artwork controls (posters, thumbs, weather icons) ask for "keep"
+       individually. -->
+  <default type="image">
+    <aspectratio>stretch</aspectratio>
+  </default>
+
+  <default type="multiselect">
+    <height>28</height>
+    <font>normal</font>
+    <textcolor>text</textcolor>
+    <focusedcolor>textinv</focusedcolor>
+    <pulseonselect>false</pulseonselect>
+  </default>
+
+  <default type="colorbutton">
+    <height>28</height>
+    <width>420</width>
+    <font>normal</font>
+    <textcolor>text</textcolor>
+    <focusedcolor>textinv</focusedcolor>
+    <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+    <texturenofocus border="2" colordiffuse="facetint">button_up.png</texturenofocus>
+    <imagewidth>20</imagewidth>
+    <imageheight>20</imageheight>
+    <align>left</align>
+    <textoffsetx>10</textoffsetx>
+    <pulseonselect>false</pulseonselect>
+  </default>
+
+</includes>

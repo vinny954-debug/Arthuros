@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <defaultcontrol always="false">20</defaultcontrol>
+  <backgroundcolor>desktop</backgroundcolor>
+  <controls>
+    <include>Chrome_Desktop</include>
+    <include>Chrome_Menubar</include>
+    <control type="group">
+      <left>6</left><top>30</top><width>1012</width><height>534</height>
+      <include content="Win_Frame">
+        <param name="width" value="1012" /><param name="height" value="534" />
+      </include>
+      <control type="group">
+        <left>3</left><top>3</top>
+        <include content="Win_Title">
+          <param name="width" value="1006" />
+          <param name="colour" value="accent1" />
+          <param name="icon" value="icons24/harddisk.png" />
+          <param name="label" value="$LOCALIZE[7]" />
+          <param name="down" value="20" />
+          <param name="boxes" value="window" />
+        </include>
+      </control>
+      <control type="image">
+        <left>6</left><top>34</top><width>498</width><height>30</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_chrome.png</texture>
+      </control>
+      <control type="label" id="101">
+        <left>14</left><top>34</top><width>420</width><height>30</height>
+        <font>small</font>
+      </control>
+      <control type="label" id="12">
+        <left>14</left><top>34</top><width>482</width><height>30</height>
+        <font>small</font><align>right</align><textcolor>textdim</textcolor>
+      </control>
+      <control type="image">
+        <left>6</left><top>70</top><width>498</width><height>458</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+      </control>
+      <control type="list" id="20">
+        <left>9</left><top>73</top><width>474</width><height>452</height>
+        <onleft>21</onleft><onright>60</onright>
+        <onup>20</onup><ondown>9100</ondown>
+        <pagecontrol>60</pagecontrol>
+        <itemlayout height="40" width="474" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_ItemLayout_XL"><param name="width" value="466" /></include>
+        </itemlayout>
+        <focusedlayout height="40" width="474" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_FocusedLayout_XL"><param name="width" value="474" /></include>
+        </focusedlayout>
+      <itemlayout height="24" width="474">
+          <include content="Arthur_ItemLayout"><param name="width" value="466" /></include>
+        </itemlayout>
+        <focusedlayout height="24" width="474">
+          <include content="Arthur_FocusedLayout"><param name="width" value="474" /></include>
+        </focusedlayout>
+      </control>
+      <control type="scrollbar" id="60">
+        <left>483</left><top>73</top><width>18</width><height>452</height>
+        <onleft>20</onleft><onright>21</onright>
+      </control>
+      <control type="image">
+        <left>510</left><top>34</top><width>498</width><height>30</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_chrome.png</texture>
+      </control>
+      <control type="label" id="102">
+        <left>518</left><top>34</top><width>420</width><height>30</height>
+        <font>small</font>
+      </control>
+      <control type="label" id="13">
+        <left>518</left><top>34</top><width>482</width><height>30</height>
+        <font>small</font><align>right</align><textcolor>textdim</textcolor>
+      </control>
+      <control type="image">
+        <left>510</left><top>70</top><width>498</width><height>458</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+      </control>
+      <control type="list" id="21">
+        <left>513</left><top>73</top><width>474</width><height>452</height>
+        <onleft>20</onleft><onright>61</onright>
+        <onup>21</onup><ondown>9100</ondown>
+        <pagecontrol>61</pagecontrol>
+        <itemlayout height="40" width="474" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_ItemLayout_XL"><param name="width" value="466" /></include>
+        </itemlayout>
+        <focusedlayout height="40" width="474" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+          <include content="Arthur_FocusedLayout_XL"><param name="width" value="474" /></include>
+        </focusedlayout>
+      <itemlayout height="24" width="474">
+          <include content="Arthur_ItemLayout"><param name="width" value="466" /></include>
+        </itemlayout>
+        <focusedlayout height="24" width="474">
+          <include content="Arthur_FocusedLayout"><param name="width" value="474" /></include>
+        </focusedlayout>
+      </control>
+      <control type="scrollbar" id="61">
+        <left>987</left><top>73</top><width>18</width><height>452</height>
+        <onleft>21</onleft><onright>20</onright>
+      </control>
+    </control>
+    <include content="Chrome_Taskbar"><param name="up" value="20" /></include>
+  </controls>
+</window>

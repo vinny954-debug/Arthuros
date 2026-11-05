@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <zorder>3</zorder>
+  <controls>
+    <control type="group">
+      <centerleft>50%</centerleft><centertop>50%</centertop>
+      <width>892</width><height>134</height>
+      <include content="Dialog_Box">
+        <param name="width" value="892" /><param name="height" value="134" />
+        <param name="innerwidth" value="886" />
+        <param name="icon" value="icons24/seek.png" /><param name="colour" value="accent2" />
+        <param name="down" value="" />
+        <param name="boxes" value="none" />
+      </include>
+      <control type="label">
+        <left>16</left><top>38</top><width>560</width><height>26</height>
+        <font>bold</font><label>$VAR[NowPlayingVar]</label>
+      </control>
+      <control type="slider" id="401">
+        <left>16</left><top>70</top><width>860</width><height>24</height>
+      </control>
+      <control type="slider" id="403">
+        <left>-3000</left><top>0</top><width>200</width><height>24</height>
+      </control>
+      <control type="label">
+        <left>16</left><top>100</top><width>420</width><height>22</height>
+        <font>small</font><label>$INFO[Player.SeekTime]$INFO[Player.Time]</label>
+      </control>
+      <control type="label">
+        <left>456</left><top>100</top><width>420</width><height>22</height>
+        <font>small</font><align>right</align><label>$INFO[Player.Duration]</label>
+      </control>
+    </control>
+  </controls>
+</window>

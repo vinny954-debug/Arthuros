@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <controls>
+    <control type="group" id="0"><left>0</left><top>0</top><width>1024</width><height>600</height></control>
+    <control type="group" id="1"><left>0</left><top>0</top><width>1024</width><height>600</height></control>
+    <control type="videowindow">
+      <left>0</left><top>0</top><width>1024</width><height>600</height>
+    </control>
+    <control type="group">
+      <left>6</left><top>6</top><width>620</width><height>84</height>
+      <visible>Player.ShowCodec</visible>
+      <include content="Win_Frame"><param name="width" value="620" /><param name="height" value="84" /></include>
+      <control type="label" id="10"><left>10</left><top>6</top><width>600</width><height>24</height><font>small</font></control>
+      <control type="label" id="11"><left>10</left><top>30</top><width>600</width><height>24</height><font>small</font></control>
+      <control type="label" id="12"><left>10</left><top>54</top><width>600</width><height>24</height><font>small</font></control>
+    </control>
+  </controls>
+</window>

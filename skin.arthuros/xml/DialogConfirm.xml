@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Serves YesNo, OK, Progress and Custom. Ids 1/2/3/4/9/10/11/12/20 are Kodi's. -->
+<window>
+  <defaultcontrol>11</defaultcontrol>
+  <controls>
+    <include>Dialog_Dim</include>
+    <control type="group">
+      <centerleft>50%</centerleft><centertop>50%</centertop>
+      <width>580</width><height>300</height>
+
+      <include content="Dialog_Box">
+        <param name="width" value="580" />
+        <param name="height" value="300" />
+        <param name="innerwidth" value="574" />
+        <param name="icon" value="icons24/info.png" />
+      </include>
+
+      <include content="Dialog_Heading"><param name="width" value="460" /></include>
+
+      <control type="image">
+        <left>10</left><top>36</top><width>560</width><height>186</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+      </control>
+
+      <control type="label" id="2">
+        <left>20</left><top>48</top><width>540</width><height>24</height>
+        <align>center</align><font>bold</font>
+      </control>
+      <control type="label" id="3">
+        <left>20</left><top>74</top><width>540</width><height>24</height>
+        <align>center</align>
+      </control>
+      <control type="label" id="4">
+        <left>20</left><top>100</top><width>540</width><height>24</height>
+        <align>center</align>
+      </control>
+      <control type="textbox" id="9">
+        <left>20</left><top>48</top><width>540</width><height>132</height>
+        <align>center</align>
+      </control>
+      <control type="progress" id="20">
+        <left>20</left><top>190</top><width>540</width><height>20</height>
+      </control>
+
+      <control type="group">
+        <left>13</left><top>246</top>
+        <include content="Dialog_ButtonRow"><param name="width" value="554" /></include>
+      </control>
+    </control>
+  </controls>
+</window>

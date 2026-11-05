@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Phosphor: green-screen terminal. -->
+<colors>
+  <color name="accent1">FF33FF66</color>
+  <color name="accent2">FF22CC55</color>
+  <color name="select">FF33FF66</color>
+  <color name="desktop">FF050F07</color>
+  <color name="facetint">FF2E4A2E</color>
+  <color name="text">FF33FF66</color>
+  <color name="textdim">FF5AD878</color>
+  <color name="textdisabled">FF1A6630</color>
+  <color name="marked">FFD0FFD8</color>
+  <color name="textinv">FF001A08</color>
+  <color name="titletext">FF001A08</color>
+</colors>

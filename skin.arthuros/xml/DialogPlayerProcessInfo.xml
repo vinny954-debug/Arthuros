@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <controls>
+    <include>Dialog_Dim</include>
+    <control type="group">
+      <centerleft>50%</centerleft><centertop>50%</centertop>
+      <width>900</width><height>500</height>
+      <include content="Dialog_Box">
+        <param name="width" value="900" /><param name="height" value="500" />
+        <param name="innerwidth" value="894" />
+        <param name="icon" value="icons24/process_info.png" /><param name="colour" value="accent2" />
+        <param name="down" value="" />
+        <param name="boxes" value="dialog" />
+      </include>
+      <include content="Dialog_Heading"><param name="width" value="794" /></include>
+    </control>
+  </controls>
+</window>

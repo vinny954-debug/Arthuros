@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <backgroundcolor>desktop</backgroundcolor>
+  <controls>
+    <include>Chrome_Desktop</include>
+    <include>Chrome_Menubar</include>
+    <control type="group">
+      <left>6</left><top>30</top><width>1012</width><height>534</height>
+      <include content="Win_Frame">
+        <param name="width" value="1012" /><param name="height" value="534" />
+      </include>
+      <control type="group">
+        <left>3</left><top>3</top>
+        <include content="Win_Title">
+          <param name="width" value="1006" />
+          <param name="colour" value="accent2" />
+          <param name="icon" value="icons24/calibration.png" />
+          <param name="label" value="$LOCALIZE[214]" />
+          <param name="down" value="" />
+          <param name="boxes" value="window" />
+        </include>
+      </control>
+      <control type="image">
+        <left>6</left><top>34</top><width>1000</width><height>494</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+      </control>
+      <control type="label" id="2">
+        <left>16</left><top>40</top><width>980</width><height>24</height>
+        <font>small</font>
+      </control>
+      <control type="label" id="3">
+        <left>16</left><top>66</top><width>980</width><height>24</height>
+        <font>small</font>
+      </control>
+      <control type="label" id="4">
+        <left>16</left><top>92</top><width>980</width><height>24</height>
+        <font>small</font>
+      </control>
+      <control type="mover" id="8">
+        <left>-3000</left><top>0</top><width>200</width><height>24</height>
+      </control>
+      <control type="mover" id="9">
+        <left>-3000</left><top>0</top><width>200</width><height>24</height>
+      </control>
+      <control type="mover" id="10">
+        <left>-3000</left><top>0</top><width>200</width><height>24</height>
+      </control>
+      <control type="resize" id="11">
+        <left>-3000</left><top>0</top><width>200</width><height>24</height>
+      </control>
+      <control type="mover" id="12">
+        <left>-3000</left><top>0</top><width>200</width><height>24</height>
+      </control>
+    </control>
+    <include content="Chrome_Taskbar"><param name="up" value="9100" /></include>
+  </controls>
+</window>

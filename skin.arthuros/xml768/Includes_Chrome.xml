@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ===================================================================
+     ArthurOS chrome: the desktop furniture every window is built from.
+     Geometry is fixed for a 1024x600 skin resolution;
+     tallpass.py makes the 1024x768 (4:3) copy in xml768.
+     Bevel textures are 6x6 nine-slice images, always used with border="2".
+     =================================================================== -->
+<includes>
+
+  <!-- ============================ desktop backdrop ================== -->
+  <include name="Chrome_Desktop">
+    <control type="image">
+      <left>0</left><top>0</top><width>1024</width><height>600</height>
+      <texture colordiffuse="desktop">fill.png</texture>
+    </control>
+  </include>
+
+  <!-- ============================ top menu bar ====================== -->
+  <!-- 1024 x 26, pinned to y=0. Mirrors the Arthur title strip. -->
+  <include name="Chrome_Menubar">
+    <control type="group">
+      <left>0</left><top>0</top><width>1024</width><height>26</height>
+      <visible>!Skin.HasSetting(hidemenubar)</visible>
+
+      <control type="image">
+        <left>0</left><top>0</top><width>1024</width><height>26</height>
+        <texture border="2" colordiffuse="facetint">panel_chrome.png</texture>
+      </control>
+
+      <control type="image">
+        <left>5</left><top>5</top><width>16</width><height>16</height>
+        <texture>logo.png</texture>
+      </control>
+
+      <control type="label">
+        <left>27</left><top>0</top><width>520</width><height>26</height>
+        <font>chromebold</font><textcolor>text</textcolor>
+        <align>left</align><aligny>center</aligny>
+        <label>Kodi $INFO[System.BuildVersionShort] - ArthurOS 1.2 (v0.9.6)</label>
+      </control>
+
+      <!-- right-hand status cluster, anchored to the right edge -->
+      <control type="image">
+        <right>6</right><top>5</top><width>16</width><height>16</height>
+        <texture>icons24/network.png</texture>
+        <visible>System.InternetState</visible>
+      </control>
+
+      <control type="image">
+        <right>100</right><top>5</top><width>16</width><height>16</height>
+        <texture>$VAR[VolumeIconVar]</texture>
+      </control>
+      <!-- a small volume gauge instead of Kodi's decibel figure -->
+      <control type="progress">
+        <right>28</right><top>8</top><width>66</width><height>10</height>
+        <info>Player.Volume</info>
+        <visible>!Player.Muted</visible>
+      </control>
+      <control type="label">
+        <right>28</right><top>0</top><width>66</width><height>26</height>
+        <font>chromesmall</font><textcolor>marked</textcolor>
+        <align>center</align><aligny>center</aligny>
+        <label>$LOCALIZE[31949]</label>
+        <visible>Player.Muted</visible>
+      </control>
+
+      <control type="label">
+        <right>124</right><top>0</top><width>300</width><height>26</height>
+        <font>chromebold</font><textcolor>text</textcolor>
+        <align>right</align><aligny>center</aligny>
+        <label>$INFO[System.Date(ddd mmm d)]  $INFO[System.Time]</label>
+        <visible>!Skin.HasSetting(hideclock)</visible>
+      </control>
+    </control>
+  </include>
+
+  <!-- ============================ bottom task bar =================== -->
+  <!-- 1024 x 32, pinned to y=568. Buttons 9100+ are reachable with Down. -->
+  <include name="Chrome_Taskbar">
+    <param name="up" default="9100" />
+    <definition>
+    <control type="group">
+      <left>0</left><top>568</top><width>1024</width><height>32</height>
+      <visible>!Skin.HasSetting(hidetaskbar)</visible>
+
+      <control type="image">
+        <left>0</left><top>0</top><width>1024</width><height>32</height>
+        <texture border="2" colordiffuse="facetint">panel_chrome.png</texture>
+      </control>
+
+      <!-- Kodi pads button text by textoffsetx on BOTH sides, so an icon inset
+           used to be charged twice and "Start" truncated under larger fonts.
+           The label is a separate control now, sized to the space it really has. -->
+      <control type="group">
+        <left>4</left><top>4</top><width>104</width><height>24</height>
+        <control type="button" id="9100">
+          <left>0</left><top>0</top><width>104</width><height>24</height>
+          <label></label>
+          <onup>$PARAM[up]</onup>
+          <onright>9101</onright>
+          <onclick>ActivateWindow(Home)</onclick>
+        </control>
+        <control type="image">
+          <left>6</left><top>4</top><width>16</width><height>16</height>
+          <texture>logo.png</texture>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>72</width><height>24</height>
+          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+          <label>Start</label>
+          <visible>!Control.HasFocus(9100)</visible>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>72</width><height>24</height>
+          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <label>Start</label>
+          <visible>Control.HasFocus(9100)</visible>
+        </control>
+      </control>
+      <!-- Kodi pads button text by textoffsetx on BOTH sides, so an icon inset
+           used to be charged twice and "Start" truncated under larger fonts.
+           The label is a separate control now, sized to the space it really has. -->
+      <control type="group">
+        <left>112</left><top>4</top><width>200</width><height>24</height>
+        <visible>Player.HasMedia</visible>
+        <control type="button" id="9101">
+          <left>0</left><top>0</top><width>200</width><height>24</height>
+          <label></label>
+          <onup>$PARAM[up]</onup>
+          <onleft>9100</onleft><onright>9102</onright>
+          <onclick>ActivateWindow(FullscreenVideo)</onclick>
+          <onclick>ActivateWindow(Visualisation)</onclick>
+        </control>
+        <control type="image">
+          <left>6</left><top>4</top><width>16</width><height>16</height>
+          <texture>icons24/audio.png</texture>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>168</width><height>24</height>
+          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+          <label>$VAR[NowPlayingVar]</label>
+          <visible>!Control.HasFocus(9101)</visible>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>168</width><height>24</height>
+          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <label>$VAR[NowPlayingVar]</label>
+          <visible>Control.HasFocus(9101)</visible>
+        </control>
+      </control>
+      <!-- Kodi pads button text by textoffsetx on BOTH sides, so an icon inset
+           used to be charged twice and "Start" truncated under larger fonts.
+           The label is a separate control now, sized to the space it really has. -->
+      <control type="group">
+        <left>316</left><top>4</top><width>150</width><height>24</height>
+        <visible>Player.HasMedia</visible>
+        <control type="button" id="9102">
+          <left>0</left><top>0</top><width>150</width><height>24</height>
+          <label></label>
+          <onup>$PARAM[up]</onup>
+          <onleft>9101</onleft><onright>9104</onright>
+          <onclick>ActivateWindow(PlayerControls)</onclick>
+        </control>
+        <control type="image">
+          <left>6</left><top>4</top><width>16</width><height>16</height>
+          <texture>icons24/playlist.png</texture>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>118</width><height>24</height>
+          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+          <label>$LOCALIZE[136]</label>
+          <visible>!Control.HasFocus(9102)</visible>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>118</width><height>24</height>
+          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <label>$LOCALIZE[136]</label>
+          <visible>Control.HasFocus(9102)</visible>
+        </control>
+      </control>
+      <!-- Kodi pads button text by textoffsetx on BOTH sides, so an icon inset
+           used to be charged twice and "Start" truncated under larger fonts.
+           The label is a separate control now, sized to the space it really has. -->
+      <!-- A window parked by its title-bar "_" box. Click to bring it back
+           to the folder it was showing; the button then goes away. -->
+      <control type="group">
+        <right>268</right><top>4</top><width>182</width><height>24</height>
+        <visible>!String.IsEmpty(Skin.String(arthur.minwin)) + !String.IsEqual(Skin.String(arthur.minwin),home)</visible>
+        <control type="button" id="9104">
+          <left>0</left><top>0</top><width>182</width><height>24</height>
+          <label></label>
+          <onup>$PARAM[up]</onup>
+          <onleft>9102</onleft><onright>9103</onright>
+          <onclick condition="String.IsEmpty(Skin.String(arthur.minpath))">ActivateWindow($INFO[Skin.String(arthur.minwin)])</onclick>
+          <onclick condition="!String.IsEmpty(Skin.String(arthur.minpath))">ActivateWindow($INFO[Skin.String(arthur.minwin)],$ESCINFO[Skin.String(arthur.minpath)])</onclick>
+          <onclick>Skin.Reset(arthur.minwin)</onclick>
+          <onclick>Skin.Reset(arthur.minpath)</onclick>
+        </control>
+        <control type="image">
+          <left>6</left><top>4</top><width>16</width><height>16</height>
+          <texture>$INFO[Skin.String(arthur.minicon)]</texture>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>150</width><height>24</height>
+          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+          <label>$INFO[Skin.String(arthur.mintitle)]</label>
+          <visible>!Control.HasFocus(9104)</visible>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>150</width><height>24</height>
+          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <label>$INFO[Skin.String(arthur.mintitle)]</label>
+          <visible>Control.HasFocus(9104)</visible>
+        </control>
+      </control>
+
+      <control type="group">
+        <right>124</right><top>4</top><width>140</width><height>24</height>
+        <control type="button" id="9103">
+          <left>0</left><top>0</top><width>140</width><height>24</height>
+          <label></label>
+          <onup>$PARAM[up]</onup>
+          <onleft>9104</onleft><onright>9105</onright>
+          <onclick>ActivateWindow(Settings)</onclick>
+        </control>
+        <control type="image">
+          <left>6</left><top>4</top><width>16</width><height>16</height>
+          <texture>icons24/settings.png</texture>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>108</width><height>24</height>
+          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+          <label>$LOCALIZE[5]</label>
+          <visible>!Control.HasFocus(9103)</visible>
+        </control>
+        <control type="label">
+          <left>26</left><top>0</top><width>108</width><height>24</height>
+          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <label>$LOCALIZE[5]</label>
+          <visible>Control.HasFocus(9103)</visible>
+        </control>
+      </control>
+
+      <!-- Touch mode: a Back button where the clock sits (the menu bar keeps
+           the time). It fills the full height of the task bar so a finger
+           can find it. -->
+      <control type="group">
+        <right>4</right><top>0</top><width>116</width><height>32</height>
+        <visible>Skin.HasSetting(touchmode)</visible>
+        <control type="button" id="9105">
+          <left>0</left><top>0</top><width>116</width><height>32</height>
+          <label></label>
+          <onup>$PARAM[up]</onup>
+          <onleft>9103</onleft>
+          <onclick>Action(Back)</onclick>
+        </control>
+        <control type="image">
+          <left>8</left><top>8</top><width>16</width><height>16</height>
+          <texture>icons24/parent.png</texture>
+        </control>
+        <control type="label">
+          <left>30</left><top>0</top><width>80</width><height>32</height>
+          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>
+          <label>$LOCALIZE[31994]</label>
+          <visible>!Control.HasFocus(9105)</visible>
+        </control>
+        <control type="label">
+          <left>30</left><top>0</top><width>80</width><height>32</height>
+          <font>chromebold</font><textcolor>textinv</textcolor><aligny>center</aligny>
+          <label>$LOCALIZE[31994]</label>
+          <visible>Control.HasFocus(9105)</visible>
+        </control>
+      </control>
+
+      <!-- tray -->
+      <control type="image">
+        <right>4</right><top>4</top><width>116</width><height>24</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_chrome.png</texture>
+        <visible>!Skin.HasSetting(touchmode)</visible>
+      </control>
+      <control type="label">
+        <visible>!Skin.HasSetting(touchmode)</visible>
+        <right>10</right><top>4</top><width>104</width><height>24</height>
+        <font>chromebold</font><textcolor>text</textcolor>
+        <align>center</align><aligny>center</aligny>
+        <label>$INFO[System.Time]</label>
+      </control>
+    </control>
+    </definition>
+  </include>
+
+  <!-- ============================ window frame ====================== -->
+  <!-- Raised bevel + 1px black outline. Caller positions the group. -->
+  <include name="Win_Frame">
+    <param name="width" default="400" />
+    <param name="height" default="300" />
+    <definition>
+      <control type="image">
+        <left>0</left><top>0</top>
+        <width>$PARAM[width]</width><height>$PARAM[height]</height>
+        <texture border="2" colordiffuse="facetint">panel_raised.png</texture>
+      </control>
+    </definition>
+  </include>
+
+  <!-- ============================ title bar ========================= -->
+  <!-- 26px coloured strip with optional icon, label and window boxes.
+       Place inside a window group at left=3, top=3, width = frame-6. -->
+  <include name="Win_Title">
+    <param name="width" default="400" />
+    <!-- a colour NAME from colors/*.xml, so palettes can recolour title bars -->
+    <param name="colour" default="accent2" />
+    <param name="label" default="" />
+    <param name="label2" default="" />
+    <param name="icon" default="" />
+    <!-- window | dialog | home | none -->
+    <param name="boxes" default="dialog" />
+    <param name="textleft" default="26" />
+    <!-- where Down goes from the window boxes, so they never trap the keyboard -->
+    <param name="down" default="" />
+    <definition>
+      <control type="group">
+        <width>$PARAM[width]</width><height>26</height>
+
+        <control type="image">
+          <left>0</left><top>0</top>
+          <width>$PARAM[width]</width><height>26</height>
+          <texture colordiffuse="$PARAM[colour]">fill.png</texture>
+        </control>
+        <!-- hard 1px rule under the bar, the way Arthur draws it -->
+        <control type="image">
+          <left>0</left><bottom>0</bottom>
+          <width>$PARAM[width]</width><height>1</height>
+          <texture>fill_black.png</texture>
+        </control>
+
+        <control type="image">
+          <left>4</left><top>5</top><width>16</width><height>16</height>
+          <texture>$PARAM[icon]</texture>
+        </control>
+
+        <!-- left + right with no width: Kodi derives the width, so the title
+             stops before the window boxes instead of running underneath them -->
+        <control type="label">
+          <left>$PARAM[textleft]</left><right>100</right><top>0</top><height>26</height>
+          <align>left</align><aligny>center</aligny>
+          <font>chromebold</font><textcolor>titletext</textcolor>
+          <label>$PARAM[label]</label>
+        </control>
+
+        <control type="label">
+          <right>100</right><top>0</top><width>460</width><height>26</height>
+          <align>right</align><aligny>center</aligny>
+          <font>chromesmall</font><textcolor>titletext</textcolor>
+          <label>$PARAM[label2]</label>
+        </control>
+
+        <!-- The window boxes. Which set a title bar gets is chosen by the
+             "boxes" parameter: window, dialog, home or none. -->
+        <include content="Win_Boxes_$PARAM[boxes]">
+          <param name="down" value="$PARAM[down]" />
+        </include>
+      </control>
+    </definition>
+  </include>
+
+  <!-- ======================== title-bar window boxes =================== -->
+  <!-- Nothing navigates INTO the boxes, so the keyboard can never get stuck
+       on them; they are for the pointer. Every way out of them is defined.
+       _  minimise   ▫  fullscreen playback   ×  close
+       Each box is a face tinted by facetint with a glyph on top tinted by the
+       palette's text colour (titletext when pointed at, on the select colour),
+       so dark palettes keep a readable glyph. -->
+
+  <!-- A full window. _ parks it on the task bar and shows the desktop; the
+       task-bar button brings it back where you left it. × closes it. -->
+  <include name="Win_Boxes_window">
+    <param name="down" default="" />
+    <definition>
+    <control type="group">
+      <control type="button" id="9901">
+        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label></label>
+        <onclick>Skin.SetString(arthur.minwin,$VAR[ArthurWindowName])</onclick>
+        <onclick>Skin.SetString(arthur.minpath,$ESCINFO[Container.FolderPath])</onclick>
+        <onclick>Skin.SetString(arthur.mintitle,$ESCINFO[System.CurrentWindow])</onclick>
+        <onclick>Skin.SetString(arthur.minicon,$VAR[ArthurWindowIcon])</onclick>
+        <onclick>ActivateWindow(Home)</onclick>
+        <onright>9902</onright>
+        <ondown>$PARAM[down]</ondown>
+      </control>
+      <control type="image">
+        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="text">wc_min_g.png</texture>
+        <visible>!Control.HasFocus(9901)</visible>
+      </control>
+      <control type="image">
+        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="titletext">wc_min_g.png</texture>
+        <visible>Control.HasFocus(9901)</visible>
+      </control>
+      <control type="button" id="9902">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label></label>
+        <enable>Player.HasMedia</enable>
+        <onclick>Action(FullScreen)</onclick>
+        <onleft>9901</onleft>
+        <onright>9903</onright>
+        <ondown>$PARAM[down]</ondown>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="text">wc_max_g.png</texture>
+        <visible>!Control.HasFocus(9902) + Player.HasMedia</visible>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="titletext">wc_max_g.png</texture>
+        <visible>Control.HasFocus(9902)</visible>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="textdim">wc_max_dg.png</texture>
+        <visible>!Player.HasMedia</visible>
+      </control>
+      <control type="button" id="9903">
+        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label></label>
+        <onclick>ActivateWindow(Home)</onclick>
+        <onleft>9902</onleft>
+        <ondown>$PARAM[down]</ondown>
+      </control>
+      <control type="image">
+        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="text">wc_close_g.png</texture>
+        <visible>!Control.HasFocus(9903)</visible>
+      </control>
+      <control type="image">
+        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="titletext">wc_close_g.png</texture>
+        <visible>Control.HasFocus(9903)</visible>
+      </control>
+    </control>
+    </definition>
+  </include>
+
+  <!-- A dialog. _ closes every dialog and shows the desktop; × closes this one. -->
+  <include name="Win_Boxes_dialog">
+    <param name="down" default="" />
+    <definition>
+    <control type="group">
+      <control type="button" id="9901">
+        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label></label>
+        <onclick>Dialog.Close(all,true)</onclick>
+        <onclick>ActivateWindow(Home)</onclick>
+        <onright>9902</onright>
+        <ondown>$PARAM[down]</ondown>
+      </control>
+      <control type="image">
+        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="text">wc_min_g.png</texture>
+        <visible>!Control.HasFocus(9901)</visible>
+      </control>
+      <control type="image">
+        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="titletext">wc_min_g.png</texture>
+        <visible>Control.HasFocus(9901)</visible>
+      </control>
+      <control type="button" id="9902">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label></label>
+        <enable>Player.HasMedia</enable>
+        <onclick>Action(FullScreen)</onclick>
+        <onleft>9901</onleft>
+        <onright>9903</onright>
+        <ondown>$PARAM[down]</ondown>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="text">wc_max_g.png</texture>
+        <visible>!Control.HasFocus(9902) + Player.HasMedia</visible>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="titletext">wc_max_g.png</texture>
+        <visible>Control.HasFocus(9902)</visible>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="textdim">wc_max_dg.png</texture>
+        <visible>!Player.HasMedia</visible>
+      </control>
+      <control type="button" id="9903">
+        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label></label>
+        <onclick>Action(Back)</onclick>
+        <onleft>9902</onleft>
+        <ondown>$PARAM[down]</ondown>
+      </control>
+      <control type="image">
+        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="text">wc_close_g.png</texture>
+        <visible>!Control.HasFocus(9903)</visible>
+      </control>
+      <control type="image">
+        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="titletext">wc_close_g.png</texture>
+        <visible>Control.HasFocus(9903)</visible>
+      </control>
+    </control>
+    </definition>
+  </include>
+
+  <!-- The desktop's own panel: it cannot be minimised or closed, so _ and ×
+       are drawn greyed out. ▫ still reaches whatever is playing. -->
+  <include name="Win_Boxes_home">
+    <param name="down" default="" />
+    <definition>
+    <control type="group">
+      <control type="image">
+        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="facetint">wc_face.png</texture>
+      </control>
+      <control type="image">
+        <right>70</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="textdim">wc_min_dg.png</texture>
+      </control>
+      <control type="button" id="9902">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texturenofocus colordiffuse="facetint">wc_face.png</texturenofocus>
+        <texturefocus border="2" colordiffuse="select">select_bevel.png</texturefocus>
+        <label></label>
+        <enable>Player.HasMedia</enable>
+        <onclick>Action(FullScreen)</onclick>
+        <ondown>$PARAM[down]</ondown>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="text">wc_max_g.png</texture>
+        <visible>!Control.HasFocus(9902) + Player.HasMedia</visible>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="titletext">wc_max_g.png</texture>
+        <visible>Control.HasFocus(9902)</visible>
+      </control>
+      <control type="image">
+        <right>46</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="textdim">wc_max_dg.png</texture>
+        <visible>!Player.HasMedia</visible>
+      </control>
+      <control type="image">
+        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="facetint">wc_face.png</texture>
+      </control>
+      <control type="image">
+        <right>22</right><top>2</top><width>22</width><height>22</height>
+        <texture colordiffuse="textdim">wc_close_dg.png</texture>
+      </control>
+    </control>
+    </definition>
+  </include>
+
+  <!-- No boxes: notifications and other transient panels. -->
+  <include name="Win_Boxes_none">
+    <param name="down" default="" />
+    <definition>
+    <control type="group" />
+    </definition>
+  </include>
+
+
+  <!-- ============================ sunken well ======================= -->
+  <include name="Win_Well">
+    <param name="width" default="200" />
+    <param name="height" default="200" />
+    <param name="texture" default="panel_sunken.png" />
+    <definition>
+      <control type="image">
+        <left>0</left><top>0</top>
+        <width>$PARAM[width]</width><height>$PARAM[height]</height>
+        <texture border="2">$PARAM[texture]</texture>
+      </control>
+    </definition>
+  </include>
+
+  <!-- ============================ scrollbar ========================= -->
+  <include name="Arthur_Scrollbar">
+    <param name="id" default="60" />
+    <definition>
+      <control type="scrollbar" id="$PARAM[id]">
+        <width>18</width>
+        <texturesliderbackground border="2" colordiffuse="facetint">sb_back.png</texturesliderbackground>
+        <texturesliderbar border="2" colordiffuse="facetint">sb_nub.png</texturesliderbar>
+        <texturesliderbarfocus border="2" colordiffuse="select">select_bevel.png</texturesliderbarfocus>
+        <textureslidernib>-</textureslidernib>
+        <textureslidernibfocus>-</textureslidernibfocus>
+        <showonepage>true</showonepage>
+        <orientation>vertical</orientation>
+      </control>
+    </definition>
+  </include>
+
+</includes>

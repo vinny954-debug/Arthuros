@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ===================================================================
+     Dialog furniture. Every popup is an Arthur window floating over a
+     dimmed desktop.
+     =================================================================== -->
+<includes>
+
+  <include name="Dialog_Dim">
+    <control type="image">
+      <left>0</left><top>0</top><width>1024</width><height>600</height>
+      <texture>dim.png</texture>
+    </control>
+  </include>
+
+  <!-- Frame + title bar. Place inside a group of the same width/height. -->
+  <include name="Dialog_Box">
+    <param name="width" default="560" />
+    <param name="height" default="300" />
+    <param name="colour" default="accent2" />
+    <param name="icon" default="" />
+    <param name="title" default="" />
+    <param name="innerwidth" default="554" />
+    <param name="down" default="" />
+    <param name="boxes" default="dialog" />
+    <definition>
+      <include content="Win_Frame">
+        <param name="width" value="$PARAM[width]" />
+        <param name="height" value="$PARAM[height]" />
+      </include>
+      <control type="group">
+        <left>3</left><top>3</top>
+        <include content="Win_Title">
+          <param name="width" value="$PARAM[innerwidth]" />
+          <param name="colour" value="$PARAM[colour]" />
+          <param name="icon" value="$PARAM[icon]" />
+          <param name="label" value="$PARAM[title]" />
+          <param name="down" value="$PARAM[down]" />
+          <param name="boxes" value="$PARAM[boxes]" />
+        </include>
+      </control>
+    </definition>
+  </include>
+
+  <!-- Kodi writes the dialog heading into control id 1, so it lives on the
+       title bar itself rather than being mirrored with Control.GetLabel. -->
+  <include name="Dialog_Heading">
+    <param name="width" default="470" />
+    <definition>
+      <control type="label" id="1">
+        <left>29</left><top>3</top><width>$PARAM[width]</width><height>26</height>
+        <font>chromebold</font><textcolor>titletext</textcolor>
+        <align>left</align><aligny>center</aligny>
+      </control>
+    </definition>
+  </include>
+
+  <!-- A row of dialog buttons along the bottom. -->
+  <include name="Dialog_ButtonRow">
+    <param name="width" default="554" />
+    <definition>
+      <control type="grouplist">
+        <width>$PARAM[width]</width><height>30</height>
+        <orientation>horizontal</orientation>
+        <align>center</align>
+        <itemgap>8</itemgap>
+        <control type="button" id="11">
+          <width>150</width><height>30</height>
+          <label>$LOCALIZE[186]</label>
+        </control>
+        <control type="button" id="10">
+          <width>150</width><height>30</height>
+          <label>$LOCALIZE[222]</label>
+        </control>
+        <control type="button" id="12">
+          <width>150</width><height>30</height>
+          <label></label>
+        </control>
+      </control>
+    </definition>
+  </include>
+
+</includes>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ===================================================================
+     Row and tile layouts. Everything is 24px-row based so text sits on
+     whole pixels and the bitmap font stays crisp.
+     =================================================================== -->
+<includes>
+
+  <!-- ========== plain row, used by Defaults.xml and simple lists ===== -->
+  <include name="Arthur_ItemLayout">
+    <param name="width" default="560" />
+    <definition>
+      <control type="image">
+        <left>4</left><top>4</top><width>16</width><height>16</height>
+        <texture>$INFO[ListItem.Icon]</texture>
+      </control>
+      <control type="label">
+        <left>26</left><top>0</top>
+        <width>$PARAM[width]</width><height>24</height>
+        <font>normal</font><textcolor>text</textcolor>
+        <align>left</align><aligny>center</aligny>
+        <label>$INFO[ListItem.Label]</label>
+      </control>
+      <control type="label">
+        <left>0</left><top>0</top>
+        <width>$PARAM[width]</width><height>24</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <align>right</align><aligny>center</aligny>
+        <label>$INFO[ListItem.Label2]</label>
+      </control>
+    </definition>
+  </include>
+
+  <include name="Arthur_ItemLayout_XL">
+    <param name="width" default="560" />
+    <definition>
+      <control type="image">
+        <left>4</left><top>12</top><width>16</width><height>16</height>
+        <texture>$INFO[ListItem.Icon]</texture>
+      </control>
+      <control type="label">
+        <left>26</left><top>0</top>
+        <width>$PARAM[width]</width><height>40</height>
+        <font>normal</font><textcolor>text</textcolor>
+        <align>left</align><aligny>center</aligny>
+        <label>$INFO[ListItem.Label]</label>
+      </control>
+      <control type="label">
+        <left>0</left><top>0</top>
+        <width>$PARAM[width]</width><height>40</height>
+        <font>small</font><textcolor>textdim</textcolor>
+        <align>right</align><aligny>center</aligny>
+        <label>$INFO[ListItem.Label2]</label>
+      </control>
+    </definition>
+  </include>
+
+  <include name="Arthur_FocusedLayout">
+    <param name="width" default="560" />
+    <definition>
+      <control type="image">
+        <left>0</left><top>0</top>
+        <width>$PARAM[width]</width><height>24</height>
+        <texture colordiffuse="select">fill.png</texture>
+      </control>
+      <control type="image">
+        <left>4</left><top>4</top><width>16</width><height>16</height>
+        <texture>$INFO[ListItem.Icon]</texture>
+      </control>
+      <control type="label">
+        <left>26</left><top>0</top>
+        <width>$PARAM[width]</width><height>24</height>
+        <font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
+        <align>left</align><aligny>center</aligny>
+        <label>$INFO[ListItem.Label]</label>
+      </control>
+      <control type="label">
+        <left>0</left><top>0</top>
+        <width>$PARAM[width]</width><height>24</height>
+        <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
+        <align>right</align><aligny>center</aligny>
+        <label>$INFO[ListItem.Label2]</label>
+      </control>
+    </definition>
+  </include>
+
+  <include name="Arthur_FocusedLayout_XL">
+    <param name="width" default="560" />
+    <definition>
+      <control type="image">
+        <left>0</left><top>0</top>
+        <width>$PARAM[width]</width><height>40</height>
+        <texture colordiffuse="select">fill.png</texture>
+      </control>
+      <control type="image">
+        <left>4</left><top>12</top><width>16</width><height>16</height>
+        <texture>$INFO[ListItem.Icon]</texture>
+      </control>
+      <control type="label">
+        <left>26</left><top>0</top>
+        <width>$PARAM[width]</width><height>40</height>
+        <font>bold</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
+        <align>left</align><aligny>center</aligny>
+        <label>$INFO[ListItem.Label]</label>
+      </control>
+      <control type="label">
+        <left>0</left><top>0</top>
+        <width>$PARAM[width]</width><height>40</height>
+        <font>small</font><textcolor>textinv</textcolor><selectedcolor>textinv</selectedcolor>
+        <align>right</align><aligny>center</aligny>
+        <label>$INFO[ListItem.Label2]</label>
+      </control>
+    </definition>
+  </include>
+
+  <!-- ========== the sunken white well a list sits in ================= -->
+  <include name="Arthur_ListWell">
+    <param name="width" default="634" />
+    <param name="height" default="462" />
+    <definition>
+      <control type="image">
+        <left>0</left><top>0</top>
+        <width>$PARAM[width]</width><height>$PARAM[height]</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken.png</texture>
+      </control>
+    </definition>
+  </include>
+
+  <!-- ========== toolbar button, horizontal grouplist member ========== -->
+  <include name="Arthur_ToolButton">
+    <param name="id" default="0" />
+    <param name="label" default="" />
+    <param name="width" default="110" />
+    <param name="onclick" default="noop" />
+    <definition>
+      <control type="button" id="$PARAM[id]">
+        <width>$PARAM[width]</width><height>24</height>
+        <font>normal</font>
+        <label>$PARAM[label]</label>
+        <align>center</align>
+        <onclick>$PARAM[onclick]</onclick>
+      </control>
+    </definition>
+  </include>
+
+</includes>
