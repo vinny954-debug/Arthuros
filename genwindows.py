@@ -1661,7 +1661,7 @@ def subtitles_dialog():
 XLC = "[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"
 GUIDE_NOW_TEX = os.path.join(os.path.dirname(OUT), "media", "epg_now.png")
 
-def _guide_layouts(cid, chw, row, ruler, cond, ids):
+def _guide_layouts(cid, chw, row, ruler, cond):
     """One set of epggrid layouts (GUIEPGGridContainer::LoadLayout):
     channellayout / focusedchannellayout - the channel column, chw wide;
     rulerlayout - a time mark (and the date in the top-left corner);
@@ -1669,11 +1669,13 @@ def _guide_layouts(cid, chw, row, ruler, cond, ids):
     Kodi stretches each programme cell to its duration through the controls
     with ids 1-14 (CGUIListGroup::EnlargeWidth; id 1 is also hidden when the
     cell gets too narrow), so whatever must follow the cell's width carries
-    such an id. ids = six of them, distinct between the two layout sets.
-    The ruler bar is drawn behind the grid by guide_window() and the
+    such an id. The title label is id 1 in both layouts of both sets: only
+    id 1 is hidden when the cell gets narrower than 10 px. Each layout is its
+    own CGUIListItemLayout, so the sets can share ids. The ruler bar is drawn behind the grid by guide_window() and the
     channel column has a fixed width, so neither layout needs one."""
     c = f' condition="{cond}"' if cond else ""
-    lab, rule, prog, ffill, flab, fprog = ids
+    lab, rule, prog = 1, 2, 3        # item: title, bottom rule, progress
+    flab, ffill, fprog = 1, 2, 3     # focused: title, fill, progress
     ic = row - 6                                 # channel logo, square
     nw = chw - ic - 12                           # channel name width
     rb = row - 1                                 # programme cell bottom line
@@ -1772,6 +1774,8 @@ def guide_window():
     # Keys: left/right move through time and only reach onleft at the start
     # of the guide data, so Up from the first channel is the way to the strip
     # (CGUIEPGGridContainer::OnUp navigates once it cannot move).
+    # The price: no Up wrap from the first channel to the last. With a remote,
+    # every jump is also in the context menu (Navigate...) and on 'n'.
     b += f"""      <control type="epggrid" id="50">
         <left>{GX}</left><top>{GY}</top><width>{GW}</width><height>{GH}</height>
         <orientation>vertical</orientation>
@@ -1784,9 +1788,8 @@ def guide_window():
     if os.path.exists(GUIDE_NOW_TEX):   # "now" line, once mkmedia draws it
         b += '        <progresstexture border="0,0,4,0" colordiffuse="accent1">epg_now.png</progresstexture>\n'
     # XL set first: Kodi takes the first layout whose condition passes.
-    # Ids 1-14 only; 11 is the group list, so the XL set skips it.
-    b += _guide_layouts(50, CHW, 50, 40, XLC, (7, 8, 9, 10, 12, 13))
-    b += _guide_layouts(50, CHW, 34, 24, None, (1, 2, 3, 4, 5, 6))
+    b += _guide_layouts(50, CHW, 50, 40, XLC)
+    b += _guide_layouts(50, CHW, 34, 24, None)
     b += f"""      </control>
       <control type="scrollbar" id="60">
         <left>{GX+GW+2}</left><top>{GY}</top><width>18</width><height>{GH}</height>
@@ -1847,8 +1850,16 @@ def guide_window():
     KODI = {11, 29, 30}
     rest = {i: t for i, t in ids.items() if i in KODI}
     b += stubs(rest, placed)
-    return fullwindow("MyPVRGuide", b, default="50", views="50",
-                      icon="icons24/pvr_guide.png")
+    s = fullwindow("MyPVRGuide", b, default="50", views="50",
+                   icon="icons24/pvr_guide.png")
+    # The channel group's name, always readable: button 28's "Group: <name>"
+    # (GUIWindowPVRBase::UpdateButtons) is cut off at the strip's width
+    # unless it has focus, but Kodi also writes the bare name into label 30
+    # (CGUIWindowPVRGuideBase::UpdateButtons), so the title bar's right-hand
+    # label shows it.
+    lab = '          <param name="label" value="$LOCALIZE[19069]" />\n'
+    assert lab in s, "guide title bar"
+    return s.replace(lab, lab + '          <param name="label2" value="$INFO[Control.GetLabel(30),$LOCALIZE[19141]: ]" />\n', 1)
 
 def pvr_guide_controls():
     """DialogPVRGuideControls.xml - 'Navigate...' in the guide's context menu
@@ -1856,7 +1867,11 @@ def pvr_guide_controls():
     every button is the skin's, calling PVR.EpgGridControl on the guide
     window underneath (PVRBuiltins.cpp). Kodi only uses this dialog because
     the file exists (OnContextButtonNavigate, HasSkinFile), so it must offer
-    all twelve jumps of Kodi's own fallback menu."""
+    all twelve jumps of Kodi's own fallback menu.
+
+    It sits on the bottom edge, over the programme info and the task bar, as
+    Estuary's does, so the grid above stays in view and each jump shows at
+    once. No dimming, for the same reason."""
     cols = [  # grouplist id, caption, buttons (id, label, EpgGridControl arg, visible)
         (201, "$LOCALIZE[19325]", [(600, 19063, "FirstProgramme", None),
                                    (601, 19317, "-12", None),
@@ -1872,11 +1887,27 @@ def pvr_guide_controls():
                                    (70044, 19320, "NextGroup", None),
                                    (70045, 19321, "SelectGroup", None)]),
     ]
-    CW, GAP, X0, TOP = 196, 8, 14, 62
-    WD = 2 * X0 + 4 * CW + 3 * GAP          # 836
-    HT = 272                                 # fits the XL rows (3 x 46 + gaps) and Close
+    CW, GAP, X0, TOP, CLW = 196, 8, 14, 62, 100
+    CX = X0 + 4 * (CW + GAP)                 # the Close column
+    WD = CX + CLW + X0                       # 944
     CLOSE = 9970
-    b  = well(8, 34, WD - 16, HT - 34 - 62, "panel_sunken_grey.png")
+    # Three rows of buttons: 30 px, or 46 px in Extra large / Touch mode
+    # (sizepass gives grouplist rows Height_30 / Height_30_XL). The box is
+    # sized for each: the frame and the well come in an XLC pair, and the
+    # Close button sits beside the rows, not under them, so nothing else
+    # has to move.
+    sizes = {}                                # cond -> (box height, well height)
+    for cond, row in ((XLC, 46), ("!" + XLC, 30)):
+        rows = 3 * row + 2 * 3
+        sizes[cond] = (TOP + rows + 16, TOP + rows + 8 - 34)
+    HT = max(h for h, _ in sizes.values())    # the group: XL size, on the bottom edge
+    HN = sizes["!" + XLC][0]
+    b = ""
+    for cond, (_, wh) in sizes.items():
+        b += (f"      <control type=\"image\">\n"
+              f"        <left>8</left><top>34</top><width>{WD-16}</width><height>{wh}</height>\n"
+              f"        <texture border=\"2\">panel_sunken_grey.png</texture>\n"
+              f"        <visible>{cond}</visible>\n      </control>\n")
     b += "      <control type=\"group\" id=\"200\">\n"
     for k, (gid, cap, btns) in enumerate(cols):
         x = X0 + k * (CW + GAP)
@@ -1886,8 +1917,8 @@ def pvr_guide_controls():
                   f"          <left>{x}</left><top>38</top><width>{span}</width><height>22</height>\n"
                   f"          <font>chromebold</font><textcolor>text</textcolor><aligny>center</aligny>\n"
                   f"          <label>{cap}</label>\n        </control>\n")
-        prev_g = cols[k - 1][0] if k else cols[-1][0]
-        next_g = cols[(k + 1) % len(cols)][0]
+        prev_g = cols[k - 1][0] if k else CLOSE
+        next_g = cols[k + 1][0] if k + 1 < len(cols) else CLOSE
         b += (f"        <control type=\"grouplist\" id=\"{gid}\">\n"
               f"          <left>{x}</left><top>{TOP}</top><width>{CW}</width><height>148</height>\n"
               f"          <orientation>vertical</orientation><itemgap>3</itemgap>\n"
@@ -1903,31 +1934,49 @@ def pvr_guide_controls():
                   "          </control>\n")
         b += "        </control>\n"
     b += "      </control>\n"
-    # touch has no Esc: a real Close button, sized for the finger in touch mode
+    # touch has no Esc: a real Close button, as tall as a row in touch mode
     b += f"""      <control type="button" id="{CLOSE}">
-        <right>14</right><bottom>10</bottom><width>160</width>
+        <left>{CX}</left><top>{TOP}</top><width>{CLW}</width>
         <include content="Height_30_XL" condition="{XLC}" />
         <include content="Height_30" condition="!{XLC}" />
         <font>chrome</font><label>$LOCALIZE[15067]</label>
         <onclick>Action(close)</onclick>
-        <onup>602</onup><ondown>602</ondown><onleft>70045</onleft><onright>600</onright>
+        <onup>602</onup><ondown>602</ondown><onleft>{cols[-1][0]}</onleft><onright>{cols[0][0]}</onright>
       </control>
 """
-    # no dimming: the grid stays visible behind, so each jump shows at once.
     # A tap outside the box closes it, as in Kodi's own skin: four empty
-    # buttons around the centred box (not one under it - a tap on the box's
-    # own background would fall through to it and close the dialog).
-    bx, by = (1024 - WD) // 2, (600 - HT) // 2
-    pre = ""
-    for k, geo in enumerate((f"<left>0</left><top>0</top><width>{bx}</width><height>600</height>",
-                             f"<right>0</right><top>0</top><width>{bx}</width><height>600</height>",
-                             f"<left>{bx}</left><top>0</top><width>{WD}</width><height>{by}</height>",
-                             f"<left>{bx}</left><bottom>0</bottom><width>{WD}</width><height>{by}</height>")):
-        pre += (f'    <control type="button" id="{9971 + k}">\n      {geo}\n'
-                 '      <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>\n'
-                 '      <label></label>\n      <onclick>Action(close)</onclick>\n    </control>\n')
-    return dialog("DialogPVRGuideControls", WD, HT, b, default="602", heading=False,
-                  icon="icons24/pvr_controls.png", default_always=True, dim=False, pre=pre)
+    # buttons around the box (not one under it - a tap on the box's own
+    # background would fall through to it and close the dialog). They hang
+    # off the box itself, 2048 px each way, so they reach the screen edges in
+    # both layouts; CGUIControlGroup passes mouse events to its children
+    # without clipping to the group. The bottom one only matters in normal
+    # mode, where the frame ends above the screen's bottom edge.
+    F = 2048
+    for cid, geo, vis in (
+            (9971, f"<left>{-F}</left><top>{-F}</top><width>{F}</width><height>{2*F}</height>", None),
+            (9972, f"<left>{WD}</left><top>{-F}</top><width>{F}</width><height>{2*F}</height>", None),
+            (9973, f"<left>0</left><top>{-F}</top><width>{WD}</width><height>{F}</height>", None),
+            (9974, f"<left>0</left><top>{HN}</top><width>{WD}</width><height>{F}</height>", "!" + XLC)):
+        b += (f'      <control type="button" id="{cid}">\n        {geo}\n'
+              '        <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>\n'
+              '        <label></label>\n        <onclick>Action(close)</onclick>\n'
+              '        <onup>602</onup><ondown>602</ondown><onleft>602</onleft><onright>602</onright>\n'
+              + (f'        <visible>{vis}</visible>\n' if vis else "") +
+              '      </control>\n')
+    s = dialog("DialogPVRGuideControls", WD, HT, b, default="602", heading=False,
+               icon="icons24/pvr_controls.png", default_always=True, dim=False,
+               anchor="bottom")
+    # the frame in two heights; Kodi keeps only the include whose condition
+    # holds when the window loads (CGUIIncludes), and a font or Touch mode
+    # change reloads the skin
+    i = s.index('      <include content="Dialog_Box">\n')
+    j = s.index("      </include>\n", i) + len("      </include>\n")
+    box = s[i:j]
+    pair = ""
+    for cond, (h, _) in sizes.items():
+        pair += (box.replace('<include content="Dialog_Box">', f'<include content="Dialog_Box" condition="{cond}">', 1)
+                    .replace(f'<param name="height" value="{HT}" />', f'<param name="height" value="{h}" />', 1))
+    return s[:i] + pair + s[j:]
 
 # ====================================================== game controllers
 def _game_box(wd, ht, title, body, heading_id=None, boxes="dialog", down="3"):

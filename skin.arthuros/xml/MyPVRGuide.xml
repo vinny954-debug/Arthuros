@@ -18,6 +18,7 @@
           <param name="colour" value="accent2" />
           <param name="icon" value="icons24/pvr_guide.png" />
           <param name="label" value="$LOCALIZE[19069]" />
+          <param name="label2" value="$INFO[Control.GetLabel(30),$LOCALIZE[19141]: ]" />
           <param name="down" value="50" />
           <param name="boxes" value="window" />
         </include>
@@ -134,16 +135,16 @@
         </rulerlayout>
         <itemlayout height="50" width="60" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
           <control type="image"><left>0</left><top>0</top><width>1</width><height>50</height><texture colordiffuse="text">fill.png</texture></control>
-          <control type="image" id="8"><left>0</left><top>49</top><width>60</width><height>1</height><texture colordiffuse="text">fill.png</texture></control>
-          <control type="progress" id="9"><left>4</left><top>43</top><width>52</width><height>4</height><info>ListItem.Progress</info><visible>Integer.IsGreater(ListItem.Progress,0) + Integer.IsLess(ListItem.Progress,100)</visible></control>
+          <control type="image" id="2"><left>0</left><top>49</top><width>60</width><height>1</height><texture colordiffuse="text">fill.png</texture></control>
+          <control type="progress" id="3"><left>4</left><top>43</top><width>52</width><height>4</height><info>ListItem.Progress</info><visible>Integer.IsGreater(ListItem.Progress,0) + Integer.IsLess(ListItem.Progress,100)</visible></control>
           <control type="image"><left>3</left><top>2</top><width>6</width><height>6</height><texture colordiffuse="accent1">fill.png</texture><visible>ListItem.HasTimer | ListItem.IsRecording</visible></control>
-          <control type="label" id="7"><left>6</left><top>0</top><width>50</width><height>49</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label" id="1"><left>6</left><top>0</top><width>50</width><height>49</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
         </itemlayout>
         <focusedlayout height="50" width="60" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
-          <control type="image" id="10"><left>0</left><top>0</top><width>60</width><height>50</height><texture colordiffuse="select">fill.png</texture></control>
-          <control type="progress" id="13"><left>4</left><top>43</top><width>52</width><height>4</height><info>ListItem.Progress</info><visible>Integer.IsGreater(ListItem.Progress,0) + Integer.IsLess(ListItem.Progress,100)</visible></control>
+          <control type="image" id="2"><left>0</left><top>0</top><width>60</width><height>50</height><texture colordiffuse="select">fill.png</texture></control>
+          <control type="progress" id="3"><left>4</left><top>43</top><width>52</width><height>4</height><info>ListItem.Progress</info><visible>Integer.IsGreater(ListItem.Progress,0) + Integer.IsLess(ListItem.Progress,100)</visible></control>
           <control type="image"><left>3</left><top>2</top><width>6</width><height>6</height><texture colordiffuse="accent1">fill.png</texture><visible>ListItem.HasTimer | ListItem.IsRecording</visible></control>
-          <control type="label" id="12"><left>6</left><top>0</top><width>50</width><height>49</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label" id="1"><left>6</left><top>0</top><width>50</width><height>49</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
         </focusedlayout>
         <channellayout height="34" width="180">
           <control type="image"><left>0</left><top>0</top><width>178</width><height>34</height><texture border="2" colordiffuse="facetint">panel_raised.png</texture></control>
@@ -169,10 +170,10 @@
           <control type="label" id="1"><left>6</left><top>0</top><width>50</width><height>33</height><font>normal</font><textcolor>text</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
         </itemlayout>
         <focusedlayout height="34" width="60">
-          <control type="image" id="4"><left>0</left><top>0</top><width>60</width><height>34</height><texture colordiffuse="select">fill.png</texture></control>
-          <control type="progress" id="6"><left>4</left><top>27</top><width>52</width><height>4</height><info>ListItem.Progress</info><visible>Integer.IsGreater(ListItem.Progress,0) + Integer.IsLess(ListItem.Progress,100)</visible></control>
+          <control type="image" id="2"><left>0</left><top>0</top><width>60</width><height>34</height><texture colordiffuse="select">fill.png</texture></control>
+          <control type="progress" id="3"><left>4</left><top>27</top><width>52</width><height>4</height><info>ListItem.Progress</info><visible>Integer.IsGreater(ListItem.Progress,0) + Integer.IsLess(ListItem.Progress,100)</visible></control>
           <control type="image"><left>3</left><top>2</top><width>6</width><height>6</height><texture colordiffuse="accent1">fill.png</texture><visible>ListItem.HasTimer | ListItem.IsRecording</visible></control>
-          <control type="label" id="5"><left>6</left><top>0</top><width>50</width><height>33</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
+          <control type="label" id="1"><left>6</left><top>0</top><width>50</width><height>33</height><font>bold</font><textcolor>textinv</textcolor><aligny>center</aligny><label>$INFO[ListItem.Label]</label></control>
         </focusedlayout>
       </control>
       <control type="scrollbar" id="60">

@@ -2,44 +2,34 @@
 <window>
   <defaultcontrol always="true">602</defaultcontrol>
   <controls>
-    <control type="button" id="9971">
-      <left>0</left><top>0</top><width>94</width><height>600</height>
-      <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>
-      <label />
-      <onclick>Action(close)</onclick>
-    </control>
-    <control type="button" id="9972">
-      <right>0</right><top>0</top><width>94</width><height>600</height>
-      <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>
-      <label />
-      <onclick>Action(close)</onclick>
-    </control>
-    <control type="button" id="9973">
-      <left>94</left><top>0</top><width>836</width><height>164</height>
-      <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>
-      <label />
-      <onclick>Action(close)</onclick>
-    </control>
-    <control type="button" id="9974">
-      <left>94</left><bottom>0</bottom><width>836</width><height>164</height>
-      <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>
-      <label />
-      <onclick>Action(close)</onclick>
-    </control>
     <control type="group">
-      <centerleft>50%</centerleft><centertop>50%</centertop>
-      <width>836</width><height>272</height>
-      <include content="Dialog_Box">
-        <param name="width" value="836" /><param name="height" value="272" />
-        <param name="innerwidth" value="830" />
+      <centerleft>50%</centerleft><bottom>0</bottom>
+      <width>944</width><height>222</height>
+      <include content="Dialog_Box" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+        <param name="width" value="944" /><param name="height" value="222" />
+        <param name="innerwidth" value="938" />
+        <param name="icon" value="icons24/pvr_controls.png" /><param name="colour" value="accent2" />
+        <param name="down" value="602" />
+        <param name="boxes" value="dialog" />
+        <param name="title" value="$LOCALIZE[19222]" />
+      </include>
+      <include content="Dialog_Box" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]">
+        <param name="width" value="944" /><param name="height" value="174" />
+        <param name="innerwidth" value="938" />
         <param name="icon" value="icons24/pvr_controls.png" /><param name="colour" value="accent2" />
         <param name="down" value="602" />
         <param name="boxes" value="dialog" />
         <param name="title" value="$LOCALIZE[19222]" />
       </include>
       <control type="image">
-        <left>8</left><top>34</top><width>820</width><height>176</height>
+        <left>8</left><top>34</top><width>928</width><height>180</height>
         <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+        <visible>[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]</visible>
+      </control>
+      <control type="image">
+        <left>8</left><top>34</top><width>928</width><height>132</height>
+        <texture border="2" colordiffuse="facetint">panel_sunken_grey.png</texture>
+        <visible>![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]</visible>
       </control>
       <control type="group" id="200">
         <control type="label">
@@ -50,7 +40,7 @@
         <control type="grouplist" id="201">
           <left>14</left><top>62</top><width>196</width><height>148</height>
           <orientation>vertical</orientation><itemgap>3</itemgap>
-          <onleft>203</onleft><onright>204</onright>
+          <onleft>9970</onleft><onright>204</onright>
           <onup>9970</onup><ondown>9970</ondown>
           <control type="button" id="600">
             <width>196</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><font>chrome</font>
@@ -133,7 +123,7 @@
         <control type="grouplist" id="203">
           <left>626</left><top>62</top><width>196</width><height>148</height>
           <orientation>vertical</orientation><itemgap>3</itemgap>
-          <onleft>202</onleft><onright>201</onright>
+          <onleft>202</onleft><onright>9970</onright>
           <onup>9970</onup><ondown>9970</ondown>
           <control type="button" id="70043">
             <width>196</width><include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" /><font>chrome</font>
@@ -156,12 +146,41 @@
         </control>
       </control>
       <control type="button" id="9970">
-        <right>14</right><bottom>10</bottom><width>160</width>
+        <left>830</left><top>62</top><width>100</width>
         <include content="Height_30_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
         <include content="Height_30" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]" />
         <font>chrome</font><label>$LOCALIZE[15067]</label>
         <onclick>Action(close)</onclick>
-        <onup>602</onup><ondown>602</ondown><onleft>70045</onleft><onright>600</onright>
+        <onup>602</onup><ondown>602</ondown><onleft>203</onleft><onright>201</onright>
+      </control>
+      <control type="button" id="9971">
+        <left>-2048</left><top>-2048</top><width>2048</width><height>4096</height>
+        <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>
+        <label />
+        <onclick>Action(close)</onclick>
+        <onup>602</onup><ondown>602</ondown><onleft>602</onleft><onright>602</onright>
+      </control>
+      <control type="button" id="9972">
+        <left>944</left><top>-2048</top><width>2048</width><height>4096</height>
+        <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>
+        <label />
+        <onclick>Action(close)</onclick>
+        <onup>602</onup><ondown>602</ondown><onleft>602</onleft><onright>602</onright>
+      </control>
+      <control type="button" id="9973">
+        <left>0</left><top>-2048</top><width>944</width><height>2048</height>
+        <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>
+        <label />
+        <onclick>Action(close)</onclick>
+        <onup>602</onup><ondown>602</ondown><onleft>602</onleft><onright>602</onright>
+      </control>
+      <control type="button" id="9974">
+        <left>0</left><top>174</top><width>944</width><height>2048</height>
+        <texturefocus>-</texturefocus><texturenofocus>-</texturenofocus>
+        <label />
+        <onclick>Action(close)</onclick>
+        <onup>602</onup><ondown>602</ondown><onleft>602</onleft><onright>602</onright>
+        <visible>![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]</visible>
       </control>
     </control>
   </controls>
