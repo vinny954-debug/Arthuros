@@ -26,7 +26,7 @@
         <left>27</left><top>0</top><width>520</width><height>26</height>
         <font>chromebold</font><textcolor>text</textcolor>
         <align>left</align><aligny>center</aligny>
-        <label>Kodi $INFO[System.BuildVersionShort] - ArthurOS 1.2 (v0.9.8)</label>
+        <label>Kodi $INFO[System.BuildVersionShort] - ArthurOS 1.2 (v0.9.9)</label>
       </control>
 
       <!-- right-hand status cluster, anchored to the right edge -->
@@ -237,7 +237,7 @@
       <control type="label">
         <left>20</left><top>72</top><width>960</width><height>22</height>
         <font>small</font><textcolor>textdim</textcolor>
-        <label>v0.9.8  -  1024x768  -  $VAR[SkinFontVar]  -  $LOCALIZE[31948]</label>
+        <label>v0.9.9  -  1024x768  -  $VAR[SkinFontVar]  -  $LOCALIZE[31948]</label>
       </control>
       <control type="image">
         <left>20</left><top>102</top><width>960</width><height>1</height>

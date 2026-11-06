@@ -1,3 +1,15 @@
+v0.9.9
+- Screen calibration can now be finished by touch. Tap until the Reset
+  marker is picked (four taps), then tap once more. Kodi asks "Reset
+  calibration?", and that box now has a Done button: it saves your
+  calibration and goes back, without resetting anything. Before, the only
+  way out was the _ box, and a long press did nothing.
+- install-arthuros.sh also adds a small touch keymap
+  (userdata/keymaps/arthuros-touch.xml). In screen calibration a long press,
+  or a two-finger tap, then means Back, which saves and exits.
+- The on-screen hint in calibration says this.
+Checked against Kodi's source and in preview only, not yet on the box.
+
 v0.9.8
 - Volume now shows where it is. The volume control on the video, music and
   game bars and in the mini player is now:

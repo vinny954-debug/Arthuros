@@ -8,7 +8,7 @@ Context for Claude Code. Read this first, then `README.md` (user-facing), then
 A from-scratch Kodi 21 (Omega) skin styled after Acorn **Arthur 1.2**: 16-colour
 pixel desktop, 1px outlines, chunky bevels, no gradients, no animations, bitmap
 font (Tamzen) used only at native or exactly-doubled sizes. Owner: Vince.
-Current version: **0.9.8** (see `skin.arthuros/changelog.txt`).
+Current version: **0.9.9** (see `skin.arthuros/changelog.txt`).
 
 Two layouts ship:
 - `xml/` — 1024x600, 16:9, default (7" panels).
@@ -179,7 +179,7 @@ regress.
 - **Desktop tiles** are skin strings `tile.N.{id,lid,pre,name,icon,image,action,addon}`,
   N=1..36, `home.layout` ∈ 3x3, 4x3 (default), 4x4, 5x4, 5x5, 6x5, 6x6.
 - **Version stamps** (bump all on release): `addon.xml`, `xml/SkinSettings.xml`
-  (`v0.9.8  -  1024x600`), `xml/Includes_Chrome.xml` (`ArthurOS 1.2 (v0.9.8)`),
+  (`v0.9.9  -  1024x600`), `xml/Includes_Chrome.xml` (`ArthurOS 1.2 (v0.9.9)`),
   `changelog.txt` (newest first), `README.md` (current version + zip names).
   `audit.sh` checks the stamps match.
 
@@ -242,6 +242,13 @@ regress.
 - Font lookup: skin `fonts/` -> special://home/media/Fonts -> special://xbmc/
   media/Fonts, so `arial.ttf` needs no shipping. Omega ignores
   `<fontset unicode=...>`: the user picks Unicode by hand. No per-glyph fallback.
+- Screen calibration (touchscreen.xml ScreenCalibration): a one-finger tap is
+  `NextCalibration`, so no skin button there is tappable; long press reaches it
+  only as RightClick through the mouse path. Exits: the "Reset calibration?"
+  yes/no (tap the Reset marker) carries a Done button 9970 (Dialog_ButtonRow,
+  visible in screencalibration: `Dialog.Close(yesnodialog,true)` +
+  `Action(Back,screencalibration)`), and install-arthuros.sh writes
+  `userdata/keymaps/arthuros-touch.xml` (longpress / 2-finger tap = Back there).
 - A folder-copied add-on is inserted disabled (CAddonDatabase::SyncInstalled);
   install-arthuros.sh enables it in Addons33.db while Kodi is stopped.
 - Under `set -e`, a failure in `a && b` is ignored unless it is the last command
@@ -267,7 +274,11 @@ excerpts in `vendor/kodi/estuary-ref/`. For anything else, read the Kodi
 
 All via `RunScript(special://skin/scripts/<name>.py[,args])`.
 
-## State at handover (0.9.8)
+## State at handover (0.9.9)
+
+0.9.9: calibration exit by touch (Vince: long press did not exit; he escaped
+via the Reset question's _ box). Untested on the box.
+
 
 0.9.7 is on the box; Vince: "looks pretty good", but the volume slider showed no
 level (bar and nib were the same facetint bevel). 0.9.8 fixes that: every OSD /

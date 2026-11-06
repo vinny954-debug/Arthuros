@@ -612,5 +612,9 @@ for d in (\"xml\",\"xml768\"):
 " && python3 -c "from PIL import Image;import sys;sys.exit(0 if Image.open(\"'"$S"'/media/blank.png\").size==(24,24) else 1)"'
 chk "volume has -/+ (5 % steps) and a NN% readout in every OSD and the mini player" '(for d in xml xml768; do for f in VideoOSD MusicOSD GameOSD PlayerControls; do grep -q "id=\"9993\"" $S/$d/$f.xml && grep -q "id=\"9994\"" $S/$d/$f.xml && grep -q "SetVolume(100)" $S/$d/$f.xml && grep -q "SetVolume(0)" $S/$d/$f.xml && grep -q "Control.GetLabel(9983)" $S/$d/$f.xml || exit 1; done; done)'
 :
+# ===== P14 calibration exit (0.9.8 box feedback) =====
+chk "calibration: the Reset question offers Done (Back to the window)" '(for f in xml/Includes_Dialogs.xml xml768/DialogConfirm.xml; do grep -A8 "id=\"9970\"" $S/$f | grep -q "Action(Back,screencalibration)" && grep -A8 "id=\"9970\"" $S/$f | grep -q "Window.IsVisible(screencalibration)" || exit 1; done)'
+chk "installer writes the calibration touch keymap (long press = Back)" 'grep -q "arthuros-touch.xml" $(dirname $S)/install-arthuros.sh && grep -q "<longpress>Back</longpress>" $(dirname $S)/install-arthuros.sh'
+:
 [ $fail -eq 0 ] && echo "all good" || echo "AUDIT FAILED"
 exit $fail

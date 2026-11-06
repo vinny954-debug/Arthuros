@@ -143,6 +143,27 @@ EOF
   else echo "== Couldn't mark the skin enabled in Kodi's add-on database"; fi
 fi
 
+# Screen calibration by touch: Kodi maps a one-finger tap there to
+# NextCalibration and sends a long press only as a mouse right-click, which
+# the calibration window may never turn into Back. A user keymap (Kodi loads
+# every userdata/keymaps/*.xml; a window section beats <global>) makes a long
+# press or a two-finger tap plain Back there. Ours alone: rewritten each time.
+KEYMAPS="$KHOME/.kodi/userdata/keymaps"
+if as_kodi sh -c 'mkdir -p "$1" && cat > "$1/arthuros-touch.xml"' _ "$KEYMAPS" <<'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Written by install-arthuros.sh (ArthurOS skin). Safe to delete. -->
+<keymap>
+  <ScreenCalibration>
+    <touch>
+      <longpress>Back</longpress>
+      <tap pointers="2">Back</tap>
+    </touch>
+  </ScreenCalibration>
+</keymap>
+EOF
+then echo "== Touch keymap: $KEYMAPS/arthuros-touch.xml (long press = Back in screen calibration)"
+else echo "== Couldn't write the touch keymap (not needed for the skin itself)"; fi
+
 # Skin settings > Network & Bluetooth (netbt.py) changes Wi-Fi through
 # NetworkManager. Kodi run as a service has no login session, so polkit refuses
 # it unless a rule names the user Kodi runs as. Offer to add one (asked on each

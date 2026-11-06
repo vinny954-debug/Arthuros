@@ -260,6 +260,25 @@
           <include content="DialogButton_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <include content="DialogButton" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
           <label/>
+          <!-- room for Done (9970); Kodi hides 12 there anyway (no custom label) -->
+          <visible>!Window.IsVisible(screencalibration)</visible>
+        </control>
+        <!-- Screen calibration: a one-finger tap there is NextCalibration
+             (touchscreen.xml ScreenCalibration), so no skin button in that
+             window can be tapped, and its long-press exit goes through the
+             mouse right-click path. The one tappable box is this one, the
+             "Reset calibration?" question Kodi asks when the Reset marker is
+             tapped (CGUIWindowSettingsScreenCalibration::ResetCalibration).
+             Done (20177): close it unanswered (no reset), then Back to the
+             calibration window itself, which saves on deinit. -->
+        <control type="button" id="9970">
+          <width>150</width>
+          <include content="DialogButton_XL" condition="[String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <include content="DialogButton" condition="![String.StartsWith(Skin.Font,ExtraLarge) | Skin.HasSetting(touchmode)]"/>
+          <label>$LOCALIZE[20177]</label>
+          <onclick>Dialog.Close(yesnodialog,true)</onclick>
+          <onclick>Action(Back,screencalibration)</onclick>
+          <visible>Window.IsVisible(screencalibration)</visible>
         </control>
       </control>
       </control>
